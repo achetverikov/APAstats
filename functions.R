@@ -8,7 +8,7 @@ omit.zeroes <- function (x, digits=2)
   sub("^.", "", format(round.p(x), nsmall = digits))
 }
 
-f.round <- function (x, digits){
+f.round <- function (x, digits=2){
   require(stringr)
   str_trim(format(round(as.numeric(x), digits), nsmall=digits))
 }
@@ -205,7 +205,7 @@ describe.binom.mean.conf <- function(x, digits=2){
 describe.ezanova <- function(ezfit, term, include_eta=T, spher_corr=T,...){
   require(ez)
   eza<-ezfit$ANOVA
-  if (spher_corr){
+  if (spher_corr&('Sphericity Corrections' %in% names(ezfit))){
     eza<-merge(eza, ezfit$`Sphericity Corrections`, by='Effect', all.x=T)
     eza[!is.na(eza$GGe),'p']<-eza[!is.na(eza$GGe),]$`p[GG]`
   }
