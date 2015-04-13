@@ -1,0 +1,37 @@
+```{r}
+source('../functions.R', chdir=T)
+
+t_res<-t.test(rnorm(20, mean = 10, sd=2))
+
+t_res
+```
+
+One sample Student's t-test demonstrated that X significantly higher than zero, `r describe.ttest(t_res)`.
+
+```{r}
+with(sleep, describe.mean.and.t( extra, group, which.mean = 3, paired=T))
+
+```
+
+Student's t-test showed that increase in hours of sleep compared to control was lower in group 1 than in group 2, `r with(sleep, describe.mean.and.t( extra, group,which.mean = 3, paired=T))`. 
+
+
+```{r}
+require(MASS)
+glm_res<-glm(Freq ~ (Age+Sex)*Survived, family = poisson, data = data.frame(Titanic))
+
+describe.glm(glm_res)
+
+lm_res<-lm(Postwt ~ Prewt + Treat + offset(Prewt), anorexia)
+describe.glm(lm_res)
+```
+
+```{r}
+describe.glm(glm_res, "SexFemale:SurvivedYes", short=1)
+describe.glm(glm_res, "SexFemale:SurvivedYes", short=2)
+describe.glm(glm_res, "SexFemale:SurvivedYes", short=3)
+describe.glm(glm_res, "SexFemale:SurvivedYes", short=3, test_df=T)
+```
+
+Adults had lower chances of survival on Titanic than children, `r describe.glm(glm_res, "AgeAdult:SurvivedYes")`, and women had higher chances than men, `r describe.glm(glm_res, "SexFemale:SurvivedYes", short=3)`. 
+

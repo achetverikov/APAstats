@@ -29,7 +29,7 @@ format.results <- function(res_str, type='pandoc'){
 }
 
 describe.r <- function(rc,...){
-  format_results(sprintf("\\emph{r}(%.0f) = %.2f, \\emph{p} %s",  rc$parameter, rc$estimate, round.p(rc$p.value)),...)
+  format.results(sprintf("\\emph{r}(%.0f) = %.2f, \\emph{p} %s",  rc$parameter, rc$estimate, round.p(rc$p.value)),...)
 }
 
 describe.ttest <- function (t,show.mean=F, abs=F,...){
@@ -39,10 +39,10 @@ describe.ttest <- function (t,show.mean=F, abs=F,...){
     res_str=sprintf("\\emph{M} = %.2f [%.2f, %.2f], \\emph{t}(%i) = %.2f, \\emph{p} %s", t$estimate, t$conf.int[1], t$conf.int[2],t$parameter, t$statistic, round.p(t$p.value))
   else 
     res_str=sprintf("\\emph{t}(%.1f) = %.2f, \\emph{p} %s",  t$parameter, t$statistic, round.p(t$p.value))
-  format_results(res_str, ...)
+  format.results(res_str, ...)
 }
 
-describe.mean.and.t <- function(x, by, which.mean=1, digits=2, type='pandoc', paired=F){
+describe.mean.and.t <- function(x, by, which.mean=1, digits=2, paired=F,...){
   library(Hmisc)
   summaries=Hmisc::summarize(x, by, smean.cl.boot)
   summaries<-transform(summaries, mean.descr=sprintf(paste0("\\emph{M} = %.",digits,"f [%.",digits,"f, %.",digits,"f]"), x, Lower, Upper))
@@ -52,7 +52,7 @@ describe.mean.and.t <- function(x, by, which.mean=1, digits=2, type='pandoc', pa
   else 
     means=summaries[which.mean,"mean.descr"];
   res_str=paste0(means,', ',describe.ttest(t.test(x~by, paired=paired)))
-  format_results(res_str, ...)
+  format.results(res_str, ...)
   
 }
 
@@ -71,8 +71,8 @@ describe.chi <- function (tbl, v=T, addN=T,...){
   chi<-chisq.test(tbl)
   cv <- sqrt(chi$statistic / (sum(tbl) * min(dim(tbl) - 1 )))
   n <- sum(tbl)
-  res<-sprintf("$\\chi^2$(%i%s) = %.2f, \\emph{p} %s%s",chi$parameter,ifelse(addN,paste0(', \\emph{N} = ', sum(tbl)),''),chi$statistic,round.p(chi$p.value), ifelse(v, paste0(', \\emph{V} = ',omit_zeroes(round(cv,2)))))
-  format_results(res, ...)
+  res<-sprintf("$\\chi^2$(%i%s) = %.2f, \\emph{p} %s%s",chi$parameter,ifelse(addN,paste0(', \\emph{N} = ', sum(tbl)),''),chi$statistic,round.p(chi$p.value), ifelse(v, paste0(', \\emph{V} = ',omit.zeroes(round(cv,2)))))
+  format.results(res, ...)
 }
 
 
@@ -85,57 +85,57 @@ describe.aov <- function (fit, term, type=2,...){
 
 describe.Anova <- function (afit, term, f.digits=2, ...){
   res_str<-sprintf(paste0("\\emph{F}(%i, %i) = %.",f.digits,"f, \\emph{p} %s"), afit[term,"Df"], afit["Residuals","Df"], afit[term, "F value"], round.p(afit[term, "Pr(>F)"]))
-  format_results(res_str, ...)
+  format.results(res_str, ...)
 }
 
-describe.glm <- function (fit, term, short=T, f.digits=2, latex=T){
-  if (class(fit)== "lm.circular.cl"){
-    mod_coef<-data.frame(fit$coefficients, fit$se.coef, fit$t.values, fit$p.values)
-  }
-  else {
-    mod_coef <- coef(summary(fit))
-  }
-  if (latex){
-  data.frame(B = f_round(mod_coef[, 1], 2), SE = f_round(mod_coef[, 2], 2), Z = f_round(mod_coef[, 3], 2), p = round.p(mod_coef[, 4]), eff=row.names(mod_coef),row.names = row.names(mod_coef), str=sprintf(paste0("\\emph{B} = %.",f.digits,"f (%.",f.digits,"f), \\emph{p} %s"), mod_coef[, 1], mod_coef[, 2], round.p(mod_coef[, 4])))
-  } else {
-    data.frame(B = f_round(mod_coef[, 1], 2), SE = f_round(mod_coef[, 2], 2), Z = f_round(mod_coef[, 3], 2), p = round.p(mod_coef[, 4]),eff=row.names(mod_coef), row.names = row.names(mod_coef), str=sprintf(paste0("*B* = %.",f.digits,"f (%.",f.digits,"f), *t*(%i) = %.2f, *p* %s"), mod_coef[, 1], mod_coef[, 2], summary(fit)$df[2], mod_coef[, 3], round.p(mod_coef[, 4])))    
-  }
-}
-
-describe.glm.s <- function (fit, term=1, short=1, f.digits=2,...){
+describe.glm <- function (fit, term=NULL, short=1, f.digits=2, test_df=F, ...){
   require('stringr')
-  if (class(fit)== "lm.circular.cl"){
+  if (class(fit)[1]== "lm.circular.cl"){
     print(1)
     afit<-data.frame(fit$coefficients, fit$se.coef, fit$t.values, fit$p.values)
     t_z<-'t'
+    if (test_df){
+      test_df=F
+      warning('df for lm.circular are not implemented')
+    }
   }
   else {
     afit <- coef(summary(fit))
-    t_z<-'Z'
+    if (fit$family[[1]]=='gaussian'||class(fit)[1]=='lm') {
+      t_z<-'t'
+    } else {
+      t_z<-'Z'
+    }
   }
+  
   if (length(attr(fit$terms, "term.labels"))==(length(rownames(afit))+1))
     rownames(afit)<-c("Intercept", attr(fit$terms, "term.labels"))
+  
+  res_df<-data.frame(B = f.round(afit[, 1], 2), SE = f.round(afit[, 2], 2), Stat = f.round(afit[, 3], 2), p = round.p(afit[, 4]), eff=row.names(afit),row.names = row.names(afit))
+
   if (short==1) {
-    res_str=sprintf(paste0("\\emph{",t_z,"} = %.",f.digits,"f, \\emph{p} %s"), afit[term, 3], round.p(afit[term, 4]))
+    res_df$str<-sprintf(paste0("\\emph{",t_z,"} = %.",f.digits,"f, \\emph{p} %s"), afit[, 3], round.p(afit[, 4]))
   }
   else if (short==2){
-    res_str=sprintf(paste0("\\emph{B} = %.",f.digits,"f (%.",f.digits,"f), \\emph{p} %s"), afit[term, 1], afit[term, 2], round.p(afit[term, 4]))
+    res_df$str<-sprintf(paste0("\\emph{B} = %.",f.digits,"f (%.",f.digits,"f), \\emph{p} %s"), afit[, 1], afit[, 2], round.p(afit[, 4]))
   }
   else {
-    res_str=sprintf(paste0("\\emph{B} = %.",f.digits,"f, \\emph{SE} = %.",f.digits,"f,  \\emph{",t_z,"} = %.",f.digits,"f, \\emph{p} %s"), afit[term, 1], afit[term, 2], afit[term, 3], round.p(afit[term, 4]))
+    res_df$str<-sprintf(paste0("\\emph{B} = %.",f.digits,"f, \\emph{SE} = %.",f.digits,"f,  \\emph{",t_z,"}",ifelse(test_df,paste0('(',summary(fit)$df[2],')'),'')," = %.",f.digits,"f, \\emph{p} %s"), afit[, 1], afit[, 2], afit[, 3], round.p(afit[, 4]))
   }
-  format_results(res_str, ...)
-  
+  res_df$str<-format.results(res_df$str, ...)
+  if (!is.null(term)){
+    res_df[term, 'str']
+  } else res_df
 }
 
 describe.mean.sd <- function(x, digits=2,...){
   require(Hmisc)
-  format_results(with(as.list(smean.sd(x)),sprintf(paste0("\\emph{M} = %.",digits,"f (\\emph{SD} = %.",digits,"f)"), Mean, SD)), ...)
+  format.results(with(as.list(smean.sd(x)),sprintf(paste0("\\emph{M} = %.",digits,"f (\\emph{SD} = %.",digits,"f)"), Mean, SD)), ...)
 }
 
 describe.mean.conf <- function(x, digits=2,...){
   require(Hmisc)
-  format_results(with(as.list(smean.cl.normal(x)),sprintf(paste0("\\emph{M} = %.",digits,"f [%.",digits,"f, %.",digits,"f]"), Mean, Lower, Upper)), ...)
+  format.results(with(as.list(smean.cl.normal(x)),sprintf(paste0("\\emph{M} = %.",digits,"f [%.",digits,"f, %.",digits,"f]"), Mean, Lower, Upper)), ...)
 }
 
 describe.lmert <- function (sfit, factor, dtype='t',...){
@@ -155,7 +155,7 @@ describe.lmert <- function (sfit, factor, dtype='t',...){
   else if (dtype=="B"){
     res_str<-sprintf("\\emph{B} = %.2f (%.2f), \\emph{p} %s", coef['Estimate'], coef['Std. Error'],  round.p(coef['Pr(>|t|)']))
   }
-  format_results(res_str,...)
+  format.results(res_str,...)
 }
 
 describe.lmer <- function (fm, pv, digits = c(2, 2, 2), incl.rel = 0, dtype="B", incl.p=T) 
@@ -198,11 +198,12 @@ ins.lmer <- function (fm, term=NULL){
 describe.binom.mean.conf <- function(x, digits=2){
   require(Hmisc)
   
-  format_results(with( data.frame(binconf(sum(x),length(x))),sprintf(paste0("\\emph{M} = %.",digits,"f [%.",digits,"f, %.",digits,"f]"), PointEst, Lower, Upper)))
+  format.results(with( data.frame(binconf(sum(x),length(x))),sprintf(paste0("\\emph{M} = %.",digits,"f [%.",digits,"f, %.",digits,"f]"), PointEst, Lower, Upper)))
 }
 
 
-ins.ezlmt <- function(eza, term, include_eta=T){
+describe.ezanova <- function(eza, term, include_eta=T){
+  require(ez)
   eza<-eza$ANOVA
   rownames(eza)<-eza$Effect
   suffix <- ifelse(include_eta, sprintf(', $\\eta$^2^~G~ = %.3f', eza[term, "ges"]),'')
@@ -214,7 +215,7 @@ describe.dip.test <- function(x,...){
   require(diptest)
   res<-dip.test(x)
   res<-sprintf('\\emph{D} = %.2f, \\emph{p} %s', res$statistic, round.p(res$p.value))
-  format_results(res,...)
+  format.results(res,...)
 }
 
 table.mean.conf.by <- function(x, by, digits=2, binom=F){
@@ -229,7 +230,7 @@ table.mean.conf <- function(x, digits=2, binom=F, ...) {
   else{
     res<-as.list(smean.cl.normal(x))
   }
-  res<-with(res,c(f_round(Mean, digits), sprintf(paste0("[%.",digits,"f, %.",digits,"f]"), Lower, Upper)))
+  res<-with(res,c(f.round(Mean, digits), sprintf(paste0("[%.",digits,"f, %.",digits,"f]"), Lower, Upper)))
   res
 }
 
