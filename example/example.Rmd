@@ -3,6 +3,8 @@ output:
   html_document:
     keep_md: yes
 ---
+See the Rmd file here: https://raw.githubusercontent.com/ralfer/apa_format_and_misc/master/example/example.Rmd
+
 ```{r}
 source('../functions.R', chdir=T)
 
