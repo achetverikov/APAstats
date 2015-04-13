@@ -12,16 +12,16 @@ t_res
 ## 	One Sample t-test
 ## 
 ## data:  rnorm(20, mean = 10, sd = 2)
-## t = 23.3276, df = 19, p-value = 1.908e-15
+## t = 26.5842, df = 19, p-value < 2.2e-16
 ## alternative hypothesis: true mean is not equal to 0
 ## 95 percent confidence interval:
-##   9.09734 10.89073
+##   9.613891 11.257104
 ## sample estimates:
 ## mean of x 
-##  9.994037
+##   10.4355
 ```
 
-One sample Student's t-test demonstrated that X significantly higher than zero, _t_(19.0) = 23.33, _p_ < .001.
+One sample Student's t-test demonstrated that X significantly higher than zero, _t_(19.0) = 26.58, _p_ < .001.
 
 
 ```r
@@ -43,10 +43,10 @@ with(sleep, describe.mean.and.t( extra, group, which.mean = 3, paired=T))
 ```
 
 ```
-## [1] "_M_ = 0.75 [-0.28, 1.79] vs. _M_ = 2.33 [1.17, 3.52], _t_(9.0) = -4.06, _p_ = .003"
+## [1] "_M_ = 0.75 [-0.20, 1.86] vs. _M_ = 2.33 [1.22, 3.54], _t_(9.0) = -4.06, _p_ = .003"
 ```
 
-Student's t-test showed that increase in hours of sleep compared to control was lower in group 1 than in group 2, _M_ = 0.75 [-0.32, 1.78] vs. _M_ = 2.33 [1.20, 3.41], _t_(9.0) = -4.06, _p_ = .003. 
+Student's t-test showed that increase in hours of sleep compared to control was lower in group 1 than in group 2, _M_ = 0.75 [-0.32, 1.83] vs. _M_ = 2.33 [1.13, 3.51], _t_(9.0) = -4.06, _p_ = .003. 
 
 
 
@@ -199,3 +199,46 @@ rt_anova
 
 Repeated measures ANOVA demonstrated a significant influence of cue on RT, _F_(3, 54) = 516.61, _p_ < .001, $\eta$^2^~G~ = 0.897. 
 
+### Plotting pointrange plots
+
+You can plot within-subject CIs with the help of summarySEwithin from http://www.cookbook-r.com/Graphs/Plotting_means_and_error_bars_%28ggplot2%29/
+
+
+```r
+require(nlme)
+```
+
+```
+## Loading required package: nlme
+```
+
+```r
+require(gridExtra)
+```
+
+```
+## Loading required package: gridExtra
+```
+
+```r
+data(ergoStool)
+
+p1<-plot.pointrange(ergoStool, aes(x=Type, y=effort))+ggtitle('Usual CIs')
+p2<-plot.pointrange(ergoStool, aes(x=Type, y=effort), within_subj=T, wid='Subject')+ggtitle('Within-subject CIs')
+```
+
+```
+## Loading required package: plyr
+## 
+## Attaching package: 'plyr'
+## 
+## The following objects are masked from 'package:Hmisc':
+## 
+##     is.discrete, summarize
+```
+
+```r
+grid.arrange(p1, p2, ncol=2)
+```
+
+![](example_files/figure-html/unnamed-chunk-6-1.png) 
