@@ -5,6 +5,7 @@ mysd <- function (x,...) sd(x, na.rm=T,...)
 lengthu <- function (x) length(unique(x))
 
 drop.empty.cols<-function(df){
+  #from http://stackoverflow.com/a/2644009/1344028
   Filter(function(x) !all(is.na(x)), df)
 }
 
