@@ -1,7 +1,20 @@
+See the Rmd file here: https://raw.githubusercontent.com/ralfer/apa_format_and_misc/master/example/example.Rmd
+
+
+```r
+require(knitr)
+```
+
+```
+## Loading required package: knitr
+```
 
 ```r
 source('../functions.R', chdir=T)
+opts_chunk$set(message=F)
+```
 
+```r
 t_res<-t.test(rnorm(20, mean = 10, sd=2))
 
 t_res
@@ -12,16 +25,16 @@ t_res
 ## 	One Sample t-test
 ## 
 ## data:  rnorm(20, mean = 10, sd = 2)
-## t = 26.5842, df = 19, p-value < 2.2e-16
+## t = 21.8098, df = 19, p-value = 6.557e-15
 ## alternative hypothesis: true mean is not equal to 0
 ## 95 percent confidence interval:
-##   9.613891 11.257104
+##   8.607978 10.435532
 ## sample estimates:
 ## mean of x 
-##   10.4355
+##  9.521755
 ```
 
-One sample Student's t-test demonstrated that X significantly higher than zero, _t_(19.0) = 26.58, _p_ < .001.
+One sample Student's t-test demonstrated that X significantly higher than zero, _t_(19.0) = 21.81, _p_ < .001.
 
 
 ```r
@@ -29,36 +42,15 @@ with(sleep, describe.mean.and.t( extra, group, which.mean = 3, paired=T))
 ```
 
 ```
-## Loading required package: grid
-## Loading required package: lattice
-## Loading required package: survival
-## Loading required package: Formula
-## Loading required package: ggplot2
-## 
-## Attaching package: 'Hmisc'
-## 
-## The following objects are masked from 'package:base':
-## 
-##     format.pval, round.POSIXt, trunc.POSIXt, units
+## [1] "_M_ = 0.75 [-0.24, 1.87] vs. _M_ = 2.33 [1.20, 3.55], _t_(9.0) = -4.06, _p_ = .003"
 ```
 
-```
-## [1] "_M_ = 0.75 [-0.20, 1.86] vs. _M_ = 2.33 [1.22, 3.54], _t_(9.0) = -4.06, _p_ = .003"
-```
-
-Student's t-test showed that increase in hours of sleep compared to control was lower in group 1 than in group 2, _M_ = 0.75 [-0.32, 1.83] vs. _M_ = 2.33 [1.13, 3.51], _t_(9.0) = -4.06, _p_ = .003. 
+Student's t-test showed that increase in hours of sleep compared to control was lower in group 1 than in group 2, _M_ = 0.75 [-0.16, 1.85] vs. _M_ = 2.33 [1.22, 3.47], _t_(9.0) = -4.06, _p_ = .003. 
 
 
 
 ```r
 require(MASS)
-```
-
-```
-## Loading required package: MASS
-```
-
-```r
 glm_res<-glm(Freq ~ (Age+Sex)*Survived, family = poisson, data = data.frame(Titanic))
 
 describe.glm(glm_res)
@@ -132,13 +124,6 @@ Adults had lower chances of survival on Titanic than children, _Z_ = -4.45, _p_ 
 
 ```r
 require(ez)
-```
-
-```
-## Loading required package: ez
-```
-
-```r
 data(ANT)
 
 rt_anova = ezANOVA(
@@ -206,39 +191,13 @@ You can plot within-subject CIs with the help of summarySEwithin from http://www
 
 ```r
 require(nlme)
-```
-
-```
-## Loading required package: nlme
-```
-
-```r
 require(gridExtra)
-```
 
-```
-## Loading required package: gridExtra
-```
-
-```r
 data(ergoStool)
 
 p1<-plot.pointrange(ergoStool, aes(x=Type, y=effort))+ggtitle('Usual CIs')
 p2<-plot.pointrange(ergoStool, aes(x=Type, y=effort), within_subj=T, wid='Subject')+ggtitle('Within-subject CIs')
-```
-
-```
-## Loading required package: plyr
-## 
-## Attaching package: 'plyr'
-## 
-## The following objects are masked from 'package:Hmisc':
-## 
-##     is.discrete, summarize
-```
-
-```r
 grid.arrange(p1, p2, ncol=2)
 ```
 
-![](example_files/figure-html/unnamed-chunk-6-1.png) 
+![](example_files/figure-html/pointrange_plots-1.png) 

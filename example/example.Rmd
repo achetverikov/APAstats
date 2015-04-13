@@ -6,8 +6,11 @@ output:
 See the Rmd file here: https://raw.githubusercontent.com/ralfer/apa_format_and_misc/master/example/example.Rmd
 
 ```{r}
+require(knitr)
 source('../functions.R', chdir=T)
-
+opts_chunk$set(message=F)
+```
+```{r}
 t_res<-t.test(rnorm(20, mean = 10, sd=2))
 
 t_res
@@ -63,7 +66,7 @@ Repeated measures ANOVA demonstrated a significant influence of cue on RT, `r de
 
 You can plot within-subject CIs with the help of summarySEwithin from http://www.cookbook-r.com/Graphs/Plotting_means_and_error_bars_%28ggplot2%29/
 
-```{r}
+```{r, pointrange_plots, message=F}
 require(nlme)
 require(gridExtra)
 
