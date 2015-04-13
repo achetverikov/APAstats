@@ -20,5 +20,7 @@ Additional functions:
 - plotting - pointrange plots with optional within-subject CIs; breaks-computing functions for Tufte-like plots
 - misc - drop.empty.cols to drop empty columns from df, mymean and mysd for means and SDs without NA, lengthu for length(unique(x))
 
+## Disclaimer
 
+Everything is provided as is, contributions are welcome, authors of borrowed functions are mentioned in functions descriptions. 
 
