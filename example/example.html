@@ -70,14 +70,14 @@ t_res</code></pre>
 ##  One Sample t-test
 ## 
 ## data:  rnorm(20, mean = 10, sd = 2)
-## t = 22.0341, df = 19, p-value = 5.437e-15
+## t = 23.3276, df = 19, p-value = 1.908e-15
 ## alternative hypothesis: true mean is not equal to 0
 ## 95 percent confidence interval:
-##   9.412936 11.388911
+##   9.09734 10.89073
 ## sample estimates:
 ## mean of x 
-##  10.40092</code></pre>
-<p>One sample Student’s t-test demonstrated that X significantly higher than zero, <em>t</em>(19.0) = 22.03, <em>p</em> &lt; .001.</p>
+##  9.994037</code></pre>
+<p>One sample Student’s t-test demonstrated that X significantly higher than zero, <em>t</em>(19.0) = 23.33, <em>p</em> &lt; .001.</p>
 <pre class="r"><code>with(sleep, describe.mean.and.t( extra, group, which.mean = 3, paired=T))</code></pre>
 <pre><code>## Loading required package: grid
 ## Loading required package: lattice
@@ -90,8 +90,8 @@ t_res</code></pre>
 ## The following objects are masked from 'package:base':
 ## 
 ##     format.pval, round.POSIXt, trunc.POSIXt, units</code></pre>
-<pre><code>## [1] &quot;_M_ = 0.75 [-0.27, 1.84] vs. _M_ = 2.33 [1.22, 3.46], _t_(9.0) = -4.06, _p_ = .003&quot;</code></pre>
-<p>Student’s t-test showed that increase in hours of sleep compared to control was lower in group 1 than in group 2, <em>M</em> = 0.75 [-0.26, 1.86] vs. <em>M</em> = 2.33 [1.18, 3.50], <em>t</em>(9.0) = -4.06, <em>p</em> = .003.</p>
+<pre><code>## [1] &quot;_M_ = 0.75 [-0.28, 1.79] vs. _M_ = 2.33 [1.17, 3.52], _t_(9.0) = -4.06, _p_ = .003&quot;</code></pre>
+<p>Student’s t-test showed that increase in hours of sleep compared to control was lower in group 1 than in group 2, <em>M</em> = 0.75 [-0.32, 1.78] vs. <em>M</em> = 2.33 [1.20, 3.41], <em>t</em>(9.0) = -4.06, <em>p</em> = .003.</p>
 <pre class="r"><code>require(MASS)</code></pre>
 <pre><code>## Loading required package: MASS</code></pre>
 <pre class="r"><code>glm_res&lt;-glm(Freq ~ (Age+Sex)*Survived, family = poisson, data = data.frame(Titanic))
@@ -127,6 +127,56 @@ describe.glm(lm_res)</code></pre>
 <pre class="r"><code>describe.glm(glm_res, &quot;SexFemale:SurvivedYes&quot;, short=3, test_df=T)</code></pre>
 <pre><code>## [1] &quot;_B_ = 2.32, _SE_ = 0.12,  _Z_(26) = 19.38, _p_ &lt; .001&quot;</code></pre>
 <p>Adults had lower chances of survival on Titanic than children, <em>Z</em> = -4.45, <em>p</em> &lt; .001, and women had higher chances than men, <em>B</em> = 2.32, <em>SE</em> = 0.12, <em>Z</em> = 19.38, <em>p</em> &lt; .001.</p>
+<pre class="r"><code>require(ez)</code></pre>
+<pre><code>## Loading required package: ez</code></pre>
+<pre class="r"><code>data(ANT)
+
+rt_anova = ezANOVA(
+    data = ANT[ANT$error==0,]
+    , dv = rt
+    , wid = subnum
+    , within = .(cue,flank)
+    , between = group
+)</code></pre>
+<pre><code>## Warning: Collapsing data to cell means. *IF* the requested effects are a
+## subset of the full design, you must use the &quot;within_full&quot; argument, else
+## results may be inaccurate.</code></pre>
+<pre class="r"><code>rt_anova</code></pre>
+<pre><code>## $ANOVA
+##            Effect DFn DFd           F            p p&lt;.05        ges
+## 2           group   1  18   18.430592 4.377562e-04     * 0.07633358
+## 3             cue   3  54  516.605213 1.005518e-39     * 0.89662286
+## 5           flank   2  36 1350.598810 1.386546e-34     * 0.92710583
+## 4       group:cue   3  54    2.553236 6.497492e-02       0.04110445
+## 6     group:flank   2  36    8.768499 7.900829e-04     * 0.07627434
+## 7       cue:flank   6 108    5.193357 9.938494e-05     * 0.11436699
+## 8 group:cue:flank   6 108    6.377225 9.012515e-06     * 0.13686958
+## 
+## $`Mauchly's Test for Sphericity`
+##            Effect         W         p p&lt;.05
+## 3             cue 0.7828347 0.5366835      
+## 4       group:cue 0.7828347 0.5366835      
+## 5           flank 0.8812738 0.3415406      
+## 6     group:flank 0.8812738 0.3415406      
+## 7       cue:flank 0.1737053 0.1254796      
+## 8 group:cue:flank 0.1737053 0.1254796      
+## 
+## $`Sphericity Corrections`
+##            Effect       GGe        p[GG] p[GG]&lt;.05       HFe        p[HF]
+## 3             cue 0.8652559 1.115029e-34         * 1.0239520 1.005518e-39
+## 4       group:cue 0.8652559 7.472046e-02           1.0239520 6.497492e-02
+## 5           flank 0.8938738 3.763312e-31         * 0.9858964 3.964046e-34
+## 6     group:flank 0.8938738 1.297752e-03         * 0.9858964 8.438369e-04
+## 7       cue:flank 0.6022111 1.546166e-03         * 0.7721473 4.745714e-04
+## 8 group:cue:flank 0.6022111 3.424499e-04         * 0.7721473 7.170939e-05
+##   p[HF]&lt;.05
+## 3         *
+## 4          
+## 5         *
+## 6         *
+## 7         *
+## 8         *</code></pre>
+<p>Repeated measures ANOVA demonstrated a significant influence of cue on RT, <em>F</em>(3, 54) = 516.61, <em>p</em> &lt; .001, <span class="math">\(\eta\)</span><sup>2</sup><sub>G</sub> = 0.897.</p>
 
 
 </div>

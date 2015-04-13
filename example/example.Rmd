@@ -1,3 +1,8 @@
+---
+output:
+  html_document:
+    keep_md: yes
+---
 ```{r}
 source('../functions.R', chdir=T)
 
@@ -35,3 +40,32 @@ describe.glm(glm_res, "SexFemale:SurvivedYes", short=3, test_df=T)
 
 Adults had lower chances of survival on Titanic than children, `r describe.glm(glm_res, "AgeAdult:SurvivedYes")`, and women had higher chances than men, `r describe.glm(glm_res, "SexFemale:SurvivedYes", short=3)`. 
 
+```{r}
+require(ez)
+data(ANT)
+
+rt_anova = ezANOVA(
+    data = ANT[ANT$error==0,]
+    , dv = rt
+    , wid = subnum
+    , within = .(cue,flank)
+    , between = group
+)
+
+rt_anova
+```
+
+Repeated measures ANOVA demonstrated a significant influence of cue on RT, `r describe.ezanova(rt_anova, 'cue')`. 
+
+Plotting pointrange plots:
+```{r}
+require(nlme)
+data(ergoStool)
+
+plot.pointrange(ergoStool, aes(x=Type, y=effort))
+
+#you can do within-subject CIs with help of summarySEwithin from http://www.cookbook-r.com/Graphs/Plotting_means_and_error_bars_%28ggplot2%29/
+
+plot.pointrange(ergoStool, aes(x=Type, y=effort), within_subj=T, wid='Subject')
+
+```

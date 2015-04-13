@@ -202,12 +202,17 @@ describe.binom.mean.conf <- function(x, digits=2){
 }
 
 
-describe.ezanova <- function(eza, term, include_eta=T){
+describe.ezanova <- function(ezfit, term, include_eta=T, spher_corr=T,...){
   require(ez)
-  eza<-eza$ANOVA
+  eza<-ezfit$ANOVA
+  if (spher_corr){
+    eza<-merge(eza, ezfit$`Sphericity Corrections`, by='Effect', all.x=T)
+    eza[!is.na(eza$GGe),'p']<-eza[!is.na(eza$GGe),]$`p[GG]`
+  }
   rownames(eza)<-eza$Effect
+  
   suffix <- ifelse(include_eta, sprintf(', $\\eta$^2^~G~ = %.3f', eza[term, "ges"]),'')
-  sprintf("_F_(%.0f, %.0f) = %.2f, _p_ %s%s", eza[term,"DFn"],eza[term,"DFd"],eza[term,"F"],round.p(eza[term,"p"]), suffix) 
+  format.results(sprintf("\\emph{F}(%.0f, %.0f) = %.2f, \\emph{p} %s%s", eza[term,"DFn"],eza[term,"DFd"],eza[term,"F"],round.p(eza[term,"p"]), suffix))
 }
 
 

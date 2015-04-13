@@ -21,7 +21,7 @@ base.breaks.y <- function(x, expand = c(0,0),...){
        scale_y_continuous(breaks=b, expand = expand))
 }
 
-plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), linesize=I(1), pointfill=I('white'), within_subj=F, wid='uid', bars='ci', withinvars=NULL){
+plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), linesize=I(1), pointfill=I('white'), within_subj=F, wid='uid', bars='ci', withinvars=NULL, betweenvars=NULL){
   if (within_subj){
     ellipses<-list(...)
     plot_f<-ellipses[[2]]
@@ -29,7 +29,7 @@ plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), lines
     dv<-as.character(plot_f['y'][[1]])
     plot_data<-as.data.frame(ellipses[[1]])
     plot_data<-plot_data[!is.na(plot_data[,dv]),]
-    aggr_data<-summarySEwithin(plot_data, measurevar=dv, withinvars = withinvars, idvar=wid, na.rm=T)
+    aggr_data<-summarySEwithin(plot_data, measurevar=dv, withinvars = withinvars, betweenvars=betweenvars, idvar=wid, na.rm=T)
     aes_list<-modifyList(lapply(plot_f[names(plot_f)!='y'],as.character),list(y=dv, ymin=paste0(dv,'-', bars), ymax=paste0(dv,'+', bars )))
     ggplot(aggr_data, do.call(aes_string,aes_list))+ geom_linerange(size=linesize, position=pos)+geom_point(size=pointsize, position=pos, fill=pointfill)
   } else {
