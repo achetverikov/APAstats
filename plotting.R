@@ -37,10 +37,10 @@ plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), lines
   }
 }
 
-scale_y_exp<-function(){
+scale_y_exp<-function(digits=0){
   require(ggplot2)
   require(scales) 
-  scale_y_continuous(breaks=trans_breaks('exp',function (x) log(x)), labels=trans_format('exp', function(x) as.character(round(x))))
+  scale_y_continuous(breaks=trans_breaks('exp',function (x) log(x)), labels=trans_format('exp', function(x) as.character(f.round(x, digits=digits))))
 }
 
 #Not mine, found somewhere
@@ -52,6 +52,7 @@ get_grob_element<-function(myggplot, el='guide-box'){
   return(legend)
 }
 
+#from https://github.com/hadley/ggplot2/wiki/Share-a-legend-between-two-ggplot2-graphs
 grid_arrange_shared_legend <- function(..., stack = 'v', one_sub=F) {
   require(ggplot2)
   require(gridExtra)
