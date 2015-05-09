@@ -2,15 +2,8 @@ See the Rmd file here: https://raw.githubusercontent.com/ralfer/apa_format_and_m
 
 
 ```r
-require(knitr)
-```
-
-```
-## Loading required package: knitr
-```
-
-```r
 source('../functions.R', chdir=T)
+load.libs(c('data.table','knitr'))
 opts_chunk$set(message=F)
 ```
 
@@ -25,16 +18,16 @@ t_res
 ## 	One Sample t-test
 ## 
 ## data:  rnorm(20, mean = 10, sd = 2)
-## t = 21.8098, df = 19, p-value = 6.557e-15
+## t = 22.0357, df = 19, p-value = 5.429e-15
 ## alternative hypothesis: true mean is not equal to 0
 ## 95 percent confidence interval:
-##   8.607978 10.435532
+##   9.364504 11.330147
 ## sample estimates:
 ## mean of x 
-##  9.521755
+##  10.34733
 ```
 
-One sample Student's t-test demonstrated that X significantly higher than zero, _t_(19.0) = 21.81, _p_ < .001.
+One sample Student's t-test demonstrated that X significantly higher than zero, _t_(19.0) = 22.04, _p_ < .001.
 
 
 ```r
@@ -42,10 +35,10 @@ with(sleep, describe.mean.and.t( extra, group, which.mean = 3, paired=T))
 ```
 
 ```
-## [1] "_M_ = 0.75 [-0.24, 1.87] vs. _M_ = 2.33 [1.20, 3.55], _t_(9.0) = -4.06, _p_ = .003"
+## [1] "_M_ = 0.75 [-0.29, 1.91] vs. _M_ = 2.33 [1.17, 3.58], _t_(9.0) = -4.06, _p_ = .003"
 ```
 
-Student's t-test showed that increase in hours of sleep compared to control was lower in group 1 than in group 2, _M_ = 0.75 [-0.16, 1.85] vs. _M_ = 2.33 [1.22, 3.47], _t_(9.0) = -4.06, _p_ = .003. 
+Student's t-test showed that increase in hours of sleep compared to control was lower in group 1 than in group 2, _M_ = 0.75 [-0.22, 1.84] vs. _M_ = 2.33 [1.23, 3.48], _t_(9.0) = -4.06, _p_ = .003. 
 
 
 
@@ -201,3 +194,79 @@ grid.arrange(p1, p2, ncol=2)
 ```
 
 ![](example_files/figure-html/pointrange_plots-1.png) 
+
+### Showing log-transformed data back untransformed
+
+Sometimes it is useful to analyze data log-transformed (e.g., in reaction time analyses), but to show it untransformed. _scale_y_exp_ comes in handy.
+
+
+```r
+temp <- tempfile()
+download.file("http://cogjournal.org/2/1/files/ChetverikovRJCS2015SOMdata.zip",temp)
+faces <- data.table(read.csv(unz(temp, "faces_data.csv"), header = T))
+unlink(temp)
+
+faces[,logAT:=log(answerTime)]
+```
+
+```
+##       uid sid stim_gender user_gender correct answerTime      logAT
+##    1:   1  33           M           F       1      0.610 -0.4942963
+##    2:   1  88           M           F       0      2.251  0.8113746
+##    3:   1  43           M           F       0      1.969  0.6775258
+##    4:   1  52           M           F       1      1.063  0.0610951
+##    5:   1  72           M           F       0      1.376  0.3191807
+##   ---                                                              
+## 2576:  60  13           M           F       1      0.504 -0.6851790
+## 2577:  60  39           M           F       1      0.450 -0.7985077
+## 2578:  60  41           F           F       1      0.462 -0.7721904
+## 2579:  60  87           M           F       1      1.133  0.1248690
+## 2580:  60  84           M           F       1      0.732 -0.3119748
+```
+
+```r
+p0<-plot.pointrange(faces[correct==1, ], aes(x=user_gender, color=stim_gender, y=logAT), wid='uid')+ylab('Log RT')
+
+p0
+```
+
+![](example_files/figure-html/unnamed-chunk-7-1.png) 
+
+```r
+p1<-plot.pointrange(faces[correct==1, ], aes(x=user_gender, color=stim_gender, y=logAT), wid='uid')+scale_y_exp(digits=2)+labs(x="Participant's gender", color="Face Gender", y='Untransformed RT')
+
+p1
+```
+
+![](example_files/figure-html/unnamed-chunk-7-2.png) 
+
+### Sharing legend and axis title between plots
+
+It is not very easy to share legend or axis title between plots. I modified a function from https://github.com/hadley/ggplot2/wiki/Share-a-legend-between-two-ggplot2-graphs to make it easier. 
+
+
+```r
+p2<-plot.pointrange(faces, aes(x=user_gender, color=stim_gender, y=correct), wid='uid')+labs(x="Participant's gender", color="Face Gender" ,y='Accuracy')
+
+p2
+```
+
+![](example_files/figure-html/unnamed-chunk-8-1.png) 
+
+```r
+grid_arrange_shared_legend(p1 + theme(legend.direction="horizontal"),p2)
+```
+
+![](example_files/figure-html/unnamed-chunk-9-1.png) 
+
+```r
+grid_arrange_shared_legend(p1, p2, stack = 'horizontal')
+```
+
+![](example_files/figure-html/unnamed-chunk-10-1.png) 
+
+```r
+grid_arrange_shared_legend(p1, p2, stack = 'horizontal', one_sub = T)
+```
+
+![](example_files/figure-html/unnamed-chunk-10-2.png) 

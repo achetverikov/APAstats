@@ -2,12 +2,14 @@
 output:
   html_document:
     keep_md: yes
+    fig_width: 3.5
+    fig_height: 3
 ---
 See the Rmd file here: https://raw.githubusercontent.com/ralfer/apa_format_and_misc/master/example/example.Rmd
 
-```{r}
-require(knitr)
+```{r, cache=F}
 source('../functions.R', chdir=T)
+load.libs(c('data.table','knitr'))
 opts_chunk$set(message=F)
 ```
 ```{r}
@@ -75,4 +77,42 @@ data(ergoStool)
 p1<-plot.pointrange(ergoStool, aes(x=Type, y=effort))+ggtitle('Usual CIs')
 p2<-plot.pointrange(ergoStool, aes(x=Type, y=effort), within_subj=T, wid='Subject')+ggtitle('Within-subject CIs')
 grid.arrange(p1, p2, ncol=2)
+```
+
+### Showing log-transformed data back untransformed
+
+Sometimes it is useful to analyze data log-transformed (e.g., in reaction time analyses), but to show it untransformed. _scale_y_exp_ comes in handy.
+
+```{r}
+temp <- tempfile()
+download.file("http://cogjournal.org/2/1/files/ChetverikovRJCS2015SOMdata.zip",temp)
+faces <- data.table(read.csv(unz(temp, "faces_data.csv"), header = T))
+unlink(temp)
+
+faces[,logAT:=log(answerTime)]
+
+p0<-plot.pointrange(faces[correct==1, ], aes(x=user_gender, color=stim_gender, y=logAT), wid='uid')+ylab('Log RT')
+
+p0
+
+p1<-plot.pointrange(faces[correct==1, ], aes(x=user_gender, color=stim_gender, y=logAT), wid='uid')+scale_y_exp(digits=2)+labs(x="Participant's gender", color="Face Gender", y='Untransformed RT')
+
+p1
+```
+
+### Sharing legend and axis title between plots
+
+It is not very easy to share legend or axis title between plots. I modified a function from https://github.com/hadley/ggplot2/wiki/Share-a-legend-between-two-ggplot2-graphs to make it easier. 
+
+```{r}
+p2<-plot.pointrange(faces, aes(x=user_gender, color=stim_gender, y=correct), wid='uid')+labs(x="Participant's gender", color="Face Gender" ,y='Accuracy')
+
+p2
+```
+```{r, fig.height=7}
+grid_arrange_shared_legend(p1 + theme(legend.direction="horizontal"),p2)
+```
+```{r, fig.width=7}
+grid_arrange_shared_legend(p1, p2, stack = 'horizontal')
+grid_arrange_shared_legend(p1, p2, stack = 'horizontal', one_sub = T)
 ```
