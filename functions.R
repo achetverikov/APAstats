@@ -90,7 +90,10 @@ describe.Anova <- function (afit, term, f.digits=2, ...){
 
 describe.glm <- function (fit, term=NULL, short=1, f.digits=2, test_df=F, ...){
   require('stringr')
-  if (class(fit)[1]== "lm.circular.cl"){
+  fit_package = attr(class(fit),'package')
+  fit_class = class(fit)[1]
+  fit_family = family(fit)[1]
+  if (fit_class== "lm.circular.cl"){
     print(1)
     afit<-data.frame(fit$coefficients, fit$se.coef, fit$t.values, fit$p.values)
     t_z<-'t'
@@ -100,17 +103,21 @@ describe.glm <- function (fit, term=NULL, short=1, f.digits=2, test_df=F, ...){
     }
   }
   else {
-    afit <- coef(summary(fit))
-    if (fit$family[[1]]=='gaussian'||class(fit)[1]=='lm') {
+    afit <- data.frame(coef(summary(fit)))
+    
+    if (fit_family=='gaussian'){
       t_z<-'t'
     } else {
       t_z<-'Z'
     }
   }
   
-  if (length(attr(fit$terms, "term.labels"))==(length(rownames(afit))+1))
-    rownames(afit)<-c("Intercept", attr(fit$terms, "term.labels"))
-  
+  if (length(attr(terms(fit), "term.labels"))==(length(rownames(afit))+1))
+    rownames(afit)<-c("Intercept", attr(terms(fit), "term.labels"))
+  if (fit_class=='lmerMod'){
+    warning('p-values for lmer are only a rough estimate from z-distribution, not suitable for the real use')
+    afit$pvals<-2*pnorm(-abs(afit[,3]))
+  }
   res_df<-data.frame(B = f.round(afit[, 1], 2), SE = f.round(afit[, 2], 2), Stat = f.round(afit[, 3], 2), p = round.p(afit[, 4]), eff=row.names(afit),row.names = row.names(afit))
 
   if (short==1) {
