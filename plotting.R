@@ -36,3 +36,51 @@ plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), lines
     ggplot(...)+ geom_linerange(stat='summary', size=linesize, fun.data=mean_cl_boot, position=pos)+geom_point(stat='summary', fun.y=mean, size=pointsize, position=pos, fill=pointfill)
   }
 }
+
+scale_y_exp<-function(){
+  require(ggplot2)
+  require(scales) 
+  scale_y_continuous(breaks=trans_breaks('exp',function (x) log(x)), labels=trans_format('exp', function(x) as.character(round(x))))
+}
+
+#Not mine, found somewhere
+get_grob_element<-function(myggplot, el='guide-box'){
+  tmp <- ggplot_gtable(ggplot_build(myggplot))
+  
+  leg <- which(tmp$layout$name==el)
+  legend <- tmp$grobs[[leg]]
+  return(legend)
+}
+
+grid_arrange_shared_legend <- function(..., stack = 'v', one_sub=F) {
+  require(ggplot2)
+  require(gridExtra)
+  plots <- list(...)
+  legend <- get_grob_element(plots[[1]])
+  plots<-lapply(plots, function(x) x + theme(legend.position="none"))
+  if (one_sub) {
+    xlab_grob<-get_grob_element(plots[[1]], 'xlab')
+    plots<-lapply(plots, function(x) x + xlab(NULL))
+  }
+  
+  if (stack=='v'){
+    lheight <- sum(legend$heights)
+    p<-arrangeGrob(
+      do.call(arrangeGrob, plots),
+      legend,
+      ncol = 1,
+      heights = unit.c(unit(1, "npc") - lheight, lheight))
+  } else {
+    lwidth <- sum(legend$widths)
+    p<-arrangeGrob(
+      do.call(arrangeGrob, c(plots, nrow=1)),
+      legend,
+      nrow = 1,
+      widths = unit.c(unit(1, "npc") - lwidth, lwidth))
+  }
+  if (one_sub) {
+    xlab_h<- unit(1.2,'lines') #sum(xlab_grob$heights)
+    p<-arrangeGrob(p, xlab_grob, ncol = 1, heights = unit.c(unit(1, "npc") - xlab_h, xlab_h))
+  }
+  p
+}
