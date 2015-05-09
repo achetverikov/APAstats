@@ -2,6 +2,8 @@ mymean <- function (x, ...) mean(x, na.rm=T, ...)
 
 mysd <- function (x,...) sd(x, na.rm=T,...)
 
+mysum <- function (x,...) sum(x, na.rm=T,...)
+
 lengthu <- function (x) length(unique(x))
 
 drop.empty.cols<-function(df){
@@ -19,4 +21,8 @@ mean.round<-function(x,digits=0){
 }
 sd.round<-function(x,digits=0){
   f.round(mysd(x), digits)
+}
+
+load.libs<-function(libs){
+  suppressMessages(invisible(lapply(libs, require, character.only=TRUE)))
 }
