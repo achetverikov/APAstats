@@ -21,20 +21,25 @@ base.breaks.y <- function(x, expand = c(0,0),...){
        scale_y_continuous(breaks=b, expand = expand))
 }
 
-plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), linesize=I(1), pointfill=I('white'), within_subj=F, wid='uid', bars='ci', withinvars=NULL, betweenvars=NULL){
+plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), linesize=I(1), pointfill=I('white'), within_subj=F, wid='uid', bars='ci', withinvars=NULL, betweenvars=NULL, x_as_numeric=F){
+  ellipses<-list(...)
+  plot_f<-ellipses[[2]]
+  withinvars<-c(withinvars, as.character(unlist(plot_f[names(plot_f)!='y'])))
+  dv<-as.character(plot_f['y'][[1]])
+  plot_data<-as.data.frame(ellipses[[1]])
+  plot_data<-plot_data[!is.na(plot_data[,dv]),]
+  aes_list<-modifyList(lapply(plot_f[names(plot_f)!='y'],as.character),list(y=dv, ymin=paste0(dv,'-', bars), ymax=paste0(dv,'+', bars )))
+  #print(aes_list)
   if (within_subj){
-    ellipses<-list(...)
-    plot_f<-ellipses[[2]]
-    withinvars<-c(withinvars, as.character(unlist(plot_f[names(plot_f)!='y'])))
-    dv<-as.character(plot_f['y'][[1]])
-    plot_data<-as.data.frame(ellipses[[1]])
-    plot_data<-plot_data[!is.na(plot_data[,dv]),]
     aggr_data<-summarySEwithin(plot_data, measurevar=dv, withinvars = withinvars, betweenvars=betweenvars, idvar=wid, na.rm=T)
-    aes_list<-modifyList(lapply(plot_f[names(plot_f)!='y'],as.character),list(y=dv, ymin=paste0(dv,'-', bars), ymax=paste0(dv,'+', bars )))
-    ggplot(aggr_data, do.call(aes_string,aes_list))+ geom_linerange(size=linesize, position=pos)+geom_point(size=pointsize, position=pos, fill=pointfill)
   } else {
-    ggplot(...)+ geom_linerange(stat='summary', size=linesize, fun.data=mean_cl_boot, position=pos)+geom_point(stat='summary', fun.y=mean, size=pointsize, position=pos, fill=pointfill)
+    aggr_data<-summarySE(plot_data, measurevar=dv, groupvars = c(withinvars,betweenvars), na.rm=T)
   }
+  if (x_as_numeric){
+    aggr_data[, aes_list$x]<-as.numeric(as.character(aggr_data[, aes_list$x]))
+  }
+  
+  ggplot(aggr_data, do.call(aes_string,aes_list))+ geom_linerange(size=linesize, position=pos)+geom_point(size=pointsize, position=pos, fill=pointfill)
 }
 
 scale_y_exp<-function(digits=0){
