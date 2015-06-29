@@ -3,6 +3,9 @@ base.breaks.x <- function(x, addSegment=T){
   b <- pretty(x)
   b[1]<-min(x)
   b[length(b)]<-max(x)
+  if (b[length(b)]-b[length(b)-1]<b[length(b)-1]-b[length(b)-2]){
+    b<-b[c(1:(length(b)-2),length(b))]
+  }
   d <- data.frame(y=-Inf, yend=-Inf, x=min(b), xend=max(b))
   if (addSegment) 
   {list(geom_segment(data=d, aes(x=x, y=y, xend=xend, yend=yend), inherit.aes=FALSE),
