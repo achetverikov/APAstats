@@ -230,6 +230,13 @@ describe.dip.test <- function(x,...){
   format.results(res,...)
 }
 
+describe.bimod.test <- function(x,start_vec=NA,...){
+  require(bimodalitytest)
+  res<-bimodality.test(x,start_vec=start_vec)
+  res<-sprintf('\\emph{LR} = %.2f, \\emph{p} %s', res@LR, round.p(res@p_value))
+  format.results(res,...)
+}
+
 table.mean.conf.by <- function(x, by, digits=2, binom=F){
   tapply(x, by, table_mean_conf, digits=2, binom=F)
 }
@@ -246,3 +253,35 @@ table.mean.conf <- function(x, digits=2, binom=F, ...) {
   res
 }
 
+paste_and<-function(x, sep=', ', suffix=''){
+  collapse <- paste0(suffix, sep)
+  last_sep <- ifelse(length(x)>2, paste0(collapse, 'and '), paste0(suffix,' and '))
+  paste0(paste0(x[1:(length(x)-1)], collapse=collapse), last_sep,x[length(x)], suffix)
+}
+
+lmer_with_julia<-function(myform, dataset){
+  #Note that julia_init() should be run before using that function
+  require(formula.tools)
+  require(ordinal)
+
+  grouping_var<-all.vars(findbars(myform)[[1]])
+  
+  dataset<-na.omit(dataset[,all.vars(myform), with=F])
+  mm<-model.matrix(nobars(myform), dataset)
+  mm<-drop.coef(mm)
+  truenames<-colnames(mm)
+  mm<-mm[,2:ncol(mm)] #removing Intercept
+  names_for_julia<-letters[1:ncol(mm)]
+  colnames(mm)<-names_for_julia
+  mm<-cbind(mm, dataset)
+  new.formula<-paste0(lhs(myform),'~',paste(names_for_julia, collapse = '+'),'+(',paste(names_for_julia, collapse = '+'),'|',grouping_var,')')
+  r2j(mm,'mm')
+  expr<-paste0('mod_fit = fit(lmm(',new.formula,',mm))')
+  print(expr)
+  j2r(expr)
+  
+  res<-j2r('DataFrame(Estimate=fixef(mod_fit), StdError = stderr(mod_fit), Z = fixef(mod_fit)./stderr(mod_fit))')
+  row.names(res)<-truenames
+  res<-round(res, 2)
+  res
+}
