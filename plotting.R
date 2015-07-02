@@ -61,7 +61,7 @@ get_grob_element<-function(myggplot, el='guide-box'){
 }
 
 #from https://github.com/hadley/ggplot2/wiki/Share-a-legend-between-two-ggplot2-graphs
-grid_arrange_shared_legend <- function(..., stack = 'v', one_sub=F) {
+grid_arrange_shared_legend <- function(..., stack = 'v', one_sub=F, heights=F) {
   require(ggplot2)
   require(gridExtra)
   plots <- list(...)
@@ -71,11 +71,13 @@ grid_arrange_shared_legend <- function(..., stack = 'v', one_sub=F) {
     xlab_grob<-get_grob_element(plots[[1]], 'xlab')
     plots<-lapply(plots, function(x) x + xlab(NULL))
   }
-  
+  if (!heights){
+    heights=unit(rep_len(1, length(plots)), "null")
+  }
   if (stack=='v'){
     lheight <- sum(legend$heights)
     p<-arrangeGrob(
-      do.call(arrangeGrob, plots),
+      do.call(arrangeGrob, append(plots, list(heights=heights))),
       legend,
       ncol = 1,
       heights = unit.c(unit(1, "npc") - lheight, lheight))
