@@ -219,7 +219,7 @@ describe.ezanova <- function(ezfit, term, include_eta=T, spher_corr=T,...){
   rownames(eza)<-eza$Effect
   
   suffix <- ifelse(include_eta, sprintf(', $\\eta$^2^~G~ = %.3f', eza[term, "ges"]),'')
-  format.results(sprintf("\\emph{F}(%.0f, %.0f) = %.2f, \\emph{p} %s%s", eza[term,"DFn"],eza[term,"DFd"],eza[term,"F"],round.p(eza[term,"p"]), suffix))
+  res<-format.results(sprintf("\\emph{F}(%.0f, %.0f) = %.2f, \\emph{p} %s%s", eza[term,"DFn"],eza[term,"DFd"],eza[term,"F"],round.p(eza[term,"p"]), suffix))
 }
 
 
@@ -238,7 +238,7 @@ describe.bimod.test <- function(x,start_vec=NA,...){
 }
 
 table.mean.conf.by <- function(x, by, digits=2, binom=F){
-  tapply(x, by, table_mean_conf, digits=2, binom=F)
+  tapply(x, by, table.mean.conf, digits=2, binom=F)
 }
 
 table.mean.conf <- function(x, digits=2, binom=F, ...) {

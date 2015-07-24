@@ -24,7 +24,7 @@ base.breaks.y <- function(x, expand = c(0,0),...){
        scale_y_continuous(breaks=b, expand = expand))
 }
 
-plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), linesize=I(1), pointfill=I('white'), within_subj=F, wid='uid', bars='ci', withinvars=NULL, betweenvars=NULL, x_as_numeric=F){
+plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), linesize=I(1), pointfill=I('white'), within_subj=F, wid='uid', bars='ci', withinvars=NULL, betweenvars=NULL, x_as_numeric=F, add_h_line=NULL, connecting_line=F){
   ellipses<-list(...)
   plot_f<-ellipses[[2]]
   withinvars<-c(withinvars, as.character(unlist(plot_f[names(plot_f)!='y'])))
@@ -42,7 +42,13 @@ plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), lines
     aggr_data[, aes_list$x]<-as.numeric(as.character(aggr_data[, aes_list$x]))
   }
   
-  ggplot(aggr_data, do.call(aes_string,aes_list))+ geom_linerange(size=linesize, position=pos)+geom_point(size=pointsize, position=pos, fill=pointfill)
+  p<-ggplot(aggr_data, do.call(aes_string,aes_list))
+  if (!is.null(add_h_line)){
+    p<-p+add_h_line
+  }
+  if (connecting_line)
+    p<-p+geom_line(position=pos, size=linesize)
+  p+geom_linerange(size=linesize, position=pos)+geom_point(size=pointsize, position=pos, fill=pointfill)
 }
 
 scale_y_exp<-function(digits=0){
@@ -94,4 +100,15 @@ grid_arrange_shared_legend <- function(..., stack = 'v', one_sub=F, heights=F) {
     p<-arrangeGrob(p, xlab_grob, ncol = 1, heights = unit.c(unit(1, "npc") - xlab_h, xlab_h))
   }
   p
+}
+
+ac_shape_pal<-function(){
+  manual_pal(unname(c(21,22,24,25,23,1:5)))
+  
+}
+
+scale_shape_ac<-function(...) 
+{
+  discrete_scale("shape", "ac", ac_shape_pal(), ...)
+  
 }
