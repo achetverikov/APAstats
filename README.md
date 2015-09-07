@@ -4,9 +4,18 @@
 
 Functions for APA-style formatting for statistical tests results in markdown or LaTeX and other miscellanous stuff.
 
+## How to install?
+
+```
+install.packages("devtools")
+devtools::install_github('ralfer/apa_format_and_misc',subdir='apastats')
+library(apastats)
+```
+
 ## How to use? 
 
-Most of the functions in functions.R file have names like "describe.something" where something is a name of statistical test or R function. 
+Most of the functions have names like "describe.something" where something is a name of statistical test or R function. 
+
 They take results of statistical test as input and provide a formatted output. So, for example, if you use repeated measures ANOVA, you can easily get something like "_F_(3, 54) = 516.61, _p_ < .001" from _ezANOVA_ results. 
 
 Methods included:
@@ -20,7 +29,7 @@ Additional functions:
 - plotting - pointrange plots with optional within-subject CIs; breaks-computing functions for Tufte-like plots
 - misc - _drop.empty.cols()_ to drop empty columns from df, _mymean()_ and _mysd()_ for means and SDs without NA, _lengthu()_ for length(unique(x))
 
-Some examples could be found here: https://github.com/ralfer/apa_format_and_misc/blob/master/example/example.md
+Some examples can be found here: https://github.com/ralfer/apa_format_and_misc/blob/master/example/example.md
 
 ## Disclaimer
 
