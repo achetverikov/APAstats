@@ -29,7 +29,7 @@ Additional functions:
 - plotting - pointrange plots with optional within-subject CIs; breaks-computing functions for Tufte-like plots
 - misc - _drop.empty.cols()_ to drop empty columns from df, _mymean()_ and _mysd()_ for means and SDs without NA, _lengthu()_ for length(unique(x))
 
-Some examples can be found here: https://github.com/ralfer/apa_format_and_misc/blob/master/example/example.md
+Some examples can be found here: https://github.com/ralfer/apa_format_and_misc/blob/master/example/example.md and in help files.
 
 ## Disclaimer
 
