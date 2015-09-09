@@ -149,10 +149,12 @@ get_grob_element<-function(myggplot, el='guide-box'){
 #'
 #' Based on a function from https://github.com/hadley/ggplot2/wiki/Share-a-legend-between-two-ggplot2-graphs
 #'
-#' @param ...
-#' @param stack
-#' @param one_sub
-#' @param heights
+#' @param ... - two or more ggplot2 plots
+#' @param stack - stack direction, "h" (horizontal) or "v" (vertical)
+#' @param one_sub - one x-axis label for all plots? T/F
+#' @param heights - a vector of heights for verticaly arrange plots
+#' @param one_x_axis - one x-axis for all plots? T/F
+#' @param legend position - "t" (top),"b" (bottom), "l" (left), or "r" (right)
 #'
 #' @return plots arranged with grid.arrange
 #' @export
@@ -160,7 +162,8 @@ get_grob_element<-function(myggplot, el='guide-box'){
 #'
 #'
 
-grid_arrange_shared_legend <- function(..., stack = 'v', one_sub=F, heights=F, one_x_axis=F, legend_pos='b') {
+
+grid_arrange_shared_legend<-function(..., stack = 'v', one_sub=F, heights=F, one_x_axis=F, legend_pos='b') {
   requireNamespace('gridExtra')
   plots <- list(...)
   legend <- get_grob_element(plots[[1]])
@@ -176,25 +179,28 @@ grid_arrange_shared_legend <- function(..., stack = 'v', one_sub=F, heights=F, o
   if (!heights){
     heights=unit(rep_len(1, length(plots)), "null")
   }
+  lheight <- sum(legend$heights)
+  lwidth <- sum(legend$widths)
+
   if (stack=='v'){
-    lheight <- sum(legend$heights)
     p<-do.call(gridExtra::arrangeGrob, append(plots, list(heights=heights)))
     if (one_x_axis){
 
       p<-gridExtra::arrangeGrob(p, x_axis_grob, ncol = 1, heights = unit.c(unit(1, "npc") - x_axis_grob$height, x_axis_grob$height))
     }
-    if (legend_pos=='t')
-      p<-gridExtra::arrangeGrob( legend, p, ncol = 1, heights = unit.c(lheight, unit(1, "npc") - lheight))
-    else p<-gridExtra::arrangeGrob(p, legend, ncol = 1, heights = unit.c(unit(1, "npc") - lheight, lheight))
-
   } else {
-    lwidth <- sum(legend$widths)
-    p<-gridExtra::arrangeGrob(
-      do.call(gridExtra::arrangeGrob, c(plots, nrow=1)),
-      legend,
-      nrow = 1,
-      widths = unit.c(unit(1, "npc") - lwidth, lwidth))
+    p<-do.call(gridExtra::arrangeGrob, c(plots, nrow=1))
   }
+
+  if (legend_pos=='t')
+    p<-gridExtra::arrangeGrob( legend, p, ncol = 1, heights = unit.c(lheight, unit(1, "npc") - lheight))
+  else if (legend_pos=='b')
+    p<-gridExtra::arrangeGrob(p, legend, ncol = 1, heights = unit.c(unit(1, "npc") - lheight, lheight))
+  else if (legend_pos=='r')
+    p<-gridExtra::arrangeGrob(p, legend, nrow = 1, widths = unit.c(unit(1, "npc") - lwidth, lwidth))
+  else if (legend_pos=='l')
+    p<-gridExtra::arrangeGrob(legend, p, nrow = 1, widths = unit.c(lwidth, unit(1, "npc") - lwidth))
+
   if (one_sub) {
     xlab_h<- unit(1.2,'lines') #sum(xlab_grob$heights)
     p<-gridExtra::arrangeGrob(p, x_lab_grob,  ncol = 1, heights = unit.c(unit(1, "npc") - xlab_h, xlab_h))
@@ -235,24 +241,24 @@ mkMyTable <- function(X){
 }
 
 mosaic.plot <- function(tbl){
-  
+
   ptbl<-prop.table(tbl)
-  
+
   df<-as.data.frame(tbl, responseName='n')
-  
-  
+
+
   #рассчитываем высоту столбцов как кумулятивную пропорцию внутри каждого уровня field
   grants<-ddply(grants, .(field), transform, ymax=cumsum(n)/sum(n), ymin=(cumsum(n)-n)/sum(n), ymid=(cumsum(n)-n/2)/sum(n))
-  
+
   #рассчитываем ширину столбцов как суммарное n для каждого уровня field
   grants<-ddply(grants, .(field), transform, xmax=sum(n))
-  
+
   #добавляем в фрейм данные об остатках
   grants<-merge(grants, as.data.frame(chi$stdres, responseName='res'), by=c("field","npersons_bin") )
-  
+
   #добавляем человекопонятные метки
   grants$field<-factor(grants$field, levels=c("soc","beh_cog","chem","physics"), labels=c("Обществ.","Бихевиор./когн.","Химия","Физика"))
-  
+
   #задаем базовую структуру графика
   p<-ggplot(data=grants,aes(xmin=0, ymin=ymin, xmax=xmax, ymax=ymax, fill=res)) +
     #квадраты графика
@@ -261,16 +267,16 @@ mosaic.plot <- function(tbl){
     geom_text(aes(label=n, x=25, y=ymin+0.05), color=I("white"), size=3) +
     #используем facet для разделения на столбцы
     facet_grid(~field,scales="free_x",space="free_x")
-  
+
   #применяем тему, убираем лишнее
   p<-p+ mytheme+theme(panel.margin = unit(0, "lines"),panel.grid=element_blank(),strip.background=element_blank(), line = element_blank(),
                       axis.text.x = element_blank(),  axis.line = element_blank(), axis.title = element_blank())+scale_x_continuous(expand=c(0,1))
-  
+
   #добавляем метки для числа человек слева
   p<-p+scale_y_continuous(expand=c(0,0), breaks=grants[grants$field=="Обществ.","ymid"], labels=c("1 человек", "2-3 человека", "3 и более"))
-  
+
   #раскрашиваем в зависимости от остатков
   p<-p+scale_fill_gradientn('Стандарт.\nостатки.',colours=c("#B2182B","#D6604D","#F4A582","#92C5DE","#4393C3","#2166AC"), values=rescale(c(min(grants$res), -3, -2,2,3,max(grants$res))),guide=guide_colorbar(nbin=4, raster=F, ticks=F, title.hjust =0,label.position="left",label.hjust =1))
-  
+
   p
 }
