@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotting.R
 \name{plot.pointrange}
 \alias{plot.pointrange}
-\title{Title}
+\title{Pointrange plot}
 \usage{
 \method{generic}{class}(..., pos = position_dodge(0.3), pointsize = I(3),
   linesize = I(1), pointfill = I("white"), within_subj = F, wid = "uid",
@@ -36,11 +36,26 @@
 \item{add_h_line}{}
 
 \item{connecting_line}{}
+
+\item{pretty_breaks_y}{}
+
+\item{pretty_y_axis}{}
+
+\item{exp_y}{}
+
+\item{print_aggregated_data}{}
 }
 \value{
 plot of pointrange
 }
 \description{
-Title
+Pointrange plot
+}
+\examples{
+data(faces)
+plot.pointrange(faces, aes(x=user_gender, color=stim_gender, y=answerTime))+ylab('RT')
+plot.pointrange(faces, aes(x=user_gender, color=stim_gender, y=answerTime), wid='uid', within_subj=T)+ylab('RT')
+plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), wid='uid', within_subj=T, bars='se')+ylab('RT')
+plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), wid='uid', within_subj=T, bars='se', print_aggregated_data=T)+ylab('RT')
 }
 

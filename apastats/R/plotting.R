@@ -44,7 +44,7 @@ base.breaks.y <- function(x, expand = c(0,0),...){
        scale_y_continuous(breaks=b, expand = expand))
 }
 
-#' Title
+#' Pointrange plot
 #'
 #' @param ...
 #' @param pos
@@ -59,11 +59,20 @@ base.breaks.y <- function(x, expand = c(0,0),...){
 #' @param x_as_numeric
 #' @param add_h_line
 #' @param connecting_line
+#' @param pretty_breaks_y
+#' @param pretty_y_axis
+#' @param exp_y
+#' @param print_aggregated_data
 #'
 #' @return plot of pointrange
 #' @export plot.pointrange
 #' @method generic class
-#'
+#' @examples
+#' data(faces)
+#' plot.pointrange(faces, aes(x=user_gender, color=stim_gender, y=answerTime))+ylab('RT')
+#' plot.pointrange(faces, aes(x=user_gender, color=stim_gender, y=answerTime), wid='uid', within_subj=T)+ylab('RT')
+#' plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), wid='uid', within_subj=T, bars='se')+ylab('RT')
+#' plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), wid='uid', within_subj=T, bars='se', print_aggregated_data=T)+ylab('RT')
 
 plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), linesize=I(1), pointfill=I('white'), within_subj=F, wid='uid', bars='ci', withinvars=NULL, betweenvars=NULL, x_as_numeric=F, add_h_line=NULL, connecting_line=F, pretty_breaks_y=F, pretty_y_axis=F, exp_y=F, print_aggregated_data=F){
   ellipses<-list(...)
@@ -159,29 +168,46 @@ get_grob_element<-function(myggplot, el='guide-box'){
 #' @return plots arranged with grid.arrange
 #' @export
 #'
+#' @examples
+#' load.libs(c('data.table','ggplot2','scales','grid'))
+#' data(faces)
 #'
+#' p1<-plot.pointrange(faces[correct==1, ], aes(x=user_gender, color=stim_gender, y=answerTime), wid='uid', within_subj=T)+labs(x="Participant's gender", color="Face Gender", y='Untransformed RT')
+#' p2<-plot.pointrange(faces, aes(x=user_gender, color=stim_gender, y=correct), wid='uid')+labs(x="Participant's gender", color="Face Gender" ,y='Accuracy')
+#' grid_arrange_shared_legend(p1, p2, stack = 'horizontal')
+#' grid_arrange_shared_legend(p1, p2, stack = 'vertical')
+#'
+#' #one_x_axis=T has a small bug for now; the labels are not aligned properly
+#' grid_arrange_shared_legend(p1+theme(plot.margin=unit(rep(0,4),'lines'), legend.position='top'),p2+theme(plot.margin=unit(rep(0,4),'lines')), stack='v', one_x_axis = T, one_sub = T,  legend_pos='t')
+#'
+#' grid_arrange_shared_legend(p1, p2, stack = 'v', heights=c(0.7,0.2))
 #'
 
 
 grid_arrange_shared_legend<-function(..., stack = 'v', one_sub=F, heights=F, one_x_axis=F, legend_pos='b') {
-  requireNamespace('gridExtra')
+  require('gridExtra')
+  require('grid')
+
   plots <- list(...)
   legend <- get_grob_element(plots[[1]])
   plots<-lapply(plots, function(x) x + theme(legend.position="none"))
-  if (one_sub) {
-    x_lab_grob<-get_grob_element(plots[[1]], 'xlab')
-    plots<-lapply(plots, function(x) x + xlab(NULL)+theme(axis.text.x=element_blank(), axis.ticks.x=element_blank()))
-  }
   if (one_x_axis){
     x_axis_grob<-get_grob_element(plots[[1]], 'axis-b')
     plots<-lapply(plots, function(x) x + theme(axis.text.x=element_blank(), axis.ticks.x=element_blank()))
   }
-  if (!heights){
-    heights=unit(rep_len(1, length(plots)), "null")
+
+  if (one_sub) {
+    x_lab_grob<-get_grob_element(plots[[1]], 'xlab')
+    plots<-lapply(plots, function(x) x + xlab(NULL))
   }
+
+  if (heights==F){
+    heights=grid::unit(rep_len(1, length(plots)), "null")
+  }
+
   lheight <- sum(legend$heights)
   lwidth <- sum(legend$widths)
-
+  stack <- substr(stack, 0, 1)
   if (stack=='v'){
     p<-do.call(gridExtra::arrangeGrob, append(plots, list(heights=heights)))
     if (one_x_axis){
