@@ -531,35 +531,61 @@ paste_and<-function(x, sep=', ', suffix=''){
 
 #' Run lmer with Julia
 #'
+#' Fits maximal model
+#'
 #' @param myform
 #' @param dataset
 #'
 #' @return result
 #' @export
+#' @examples
+#'
+#' load.libs(c('lme4','rjulia','data.table'))
+#' julia_init()
+#' data(faces)
+#'
+#' ptm <- proc.time()
+#' summary(lmer(answerTime~correct*stim_gender+(1+correct*stim_gender|uid), faces))
+#' proc.time() - ptm
+#'
+#' ptm <- proc.time()
+#' lmer_with_julia(answerTime~correct*stim_gender+(1|uid), faces)
+#' proc.time() - ptm
+#'
+#' #Bizzare model - user gender cannot be a random effect within users, only for demonstration
+#' ptm <- proc.time()
+#' summary(lmer(answerTime~correct*stim_gender*user_gender+(1+correct*stim_gender*user_gender|uid), faces))
+#' proc.time() - ptm
+#'
+#' ptm <- proc.time()
+#' lmer_with_julia(answerTime~correct*stim_gender*user_gender+(1|uid), faces)
+#' proc.time() - ptm
 #'
 
 lmer_with_julia<-function(myform, dataset){
   #Note that julia_init() should be run before using that function
   requireNamespace('formula.tools')
   requireNamespace('ordinal')
+  rjulia::j2r('using MixedModels')
 
-  grouping_var<-all.vars(findbars(myform)[[1]])
+  myform<-formula(myform)
+  grouping_var<-all.vars(lme4::findbars(myform)[[1]])
 
   dataset<-na.omit(dataset[,all.vars(myform), with=F])
-  mm<-model.matrix(nobars(myform), dataset)
-  mm<-drop.coef(mm)
+  mm<-model.matrix(lme4::nobars(myform), dataset)
+  mm<-ordinal::drop.coef(mm)
   truenames<-colnames(mm)
   mm<-mm[,2:ncol(mm)] #removing Intercept
   names_for_julia<-letters[1:ncol(mm)]
   colnames(mm)<-names_for_julia
   mm<-cbind(mm, dataset)
-  new.formula<-paste0(lhs(myform),'~',paste(names_for_julia, collapse = '+'),'+(',paste(names_for_julia, collapse = '+'),'|',grouping_var,')')
-  r2j(mm,'mm')
+  new.formula<-paste0(formula.tools::lhs(myform),'~',paste(names_for_julia, collapse = '+'),'+(',paste(names_for_julia, collapse = '+'),'|',grouping_var,')')
+  rjulia::r2j(mm,'mm')
   expr<-paste0('mod_fit = fit(lmm(',new.formula,',mm))')
   print(expr)
-  j2r(expr)
+  rjulia::j2r(expr)
 
-  res<-j2r('DataFrame(Estimate=fixef(mod_fit), StdError = stderr(mod_fit), Z = fixef(mod_fit)./stderr(mod_fit))')
+  res<-rjulia::j2r('DataFrame(Estimate=fixef(mod_fit), StdError = stderr(mod_fit), Z = fixef(mod_fit)./stderr(mod_fit))')
   row.names(res)<-truenames
   res<-round(res, 2)
   res

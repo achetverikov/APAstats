@@ -15,6 +15,28 @@ lmer_with_julia(myform, dataset)
 result
 }
 \description{
-Run lmer with Julia
+Fits maximal model
+}
+\examples{
+load.libs(c('lme4','rjulia','data.table'))
+julia_init()
+data(faces)
+
+ptm <- proc.time()
+summary(lmer(answerTime~correct*stim_gender+(1+correct*stim_gender|uid), faces))
+proc.time() - ptm
+
+ptm <- proc.time()
+lmer_with_julia(answerTime~correct*stim_gender+(1|uid), faces)
+proc.time() - ptm
+
+#Bizzare model - user gender cannot be a random effect within users, only for demonstration
+ptm <- proc.time()
+summary(lmer(answerTime~correct*stim_gender*user_gender+(1+correct*stim_gender*user_gender|uid), faces))
+proc.time() - ptm
+
+ptm <- proc.time()
+lmer_with_julia(answerTime~correct*stim_gender*user_gender+(1|uid), faces)
+proc.time() - ptm
 }
 
