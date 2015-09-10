@@ -562,9 +562,10 @@ paste_and<-function(x, sep=', ', suffix=''){
 #' proc.time() - ptm
 #'
 
+
 lmer_with_julia<-function(myform, dataset){
   #Note that julia_init() should be run before using that function
-  requireNamespace('formula.tools')
+  require('formula.tools')
   requireNamespace('ordinal')
   rjulia::j2r('using MixedModels')
 
