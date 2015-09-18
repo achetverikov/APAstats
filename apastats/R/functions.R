@@ -591,3 +591,27 @@ lmer_with_julia<-function(myform, dataset){
   res<-round(res, 2)
   res
 }
+
+#' Double aggregation
+#'
+#' Aggregates value twice providing mean of means, SD of SDs, etc.
+#'
+#' @param x value to aggregate
+#' @param by vector to aggregate by (e.g., ID of participant)
+#' @param fun function to apply
+#'
+#' @return value aggregate first by specified vector and then aggregated again
+#' @export
+#'
+#' @examples
+#'
+#' x<-rnorm(100)
+#' id<-rep(1:10, each=10)
+#'
+#' aggregate(x~id, FUN=mean)
+#' aggr2(x, id, mean)
+#'
+aggr2<-function (x, by, fun){
+  if (!is.list(by)) by<-list(by)
+  fun(aggregate(x,by, FUN=fun)$x)
+}
