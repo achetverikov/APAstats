@@ -63,6 +63,7 @@ base.breaks.y <- function(x, expand = c(0,0),...){
 #' @param pretty_y_axis
 #' @param exp_y
 #' @param print_aggregated_data
+#' @param do_aggregate - aggregate data by all conditions before plotting (False)
 #'
 #' @return plot of pointrange
 #' @export plot.pointrange
@@ -74,7 +75,7 @@ base.breaks.y <- function(x, expand = c(0,0),...){
 #' plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), wid='uid', within_subj=T, bars='se')+ylab('RT')
 #' plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), wid='uid', within_subj=T, bars='se', print_aggregated_data=T)+ylab('RT')
 
-plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), linesize=I(1), pointfill=I('white'), within_subj=F, wid='uid', bars='ci', withinvars=NULL, betweenvars=NULL, x_as_numeric=F, add_h_line=NULL, connecting_line=F, pretty_breaks_y=F, pretty_y_axis=F, exp_y=F, print_aggregated_data=F){
+plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), linesize=I(1), pointfill=I('white'), within_subj=F, wid='uid', bars='ci', withinvars=NULL, betweenvars=NULL, x_as_numeric=F, add_h_line=NULL, connecting_line=F, pretty_breaks_y=F, pretty_y_axis=F, exp_y=F, print_aggregated_data=F, do_aggregate = F){
   ellipses<-list(...)
   plot_f<-ellipses[[2]]
   withinvars<-c(withinvars, as.character(unlist(plot_f[names(plot_f)!='y'])))
@@ -83,6 +84,9 @@ plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), lines
   plot_data<-plot_data[!is.na(plot_data[,dv]),]
   aes_list<-modifyList(lapply(plot_f[names(plot_f)!='y'],as.character),list(y=dv, ymin='ymin', ymax='ymax'))
   #print(aes_list)
+  if (do_aggregate) {
+    plot_data<-Rmisc::summarySE(plot_data, measurevar=dv, groupvars = c(withinvars,betweenvars, wid), na.rm=T)
+  }
   if (within_subj){
     aggr_data<-Rmisc::summarySEwithin(plot_data, measurevar=dv, withinvars = withinvars, betweenvars=betweenvars, idvar=wid, na.rm=T)
   } else {
@@ -241,7 +245,7 @@ grid_arrange_shared_legend<-function(..., stack = 'v', one_sub=F, heights=F, one
 #'
 #'
 ac_shape_pal<-function(){
-  manual_pal(unname(c(21,22,24,25,23,1:5)))
+  manual_pal(unname(c(22,24,25,23,21,1:5)))
 
 }
 

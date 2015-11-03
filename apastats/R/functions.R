@@ -343,6 +343,46 @@ describe.lmert <- function (sfit, factor, dtype='t',...){
   format.results(res_str,...)
 }
 
+
+
+#' Describe contrasts created by lsmeans
+#'
+#' @param obj - summary object from lsmeans::contrast
+#' @param term - contrast number
+#' @param dtype - description type, "t", "B", or any other letter
+#' @param df - should we include DF in t-test description
+#' @param ... other parameters passed to format.results
+#'
+#' @return string with formatted results
+#' @export
+#'
+#' @examples
+#'
+#' require(lsmeans)
+#' warp.lm <- lm(breaks ~ wool*tension, data = warpbreaks)
+#' warp.lsm <- lsmeans(warp.lm, ~ tension | wool)
+#' (sum_contr<-summary(contrast(warp.lsm, 'trt.vs.ctrl')))
+#' describe.lsmeans(sum_contr, 1)
+#' describe.lsmeans(sum_contr, 3)
+#' describe.lsmeans(sum_contr, 3, dtype='t')
+#' describe.lsmeans(sum_contr, 3, dtype='c')
+#' describe.lsmeans(sum_contr, 3, dtype='c', df=T)
+
+
+describe.lsmeans<-function(obj, term, dtype='B', df=F, ...){
+  obj<-obj[term,]
+  if (dtype=="t"){
+    res_str<-sprintf("\\emph{%s}%s = %.2f, \\emph{p} %s", 't', ifelse(df, paste0('(', round(obj['df']),')'),''), obj['t.ratio'], round.p(obj['p.value']))
+  }
+  else if (dtype=="B"){
+    res_str<-sprintf("\\emph{B} = %.2f (%.2f), \\emph{p} %s", obj['estimate'], obj['SE'], round.p(obj['p.value']))
+  }
+  else{
+    res_str<-sprintf("\\emph{B} = %.2f (%.2f), \\emph{%s}%s = %.2f, \\emph{p} %s", obj['estimate'], obj['SE'],  't', ifelse(df, paste0('(', round(obj['df']),')'),''), obj['t.ratio'], round.p(obj['p.value']))
+  }
+  format.results(res_str,...)
+}
+
 #' Describe lmer results
 #'
 #' @param fm
@@ -438,7 +478,7 @@ describe.ezanova <- function(ezfit, term, include_eta=T, spher_corr=T,...){
   }
   rownames(eza)<-eza$Effect
 
-  suffix <- ifelse(include_eta, sprintf(', $\\eta$^2^~G~ = %.3f', eza[term, "ges"]),'')
+  suffix <- ifelse(include_eta, sprintf(', $\\eta$^2^~G~ = %.2f', eza[term, "ges"]),'')
   res<-format.results(sprintf("\\emph{F}(%.0f, %.0f) = %.2f, \\emph{p} %s%s", eza[term,"DFn"],eza[term,"DFd"],eza[term,"F"],round.p(eza[term,"p"]), suffix))
   res
 }

@@ -8,7 +8,8 @@
   linesize = I(1), pointfill = I("white"), within_subj = F, wid = "uid",
   bars = "ci", withinvars = NULL, betweenvars = NULL, x_as_numeric = F,
   add_h_line = NULL, connecting_line = F, pretty_breaks_y = F,
-  pretty_y_axis = F, exp_y = F, print_aggregated_data = F)
+  pretty_y_axis = F, exp_y = F, print_aggregated_data = F,
+  do_aggregate = F)
 }
 \arguments{
 \item{...}{}
@@ -44,6 +45,8 @@
 \item{exp_y}{}
 
 \item{print_aggregated_data}{}
+
+\item{do_aggregate}{- aggregate data by all conditions before plotting (False)}
 }
 \value{
 plot of pointrange
