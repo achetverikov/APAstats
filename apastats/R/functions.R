@@ -147,7 +147,7 @@ describe.mean.and.t <- function(x, by, which.mean=1, digits=2, paired=F, eff.siz
     means = paste0(summaries[which.mean,"mean.descr"], ', ')
   
   res_str=paste0(means,describe.ttest(t.test(x~by, paired=paired)))
-  if (eff_size){
+  if (eff.size){
     requireNamespace('lsr')
     eff_size = cohensD(x~by, method = ifelse(paired, 'paired', 'unequal'))
     res_str=paste0(res_str,', \\emph(d) = ',f.round(eff_size, digits=digits))
