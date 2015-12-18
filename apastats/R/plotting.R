@@ -188,15 +188,26 @@ get_grob_element<-function(myggplot, el='guide-box'){
 #'
 
 
-grid_arrange_shared_legend<-function(..., stack = 'v', one_sub=F, heights=F, one_x_axis=F, legend_pos='b') {
+grid_arrange_shared_legend<-function(..., stack = 'v', one_sub=F, heights=F, one_x_axis=F, legend_pos='b', share_legend=T) {
   require('gridExtra')
   require('grid')
 
   plots <- list(...)
-  legend <- get_grob_element(plots[[1]])
-  plots<-lapply(plots, function(x) x + theme(legend.position="none"))
+  if (share_legend){
+    legend <- get_grob_element(plots[[1]])
+    plots<-lapply(plots, function(x) x + theme(legend.position="none"))
+    lheight <- sum(legend$heights)
+    lwidth <- sum(legend$widths)
+  }
   if (one_x_axis){
     x_axis_grob<-get_grob_element(plots[[1]], 'axis-b')
+    if (length(x_axis_grob)>1&'gtable' %in% class(x_axis_grob[[2]])){
+      x_axis_height<-x_axis_grob[[2]]$heights[1]
+      x_axis_grob<-x_axis_grob[[2]]
+    }
+    else {
+      x_axis_height<-x_axis_grob$height
+    }
     plots<-lapply(plots, function(x) x + theme(axis.text.x=element_blank(), axis.ticks.x=element_blank()))
   }
 
@@ -209,28 +220,27 @@ grid_arrange_shared_legend<-function(..., stack = 'v', one_sub=F, heights=F, one
     heights=grid::unit(rep_len(1, length(plots)), "null")
   }
 
-  lheight <- sum(legend$heights)
-  lwidth <- sum(legend$widths)
+  
   stack <- substr(stack, 0, 1)
   if (stack=='v'){
     p<-do.call(gridExtra::arrangeGrob, append(plots, list(heights=heights)))
     if (one_x_axis){
 
-      p<-gridExtra::arrangeGrob(p, x_axis_grob, ncol = 1, heights = unit.c(unit(1, "npc") - x_axis_grob$height, x_axis_grob$height))
+      p<- grid.arrange(gridExtra::arrangeGrob(p, x_axis_grob, ncol = 1, heights = unit.c(unit(1, "npc") - unit(1,'cm'), x_axis_height)))
     }
   } else {
     p<-do.call(gridExtra::arrangeGrob, c(plots, nrow=1))
   }
-
-  if (legend_pos=='t')
-    p<-gridExtra::arrangeGrob( legend, p, ncol = 1, heights = unit.c(lheight, unit(1, "npc") - lheight))
-  else if (legend_pos=='b')
-    p<-gridExtra::arrangeGrob(p, legend, ncol = 1, heights = unit.c(unit(1, "npc") - lheight, lheight))
-  else if (legend_pos=='r')
-    p<-gridExtra::arrangeGrob(p, legend, nrow = 1, widths = unit.c(unit(1, "npc") - lwidth, lwidth))
-  else if (legend_pos=='l')
-    p<-gridExtra::arrangeGrob(legend, p, nrow = 1, widths = unit.c(lwidth, unit(1, "npc") - lwidth))
-
+  if (share_legend){
+    if (legend_pos=='t')
+      p<-gridExtra::arrangeGrob( legend, p, ncol = 1, heights = unit.c(lheight, unit(1, "npc") - lheight))
+    else if (legend_pos=='b')
+      p<-gridExtra::arrangeGrob(p, legend, ncol = 1, heights = unit.c(unit(1, "npc") - lheight, lheight))
+    else if (legend_pos=='r')
+      p<-gridExtra::arrangeGrob(p, legend, nrow = 1, widths = unit.c(unit(1, "npc") - lwidth, lwidth))
+    else if (legend_pos=='l')
+      p<-gridExtra::arrangeGrob(legend, p, nrow = 1, widths = unit.c(lwidth, unit(1, "npc") - lwidth))
+  }
   if (one_sub) {
     xlab_h<- unit(1.2,'lines') #sum(xlab_grob$heights)
     p<-gridExtra::arrangeGrob(p, x_lab_grob,  ncol = 1, heights = unit.c(unit(1, "npc") - xlab_h, xlab_h))

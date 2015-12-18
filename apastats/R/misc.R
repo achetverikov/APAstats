@@ -145,3 +145,8 @@ sd.round<-function(x, ...){
 load.libs<-function(libs){
   suppressMessages(invisible(lapply(libs, require, character.only=TRUE)))
 }
+
+
+int_to_bin<-function (x) {
+  as.integer(paste(rev(as.integer(intToBits(x))), collapse=""))
+}

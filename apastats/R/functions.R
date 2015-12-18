@@ -116,31 +116,47 @@ describe.ttest <- function (t,show.mean=F, abs=F,...){
   format.results(res_str, ...)
 }
 
-#' Describe t-test with means
+
+
+#' Describe two-sample t-test with means and effect sizes
 #'
-#' @param x
-#' @param by
-#' @param which.mean
-#' @param digits
-#' @param paired
+#' @param x dependent variable
+#' @param by independent variable
+#' @param which.mean which mean to show (0 - none, 1 - first group (default), 2 - second group, 3 - both)
+#' @param digits number of digits in results (default: 2)
+#' @param paired should it be a paired test (default: F)
+#' @param eff.size should we include effect size (default: F)
 #' @param ...
 #'
 #' @return result
 #' @export
 #'
 
-describe.mean.and.t <- function(x, by, which.mean=1, digits=2, paired=F,...){
+describe.mean.and.t <- function(x, by, which.mean=1, digits=2, paired=F, eff.size=F, ...){
+  if (lengthu(by)!=2)
+    stop('"by" should have exactly two levels')
+  
   summaries=Hmisc::summarize(x, by, smean.cl.boot)
   summaries<-transform(summaries, mean.descr=sprintf(paste0("\\emph{M} = %.",digits,"f [%.",digits,"f, %.",digits,"f]"), x, Lower, Upper))
-
+  
   if (which.mean==3)
-    means=paste(summaries[1,"mean.descr"],"vs.",summaries[2,"mean.descr"])
+    means = paste0(summaries[1,"mean.descr"],"vs. ",summaries[2,"mean.descr"],', ')
+  else if (which.mean==0)
+    means = ''
   else
-    means=summaries[which.mean,"mean.descr"];
-  res_str=paste0(means,', ',describe.ttest(t.test(x~by, paired=paired)))
+    means = paste0(summaries[which.mean,"mean.descr"], ', ')
+  
+  res_str=paste0(means,describe.ttest(t.test(x~by, paired=paired)))
+  if (eff_size){
+    requireNamespace('lsr')
+    eff_size = cohensD(x~by, method = ifelse(paired, 'paired', 'unequal'))
+    res_str=paste0(res_str,', \\emph(d) = ',f.round(eff_size, digits=digits))
+  }
+  
   format.results(res_str, ...)
-
+  
 }
+
 
 #' Get nice matrix of fixed effects from lmer
 #'
@@ -204,6 +220,29 @@ describe.aov <- function (fit, term, type=2,...){
   afit<-as.data.frame(car::Anova(fit, type=type))
 
   describe.Anova(afit, term, ...)
+}
+
+
+#' Describe lmerTest anova results
+#'
+#' @param afit - lmerTest anova results
+#' @param term - term name
+#' @param f.digits - decimal digits for F
+#' @param ...
+#'
+#' @return formatted string describing the results of anova
+#' @export
+#'
+#' @examples
+#' load.libs(c('lme4','lmerTest'))
+#' data(faces)
+#'
+#' fit <- lmer(answerTime~correct*stim_gender+(1+correct*stim_gender|uid), faces)
+#' afit <- anova(fit)
+#' describe.lmtaov(afit, 'correct:stim_gender')
+describe.lmtaov <- function (afit, term, f.digits=2, ...){
+  res_str<-sprintf(paste0("\\emph{F}(%.0f, %.1f) = %.",f.digits,"f, \\emph{p} %s"), afit[term,"NumDF"], afit[term,"DenDF"], afit[term, "F.value"], round.p(afit[term, "Pr(>F)"]))
+  format.results(res_str, ...)
 }
 
 #' Describe Anova results

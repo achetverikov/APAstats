@@ -2,20 +2,23 @@
 % Please edit documentation in R/functions.R
 \name{describe.mean.and.t}
 \alias{describe.mean.and.t}
-\title{Describe t-test with means}
+\title{Describe two-sample t-test with means and effect sizes}
 \usage{
-describe.mean.and.t(x, by, which.mean = 1, digits = 2, paired = F, ...)
+describe.mean.and.t(x, by, which.mean = 1, digits = 2, paired = F,
+  eff.size = F, ...)
 }
 \arguments{
-\item{x}{}
+\item{x}{dependent variable}
 
-\item{by}{}
+\item{by}{independent variable}
 
-\item{which.mean}{}
+\item{which.mean}{which mean to show (0 - none, 1 - first group (default), 2 - second group, 3 - both)}
 
-\item{digits}{}
+\item{digits}{number of digits in results (default: 2)}
 
-\item{paired}{}
+\item{paired}{should it be a paired test (default: F)}
+
+\item{eff.size}{should we include effect size (default: F)}
 
 \item{...}{}
 }
@@ -23,6 +26,6 @@ describe.mean.and.t(x, by, which.mean = 1, digits = 2, paired = F, ...)
 result
 }
 \description{
-Describe t-test with means
+Describe two-sample t-test with means and effect sizes
 }
 
