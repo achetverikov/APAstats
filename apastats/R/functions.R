@@ -126,13 +126,14 @@ describe.ttest <- function (t,show.mean=F, abs=F,...){
 #' @param digits number of digits in results (default: 2)
 #' @param paired should it be a paired test (default: F)
 #' @param eff.size should we include effect size (default: F)
+#' @param abs should we show the absolute value if the t-test (T) or keep its sign (F, default)
 #' @param ...
 #'
 #' @return result
 #' @export
 #'
 
-describe.mean.and.t <- function(x, by, which.mean=1, digits=2, paired=F, eff.size=F, ...){
+describe.mean.and.t <- function(x, by, which.mean=1, digits=2, paired=F, eff.size=F, abs=F, ...){
   if (lengthu(by)!=2)
     stop('"by" should have exactly two levels')
   
@@ -146,7 +147,7 @@ describe.mean.and.t <- function(x, by, which.mean=1, digits=2, paired=F, eff.siz
   else
     means = paste0(summaries[which.mean,"mean.descr"], ', ')
   
-  res_str=paste0(means,describe.ttest(t.test(x~by, paired=paired)))
+  res_str=paste0(means,describe.ttest(t.test(x~by, paired=paired), abs=abs))
   if (eff.size){
     requireNamespace('lsr')
     eff_size = lsr::cohensD(x~by, method = ifelse(paired, 'paired', 'unequal'))
@@ -263,18 +264,19 @@ describe.Anova <- function (afit, term, f.digits=2, ...){
 
 #' Describe regression model (GLM, GLMer, lm, lm.circular, ...)
 #'
-#' @param fit
-#' @param term
-#' @param short
-#' @param f.digits
-#' @param test_df
+#' @param fit model object
+#' @param term model term to describe
+#' @param short description type (1, 2, or 3)
+#' @param f.digits how many digits to use
+#' @param test_df should we include degrees of freedom in description?
+#' @param eff.size should we include effect size (currently implemented only for simple regression)? 
 #' @param ...
 #'
 #' @return result
 #' @export
 #'
 
-describe.glm <- function (fit, term=NULL, short=1, f.digits=2, test_df=F, p_as_number=F, term_pattern=NULL, ...){
+describe.glm <- function (fit, term=NULL, short=1, f.digits=2, test_df=F, p_as_number=F, term_pattern=NULL, eff.size = F, ...){
   fit_package = attr(class(fit),'package')
   fit_class = class(fit)[1]
   fit_family = family(fit)[1]
@@ -295,7 +297,13 @@ describe.glm <- function (fit, term=NULL, short=1, f.digits=2, test_df=F, p_as_n
     } else {
       t_z<-'Z'
     }
+    if (eff.size){
+      requireNamespace('rockchalk')
+      ess <- rockchalk::getDeltaRsquare(fit)
+    }
   }
+  
+  
 
   if (length(attr(terms(fit), "term.labels"))==(length(rownames(afit))+1))
     rownames(afit)<-c("Intercept", attr(terms(fit), "term.labels"))
@@ -315,6 +323,12 @@ describe.glm <- function (fit, term=NULL, short=1, f.digits=2, test_df=F, p_as_n
   else {
     res_df$str<-sprintf(paste0("\\emph{B} = %.",f.digits,"f, \\emph{SE} = %.",f.digits,"f,  \\emph{",t_z,"}",ifelse(test_df,paste0('(',summary(fit)$df[2],')'),'')," = %.",f.digits,"f, \\emph{p} %s"), afit[, 1], afit[, 2], afit[, 3], round.p(afit[, 4]))
   }
+  if (eff.size&!exists('ess')){
+    stop('Effect sizes are not implemented for THAT kind of models yet.')
+  } else if (eff.size) {
+    res_df$str<-paste0(res_df$str, ', $R_part^2$', round.p(c(NA,ess),digits = ifelse(min(ess)<0.01,3,2) ))
+  }
+  
   res_df$str<-format.results(res_df$str, ...)
   if (!is.null(term)){
     res_df[term, 'str']
