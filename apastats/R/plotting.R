@@ -85,12 +85,12 @@ plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), lines
   aes_list<-modifyList(lapply(plot_f[names(plot_f)!='y'],as.character),list(y=dv, ymin='ymin', ymax='ymax'))
   #print(aes_list)
   if (do_aggregate) {
-    plot_data<-Rmisc::summarySE(plot_data, measurevar=dv, groupvars = c(withinvars,betweenvars, wid), na.rm=T)
+    plot_data<-summarySE(plot_data, measurevar=dv, groupvars = c(withinvars,betweenvars, wid), na.rm=T)
   }
   if (within_subj){
-    aggr_data<-Rmisc::summarySEwithin(plot_data, measurevar=dv, withinvars = withinvars, betweenvars=betweenvars, idvar=wid, na.rm=T)
+    aggr_data<-summarySEwithin(plot_data, measurevar=dv, withinvars = withinvars, betweenvars=betweenvars, idvar=wid, na.rm=T)
   } else {
-    aggr_data<-Rmisc::summarySE(plot_data, measurevar=dv, groupvars = c(withinvars,betweenvars), na.rm=T)
+    aggr_data<-summarySE(plot_data, measurevar=dv, groupvars = c(withinvars,betweenvars), na.rm=T)
   }
   if (x_as_numeric){
     aggr_data[, aes_list$x]<-as.numeric(as.character(aggr_data[, aes_list$x]))
@@ -220,7 +220,7 @@ grid_arrange_shared_legend<-function(..., stack = 'v', one_sub=F, heights=F, one
     heights=grid::unit(rep_len(1, length(plots)), "null")
   }
 
-  
+
   stack <- substr(stack, 0, 1)
   if (stack=='v'){
     p<-do.call(gridExtra::arrangeGrob, append(plots, list(heights=heights)))

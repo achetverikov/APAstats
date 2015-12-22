@@ -5,18 +5,20 @@
 \title{Describe regression model (GLM, GLMer, lm, lm.circular, ...)}
 \usage{
 describe.glm(fit, term = NULL, short = 1, f.digits = 2, test_df = F,
-  p_as_number = F, term_pattern = NULL, ...)
+  p_as_number = F, term_pattern = NULL, eff.size = F, ...)
 }
 \arguments{
-\item{fit}{}
+\item{fit}{model object}
 
-\item{term}{}
+\item{term}{model term to describe}
 
-\item{short}{}
+\item{short}{description type (1, 2, or 3)}
 
-\item{f.digits}{}
+\item{f.digits}{how many digits to use}
 
-\item{test_df}{}
+\item{test_df}{should we include degrees of freedom in description?}
+
+\item{eff.size}{should we include effect size (currently implemented only for simple regression)?}
 
 \item{...}{}
 }

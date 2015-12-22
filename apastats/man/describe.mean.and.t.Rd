@@ -5,7 +5,7 @@
 \title{Describe two-sample t-test with means and effect sizes}
 \usage{
 describe.mean.and.t(x, by, which.mean = 1, digits = 2, paired = F,
-  eff.size = F, ...)
+  eff.size = F, abs = F, ...)
 }
 \arguments{
 \item{x}{dependent variable}
@@ -19,6 +19,8 @@ describe.mean.and.t(x, by, which.mean = 1, digits = 2, paired = F,
 \item{paired}{should it be a paired test (default: F)}
 
 \item{eff.size}{should we include effect size (default: F)}
+
+\item{abs}{should we show the absolute value if the t-test (T) or keep its sign (F, default)}
 
 \item{...}{}
 }
