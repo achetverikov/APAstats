@@ -93,12 +93,12 @@ summarySEwithin <- function(data=NULL, measurevar, betweenvars=NULL, withinvars=
   factorvars <- vapply(data[, c(betweenvars, withinvars), drop=FALSE],
                        FUN=is.factor, FUN.VALUE=logical(1))
 
-  if (!all(factorvars)) {
-    nonfactorvars <- names(factorvars)[!factorvars]
-    message("Automatically converting the following non-factors to factors: ",
-            paste(nonfactorvars, collapse = ", "))
-    data[nonfactorvars] <- lapply(data[nonfactorvars], factor)
-  }
+#   if (!all(factorvars)) {
+#     nonfactorvars <- names(factorvars)[!factorvars]
+#     message("Automatically converting the following non-factors to factors: ",
+#             paste(nonfactorvars, collapse = ", "))
+#     data[nonfactorvars] <- lapply(data[nonfactorvars], factor)
+#   }
 
   # Get the means from the un-normed data
   datac <- summarySE(data, measurevar, groupvars=c(betweenvars, withinvars),
@@ -121,7 +121,7 @@ summarySEwithin <- function(data=NULL, measurevar, betweenvars=NULL, withinvars=
 
   # Apply correction from Morey (2008) to the standard error and confidence interval
   #  Get the product of the number of conditions of within-S variables
-  nWithinGroups    <- prod(vapply(ndatac[,withinvars, drop=FALSE], FUN=nlevels,
+  nWithinGroups    <- prod(vapply(ndatac[,withinvars, drop=FALSE], FUN=apastats::lengthu,
                                   FUN.VALUE=numeric(1)))
   correctionFactor <- sqrt( nWithinGroups / (nWithinGroups-1) )
 
