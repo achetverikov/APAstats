@@ -132,13 +132,14 @@ plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), lines
 #' Transform exponential scale back to normal
 #'
 #' @param digits
+#' @param  ... other arguments passed to scale_y_continuous
 #'
 #' @return scale
 #' @export
 #'
-scale_y_exp<-function(digits=0){
+scale_y_exp<-function(digits=0, ...){
   requireNamespace('scales')
-  scale_y_continuous(breaks=trans_breaks('exp',function (x) log(x)), labels=trans_format('exp', function(x) as.character(f.round(x, digits=digits))))
+  scale_y_continuous(breaks=trans_breaks('exp',function (x) log(x)), labels=trans_format('exp', function(x) as.character(f.round(x, digits=digits))), ...)
 }
 
 #' Title
