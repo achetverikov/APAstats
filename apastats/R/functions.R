@@ -136,26 +136,26 @@ describe.ttest <- function (t,show.mean=F, abs=F,...){
 describe.mean.and.t <- function(x, by, which.mean=1, digits=2, paired=F, eff.size=F, abs=F, ...){
   if (lengthu(by)!=2)
     stop('"by" should have exactly two levels')
-  
+
   summaries=Hmisc::summarize(x, by, smean.cl.boot)
   summaries<-transform(summaries, mean.descr=sprintf(paste0("\\emph{M} = %.",digits,"f [%.",digits,"f, %.",digits,"f]"), x, Lower, Upper))
-  
+
   if (which.mean==3)
     means = paste0(summaries[1,"mean.descr"],"vs. ",summaries[2,"mean.descr"],', ')
   else if (which.mean==0)
     means = ''
   else
     means = paste0(summaries[which.mean,"mean.descr"], ', ')
-  
+
   res_str=paste0(means,describe.ttest(t.test(x~by, paired=paired), abs=abs))
   if (eff.size){
     requireNamespace('lsr')
     eff_size = lsr::cohensD(x~by, method = ifelse(paired, 'paired', 'unequal'))
     res_str=paste0(res_str,', \\emph{d} = ',f.round(eff_size, digits=digits))
   }
-  
+
   format.results(res_str, ...)
-  
+
 }
 
 
@@ -223,6 +223,24 @@ describe.aov <- function (fit, term, type=2,...){
   describe.Anova(afit, term, ...)
 }
 
+#' Describe the results of model comparison with anova
+#'
+#' @param anova_res anova results
+#' @param rown row number (default: 2)
+#' @param f.digits number of digits in the results (default: 2)
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#'
+describe.anova <- function (anova_res, rown=2, f.digits=2,...){
+  if ('F' %in% names(anova_res)){
+    res_str<-sprintf(paste0("\\emph{F}(%.0f, %.0f) = %.",f.digits,"f, \\emph{p} %s"), anova_res[rown,"Df"], anova_res[rown,"Res.Df"], anova_res[rown, "F"], round.p(anova_res[rown, "Pr(>F)"]))
+  } else res_str<-sprintf(paste0("$\\chi^2$(%i) = %.",f.digits,"f, \\emph{p} %s"), anova_res[rown,"Df"], anova_res[rown,"Chisq"], round.p(anova_res[rown,"Pr(>Chisq)"]))
+  format.results(res_str, ...)
+
+}
 
 #' Describe lmerTest anova results
 #'
@@ -266,10 +284,10 @@ describe.Anova <- function (afit, term, f.digits=2, ...){
 #'
 #' @param fit model object
 #' @param term model term to describe
-#' @param short description type (1, 2, or 3)
+#' @param short description type (1, 2, 3, or other)
 #' @param f.digits how many digits to use
 #' @param test_df should we include degrees of freedom in description?
-#' @param eff.size should we include effect size (currently implemented only for simple regression)? 
+#' @param eff.size should we include effect size (currently implemented only for simple regression)?
 #' @param ...
 #'
 #' @return result
@@ -302,8 +320,8 @@ describe.glm <- function (fit, term=NULL, short=1, f.digits=2, test_df=F, p_as_n
       ess <- rockchalk::getDeltaRsquare(fit)
     }
   }
-  
-  
+
+
 
   if (length(attr(terms(fit), "term.labels"))==(length(rownames(afit))+1))
     rownames(afit)<-c("Intercept", attr(terms(fit), "term.labels"))
@@ -320,6 +338,9 @@ describe.glm <- function (fit, term=NULL, short=1, f.digits=2, test_df=F, p_as_n
   else if (short==2){
     res_df$str<-sprintf(paste0("\\emph{B} = %.",f.digits,"f (%.",f.digits,"f), \\emph{p} %s"), afit[, 1], afit[, 2], round.p(afit[, 4]))
   }
+  else if (short==3) {
+    res_df$str<-sprintf(paste0("\\emph{B} = %.",f.digits,"f,  \\emph{",t_z,"}",ifelse(test_df,paste0('(',summary(fit)$df[2],')'),'')," = %.",f.digits,"f"), afit[, 1],  afit[, 3])
+  }
   else {
     res_df$str<-sprintf(paste0("\\emph{B} = %.",f.digits,"f, \\emph{SE} = %.",f.digits,"f,  \\emph{",t_z,"}",ifelse(test_df,paste0('(',summary(fit)$df[2],')'),'')," = %.",f.digits,"f, \\emph{p} %s"), afit[, 1], afit[, 2], afit[, 3], round.p(afit[, 4]))
   }
@@ -328,7 +349,7 @@ describe.glm <- function (fit, term=NULL, short=1, f.digits=2, test_df=F, p_as_n
   } else if (eff.size) {
     res_df$str<-paste0(res_df$str, ', $R_part^2$', round.p(c(NA,ess),digits = ifelse(min(ess)<0.01,3,2) ))
   }
-  
+
   res_df$str<-format.results(res_df$str, ...)
   if (!is.null(term)){
     res_df[term, 'str']
