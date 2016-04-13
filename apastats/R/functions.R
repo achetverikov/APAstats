@@ -40,6 +40,7 @@ f.round <- function (x, digits=2){
 #' @param list a vector of p-values
 #' @param include.rel include relation sign
 #' @param digits a number of decimal digits
+#' @param strip.lead.zeros remove zero before decimal point
 #'
 #' @return Formatted p-value
 #' @export round.p
@@ -50,9 +51,15 @@ f.round <- function (x, digits=2){
 #' round.p(c(0.025, 0.0001, 0.001, 0.568))
 #' round.p(c(0.025, 0.0001, 0.001, 0.568), digits=2)
 #' round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=F)
-round.p <- function(list, include.rel=1,digits=3){
+#' round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=F, strip.lead.zeros=F)
+round.p <- function(list, include.rel=1,digits=3, strip.lead.zeros=T){
   list<-as.numeric(list)
-  ifelse(list<=0.001,"< .001",paste(ifelse(include.rel,"= ",""),sub("^.", "", format(round(list,digits=digits),nsmall=digits)),sep=""))
+  if (strip.lead.zeros){
+    ifelse(list<=0.001,"< .001",paste(ifelse(include.rel,"= ",""),sub("^.", "", format(round(list,digits=digits),nsmall=digits)),sep=""))
+  }
+  else {
+    paste(ifelse(include.rel,"= ",""),sub("^.", "", format(round(list,digits=digits),nsmall=digits)),sep="")
+  }
 }
 
 #' Format results
@@ -285,25 +292,32 @@ describe.Anova <- function (afit, term, f.digits=2, ...){
 #' @param fit model object
 #' @param term model term to describe
 #' @param short description type (1, 2, 3, or other)
-#' @param f.digits how many digits to use
-#' @param test_df should we include degrees of freedom in description?
+#' @param b.digits how many digits to use for _B_ and _SE_
+#' @param t.digits how many digits to use for _t_
+#' @param test.df should we include degrees of freedom in description?
 #' @param eff.size should we include effect size (currently implemented only for simple regression)?
+#' @param adj.digits automatically adjusts digits so that B or SE would not show up as "0.00"
 #' @param ...
 #'
 #' @return result
 #' @export
 #'
 
-describe.glm <- function (fit, term=NULL, short=1, f.digits=2, test_df=F, p_as_number=F, term_pattern=NULL, eff.size = F, ...){
+describe.glm <- function (fit, term=NULL, short=1, b.digits=2, t.digits=2, test.df=F, p.as.number=F, term.pattern=NULL, eff.size = F, adj.digits=F, ...){
+  requireNamespace('plyr')
+
   fit_package = attr(class(fit),'package')
   fit_class = class(fit)[1]
   fit_family = family(fit)[1]
+
+  if (!is.numeric(short) | short<0 |short>4) short = 3
+
   if (fit_class== "lm.circular.cl"){
     print(1)
     afit<-data.frame(fit$coefficients, fit$se.coef, fit$t.values, fit$p.values)
     t_z<-'t'
-    if (test_df){
-      test_df=F
+    if (test.df){
+      test.df=F
       warning('df for lm.circular are not implemented')
     }
   }
@@ -320,30 +334,40 @@ describe.glm <- function (fit, term=NULL, short=1, f.digits=2, test_df=F, p_as_n
       ess <- rockchalk::getDeltaRsquare(fit)
     }
   }
-
-
+  if (!is.null(term) & term %nin% row.names(afit)){
+    stop(sprintf('Term %s is absent from the model', term))
+  }
+  if (!is.null(term) & adj.digits)
+    while (plyr::round_any(min(abs(afit[term, 1]),abs(afit[term, 2])), 10^(-b.digits))<(10^(-b.digits)))
+      b.digits = b.digits + 1
+  else if (adj.digits)
+    while (plyr::round_any(abs(afit[which.min(pmin(abs(afit[, 1]),abs(afit[, 2]))),1]), 10^(-b.digits))<(10^(-b.digits)))
+      b.digits = b.digits + 1
 
   if (length(attr(terms(fit), "term.labels"))==(length(rownames(afit))+1))
     rownames(afit)<-c("Intercept", attr(terms(fit), "term.labels"))
   if (fit_class=='lmerMod'){
-    warning('p-values for lmer are only a rough estimate from z-distribution, not suitable for the real use')
+    if (short!=4)
+      warning('p-values for lmer are only a rough estimate from z-distribution, not suitable for the real use')
     afit$pvals<-2*pnorm(-abs(afit[,3]))
   }
 
-  res_df<-data.frame(B = f.round(afit[, 1], 2), SE = f.round(afit[, 2], 2), Stat = f.round(afit[, 3], 2), p = if(p_as_number) zapsmall(as.vector(afit[,4]),4) else round.p(afit[, 4]), eff=row.names(afit),row.names = row.names(afit))
+
+  res_df<-data.frame(B = f.round(afit[, 1], 2), SE = f.round(afit[, 2], 2), Stat = f.round(afit[, 3], t.digits), p = if(p.as.number) zapsmall(as.vector(afit[,4]),4) else round.p(afit[, 4]), eff=row.names(afit),row.names = row.names(afit))
 
   if (short==1) {
-    res_df$str<-sprintf(paste0("\\emph{",t_z,"} = %.",f.digits,"f, \\emph{p} %s"), afit[, 3], round.p(afit[, 4]))
+    res_df$str<-sprintf(paste0("\\emph{",t_z,"} %s, \\emph{p} %s"), round.p(afit[, 3], digits=t.digits, strip=F), round.p(afit[, 4]))
   }
   else if (short==2){
-    res_df$str<-sprintf(paste0("\\emph{B} = %.",f.digits,"f (%.",f.digits,"f), \\emph{p} %s"), afit[, 1], afit[, 2], round.p(afit[, 4]))
+    res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f (%.",b.digits,"f), \\emph{p} %s"), afit[, 1], afit[, 2], round.p(afit[, 4]))
   }
-  else if (short==3) {
-    res_df$str<-sprintf(paste0("\\emph{B} = %.",f.digits,"f,  \\emph{",t_z,"}",ifelse(test_df,paste0('(',summary(fit)$df[2],')'),'')," = %.",f.digits,"f"), afit[, 1],  afit[, 3])
+  else if (short==3){
+    res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f, \\emph{SE} = %.",b.digits,"f,  \\emph{",t_z,"}",ifelse(test.df,paste0('(',summary(fit)$df[2],')'),'')," %s, \\emph{p} %s"), afit[, 1], afit[, 2], round.p(afit[, 3], digits=t.digits, strip=F), round.p(afit[, 4]))
   }
-  else {
-    res_df$str<-sprintf(paste0("\\emph{B} = %.",f.digits,"f, \\emph{SE} = %.",f.digits,"f,  \\emph{",t_z,"}",ifelse(test_df,paste0('(',summary(fit)$df[2],')'),'')," = %.",f.digits,"f, \\emph{p} %s"), afit[, 1], afit[, 2], afit[, 3], round.p(afit[, 4]))
+  else if (short==4) {
+    res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f (%.",b.digits,"f),  \\emph{",t_z,"}",ifelse(test.df,paste0('(',summary(fit)$df[2],')'),'')," %s"), afit[, 1], afit[, 2], round.p(afit[, 3], digits=t.digits, strip=F))
   }
+
   if (eff.size&!exists('ess')){
     stop('Effect sizes are not implemented for THAT kind of models yet.')
   } else if (eff.size) {
@@ -353,8 +377,8 @@ describe.glm <- function (fit, term=NULL, short=1, f.digits=2, test_df=F, p_as_n
   res_df$str<-format.results(res_df$str, ...)
   if (!is.null(term)){
     res_df[term, 'str']
-  } else if (!is.null(term_pattern)){
-    res_df[grepl(term_pattern,res_df$eff),]
+  } else if (!is.null(term.pattern)){
+    res_df[grepl(term.pattern,res_df$eff),]
   } else res_df
 }
 
@@ -402,14 +426,14 @@ describe.lmert <- function (sfit, factor, dtype='t',...){
   coef<-sfit$coefficients[factor,]
   if (sfit$objClass=='glmerMod'){
     test_name='z'
-    test_df=''
+    test.df=''
     names(coef)<-stringr::str_replace(names(coef),'z','t')
   } else {
     test_name='t'
-    test_df=paste0('(', round(coef['df']),')')
+    test.df=paste0('(', round(coef['df']),')')
   }
   if (dtype=="t"){
-    res_str<-sprintf("\\emph{%s}%s = %.2f, \\emph{p} %s",test_name,test_df, coef['t value'],round.p(coef['Pr(>|t|)']))
+    res_str<-sprintf("\\emph{%s}%s = %.2f, \\emph{p} %s",test_name,test.df, coef['t value'],round.p(coef['Pr(>|t|)']))
   }
   else if (dtype=="B"){
     res_str<-sprintf("\\emph{B} = %.2f (%.2f), \\emph{p} %s", coef['Estimate'], coef['Std. Error'],  round.p(coef['Pr(>|t|)']))
@@ -495,27 +519,18 @@ describe.lmer <- function (fm, pv, digits = c(2, 2, 2), incl.rel = 0, dtype="B",
 
 #' Describe lmer in-text
 #'
+#' A shortcut for describe.glm(..., short=4)
+#'
 #' @param fm
 #' @param term
-#'
+#' @param  digits number of digits for B and SD
+#' @param  adj.digits automatically adjusts digits so that B would not show up as "0.00"
 #' @return result
 #' @export
 #'
 
-ins.lmer <- function (fm, term=NULL){
-  .Deprecated("describe.glm")
-
-  cc <- lme4::fixef(fm)
-  ss <- sqrt(diag(as.matrix(vcov(fm))))
-  data <- data.frame(Estimate = cc, Std.Err = ss, t = cc/ss, row.names = names(cc))
-
-  data$str<-sprintf("_B_ = %.2f (%.2f), _t_ = %.2f", data$Estimate, data$Std.Err, data$t)
-  if (!is.null(term)) {
-    data[term , 'str']
-  }
-  else {
-    data
-  }
+ins.lmer <- function (fm, term=NULL, digits=2, adj.digits=T){
+  describe.glm(fm, term=term, b.digits=digits, adj.digits = adj.digits, short=4)
 }
 
 #' Describe mean and confidence intervals for binomial variable
