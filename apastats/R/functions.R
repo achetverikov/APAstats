@@ -334,10 +334,10 @@ describe.glm <- function (fit, term=NULL, short=1, b.digits=2, t.digits=2, test.
       ess <- rockchalk::getDeltaRsquare(fit)
     }
   }
-  if (!is.null(term) & term %nin% row.names(afit)){
+  if (!is.null(term) && term %nin% row.names(afit)){
     stop(sprintf('Term %s is absent from the model', term))
   }
-  if (!is.null(term) & adj.digits)
+  if (!is.null(term) && adj.digits)
     while (plyr::round_any(min(abs(afit[term, 1]),abs(afit[term, 2])), 10^(-b.digits))<(10^(-b.digits)))
       b.digits = b.digits + 1
   else if (adj.digits)
