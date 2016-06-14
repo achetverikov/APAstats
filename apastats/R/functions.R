@@ -117,7 +117,7 @@ describe.r <- function(rc,...){
 describe.ttest <- function (t,show.mean=F, abs=F,...){
   if (abs) t$statistic<-abs(t$statistic)
   if (show.mean==T)
-    res_str=sprintf("\\emph{M} = %.2f [%.2f, %.2f], \\emph{t}(%i) = %.2f, \\emph{p} %s", t$estimate, t$conf.int[1], t$conf.int[2],t$parameter, t$statistic, round.p(t$p.value))
+    res_str=sprintf("\\emph{M} = %.2f [%.2f, %.2f], \\emph{t}(%.1f) = %.2f, \\emph{p} %s", t$estimate, t$conf.int[1], t$conf.int[2],t$parameter, t$statistic, round.p(t$p.value))
   else
     res_str=sprintf("\\emph{t}(%.1f) = %.2f, \\emph{p} %s",  t$parameter, t$statistic, round.p(t$p.value))
   format.results(res_str, ...)
