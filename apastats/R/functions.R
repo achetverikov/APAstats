@@ -148,7 +148,7 @@ describe.mean.and.t <- function(x, by, which.mean=1, digits=2, paired=F, eff.siz
   summaries<-transform(summaries, mean.descr=sprintf(paste0("\\emph{M} = %.",digits,"f [%.",digits,"f, %.",digits,"f]"), x, Lower, Upper))
 
   if (which.mean==3)
-    means = paste0(summaries[1,"mean.descr"],"vs. ",summaries[2,"mean.descr"],', ')
+    means = paste0(summaries[1,"mean.descr"]," vs. ",summaries[2,"mean.descr"],', ')
   else if (which.mean==0)
     means = ''
   else
