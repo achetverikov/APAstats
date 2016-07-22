@@ -442,7 +442,37 @@ describe.lmert <- function (sfit, factor, dtype='t',...){
 }
 
 
+#' Describe linearHypothesis test results
+#'
+#' @param hyp - hypothesis from \link[car]{linearHypothesis}
+#' @param ... - additional papameters passed to \link{format.results}
+#'
+#' @return results of Χ^2 or F test
+#' @export
+#'
+#' @examples
+#'
+#' library(car)
+#' mod.davis <- lm(weight ~ repwt, data=Davis)
+#'
+#' res <- linearHypothesis(mod.davis, c("(Intercept) = 0", "repwt = 1"))
+#' describe.lht(res)
+#'
+#' res.chi <- linearHypothesis(mod.davis, c("(Intercept) = 0", "repwt = 1"), test = "Chisq")
+#' describe.lht(res.chi)
+describe.lht <- function (hyp, ...){
+  res<-hyp[2,]
 
+  if ('Chisq' %in% names(res)) {
+    res<-res[c('Df','Chisq','Pr(>Chisq)')]
+    res[3]<-round.p(res[3])
+    format.results(do.call(sprintf, c(list('$\\chi^2$(%g) = %.2f, \\emph{p} %s'), res)),...)
+  } else {
+    res[6]<-round.p(res[6])
+    res<-res[c(3, 1, 5, 6)]
+    format.results(do.call(sprintf, c(list('\\emph{F}(%g, %g) = %.2f, \\emph{p} %s'), res)),...)
+  }
+}
 #' Describe contrasts created by lsmeans
 #'
 #' @param obj - summary object from lsmeans::contrast
