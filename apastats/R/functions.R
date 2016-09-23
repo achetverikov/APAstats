@@ -781,19 +781,29 @@ aggr2<-function (x, by, fun, ...){
 #'
 #' @param bf an object of \code{BFBayesFactor} class
 #' @param digits number of digits to use
+#' @param top_limit numbers above that limit (or below the digits limit) will be converted to exponential notation (if convert_to_power is TRUE)
+#' @param convert_to_power enable or distable converting of very small or very large numbers to exponential notation
 #' @param ... other parameters passed to format.results
 #' @return string describing the result
+#' @note Code for converting to exponential notation is based on http://dankelley.github.io/r/2015/03/22/scinot.html
 #' @export
 #'
 #' @examples
 #'
 #' require('BayesFactor')
 #' data(puzzles)
-#' bfs <- anovaBF(RT ~ shape*color + ID, data = puzzles, whichRandom = "ID", progress=FALSE)
+#'
+#' bfs <- anovaBF(RT ~ shape*color + ID, data = puzzles, progress=FALSE)
 #' describe.bf(bfs[1])
-#' describe.bf(bfs[1]/bfs[2])
+#' describe.bf(bfs[2]/bfs[14])
 #'
 
-describe.bf<-function(bf, digits=2, ...){
-  format.results(sprintf(paste0("\\emph{BF} = %.",digits,"f"),exp(bf@bayesFactor[1])),...)
+describe.bf<-function(bf, digits = 2, top_limit = 10000, convert_to_power = T, ...){
+  bf_val <- exp(bf@bayesFactor[1])
+  if ((bf_val<(10^(-digits)) | bf_val > top_limit) & convert_to_power){
+    exponent <- floor(log10(bf_val))
+    bf_val <- round(bf_val / 10^exponent, digits=digits)
+    format.results(paste0("\\emph{BF} = $",bf_val, "\\times 10^{", as.integer(exponent), "}$"),...)
+  }
+  else format.results(sprintf(paste0("\\emph{BF} = %.",digits,"f"),exp(bf@bayesFactor[1])),...)
 }

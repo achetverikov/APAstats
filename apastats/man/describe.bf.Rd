@@ -4,12 +4,16 @@
 \alias{describe.bf}
 \title{Describe BayesFactor results}
 \usage{
-describe.bf(bf, digits = 2, ...)
+describe.bf(bf, digits = 2, top_limit = 10000, convert_to_power = T, ...)
 }
 \arguments{
 \item{bf}{an object of \code{BFBayesFactor} class}
 
 \item{digits}{number of digits to use}
+
+\item{top_limit}{numbers above that limit (or below the digits limit) will be converted to exponential notation (if convert_to_power is TRUE)}
+
+\item{convert_to_power}{enable or distable converting of very small or very large numbers to exponential notation}
 
 \item{...}{other parameters passed to format.results}
 }
@@ -19,13 +23,17 @@ string describing the result
 \description{
 Describe BayesFactor results
 }
+\note{
+Code for converting to exponential notation is based on http://dankelley.github.io/r/2015/03/22/scinot.html
+}
 \examples{
 
 require('BayesFactor')
 data(puzzles)
-bfs <- anovaBF(RT ~ shape*color + ID, data = puzzles, whichRandom = "ID", progress=FALSE)
+
+bfs <- anovaBF(RT ~ shape*color + ID, data = puzzles, progress=FALSE)
 describe.bf(bfs[1])
-describe.bf(bfs[1]/bfs[2])
+describe.bf(bfs[2]/bfs[14])
 
 }
 
