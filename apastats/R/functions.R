@@ -775,3 +775,25 @@ aggr2<-function (x, by, fun, ...){
   if (!is.list(by)) by<-list(by)
   fun(aggregate(x,by, FUN=fun, ...)$x)
 }
+
+
+#' Describe BayesFactor results
+#'
+#' @param bf an object of \code{BFBayesFactor} class
+#' @param digits number of digits to use
+#' @param ... other parameters passed to format.results
+#' @return string describing the result
+#' @export
+#'
+#' @examples
+#'
+#' require('BayesFactor')
+#' data(puzzles)
+#' bfs <- anovaBF(RT ~ shape*color + ID, data = puzzles, whichRandom = "ID", progress=FALSE)
+#' describe.bf(bfs[1])
+#' describe.bf(bfs[1]/bfs[2])
+#'
+
+describe.bf<-function(bf, digits=2, ...){
+  format.results(sprintf(paste0("\\emph{BF} = %.",digits,"f"),exp(bf@bayesFactor[1])),...)
+}
