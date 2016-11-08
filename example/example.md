@@ -1,3 +1,5 @@
+The descriptions for the results of significance testing in this file are generated automatically based on the tests results with `apastats` library.
+
 See the Rmd file here: https://raw.githubusercontent.com/ralfer/apa_format_and_misc/master/example/example.Rmd
 
 
