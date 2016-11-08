@@ -7,11 +7,43 @@
 \method{generic}{class}(..., pos = position_dodge(0.3), pointsize = I(3),
   linesize = I(1), pointfill = I("white"), within_subj = F, wid = "uid",
   bars = "ci", withinvars = NULL, betweenvars = NULL, x_as_numeric = F,
-  add_h_line = NULL, connecting_line = F, pretty_breaks_y = F,
+  custom_geom = NULL, connecting_line = F, pretty_breaks_y = F,
   pretty_y_axis = F, exp_y = F, print_aggregated_data = F,
   do_aggregate = F)
 }
 \arguments{
+\item{pos}{position adjustment function (e.g., position_dodge())}
+
+\item{pointsize}{size for the points}
+
+\item{linesize}{size for the lines}
+
+\item{pointfill}{fill for the points}
+
+\item{within_subj}{should we use within-subject adjustment?}
+
+\item{wid}{within-subject ID variable}
+
+\item{bars}{should we use confidence intervals ("ci") or standard errors ("se")?}
+
+\item{withinvars}{within-subject variables}
+
+\item{betweenvars}{between-subject variables}
+
+\item{x_as_numeric}{should we treat x as numeric (otherwise it is treated as is)?}
+
+\item{custom_geom}{any custom geom to add befor points and connecting line}
+
+\item{connecting_line}{should we add connecting line (T/F)?}
+
+\item{pretty_breaks_y}{prettify y breaks}
+
+\item{pretty_y_axis}{prettify y axis}
+
+\item{exp_y}{exponentiate y}
+
+\item{print_aggregated_data}{print aggregated data used for plotting to console}
+
 \item{do_aggregate}{- aggregate data by all conditions before plotting (False)}
 }
 \value{

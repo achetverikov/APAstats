@@ -2,6 +2,7 @@
 
 export(ac_shape_pal)
 export(aggr2)
+export(base.breaks)
 export(base.breaks.x)
 export(base.breaks.y)
 export(binom.ci)

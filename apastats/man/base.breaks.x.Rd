@@ -2,17 +2,19 @@
 % Please edit documentation in R/plotting.R
 \name{base.breaks.x}
 \alias{base.breaks.x}
-\title{Title}
+\title{Tufte-like breaks for X axis}
 \usage{
-base.breaks.x(x, addSegment = T)
+base.breaks.x(x, addSegment = T, ...)
 }
 \arguments{
-\item{addSegment}{}
+\item{x}{vector of numbers to create breaks from}
+
+\item{addSegment}{should we add a line to the scale? (T/F)}
 }
 \value{
 scale_x_continuous with pretty breaks
 }
 \description{
-Title
+Tufte-like breaks for X axis
 }
 

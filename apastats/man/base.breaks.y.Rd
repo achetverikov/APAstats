@@ -2,17 +2,19 @@
 % Please edit documentation in R/plotting.R
 \name{base.breaks.y}
 \alias{base.breaks.y}
-\title{Title}
+\title{Tufte-like breaks for Y axis}
 \usage{
-base.breaks.y(x, expand = c(0, 0), ...)
+base.breaks.y(x, addSegment = T, ...)
 }
 \arguments{
-\item{...}{}
+\item{x}{vector of numbers to create breaks from}
+
+\item{addSegment}{should we add a line to the scale? (T/F)}
 }
 \value{
 scale_y_continuous with pretty breaks
 }
 \description{
-Title
+Tufte-like breaks for Y axis
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotting.R
 \name{get_grob_element}
 \alias{get_grob_element}
-\title{Title
+\title{Extract grob element by name
 Not mine, found somewhere}
 \usage{
 get_grob_element(myggplot, el = "guide-box")
@@ -14,7 +14,7 @@ get_grob_element(myggplot, el = "guide-box")
 grob element
 }
 \description{
-Title
+Extract grob element by name
 Not mine, found somewhere
 }
 

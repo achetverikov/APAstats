@@ -1,68 +1,90 @@
-#' Title
+#' Tufte-like breaks for axes
 #'
-#' @param x
-#' @param addSegment
+#' @param x vector of numbers to create breaks from
+#' @param scale scale (x or y) to create breaks for
+#' @param addSegment should we add a line to the scale? (T/F)
+#' @param ... other parameters passed to scale_(x or y)_continuous
+#'
+#' @return scale_(x or y)_continuous with pretty breaks and accompaniying geom_segment if addSegment == T
+#' @export
+#'
+#' @examples
+#'
+base.breaks<-function(x, scale='x', addSegment=T, ...){
+  b <- pretty(x)
+
+  b[1]<-min(x)
+  b[length(b)]<-max(x)
+
+  if (round((b[length(b)]-b[length(b)-1])-(b[length(b)-1]-b[length(b)-2]),5)>0){
+    b<-b[c(1:(length(b)-2),length(b))]
+  }
+  print(b)
+
+
+  if (scale=='x')
+    scale_fun <- scale_x_continuous(breaks=b,...)
+  else if (scale=='y') scale_fun <- scale_y_continuous(breaks=b,...)
+  else stop('Scale parameter should be "x" or "y"')
+
+  if (addSegment){
+    if (scale=='y')
+      list(geom_segment(data=data.frame(y=min(b), yend=max(b), x=-Inf, xend=-Inf), aes(x=x, y=y, xend=xend, yend=yend), inherit.aes=FALSE), scale_fun)
+    else list(geom_segment(data=data.frame(y=-Inf, yend=-Inf, x=min(b), xend=max(b)), aes(x=x, y=y, xend=xend, yend=yend), inherit.aes=FALSE), scale_fun)
+  }
+  else scale_fun
+}
+
+
+#' Tufte-like breaks for X axis
+#'
+#' @param x vector of numbers to create breaks from
+#' @param addSegment should we add a line to the scale? (T/F)
 #'
 #' @return scale_x_continuous with pretty breaks
 #' @export
 #'
 #'
-base.breaks.x <- function(x, addSegment=T){
-  b <- pretty(x)
 
-  b[1]<-min(x)
-  b[length(b)]<-max(x)
-  if (b[length(b)]-b[length(b)-1]<b[length(b)-1]-b[length(b)-2]){
-    b<-b[c(1:(length(b)-2),length(b))]
-  }
-
-  d <- data.frame(y=-Inf, yend=-Inf, x=min(b), xend=max(b))
-  if (addSegment)
-  {list(geom_segment(data=d, aes(x=x, y=y, xend=xend, yend=yend), inherit.aes=FALSE),
-        scale_x_continuous(breaks=b))}
-  else scale_x_continuous(breaks=b)
+base.breaks.x <- function(x, addSegment=T, ...){
+  base.breaks(x, scale = 'x', addSegment = addSegment, ...)
 }
 
-#' Title
+
+#' Tufte-like breaks for Y axis
 #'
-#' @param x
-#' @param expand
-#' @param ...
+#' @param x vector of numbers to create breaks from
+#' @param addSegment should we add a line to the scale? (T/F)
 #'
 #' @return scale_y_continuous with pretty breaks
 #' @export
 #'
 #'
-base.breaks.y <- function(x, expand = c(0,0),...){
-  b <- pretty(x)
-  #print(b)
-  b[1]<-min(x)
-  b[length(b)]<-max(x)
 
-  d <- data.frame(x=-Inf, xend=-Inf, y=min(b), yend=max(b),...)
-  list(geom_segment(data=d, aes(x=x, y=y, xend=xend, yend=yend), inherit.aes=F),
-       scale_y_continuous(breaks=b, expand = expand))
+base.breaks.y <- function(x, addSegment=T, ...){
+  base.breaks(x, scale = 'y', addSegment = addSegment, ...)
 }
+
 
 #' Pointrange plot
 #'
 #' @param ...
-#' @param pos
-#' @param pointsize
-#' @param linesize
-#' @param pointfill
-#' @param within_subj
-#' @param wid
-#' @param bars
-#' @param withinvars
-#' @param betweenvars
-#' @param x_as_numeric
-#' @param add_h_line
-#' @param connecting_line
-#' @param pretty_breaks_y
-#' @param pretty_y_axis
-#' @param exp_y
-#' @param print_aggregated_data
+#' @param pos position adjustment function (e.g., position_dodge())
+#' @param pointsize size for the points
+#' @param linesize size for the lines
+#' @param pointfill fill for the points
+#' @param within_subj should we use within-subject adjustment?
+#' @param wid within-subject ID variable
+#' @param bars should we use confidence intervals ("ci") or standard errors ("se")?
+#' @param withinvars within-subject variables
+#' @param betweenvars between-subject variables
+#' @param x_as_numeric should we treat x as numeric (otherwise it is treated as is)?
+#' @param custom_geom any custom geom to add befor points and connecting line
+#' @param connecting_line should we add connecting line (T/F)?
+#' @param pretty_breaks_y prettify y breaks
+#' @param pretty_y_axis prettify y axis
+#' @param exp_y exponentiate y
+#' @param print_aggregated_data print aggregated data used for plotting to console
 #' @param do_aggregate - aggregate data by all conditions before plotting (False)
 #'
 #' @return plot of pointrange
@@ -75,7 +97,7 @@ base.breaks.y <- function(x, expand = c(0,0),...){
 #' plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), wid='uid', within_subj=T, bars='se')+ylab('RT')
 #' plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), wid='uid', within_subj=T, bars='se', print_aggregated_data=T)+ylab('RT')
 
-plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), linesize=I(1), pointfill=I('white'), within_subj=F, wid='uid', bars='ci', withinvars=NULL, betweenvars=NULL, x_as_numeric=F, add_h_line=NULL, connecting_line=F, pretty_breaks_y=F, pretty_y_axis=F, exp_y=F, print_aggregated_data=F, do_aggregate = F){
+plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), linesize=I(1), pointfill=I('white'), within_subj=F, wid='uid', bars='ci', withinvars=NULL, betweenvars=NULL, x_as_numeric=F, custom_geom=NULL, connecting_line=F, pretty_breaks_y=F, pretty_y_axis=F, exp_y=F, print_aggregated_data=F, do_aggregate = F){
   ellipses<-list(...)
   plot_f<-ellipses[[2]]
   withinvars<-c(withinvars, as.character(unlist(plot_f[names(plot_f)!='y'])))
@@ -107,13 +129,15 @@ plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), lines
   }
   p<-ggplot(aggr_data, do.call(aes_string,aes_list))
 
+  if (!is.null(custom_geom)){
+    p<-p+custom_geom
+  }
+
   if (connecting_line)
     p<-p+geom_line(position=pos, size=linesize)
   p<-p+geom_linerange(size=linesize, position=pos)+geom_point(size=pointsize, position=pos, fill=pointfill)
 
-  if (!is.null(add_h_line)){
-    p<-p+add_h_line
-  }
+
 
   if (pretty_breaks_y){
     y_range<-ggplot_build(p)$panel$ranges[[1]]$y.range
@@ -142,7 +166,7 @@ scale_y_exp<-function(digits=0, ...){
   scale_y_continuous(breaks=trans_breaks('exp',function (x) log(x)), labels=trans_format('exp', function(x) as.character(f.round(x, digits=digits))), ...)
 }
 
-#' Title
+#' Extract grob element by name
 #' Not mine, found somewhere
 #' @param myggplot
 #' @param el
