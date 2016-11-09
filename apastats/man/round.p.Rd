@@ -5,16 +5,18 @@
 \title{Round *p*-value}
 \usage{
 \method{generic}{class
-  #'}(list, include.rel = 1, digits = 3, strip.lead.zeros = T)
+  #'}(values, include.rel = 1, digits = 3, strip.lead.zeros = T, replace.very.small = 0.001)
 }
 \arguments{
-\item{list}{a vector of p-values}
+\item{values}{a vector of p-values}
 
 \item{include.rel}{include relation sign}
 
 \item{digits}{a number of decimal digits}
 
 \item{strip.lead.zeros}{remove zero before decimal point}
+
+\item{replace.very.small}{replace values lower than this criteria (NULL to keep values as is)}
 }
 \value{
 Formatted p-value
@@ -27,5 +29,6 @@ round.p(c(0.025, 0.0001, 0.001, 0.568))
 round.p(c(0.025, 0.0001, 0.001, 0.568), digits=2)
 round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=F)
 round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=F, strip.lead.zeros=F)
+round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=F, strip.lead.zeros=F, replace.very.small = 0.01)
 }
 

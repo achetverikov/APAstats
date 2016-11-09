@@ -37,11 +37,11 @@ f.round <- function (x, digits=2){
 #'
 #' If p-value is <= 0.001, returns ".001" else returns p-value rounded to the specified number of digits, optionally including relation sign ("<" or "=").
 #'
-#' @param list a vector of p-values
+#' @param values a vector of p-values
 #' @param include.rel include relation sign
 #' @param digits a number of decimal digits
 #' @param strip.lead.zeros remove zero before decimal point
-#'
+#' @param replace.very.small replace values lower than this criteria (NULL to keep values as is)
 #' @return Formatted p-value
 #' @export round.p
 #'
@@ -52,13 +52,20 @@ f.round <- function (x, digits=2){
 #' round.p(c(0.025, 0.0001, 0.001, 0.568), digits=2)
 #' round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=F)
 #' round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=F, strip.lead.zeros=F)
-round.p <- function(list, include.rel=1,digits=3, strip.lead.zeros=T){
-  list<-as.numeric(list)
+#' round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=F, strip.lead.zeros=F, replace.very.small = 0.01)
+round.p <- function(values, include.rel=1,digits=3, strip.lead.zeros=T, replace.very.small = 0.001){
+  values<-as.numeric(values)
+  rel <- ifelse(include.rel,"= ","")
+  values <- format(round(values,digits=digits),nsmall=digits)
   if (strip.lead.zeros){
-    ifelse(list<=0.001,"< .001",paste(ifelse(include.rel,"= ",""),sub("^.", "", format(round(list,digits=digits),nsmall=digits)),sep=""))
+    sub("^0", "", values)
+  }
+
+  if (!is.null(replace.very.small)){
+    ifelse(values<=replace.very.small,paste0("< ",ifelse(strip.lead.zeros,sub("^0", "", replace.very.small),replace.very.small)),paste(rel,values, sep=""))
   }
   else {
-    paste(ifelse(include.rel,"= ",""),sub("^.", "", format(round(list,digits=digits),nsmall=digits)),sep="")
+    paste(rel,values, sep="")
   }
 }
 
