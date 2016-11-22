@@ -320,6 +320,10 @@ describe.glm <- function (fit, term=NULL, short=1, b.digits=2, t.digits=2, test.
 
   if (!is.numeric(short) | short<0 |short>4) short = 3
 
+  if (fit_class == 'merModLmerTest'){
+    requireNamespace('lmerTest')
+  }
+
   if (fit_class== "lm.circular.cl"){
     print(1)
     afit<-data.frame(fit$coefficients, fit$se.coef, fit$t.values, fit$p.values)
