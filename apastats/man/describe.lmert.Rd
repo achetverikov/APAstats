@@ -7,12 +7,29 @@
 describe.lmert(sfit, factor, dtype = "t", ...)
 }
 \arguments{
-\item{...}{}
+\item{sfit}{*summary* object from lmerTest::lmer model}
+
+\item{factor}{name or number of the factor that needs to be describe}
+
+\item{dtype}{description type ("B"/"t")}
+
+\item{...}{other parameters passed to format.results}
 }
 \value{
-result
+Formatted string
 }
 \description{
-Describe lmerTest results
+Note that this function uses *summary* object from lmerTest::lmer model and not the model itself (see example). Otherwise p-values will be computed during the call and everything would be very slow.
+}
+\examples{
+
+library(lmerTest)
+fm <- lmer(Reaction ~ Days + (Days|Subject), sleepstudy)
+fms <- summary(fm)
+describe.lmert(fms, 'Days')
+describe.lmert(fms, 'Intercept')
+describe.lmert(fms, 2)
+describe.lmert(fms, 'Days', 'B')
+
 }
 

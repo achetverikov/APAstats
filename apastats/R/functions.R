@@ -58,7 +58,7 @@ round.p <- function(values, include.rel=1,digits=3, strip.lead.zeros=T, replace.
   rel <- ifelse(include.rel,"= ","")
   values_string <- format(round(values,digits=digits),nsmall=digits)
   if (strip.lead.zeros){
-    values_string <- sub("^0", "", values)
+    values_string <- sub("^0", "", values_string)
   }
   values_string <- paste(rel,values_string, sep="")
 
@@ -244,7 +244,7 @@ describe.aov <- function (fit, term, type=2,...){
 #' @param rown row number (default: 2)
 #' @param f.digits number of digits in the results (default: 2)
 #'
-#' @return
+#' @return Formatted string with F (or chi2), df, and p
 #' @export
 #'
 #' @examples
@@ -420,13 +420,25 @@ describe.mean.conf <- function(x, digits=2,...){
 
 #' Describe lmerTest results
 #'
-#' @param sfit
-#' @param factor
-#' @param dtype
-#' @param ...
+#' Note that this function uses *summary* object from lmerTest::lmer model and not the model itself (see example). Otherwise p-values will be computed during the call and everything would be very slow.
 #'
-#' @return result
+#' @param sfit *summary* object from lmerTest::lmer model
+#' @param factor name or number of the factor that needs to be describe
+#' @param dtype description type ("B"/"t")
+#' @param ... other parameters passed to format.results
+#'
+#' @return Formatted string
 #' @export
+#'
+#' @examples
+#'
+#' library(lmerTest)
+#' fm <- lmer(Reaction ~ Days + (Days|Subject), sleepstudy)
+#' fms <- summary(fm)
+#' describe.lmert(fms, 'Days')
+#' describe.lmert(fms, 'Intercept')
+#' describe.lmert(fms, 2)
+#' describe.lmert(fms, 'Days', 'B')
 #'
 
 describe.lmert <- function (sfit, factor, dtype='t',...){
