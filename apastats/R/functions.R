@@ -299,7 +299,7 @@ describe.Anova <- function (afit, term, f.digits=2, ...){
 #'
 #' @param fit model object
 #' @param term model term to describe
-#' @param short description type (1, 2, 3, or other)
+#' @param dtype description type (1: t, p;  2: B(SE), p; 3: B, SE, t, p; or other: B (SE), t)
 #' @param b.digits how many digits to use for _B_ and _SE_
 #' @param t.digits how many digits to use for _t_
 #' @param test.df should we include degrees of freedom in description?
@@ -310,19 +310,34 @@ describe.Anova <- function (afit, term, f.digits=2, ...){
 #' @return result
 #' @export
 #'
+#' @examples
+#'
+#' utils::data(Animals, package = "MASS")
+#' Animals$body<-log(Animals$body)
+#' Animals$brain<-log(Animals$brain)
+#' fit <- lm(brain~body, Animals)
+#' describe.glm(fit, 'body')
+#' describe.glm(fit, '(Intercept)')
+#' describe.glm(fit, 'body', 2)
+#' describe.glm(fit, 'body', 3)
+#' describe.glm(fit, 'body', 4)
+#' describe.glm(fit, 'body', 3, test.df = 1)
+#' describe.glm(fit)
+#' ## Not run:
+#' require(rockchalk)
+#' describe.glm(fit, 'body', 4, eff.size=T)
+#' ## End(Not run)
 
-describe.glm <- function (fit, term=NULL, short=1, b.digits=2, t.digits=2, test.df=F, p.as.number=F, term.pattern=NULL, eff.size = F, adj.digits=F, ...){
+
+describe.glm <- function (fit, term=NULL, dtype=1, b.digits=2, t.digits=2, test.df=F, p.as.number=F, term.pattern=NULL, eff.size = F, adj.digits=F, ...){
   requireNamespace('plyr')
+  requireNamespace('Hmisc')
 
   fit_package = attr(class(fit),'package')
   fit_class = class(fit)[1]
   fit_family = family(fit)[1]
 
-  if (!is.numeric(short) | short<0 |short>4) short = 3
-
-  if (fit_class == 'merModLmerTest'){
-    requireNamespace('lmerTest')
-  }
+  if (!is.numeric(dtype) | dtype<0 |dtype>4) dtype = 3
 
   if (fit_class== "lm.circular.cl"){
     print(1)
@@ -334,8 +349,18 @@ describe.glm <- function (fit, term=NULL, short=1, b.digits=2, t.digits=2, test.
     }
   }
   else {
-    afit <- data.frame(coef(summary(fit)))
 
+    if (fit_class == 'merModLmerTest'){
+      requireNamespace('lmerTest')
+      afit <- data.frame(coef(lmerTest::summary(fit)))
+      if (test.df){
+        dfs<-afit[,3]
+      }
+      afit <- afit[,c(1,2,4,5)]
+    }
+    else {
+      afit <- data.frame(coef(summary(fit)))
+    }
     if (fit_family=='gaussian'){
       t_z<-'t'
     } else {
@@ -346,7 +371,7 @@ describe.glm <- function (fit, term=NULL, short=1, b.digits=2, t.digits=2, test.
       ess <- rockchalk::getDeltaRsquare(fit)
     }
   }
-  if (!is.null(term) && term %nin% row.names(afit)){
+  if (!is.null(term) && !(term %in% row.names(afit))){
     stop(sprintf('Term %s is absent from the model', term))
   }
   if (!is.null(term) && adj.digits)
@@ -359,25 +384,38 @@ describe.glm <- function (fit, term=NULL, short=1, b.digits=2, t.digits=2, test.
   if (length(attr(terms(fit), "term.labels"))==(length(rownames(afit))+1))
     rownames(afit)<-c("Intercept", attr(terms(fit), "term.labels"))
   if (fit_class=='lmerMod'){
-    if (short!=4)
+    if (dtype!=4)
       warning('p-values for lmer are only a rough estimate from z-distribution, not suitable for the real use')
     afit$pvals<-2*pnorm(-abs(afit[,3]))
   }
 
+  if (test.df){
+    if (fit_class != 'merModLmerTest') {
+      dfs<-summary(fit)$df[2]
+    }
+    if (all.equal(dfs, as.integer(dfs))){
+      dfs <- as.character(round(dfs))
+    }
+    else {
+      dfs <- f.round(dfs, t.digits)
+    }
+    dfs <- paste0('(',dfs,')')
+  }
+  else dfs<-""
 
   res_df<-data.frame(B = f.round(afit[, 1], 2), SE = f.round(afit[, 2], 2), Stat = f.round(afit[, 3], t.digits), p = if(p.as.number) zapsmall(as.vector(afit[,4]),4) else round.p(afit[, 4]), eff=row.names(afit),row.names = row.names(afit))
 
-  if (short==1) {
+  if (dtype==1) {
     res_df$str<-sprintf(paste0("\\emph{",t_z,"} %s, \\emph{p} %s"), round.p(afit[, 3], digits=t.digits, strip=F), round.p(afit[, 4]))
   }
-  else if (short==2){
+  else if (dtype==2){
     res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f (%.",b.digits,"f), \\emph{p} %s"), afit[, 1], afit[, 2], round.p(afit[, 4]))
   }
-  else if (short==3){
-    res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f, \\emph{SE} = %.",b.digits,"f,  \\emph{",t_z,"}",ifelse(test.df,paste0('(',summary(fit)$df[2],')'),'')," %s, \\emph{p} %s"), afit[, 1], afit[, 2], round.p(afit[, 3], digits=t.digits, strip=F, replace.very.small = 0.01), round.p(afit[, 4]))
+  else if (dtype==3){
+    res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f, \\emph{SE} = %.",b.digits,"f,  \\emph{",t_z,"}", dfs," %s, \\emph{p} %s"), afit[, 1], afit[, 2], round.p(afit[, 3], digits=t.digits, strip=F, replace.very.small = 0.01), round.p(afit[, 4]))
   }
-  else if (short==4) {
-    res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f (%.",b.digits,"f),  \\emph{",t_z,"}",ifelse(test.df,paste0('(',summary(fit)$df[2],')'),'')," %s"), afit[, 1], afit[, 2], round.p(afit[, 3], digits=t.digits, strip=F, replace.very.small = 0.01))
+  else if (dtype==4) {
+    res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f (%.",b.digits,"f),  \\emph{",t_z,"}", dfs," %s"), afit[, 1], afit[, 2], round.p(afit[, 3], digits=t.digits, strip=F, replace.very.small = 0.01))
   }
 
   if (eff.size&!exists('ess')){
@@ -440,7 +478,7 @@ describe.mean.conf <- function(x, digits=2,...){
 #' fm <- lmer(Reaction ~ Days + (Days|Subject), sleepstudy)
 #' fms <- summary(fm)
 #' describe.lmert(fms, 'Days')
-#' describe.lmert(fms, 'Intercept')
+#' describe.lmert(fms, '(Intercept)')
 #' describe.lmert(fms, 2)
 #' describe.lmert(fms, 'Days', 'B')
 #'

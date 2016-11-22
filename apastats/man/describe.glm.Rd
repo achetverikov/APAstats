@@ -4,7 +4,7 @@
 \alias{describe.glm}
 \title{Describe regression model (GLM, GLMer, lm, lm.circular, ...)}
 \usage{
-describe.glm(fit, term = NULL, short = 1, b.digits = 2, t.digits = 2,
+describe.glm(fit, term = NULL, dtype = 1, b.digits = 2, t.digits = 2,
   test.df = F, p.as.number = F, term.pattern = NULL, eff.size = F,
   adj.digits = F, ...)
 }
@@ -13,7 +13,7 @@ describe.glm(fit, term = NULL, short = 1, b.digits = 2, t.digits = 2,
 
 \item{term}{model term to describe}
 
-\item{short}{description type (1, 2, 3, or other)}
+\item{dtype}{description type (1: t, p;  2: B(SE), p; 3: B, SE, t, p; or other: B (SE), t)}
 
 \item{b.digits}{how many digits to use for _B_ and _SE_}
 
@@ -32,5 +32,23 @@ result
 }
 \description{
 Describe regression model (GLM, GLMer, lm, lm.circular, ...)
+}
+\examples{
+
+utils::data(Animals, package = "MASS")
+Animals$body<-log(Animals$body)
+Animals$brain<-log(Animals$brain)
+fit <- lm(brain~body, Animals)
+describe.glm(fit, 'body')
+describe.glm(fit, '(Intercept)')
+describe.glm(fit, 'body', 2)
+describe.glm(fit, 'body', 3)
+describe.glm(fit, 'body', 4)
+describe.glm(fit, 'body', 3, test.df = 1)
+describe.glm(fit)
+## Not run:
+require(rockchalk)
+describe.glm(fit, 'body', 4, eff.size=T)
+## End(Not run)
 }
 

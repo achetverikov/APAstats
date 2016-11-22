@@ -27,7 +27,7 @@ library(lmerTest)
 fm <- lmer(Reaction ~ Days + (Days|Subject), sleepstudy)
 fms <- summary(fm)
 describe.lmert(fms, 'Days')
-describe.lmert(fms, 'Intercept')
+describe.lmert(fms, '(Intercept)')
 describe.lmert(fms, 2)
 describe.lmert(fms, 'Days', 'B')
 
