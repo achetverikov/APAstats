@@ -237,7 +237,13 @@ grid_arrange_shared_legend<-function(..., stack = 'v', one_sub=F, heights=F, one
   }
 
   if (one_sub) {
-    x_lab_grob<-get_grob_element(plots[[1]], 'xlab')
+    tryCatch({
+    if (compareVersion(as.character(packageVersion('ggplot2')),'2.2.0')>=0){
+      x_lab_grob<-get_grob_element(plots[[1]], 'xlab-b')
+    } else x_lab_grob<-get_grob_element(plots[[1]], 'xlab')
+
+
+    }, error = function(e) {print('Cannot extract x-axis title from the plot object'); stop(e)})
     plots<-lapply(plots, function(x) x + xlab(NULL))
   }
 
