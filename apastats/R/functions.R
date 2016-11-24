@@ -622,7 +622,7 @@ describe.lmer <- function (fm, pv, digits = c(2, 2, 2), incl.rel = 0, dtype="B",
 #'
 
 ins.lmer <- function (fm, term=NULL, digits=2, adj.digits=T){
-  describe.glm(fm, term=term, b.digits=digits, adj.digits = adj.digits, short=4)
+  describe.glm(fm, term=term, b.digits=digits, adj.digits = adj.digits, dtype=4)
 }
 
 #' Describe mean and confidence intervals for binomial variable
