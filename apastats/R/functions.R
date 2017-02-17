@@ -142,17 +142,45 @@ describe.ttest <- function (t,show.mean=F, abs=F,...){
 #' @param paired should it be a paired test (default: F)
 #' @param eff.size should we include effect size (default: F)
 #' @param abs should we show the absolute value if the t-test (T) or keep its sign (F, default)
+#' @param aggregate_by do the aggregation by the thrird variable(s): either NULL (default), a single vector variable, or a list of variables to aggregate by.
+#' @param transform_means a function to transform means and confidence intervals (default: NULL)
 #' @param ...
 #'
 #' @return result
 #' @export
 #'
+#' @examples
+#' data(faces)
+#' rt <- faces$answerTime
+#' gr <- faces$stim_gender
+#' describe.mean.and.t(rt, gr)
+#' describe.mean.and.t(rt, gr, which.mean = 3)
+#' describe.mean.and.t(rt, gr, eff.size = T)
+#'
+#' sid <- faces$sid
+#' describe.mean.and.t(rt, gr, which.mean = 3, aggregate_by = sid)
+#' log_rt <- log(rt*1000)
+#' describe.mean.and.t(log_rt, gr, which.mean = 3, aggregate_by = sid)
+#' describe.mean.and.t(log_rt, gr, which.mean = 3, aggregate_by = sid, transform_means = exp)
 
-describe.mean.and.t <- function(x, by, which.mean=1, digits=2, paired=F, eff.size=F, abs=F, ...){
+
+describe.mean.and.t <- function(x, by, which.mean=1, digits=2, paired=F, eff.size=F, abs=F, aggregate_by=NULL, transform_means = NULL, ...){
+  requireNamespace('Hmisc')
   if (lengthu(by)!=2)
     stop('"by" should have exactly two levels')
+  if (!is.null(aggregate_by)){
+    if (is.list(aggregate_by)) aggregate_by<-append(aggregate_by,list(by=by))
+    else aggregate_by<-list(aggregate_by=aggregate_by, by=by)
+    aggr_df<-Hmisc::summarize(x,aggregate_by,mymean)
+    x<-as.numeric(aggr_df$x)
+    by<-aggr_df$by
+  }
+  summaries<-Hmisc::summarize(x, by, Hmisc::smean.cl.boot)
 
-  summaries=Hmisc::summarize(x, by, smean.cl.boot)
+  if (!is.null(transform_means)){
+    summaries[,c('x','Lower','Upper')]<-sapply(summaries[,c('x','Lower','Upper')], exp)
+  }
+
   summaries<-transform(summaries, mean.descr=sprintf(paste0("\\emph{M} = %.",digits,"f [%.",digits,"f, %.",digits,"f]"), x, Lower, Upper))
 
   if (which.mean==3)
@@ -172,6 +200,7 @@ describe.mean.and.t <- function(x, by, which.mean=1, digits=2, paired=F, eff.siz
   format.results(res_str, ...)
 
 }
+
 
 
 #' Get nice matrix of fixed effects from lmer
@@ -462,7 +491,7 @@ describe.mean.conf <- function(x, digits=2,...){
 
 #' Describe lmerTest results
 #'
-#' Note that this function uses *summary* object from lmerTest::lmer model and not the model itself (see example). Otherwise p-values will be computed during the call and everything would be very slow.
+#' Note that this function uses *summary* object from lmerTest::lmer model and not the model itself (see the example). Otherwise p-values will be computed during the call and everything will be very slow.
 #'
 #' @param sfit *summary* object from lmerTest::lmer model
 #' @param factor name or number of the factor that needs to be describe
