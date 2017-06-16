@@ -190,7 +190,8 @@ get_grob_element<-function(myggplot, el='guide-box'){
 #' @param ... - two or more ggplot2 plots
 #' @param stack - stack direction, "h" (horizontal) or "v" (vertical)
 #' @param one_sub - one x-axis label for all plots? T/F
-#' @param heights - a vector of heights for verticaly arrange plots
+#' @param heights - a vector of heights for vertically arranged plots
+#' @param widths - a vector of widths for horizontally arranged plots
 #' @param one_x_axis - one x-axis for all plots? T/F
 #' @param legend position - "t" (top),"b" (bottom), "l" (left), or "r" (right)
 #'
@@ -213,7 +214,7 @@ get_grob_element<-function(myggplot, el='guide-box'){
 #'
 
 
-grid_arrange_shared_legend<-function(..., stack = 'v', one_sub=F, heights=F, one_x_axis=F, legend_pos='b', share_legend=T) {
+grid_arrange_shared_legend<-function(..., stack = 'v', one_sub=F, heights=F, widths=F, one_x_axis=F, legend_pos='b', share_legend=T) {
   require('gridExtra')
   require('grid')
 
@@ -251,6 +252,9 @@ grid_arrange_shared_legend<-function(..., stack = 'v', one_sub=F, heights=F, one
     heights=grid::unit(rep_len(1, length(plots)), "null")
   }
 
+  if (widths==F){
+    widths=grid::unit(rep_len(1, length(plots)), "null")
+  }
 
   stack <- substr(stack, 0, 1)
   if (stack=='v'){
@@ -260,7 +264,7 @@ grid_arrange_shared_legend<-function(..., stack = 'v', one_sub=F, heights=F, one
       p<- grid.arrange(gridExtra::arrangeGrob(p, x_axis_grob, ncol = 1, heights = unit.c(unit(1, "npc") - unit(1,'cm'), x_axis_height)))
     }
   } else {
-    p<-do.call(gridExtra::arrangeGrob, c(plots, nrow=1))
+    p<-do.call(gridExtra::arrangeGrob, append(plots, list(nrow=1, widths=widths)))
   }
   if (share_legend){
     if (legend_pos=='t')
