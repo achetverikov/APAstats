@@ -5,155 +5,28 @@
 Functions for APA-style formatting for statistical tests results in markdown or LaTeX and other miscellanous stuff.
 
 ## Main functions
-
-<table>
- <tr>
-  <td>
-  describe.Anova
-  </td>
-  <td>
-  Describe Anova results
-  </td>
- </tr>
- <tr>
-  <td>
-  describe.aov
-  </td>
-  <td>
-  Describe aov results
-  </td>
- </tr>
- <tr>
-  <td>
-  describe.bimod.test
-  </td>
-  <td>
-  Describe bimodality test results
-  </td>
- </tr>
- <tr>
-  <td>
-  describe.binom.mean.conf
-  </td>
-  <td>
-  Describe mean and confidence intervals for binomial
-  variable
-  </td>
- </tr>
- <tr>
-  <td>
-  describe.chi
-  </td>
-  <td>
-  Describe $chi^2$ results
-  </td>
- </tr>
- <tr>
-  <td>
-  describe.dip.test
-  </td>
-  <td>
-  Describe Hartigans' dip test results
-  </td>
- </tr>
- <tr>
-  <td>
-  describe.ezanova
-  </td>
-  <td>
-  Describe ezANOVA results
-  </td>
- </tr>
- <tr>
-  <td>
-  describe.glm
-  </td>
-  <td>
-  Describe regression model (GLM, GLMer, lm, lm.circular,
-  ...)
-  </td>
- </tr>
- <tr>
-  <td>
-  describe.lmer
-  </td>
-  <td>
-  Describe lmer results
-  </td>
- </tr>
- <tr>
-  <td>
-  describe.lmert
-  </td>
-  <td>
-  Describe lmerTest results
-  </td>
- </tr>
- <tr>
-  <td>
-  describe.lmtaov
-  </td>
-  <td>
-  Describe lmerTest anova results
-  </td>
- </tr>
- <tr>
-  <td>
-  describe.lsmeans
-  </td>
-  <td>
-  Describe contrasts created by lsmeans
-  </td>
- </tr>
- <tr>
-  <td>
-  describe.mean.and.t
-  </td>
-  <td>
-  Describe two-sample t-test with means and effect sizes
-  </td>
- </tr>
- <tr>
-  <td>
-  describe.mean.conf
-  </td>
-  <td>
-  Describe mean and confidence intervals
-  </td>
- </tr>
- <tr>
-  <td>
-  describe.mean.sd
-  </td>
-  <td>
-  Describe mean and SD
-  </td>
- </tr>
- <tr>
-  <td>
-  describe.r
-  </td>
-  <td>
-  Describe Pearson test results
-  </td>
- </tr>
- <tr>
-  <td>
-  describe.roc.diff
-  </td>
-  <td>
-  Describe differences between ROC curves
-  </td>
- </tr>
- <tr>
-  <td>
-  describe.ttest
-  </td>
-  <td>
-  Describe t-test results
-  </td>
- </tr>
-</table>
+|Function|Description|
+|--- | ---|
+| describe.Anova | Describe Anova results|
+| describe.aov | Describe aov results|
+| describe.bf | Describe BayesFactor results|
+| describe.bimod.test | Describe bimodality test results|
+| describe.binom.mean.conf | Describe mean and confidence intervals for binomial variable|
+| describe.chi | Describe $chi^2$ results|
+| describe.dip.test | Describe Hartigans' dip test results|
+| describe.ezanova | Describe ezANOVA results|
+| describe.glm | Describe regression model (GLM, GLMer, lm, lm.circular, ...)|
+| describe.lht | Describe linearHypothesis test results|
+| describe.lmer | Describe lmer results|
+| describe.lmert | Describe lmerTest results|
+| describe.lmtaov | Describe lmerTest anova results|
+| describe.lsmeans | Describe contrasts created by lsmeans|
+| describe.mean.and.t | Describe two-sample t-test with means and effect sizes|
+| describe.mean.conf | Describe mean and confidence intervals|
+| describe.mean.sd | Describe mean and SD|
+| describe.r | Describe Pearson test results|
+| describe.roc.diff | Describe differences between ROC curves|
+| describe.ttest | Describe t-test results|
 
 
 
