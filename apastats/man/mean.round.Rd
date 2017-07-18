@@ -22,4 +22,3 @@ mean.round(c(10,99))
 mean.round(c(10,99,NA))
 mean.round(c(10,99), 2)
 }
-

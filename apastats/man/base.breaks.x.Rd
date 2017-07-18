@@ -17,4 +17,3 @@ scale_x_continuous with pretty breaks
 \description{
 Tufte-like breaks for X axis
 }
-

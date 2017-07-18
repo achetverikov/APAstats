@@ -39,4 +39,3 @@ lmer_with_julia(answerTime~correct*stim_gender*user_gender+(1|uid), faces)
 proc.time() - ptm
 
 }
-

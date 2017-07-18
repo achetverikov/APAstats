@@ -22,4 +22,3 @@ x<-c(NA, 10,90)
 mean(x)
 mymean(x)
 }
-

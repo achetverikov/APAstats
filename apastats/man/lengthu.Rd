@@ -20,4 +20,3 @@ x<-c(5,7,8,9,5,7)
 length(x)
 lengthu(x)
 }
-

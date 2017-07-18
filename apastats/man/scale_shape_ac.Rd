@@ -15,4 +15,3 @@ scale with nice shapes palette
 \description{
 Nice palette of shapes
 }
-

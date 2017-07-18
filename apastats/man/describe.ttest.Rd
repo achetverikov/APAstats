@@ -27,4 +27,3 @@ describe.ttest(t_res)
 describe.ttest(t_res, show.mean=T)
 describe.ttest(t_res, show.mean=T, abs=T)
 }
-

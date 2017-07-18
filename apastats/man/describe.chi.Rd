@@ -7,12 +7,30 @@
 describe.chi(tbl, v = T, addN = T, ...)
 }
 \arguments{
+\item{tbl}{- MxN table on which to compute chi^2 (if not a table, will try to make a table out of it)}
+
+\item{v}{- add Cramer's V (default: T)}
+
+\item{addN}{- add N (default: T)}
+
 \item{...}{}
 }
 \value{
 result
 }
 \description{
-Describe $chi^2$ results
+Describe Pearson $chi^2$ results. Note that the function takes table as an input rather than $chi^2$ object - this is necessary to get Cramer's V.
 }
+\examples{
 
+## From chisq.test help page
+## ---------------------
+## From Agresti(2007) p.39
+M <- as.table(rbind(c(762, 327, 468), c(484, 239, 477)))
+dimnames(M) <- list(gender = c("F", "M"),
+                    party = c("Democrat","Independent", "Republican"))
+(Xsq <- chisq.test(M))  # Prints test summary
+## ----------------------
+describe.chi(M) # Note that describe.chi should be used for the table, not the chi2
+
+}

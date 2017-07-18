@@ -4,7 +4,7 @@
 \alias{format.results}
 \title{Format results}
 \usage{
-\method{generic}{class}(res_str, type = "pandoc")
+\method{format}{results}(res_str, type = "pandoc")
 }
 \arguments{
 \item{res_str}{text}
@@ -17,4 +17,3 @@
 \description{
 Internal function used to convert latex-formatted results to pandoc style.
 }
-

@@ -15,4 +15,3 @@ result
 \description{
 Describe mean and confidence intervals for binomial variable
 }
-

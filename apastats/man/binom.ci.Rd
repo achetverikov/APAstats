@@ -18,4 +18,3 @@ Binomial confidence interval as a vector
 \examples{
 binom.ci(rbinom(500, 1, prob=0.7))
 }
-

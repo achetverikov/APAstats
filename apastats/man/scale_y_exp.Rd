@@ -15,4 +15,3 @@ scale
 \description{
 Transform exponential scale back to normal
 }
-

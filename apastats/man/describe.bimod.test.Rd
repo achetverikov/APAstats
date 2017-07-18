@@ -15,4 +15,3 @@ result
 \description{
 Describe bimodality test results
 }
-

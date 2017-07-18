@@ -22,4 +22,3 @@ x<-c(NA, 10,90)
 sum(x)
 mysum(x)
 }
-

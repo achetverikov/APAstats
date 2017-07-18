@@ -24,4 +24,3 @@ Tufte-like breaks for axes
 \examples{
 
 }
-

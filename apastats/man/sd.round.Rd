@@ -22,4 +22,3 @@ sd.round(c(10,99))
 sd.round(c(10,99,NA))
 sd.round(c(10,99), 2)
 }
-

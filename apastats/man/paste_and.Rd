@@ -15,4 +15,3 @@ result
 \description{
 Paste several strings, add 'and' before last
 }
-

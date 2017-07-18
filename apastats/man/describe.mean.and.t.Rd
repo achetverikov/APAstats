@@ -5,7 +5,8 @@
 \title{Describe two-sample t-test with means and effect sizes}
 \usage{
 describe.mean.and.t(x, by, which.mean = 1, digits = 2, paired = F,
-  eff.size = F, abs = F, ...)
+  eff.size = F, abs = F, aggregate_by = NULL, transform_means = NULL,
+  ...)
 }
 \arguments{
 \item{x}{dependent variable}
@@ -22,6 +23,10 @@ describe.mean.and.t(x, by, which.mean = 1, digits = 2, paired = F,
 
 \item{abs}{should we show the absolute value if the t-test (T) or keep its sign (F, default)}
 
+\item{aggregate_by}{do the aggregation by the thrird variable(s): either NULL (default), a single vector variable, or a list of variables to aggregate by.}
+
+\item{transform_means}{a function to transform means and confidence intervals (default: NULL)}
+
 \item{...}{}
 }
 \value{
@@ -30,4 +35,17 @@ result
 \description{
 Describe two-sample t-test with means and effect sizes
 }
+\examples{
+data(faces)
+rt <- faces$answerTime
+gr <- faces$stim_gender
+describe.mean.and.t(rt, gr)
+describe.mean.and.t(rt, gr, which.mean = 3)
+describe.mean.and.t(rt, gr, eff.size = T)
 
+sid <- faces$sid
+describe.mean.and.t(rt, gr, which.mean = 3, aggregate_by = sid)
+log_rt <- log(rt*1000)
+describe.mean.and.t(log_rt, gr, which.mean = 3, aggregate_by = sid)
+describe.mean.and.t(log_rt, gr, which.mean = 3, aggregate_by = sid, transform_means = exp)
+}

@@ -19,7 +19,7 @@ describe.lmert(sfit, factor, dtype = "t", ...)
 Formatted string
 }
 \description{
-Note that this function uses *summary* object from lmerTest::lmer model and not the model itself (see example). Otherwise p-values will be computed during the call and everything would be very slow.
+Note that this function uses *summary* object from lmerTest::lmer model and not the model itself (see the example). Otherwise p-values will be computed during the call and everything will be very slow.
 }
 \examples{
 
@@ -32,4 +32,3 @@ describe.lmert(fms, 2)
 describe.lmert(fms, 'Days', 'B')
 
 }
-

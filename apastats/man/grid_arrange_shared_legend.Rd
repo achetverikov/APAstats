@@ -5,7 +5,7 @@
 \title{Arrange several plots with one legend and/or one x-axis title}
 \usage{
 grid_arrange_shared_legend(..., stack = "v", one_sub = F, heights = F,
-  one_x_axis = F, legend_pos = "b", share_legend = T)
+  widths = F, one_x_axis = F, legend_pos = "b", share_legend = T)
 }
 \arguments{
 \item{...}{- two or more ggplot2 plots}
@@ -14,7 +14,9 @@ grid_arrange_shared_legend(..., stack = "v", one_sub = F, heights = F,
 
 \item{one_sub}{- one x-axis label for all plots? T/F}
 
-\item{heights}{- a vector of heights for verticaly arrange plots}
+\item{heights}{- a vector of heights for vertically arranged plots}
+
+\item{widths}{- a vector of widths for horizontally arranged plots}
 
 \item{one_x_axis}{- one x-axis for all plots? T/F}
 
@@ -41,4 +43,3 @@ grid_arrange_shared_legend(p1+theme(plot.margin=unit(rep(0,4),'lines'), legend.p
 grid_arrange_shared_legend(p1, p2, stack = 'v', heights=c(0.7,0.2))
 
 }
-

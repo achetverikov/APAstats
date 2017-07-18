@@ -15,4 +15,3 @@ result
 \description{
 Get nice matrix of fixed effects from lmer
 }
-

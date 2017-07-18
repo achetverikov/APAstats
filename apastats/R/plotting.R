@@ -93,11 +93,14 @@ base.breaks.y <- function(x, addSegment=T, ...){
 #' @examples
 #' data(faces)
 #' plot.pointrange(faces, aes(x=user_gender, color=stim_gender, y=answerTime))+ylab('RT')
-#' plot.pointrange(faces, aes(x=user_gender, color=stim_gender, y=answerTime), wid='uid', within_subj=T)+ylab('RT')
-#' plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), wid='uid', within_subj=T, bars='se')+ylab('RT')
-#' plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), wid='uid', within_subj=T, bars='se', print_aggregated_data=T)+ylab('RT')
+#' plot.pointrange(faces, aes(x=user_gender, color=stim_gender, y=answerTime), wid='uid', within_subj=T, withinvars=c('stim_gender'), betweenvars=c('user_gender'))+ylab('RT')
+#' plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), wid='uid', withinvars=c('stim_gender'), betweenvars=c('user_gender'), within_subj=T, bars='se')+ylab('RT')
+#' plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), wid='uid', withinvars=c('stim_gender'), betweenvars=c('user_gender'), within_subj=T, bars='se', print_aggregated_data=T)+ylab('RT')
+#' plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), withinvars=c('stim_gender'), betweenvars = c('user_gender'), print_aggregated_data = T, wid='uid', within_subj=T, exp_y=T, bars='ci', do_aggregate = T)+ylab('RT')
+
 
 plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), linesize=I(1), pointfill=I('white'), within_subj=F, wid='uid', bars='ci', withinvars=NULL, betweenvars=NULL, x_as_numeric=F, custom_geom=NULL, connecting_line=F, pretty_breaks_y=F, pretty_y_axis=F, exp_y=F, print_aggregated_data=F, do_aggregate = F){
+  library(ggplot2)
   ellipses<-list(...)
   plot_f<-ellipses[[2]]
   withinvars<-c(withinvars, as.character(unlist(plot_f[names(plot_f)!='y'])))

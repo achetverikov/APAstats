@@ -45,8 +45,6 @@ f.round <- function (x, digits=2){
 #' @return Formatted p-value
 #' @export round.p
 #'
-#' @method generic class
-#' #'
 #' @examples
 #' round.p(c(0.025, 0.0001, 0.001, 0.568))
 #' round.p(c(0.025, 0.0001, 0.001, 0.568), digits=2)
@@ -79,7 +77,7 @@ round.p <- function(values, include.rel=1,digits=3, strip.lead.zeros=T, replace.
 #'
 #' @return \code{res_str} with latex 'emph' tags replaced with pandoc '_'
 #' @export format.results
-#' @method generic class
+
 format.results <- function(res_str, type='pandoc'){
   if (type=='latex'){
     res_str
@@ -231,15 +229,28 @@ describe.roc.diff <- function (roc_diff){
 
 #' Describe $chi^2$ results
 #'
-#' @param tbl
-#' @param v
-#' @param addN
+#' Describe Pearson $chi^2$ results. Note that the function takes table as an input rather than $chi^2$ object - this is necessary to get Cramer's V.
+#'
+#' @param tbl - MxN table on which to compute chi^2 (if not a table, will try to make a table out of it)
+#' @param v - add Cramer's V (default: T)
+#' @param addN - add N (default: T)
 #' @param ...
 #'
 #' @return result
 #' @export
 #'
-
+#' @examples
+#'
+#' ## From chisq.test help page
+#' ## ---------------------
+#' ## From Agresti(2007) p.39
+#' M <- as.table(rbind(c(762, 327, 468), c(484, 239, 477)))
+#' dimnames(M) <- list(gender = c("F", "M"),
+#'                     party = c("Democrat","Independent", "Republican"))
+#' (Xsq <- chisq.test(M))  # Prints test summary
+#' ## ----------------------
+#' describe.chi(M) # Note that describe.chi should be used for the table, not the chi2
+#'
 describe.chi <- function (tbl, v=T, addN=T,...){
   if (length(dim(tbl))!=2&!is.matrix(tbl)) tbl<-table(tbl)
   chi<-chisq.test(tbl)

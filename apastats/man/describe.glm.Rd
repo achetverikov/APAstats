@@ -51,4 +51,3 @@ require(rockchalk)
 describe.glm(fit, 'body', 4, eff.size=T)
 ## End(Not run)
 }
-

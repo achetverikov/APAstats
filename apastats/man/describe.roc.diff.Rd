@@ -15,4 +15,3 @@ result
 \description{
 Describe differences between ROC curves
 }
-

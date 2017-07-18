@@ -30,4 +30,3 @@ You are free to use it under a Creative Commons Attribution 4.0 International Li
 Chetverikov, A.A. (2015). Linear mixed effects regression in cognitive studies. The Russian Journal of Cognitive Science, 2(1), 41-51. URL: \href{http://cogjournal.org/2/1/pdf/ChetverikovRJCS2015.pdf}{http://cogjournal.org/2/1/pdf/ChetverikovRJCS2015.pdf}
 }
 \keyword{datasets}
-

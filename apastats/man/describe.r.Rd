@@ -23,4 +23,3 @@ y<-x*2+rnorm(40)
 rc<-cor.test(x,y)
 describe.r(rc)
 }
-

@@ -17,4 +17,3 @@ grob element
 Extract grob element by name
 Not mine, found somewhere
 }
-

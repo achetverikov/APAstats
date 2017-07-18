@@ -4,8 +4,8 @@
 \alias{round.p}
 \title{Round *p*-value}
 \usage{
-\method{generic}{class
-  #'}(values, include.rel = 1, digits = 3, strip.lead.zeros = T, replace.very.small = 0.001)
+\method{round}{p}(values, include.rel = 1, digits = 3,
+  strip.lead.zeros = T, replace.very.small = 0.001)
 }
 \arguments{
 \item{values}{a vector of p-values}
@@ -31,4 +31,3 @@ round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=F)
 round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=F, strip.lead.zeros=F)
 round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=F, strip.lead.zeros=F, replace.very.small = 0.01)
 }
-

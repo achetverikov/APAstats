@@ -35,4 +35,3 @@ describe.lsmeans(sum_contr, 3, dtype='t')
 describe.lsmeans(sum_contr, 3, dtype='c')
 describe.lsmeans(sum_contr, 3, dtype='c', df=T)
 }
-

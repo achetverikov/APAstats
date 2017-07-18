@@ -16,4 +16,3 @@ result
 \description{
 Describe lmer results
 }
-

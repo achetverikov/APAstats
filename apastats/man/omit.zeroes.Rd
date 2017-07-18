@@ -22,4 +22,3 @@ omit.zeroes(0.2312)
 omit.zeroes(0.2312, digits=3)
 omit.zeroes('000.2312', digits=1)
 }
-

@@ -12,4 +12,3 @@ palette of shapes
 \description{
 Internal function for palette of shapes
 }
-

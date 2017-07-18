@@ -29,4 +29,3 @@ fit <- lmer(answerTime~correct*stim_gender+(1+correct*stim_gender|uid), faces)
 afit <- anova(fit)
 describe.lmtaov(afit, 'correct:stim_gender')
 }
-

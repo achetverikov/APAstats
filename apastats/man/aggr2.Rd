@@ -30,4 +30,3 @@ aggregate(x~id, FUN=mean)
 aggr2(x, id, mean)
 
 }
-

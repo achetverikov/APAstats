@@ -17,4 +17,3 @@ scale_y_continuous with pretty breaks
 \description{
 Tufte-like breaks for Y axis
 }
-

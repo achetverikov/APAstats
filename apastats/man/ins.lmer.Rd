@@ -17,4 +17,3 @@ result
 \description{
 A shortcut for describe.glm(..., short=4)
 }
-

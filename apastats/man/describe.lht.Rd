@@ -28,4 +28,3 @@ describe.lht(res)
 res.chi <- linearHypothesis(mod.davis, c("(Intercept) = 0", "repwt = 1"), test = "Chisq")
 describe.lht(res.chi)
 }
-

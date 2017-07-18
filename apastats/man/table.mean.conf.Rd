@@ -15,4 +15,3 @@ result
 \description{
 Show table of means and confidence interval
 }
-

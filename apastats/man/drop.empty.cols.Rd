@@ -22,4 +22,3 @@ df<-drop.empty.cols(df)
 str(df)
 
 }
-

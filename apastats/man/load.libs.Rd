@@ -18,4 +18,3 @@ Quietly load libraries
 \examples{
 load.libs(c('ggplot2','apastats','Hmisc'))
 }
-
