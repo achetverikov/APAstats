@@ -110,12 +110,12 @@ plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), lines
   aes_list<-modifyList(lapply(plot_f[names(plot_f)!='y'],as.character),list(y=dv, ymin='ymin', ymax='ymax'))
   #print(aes_list)
   if (do_aggregate) {
-    plot_data<-summarySE(plot_data, measurevar=dv, groupvars = c(withinvars,betweenvars, wid), na.rm=T)
+    plot_data<-apastats:::summarySE(plot_data, measurevar=dv, groupvars = c(withinvars,betweenvars, wid), na.rm=T)
   }
   if (within_subj){
-    aggr_data<-summarySEwithin(plot_data, measurevar=dv, withinvars = withinvars, betweenvars=betweenvars, idvar=wid, na.rm=T)
+    aggr_data<-apastats:::summarySEwithin(plot_data, measurevar=dv, withinvars = withinvars, betweenvars=betweenvars, idvar=wid, na.rm=T)
   } else {
-    aggr_data<-summarySE(plot_data, measurevar=dv, groupvars = c(withinvars,betweenvars), na.rm=T)
+    aggr_data<-apastats:::summarySE(plot_data, measurevar=dv, groupvars = c(withinvars,betweenvars), na.rm=T)
   }
   if (x_as_numeric){
     aggr_data[, aes_list$x]<-as.numeric(as.character(aggr_data[, aes_list$x]))
@@ -324,37 +324,36 @@ mosaic.plot <- function(tbl){
 
   df<-as.data.frame(tbl, responseName='n')
 
-
-  #рассчитываем высоту столбцов как кумулятивную пропорцию внутри каждого уровня field
+  #calculate column heights as a cumulative proprortion within levels of field
   grants<-ddply(grants, .(field), transform, ymax=cumsum(n)/sum(n), ymin=(cumsum(n)-n)/sum(n), ymid=(cumsum(n)-n/2)/sum(n))
 
-  #рассчитываем ширину столбцов как суммарное n для каждого уровня field
+  #calculate columns widths as a summary n within the levels of field
   grants<-ddply(grants, .(field), transform, xmax=sum(n))
 
-  #добавляем в фрейм данные об остатках
+  #add data about residuals in the data.frame
   grants<-merge(grants, as.data.frame(chi$stdres, responseName='res'), by=c("field","npersons_bin") )
 
-  #добавляем человекопонятные метки
-  grants$field<-factor(grants$field, levels=c("soc","beh_cog","chem","physics"), labels=c("Обществ.","Бихевиор./когн.","Химия","Физика"))
+  #add human-readable labels
+  grants$field<-factor(grants$field, levels=c("soc","beh_cog","chem","physics"), labels=c("Social","Behavioral/cognitive","Chemistry","Physics"))
 
-  #задаем базовую структуру графика
+  #set basic plot structur
   p<-ggplot(data=grants,aes(xmin=0, ymin=ymin, xmax=xmax, ymax=ymax, fill=res)) +
-    #квадраты графика
+    #squares
     geom_rect(color=I("white"), show_guide=F, size=I(3)) +
-    #подписи с частотами
+    #labels with frequecies
     geom_text(aes(label=n, x=25, y=ymin+0.05), color=I("white"), size=3) +
-    #используем facet для разделения на столбцы
+    #use facets to separate into columns
     facet_grid(~field,scales="free_x",space="free_x")
 
-  #применяем тему, убираем лишнее
+  #add theme, remove noise
   p<-p+ mytheme+theme(panel.margin = unit(0, "lines"),panel.grid=element_blank(),strip.background=element_blank(), line = element_blank(),
                       axis.text.x = element_blank(),  axis.line = element_blank(), axis.title = element_blank())+scale_x_continuous(expand=c(0,1))
 
-  #добавляем метки для числа человек слева
-  p<-p+scale_y_continuous(expand=c(0,0), breaks=grants[grants$field=="Обществ.","ymid"], labels=c("1 человек", "2-3 человека", "3 и более"))
+  #add labels for counts on the right
+  p<-p+scale_y_continuous(expand=c(0,0), breaks=grants[grants$field=="Social","ymid"], labels=c("1 person", "2-3 persons", "3 and more"))
 
-  #раскрашиваем в зависимости от остатков
-  p<-p+scale_fill_gradientn('Стандарт.\nостатки.',colours=c("#B2182B","#D6604D","#F4A582","#92C5DE","#4393C3","#2166AC"), values=rescale(c(min(grants$res), -3, -2,2,3,max(grants$res))),guide=guide_colorbar(nbin=4, raster=F, ticks=F, title.hjust =0,label.position="left",label.hjust =1))
+  #colorize based on residuals
+  p<-p+scale_fill_gradientn('Stand.\nres.',colours=c("#B2182B","#D6604D","#F4A582","#92C5DE","#4393C3","#2166AC"), values=rescale(c(min(grants$res), -3, -2,2,3,max(grants$res))),guide=guide_colorbar(nbin=4, raster=F, ticks=F, title.hjust =0,label.position="left",label.hjust =1))
 
   p
 }
