@@ -681,17 +681,26 @@ describe.binom.mean.conf <- function(x, digits=2){
 
 #' Describe ezANOVA results
 #'
-#' @param ezfit
-#' @param term
-#' @param include_eta
-#' @param spher_corr
-#' @param ...
+#' @param ezfit - ezANOVA object
+#' @param term - name or sequential number of the term in the model
+#' @param include_eta - add eta^2 for the model (default: True)
+#' @param spher_corr - use sphericity corrections	(default: True)
+#' @param eta_digits - number of digits to use for eta^2 (default: 2)
+#' @param ... - other parameters passed to format.results
 #'
-#' @return result
+#' @return string with formatted results
 #' @export
 #'
+#' @examples
+#' library(ez)
+#' data(faces)
+#' ez_res <- ezANOVA(faces[faces$correct==1], dv = answerTime, wid = uid, within = stim_gender, between=user_gender)
+#' describe.ezanova(ez_res, 'user_gender')
+#' describe.ezanova(ez_res, 'user_gender', eta_digits = 3)
+#' describe.ezanova(ez_res, 'user_gender:stim_gender', eta_digits = 3)
+#' describe.ezanova(ez_res, 3, eta_digits = 3)
 
-describe.ezanova <- function(ezfit, term, include_eta=T, spher_corr=T,...){
+describe.ezanova <- function(ezfit, term, include_eta=T, spher_corr=T, eta_digits = 2, ...){
   eza<-ezfit$ANOVA
   if (spher_corr&('Sphericity Corrections' %in% names(ezfit))){
     eza<-merge(eza, ezfit$`Sphericity Corrections`, by='Effect', all.x=T)
@@ -699,8 +708,8 @@ describe.ezanova <- function(ezfit, term, include_eta=T, spher_corr=T,...){
   }
   rownames(eza)<-eza$Effect
 
-  suffix <- ifelse(include_eta, sprintf(', $\\eta$^2^~G~ = %.2f', eza[term, "ges"]),'')
-  res<-format.results(sprintf("\\emph{F}(%.0f, %.0f) = %.2f, \\emph{p} %s%s", eza[term,"DFn"],eza[term,"DFd"],eza[term,"F"],round.p(eza[term,"p"]), suffix))
+  suffix <- ifelse(include_eta, sprintf(', $\\eta$^2^~G~ %s', round.p(eza[term, "ges"], digits = eta_digits, replace.very.small = 10^(-eta_digits))),'')
+  res<-format.results(sprintf("\\emph{F}(%.0f, %.0f) = %.2f, \\emph{p} %s%s", eza[term,"DFn"],eza[term,"DFd"],eza[term,"F"],round.p(eza[term,"p"]), suffix),...)
   res
 }
 

@@ -4,14 +4,34 @@
 \alias{describe.ezanova}
 \title{Describe ezANOVA results}
 \usage{
-describe.ezanova(ezfit, term, include_eta = T, spher_corr = T, ...)
+describe.ezanova(ezfit, term, include_eta = T, spher_corr = T,
+  eta_digits = 2, ...)
 }
 \arguments{
-\item{...}{}
+\item{ezfit}{- ezANOVA object}
+
+\item{term}{- name or sequential number of the term in the model}
+
+\item{include_eta}{- add eta^2 for the model (default: True)}
+
+\item{spher_corr}{- use sphericity corrections    (default: True)}
+
+\item{eta_digits}{- number of digits to use for eta^2 (default: 2)}
+
+\item{...}{- other parameters passed to format.results}
 }
 \value{
-result
+string with formatted results
 }
 \description{
 Describe ezANOVA results
+}
+\examples{
+library(ez)
+data(faces)
+ez_res <- ezANOVA(faces[faces$correct==1], dv = answerTime, wid = uid, within = stim_gender, between=user_gender)
+describe.ezanova(ez_res, 'user_gender')
+describe.ezanova(ez_res, 'user_gender', eta_digits = 3)
+describe.ezanova(ez_res, 'user_gender:stim_gender', eta_digits = 3)
+describe.ezanova(ez_res, 3, eta_digits = 3)
 }
