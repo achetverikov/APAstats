@@ -699,13 +699,16 @@ describe.binom.mean.conf <- function(x, digits=2){
 
 
 #' Describe ezANOVA results
+#' Provides formatted string like _F_(DFn, DFd) = ..., _p_ ..., eta2 = ... based on ezANOVA results
 #'
-#' @param ezfit - ezANOVA object
-#' @param term - name or sequential number of the term in the model
-#' @param include_eta - add eta^2 for the model (default: True)
-#' @param spher_corr - use sphericity corrections	(default: True)
-#' @param eta_digits - number of digits to use for eta^2 (default: 2)
-#' @param ... - other parameters passed to format.results
+#' @param ezfit ezANOVA object
+#' @param term name or sequential number of the term in the model
+#' @param include_eta add eta^2 for the model (default: True)
+#' @param spher_corr use sphericity corrections	(default: True)
+#' @param eta_digits number of digits to use for eta^2 (default: 2)
+#' @param f_digits number of digits to use for F (default: 2)
+#' @param df_digits number of digits to use for df (default: 0)
+#' @param ... other parameters passed to format.results
 #'
 #' @return string with formatted results
 #' @export
@@ -719,7 +722,7 @@ describe.binom.mean.conf <- function(x, digits=2){
 #' describe.ezanova(ez_res, 'user_gender:stim_gender', eta_digits = 3)
 #' describe.ezanova(ez_res, 3, eta_digits = 3)
 
-describe.ezanova <- function(ezfit, term, include_eta=T, spher_corr=T, eta_digits = 2, ...){
+describe.ezanova <- function(ezfit, term, include_eta=T, spher_corr=T, eta_digits = 2, f_digits = 2, df_digits = 0, ...){
   eza<-ezfit$ANOVA
   if (spher_corr&('Sphericity Corrections' %in% names(ezfit))){
     eza<-merge(eza, ezfit$`Sphericity Corrections`, by='Effect', all.x=T)
@@ -728,7 +731,7 @@ describe.ezanova <- function(ezfit, term, include_eta=T, spher_corr=T, eta_digit
   rownames(eza)<-eza$Effect
 
   suffix <- ifelse(include_eta, sprintf(', $\\eta$^2^~G~ %s', round.p(eza[term, "ges"], digits = eta_digits, replace.very.small = 10^(-eta_digits))),'')
-  res<-format.results(sprintf("\\emph{F}(%.0f, %.0f) = %.2f, \\emph{p} %s%s", eza[term,"DFn"],eza[term,"DFd"],eza[term,"F"],round.p(eza[term,"p"]), suffix),...)
+  res<-format.results(sprintf("\\emph{F}(%.*f, %.*f) = %.*f, \\emph{p} %s%s", df_digits, eza[term,"DFn"], df_digits, eza[term,"DFd"],f_digits,eza[term,"F"],round.p(eza[term,"p"]), suffix),...)
   res
 }
 

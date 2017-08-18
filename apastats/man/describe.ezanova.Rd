@@ -2,29 +2,35 @@
 % Please edit documentation in R/functions.R
 \name{describe.ezanova}
 \alias{describe.ezanova}
-\title{Describe ezANOVA results}
+\title{Describe ezANOVA results
+Provides formatted string like _F_(DFn, DFd) = ..., _p_ ..., eta2 = ... based on ezANOVA results}
 \usage{
 describe.ezanova(ezfit, term, include_eta = T, spher_corr = T,
-  eta_digits = 2, ...)
+  eta_digits = 2, f_digits = 2, df_digits = 0, ...)
 }
 \arguments{
-\item{ezfit}{- ezANOVA object}
+\item{ezfit}{ezANOVA object}
 
-\item{term}{- name or sequential number of the term in the model}
+\item{term}{name or sequential number of the term in the model}
 
-\item{include_eta}{- add eta^2 for the model (default: True)}
+\item{include_eta}{add eta^2 for the model (default: True)}
 
-\item{spher_corr}{- use sphericity corrections    (default: True)}
+\item{spher_corr}{use sphericity corrections    (default: True)}
 
-\item{eta_digits}{- number of digits to use for eta^2 (default: 2)}
+\item{eta_digits}{number of digits to use for eta^2 (default: 2)}
 
-\item{...}{- other parameters passed to format.results}
+\item{f_digits}{number of digits to use for F (default: 2)}
+
+\item{df_digits}{number of digits to use for df (default: 0)}
+
+\item{...}{other parameters passed to format.results}
 }
 \value{
 string with formatted results
 }
 \description{
 Describe ezANOVA results
+Provides formatted string like _F_(DFn, DFd) = ..., _p_ ..., eta2 = ... based on ezANOVA results
 }
 \examples{
 library(ez)
