@@ -15,6 +15,7 @@ Functions for APA-style formatting for statistical tests results in markdown or 
 | describe.chi | Describe $chi^2$ results|
 | describe.dip.test | Describe Hartigans' dip test results|
 | describe.ezanova | Describe ezANOVA results|
+| describe.ezstats | Describe ezStats results|
 | describe.glm | Describe regression model (GLM, GLMer, lm, lm.circular, ...)|
 | describe.lht | Describe linearHypothesis test results|
 | describe.lmer | Describe lmer results|
