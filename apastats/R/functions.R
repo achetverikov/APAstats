@@ -474,16 +474,35 @@ describe.glm <- function (fit, term=NULL, dtype=1, b.digits=2, t.digits=2, test.
 
 #' Describe mean and SD
 #'
-#' @param x
-#' @param digits
-#' @param ...
+#' Computes mean and SD for a vector (or just uses mean and sd if provided) and returns them as formatted string
 #'
-#' @return result
+#' @param x vector of values
+#' @param m mean (not used if x is provided)
+#' @param sd SD (not used if x is provided)
+#' @param digits number of digits used for description (default: 2)
+#' @param type "p" for SD in parentheses (default), "c" for SD after comma
+#' @param ... other arguments passed to format.results
+#'
+#' @return formatted string
 #' @export
 #'
+#' @examples
+#'
+#' x <- rnorm(1000, 50, 25)
+#' describe.mean.sd(x)
+#' describe.mean.sd(x, 0)
+#' describe.mean.sd(x, type = 'c')
 
-describe.mean.sd <- function(x, digits=2,...){
-  format.results(with(as.list(Hmisc::smean.sd(x)),sprintf(paste0("\\emph{M} = %.",digits,"f (\\emph{SD} = %.",digits,"f)"), Mean, SD)), ...)
+describe.mean.sd <- function(x = NULL, m = NULL, sd = NULL, digits=2, type = 'p', ...){
+  if (type == 'c'){s1 <- ', '; s2 <- ''}
+  else {s1 <- ' ('; s2 <- ')'}
+
+  if (!is.null(x)){
+    m_sd <- as.list(Hmisc::smean.sd(x))
+    m <- m_sd$Mean
+    sd <- m_sd$SD
+  }
+  format.results(sprintf("\\emph{M} = %.*f%s\\emph{SD} = %.*f%s", digits, m, s1, digits, sd, s2), ...)
 }
 
 #' Describe mean and confidence intervals

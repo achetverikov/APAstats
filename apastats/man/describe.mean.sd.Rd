@@ -4,14 +4,32 @@
 \alias{describe.mean.sd}
 \title{Describe mean and SD}
 \usage{
-describe.mean.sd(x, digits = 2, ...)
+describe.mean.sd(x = NULL, m = NULL, sd = NULL, digits = 2,
+  type = "p", ...)
 }
 \arguments{
-\item{...}{}
+\item{x}{vector of values}
+
+\item{m}{mean (not used if x is provided)}
+
+\item{sd}{SD (not used if x is provided)}
+
+\item{digits}{number of digits used for description (default: 2)}
+
+\item{type}{"p" for SD in parentheses (default), "c" for SD after comma}
+
+\item{...}{other arguments passed to format.results}
 }
 \value{
-result
+formatted string
 }
 \description{
-Describe mean and SD
+Computes mean and SD for a vector (or just uses mean and sd if provided) and returns them as formatted string
+}
+\examples{
+
+x <- rnorm(1000, 50, 25)
+describe.mean.sd(x)
+describe.mean.sd(x, 0)
+describe.mean.sd(x, type = 'c')
 }
