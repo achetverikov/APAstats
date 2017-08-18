@@ -735,6 +735,34 @@ describe.ezanova <- function(ezfit, term, include_eta=T, spher_corr=T, eta_digit
   res
 }
 
+#' Describe ezStats results
+#'
+#' Returns formatted string with mean and SD from ezStats object
+#'
+#' @param ez_stats data.frame returned by ezStats
+#' @param term name or sequential number of the term in the model (see details)
+#' @param ... other parameters passed to describe.mean.sd
+#'
+#' If a string is used for a term and there is more than one factor, "X:Y:Z" format is assumed (value in first column : value in the second, and so on). If no term is supplied, the first row is used. So if you need to select a term based on two or more variables, you can also just filter ezStats result beforehand (or use a row number as a term).
+#'
+#' @return string with formatted results
+#' @export
+#'
+#' @examples
+#' library(ez)
+#' data(faces)
+#' ezstats_res <- ezStats(faces, dv = answerTime, wid = uid, within = .(stim_gender,correct))
+#' ezstats_res
+#' describe.ezstats(ezstats_res, 'M:0')
+#' describe.ezstats(ezstats_res, 2)
+#' describe.ezstats(ezstats_res, 2, digits=1)
+#'
+
+describe.ezstats <- function(ezstats_res, term = 1, ...){
+  rownames(ezstats_res)<-apply(ezstats_res[,1:(which(colnames(ezstats_res)=='N')-1)],1, paste,collapse = ':')
+  with(ezstats_res[term,], describe.mean.sd(m = Mean, sd = SD, ...))
+}
+
 
 #' Describe Hartigans' dip test results
 #'
