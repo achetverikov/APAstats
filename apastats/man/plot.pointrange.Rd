@@ -5,20 +5,22 @@
 \title{Pointrange plot}
 \usage{
 \method{generic}{class}(..., pos = position_dodge(0.3), pointsize = I(3),
-  linesize = I(1), pointfill = I("white"), within_subj = F, wid = "uid",
-  bars = "ci", withinvars = NULL, betweenvars = NULL, x_as_numeric = F,
-  custom_geom = NULL, connecting_line = F, pretty_breaks_y = F,
-  pretty_y_axis = F, exp_y = F, print_aggregated_data = F,
-  do_aggregate = F)
+  linesize = I(1), pointfill = I("white"), pointshape = NULL,
+  within_subj = F, wid = "uid", bars = "ci", withinvars = NULL,
+  betweenvars = NULL, x_as_numeric = F, custom_geom = NULL,
+  connecting_line = F, pretty_breaks_y = F, pretty_y_axis = F,
+  exp_y = F, print_aggregated_data = F, do_aggregate = F)
 }
 \arguments{
 \item{pos}{position adjustment function (e.g., position_dodge())}
 
-\item{pointsize}{size for the points}
+\item{pointsize}{size for the points (e.g., "I(1)")}
 
-\item{linesize}{size for the lines}
+\item{linesize}{size for the lines (e.g., "I(1)")}
 
-\item{pointfill}{fill for the points}
+\item{pointfill}{fill for the points (e.g., "I('white')")}
+
+\item{pointshape}{shape for the points (e.g., "I(22)")}
 
 \item{within_subj}{should we use within-subject adjustment?}
 

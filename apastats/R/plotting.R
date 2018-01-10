@@ -70,9 +70,10 @@ base.breaks.y <- function(x, addSegment=T, ...){
 #'
 #' @param ...
 #' @param pos position adjustment function (e.g., position_dodge())
-#' @param pointsize size for the points
-#' @param linesize size for the lines
-#' @param pointfill fill for the points
+#' @param pointsize size for the points (e.g., "I(1)")
+#' @param linesize size for the lines (e.g., "I(1)")
+#' @param pointfill fill for the points (e.g., "I('white')")
+#' @param pointshape shape for the points (e.g., "I(22)")
 #' @param within_subj should we use within-subject adjustment?
 #' @param wid within-subject ID variable
 #' @param bars should we use confidence intervals ("ci") or standard errors ("se")?
@@ -99,7 +100,7 @@ base.breaks.y <- function(x, addSegment=T, ...){
 #' plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), withinvars=c('stim_gender'), betweenvars = c('user_gender'), print_aggregated_data = T, wid='uid', within_subj=T, exp_y=T, bars='ci', do_aggregate = T)+ylab('RT')
 
 
-plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), linesize=I(1), pointfill=I('white'), within_subj=F, wid='uid', bars='ci', withinvars=NULL, betweenvars=NULL, x_as_numeric=F, custom_geom=NULL, connecting_line=F, pretty_breaks_y=F, pretty_y_axis=F, exp_y=F, print_aggregated_data=F, do_aggregate = F){
+plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), linesize=I(1), pointfill=I('white'), pointshape=NULL, within_subj=F, wid='uid', bars='ci', withinvars=NULL, betweenvars=NULL, x_as_numeric=F, custom_geom=NULL, connecting_line=F, pretty_breaks_y=F, pretty_y_axis=F, exp_y=F, print_aggregated_data=F, do_aggregate = F){
   library(ggplot2)
   ellipses<-list(...)
   plot_f<-ellipses[[2]]
@@ -138,12 +139,17 @@ plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), lines
 
   if (connecting_line)
     p<-p+geom_line(position=pos, size=linesize)
-  p<-p+geom_linerange(size=linesize, position=pos)+geom_point(size=pointsize, position=pos, fill=pointfill)
+
+  p<-p+geom_linerange(size=linesize, position=pos)
+
+  if (!is.null(pointshape)) {
+    p<-p+geom_point(size=pointsize, position=pos, fill=pointfill, shape=pointshape)
+  } else p<-p+geom_point(size=pointsize, position=pos, fill=pointfill)
 
 
 
   if (pretty_breaks_y){
-    y_range<-ggplot_build(p)$panel$ranges[[1]]$y.range
+    y_range<-ggplot_build(p)$layout$panel_ranges[[1]]$y.range
     breaks<-labeling::extended(y_range[1],y_range[2],5)
     limits<-range(c(breaks,y_range))
     p<-p+scale_y_continuous(breaks=breaks)+coord_cartesian(ylim=limits)
