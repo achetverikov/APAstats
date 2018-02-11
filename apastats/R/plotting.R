@@ -84,7 +84,7 @@ base.breaks.y <- function(x, addSegment=T, ...){
 #' @param connecting_line should we add connecting line (T/F)?
 #' @param pretty_breaks_y prettify y breaks
 #' @param pretty_y_axis prettify y axis
-#' @param exp_y exponentiate y
+#' @param exp_y exponentiate y (it's better to use this than scale_y_exp if pretty_breaks_y is used)
 #' @param print_aggregated_data print aggregated data used for plotting to console
 #' @param do_aggregate - aggregate data by all conditions before plotting (False)
 #'
@@ -149,7 +149,7 @@ plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), lines
 
 
   if (pretty_breaks_y){
-    y_range<-ggplot_build(p)$layout$panel_ranges[[1]]$y.range
+    y_range<-c(min(aggr_data$ymin),max(aggr_data$ymax))
     breaks<-labeling::extended(y_range[1],y_range[2],5)
     limits<-range(c(breaks,y_range))
     p<-p+scale_y_continuous(breaks=breaks)+coord_cartesian(ylim=limits)
