@@ -7,6 +7,10 @@
 ins.lmer(fm, term = NULL, digits = 2, adj.digits = T)
 }
 \arguments{
+\item{fm}{LMER model from lme4}
+
+\item{term}{model term to describe (a string with the term name or its sequential number)}
+
 \item{digits}{number of digits for B and SD}
 
 \item{adj.digits}{automatically adjusts digits so that B would not show up as "0.00"}

@@ -7,11 +7,25 @@
 describe.Anova(afit, term, f.digits = 2, ...)
 }
 \arguments{
-\item{...}{}
+\item{afit}{fitted \link[car]{Anova} model}
+
+\item{term}{model term to describe (a string with the term name or its sequential number)}
+
+\item{f.digits}{number of digits for F}
+
+\item{...}{other parameters passed to \link{format.results}}
 }
 \value{
 result
 }
 \description{
 Describe Anova results
+}
+\examples{
+library(car)
+mod <- lm(conformity ~ fcategory*partner.status, data=Moore, contrasts=list(fcategory=contr.sum, partner.status=contr.sum))
+afit <- Anova(mod)
+describe.Anova(afit, 'fcategory')
+describe.Anova(afit, 2, 4)
+
 }

@@ -9,7 +9,7 @@ f.round(x, digits = 2)
 \arguments{
 \item{x}{A number}
 
-\item{digits}{Number of decimal digits to keep ()}
+\item{digits}{Number of decimal digits to keep}
 }
 \value{
 Value A number rounded to the specified number of digits

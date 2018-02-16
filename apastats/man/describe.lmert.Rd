@@ -13,7 +13,7 @@ describe.lmert(sfit, factor, dtype = "t", ...)
 
 \item{dtype}{description type ("B"/"t")}
 
-\item{...}{other parameters passed to format.results}
+\item{...}{other parameters passed to \link{format.results}}
 }
 \value{
 Formatted string

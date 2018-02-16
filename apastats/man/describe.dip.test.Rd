@@ -7,7 +7,9 @@
 describe.dip.test(x, ...)
 }
 \arguments{
-\item{...}{}
+\item{x}{Hartigans' dip test results}
+
+\item{...}{other parameters passed to \link{format.results}}
 }
 \value{
 result

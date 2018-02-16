@@ -7,7 +7,7 @@
 describe.bf(bf, digits = 2, top_limit = 10000, convert_to_power = T, ...)
 }
 \arguments{
-\item{bf}{an object of \code{BFBayesFactor} class}
+\item{bf}{an object of \link[BayesFactor]{BFBayesFactor} class}
 
 \item{digits}{number of digits to use}
 
@@ -15,7 +15,7 @@ describe.bf(bf, digits = 2, top_limit = 10000, convert_to_power = T, ...)
 
 \item{convert_to_power}{enable or distable converting of very small or very large numbers to exponential notation}
 
-\item{...}{other parameters passed to format.results}
+\item{...}{other parameters passed to \link{format.results}}
 }
 \value{
 string describing the result

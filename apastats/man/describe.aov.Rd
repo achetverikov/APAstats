@@ -7,10 +7,16 @@
 describe.aov(fit, term, type = 2, ...)
 }
 \arguments{
-\item{...}{}
+\item{fit}{fitted aov model}
+
+\item{term}{model term to describe (a string with the term name or its sequential number)}
+
+\item{type}{anova SS type (e.g., 2 or 3)}
+
+\item{...}{other parameters passed to describe.Anova}
 }
 \value{
-result
+formatted string with F(df_numerator, df_denomiator) = F_value, p =/< p_value
 }
 \description{
 Describe aov results

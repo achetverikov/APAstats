@@ -9,11 +9,11 @@ describe.lmtaov(afit, term, f.digits = 2, ...)
 \arguments{
 \item{afit}{- lmerTest anova results}
 
-\item{term}{- term name}
+\item{term}{model term to describe (a string with the term name or its sequential number)}
 
 \item{f.digits}{- decimal digits for F}
 
-\item{...}{}
+\item{...}{other parameters passed to \link{format.results}}
 }
 \value{
 formatted string describing the results of anova

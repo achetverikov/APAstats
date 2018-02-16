@@ -4,14 +4,29 @@
 \alias{describe.mean.conf}
 \title{Describe mean and confidence intervals}
 \usage{
-describe.mean.conf(x, digits = 2, ...)
+describe.mean.conf(x, bootCI = T, addCI = F, digits = 2, ...)
 }
 \arguments{
-\item{...}{}
+\item{x}{value that should be described}
+
+\item{bootCI}{use bootstrapped (T, default) or Gaussian (F) confidence intervals}
+
+\item{addCI}{add "95\% CI =" before confidence intervals (default: F)}
+
+\item{digits}{number of digits to use}
+
+\item{...}{other arguments passed to \link{format.results}}
 }
 \value{
-result
+a string with a mean followed by confidence intervals in square brackets.
 }
 \description{
 Describe mean and confidence intervals
+}
+\examples{
+
+x <- runif(100, 0, 50)
+describe.mean.conf(x)
+describe.mean.conf(x, bootCI = F)
+describe.mean.conf(x, digits = 5)
 }

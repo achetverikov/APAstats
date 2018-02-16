@@ -2,16 +2,26 @@
 % Please edit documentation in R/functions.R
 \name{table.mean.conf.by}
 \alias{table.mean.conf.by}
-\title{Show table of means and confidence intervals by group}
+\title{Get a list of means and confidence intervals by group}
 \usage{
 table.mean.conf.by(x, by, digits = 2, binom = F)
 }
 \arguments{
-\item{binom}{}
+\item{x}{value to compute the mean for}
+
+\item{by}{group labels}
+
+\item{digits}{number of digits in results (default: 2)}
+
+\item{binom}{compute binomial CI instead of the usual ones}
 }
 \value{
-result
+a list of means and CI with keys corresponding to the group labels
 }
 \description{
-Show table of means and confidence intervals by group
+Get a list of means and confidence intervals by group
+}
+\examples{
+table.mean.conf.by(faces$answerTime, faces$correct, 4)
+
 }

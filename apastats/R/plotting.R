@@ -68,7 +68,7 @@ base.breaks.y <- function(x, addSegment=T, ...){
 
 #' Pointrange plot
 #'
-#' @param ...
+#' @param ... the first element is assumed to be the dataset and the second one is assumed to be a list of plot aesthetics (e.g., aes(x = varA, y=varB))
 #' @param pos position adjustment function (e.g., position_dodge())
 #' @param pointsize size for the points (e.g., "I(1)")
 #' @param linesize size for the lines (e.g., "I(1)")
@@ -162,9 +162,11 @@ plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), lines
   p
 }
 
-#' Transform exponential scale back to normal
+#' Exponentiate scale
 #'
-#' @param digits
+#' Helps to transform log-scale back to normal
+#'
+#' @param digits number of digits to use in lables
 #' @param  ... other arguments passed to scale_y_continuous
 #'
 #' @return scale
@@ -177,8 +179,8 @@ scale_y_exp<-function(digits=0, ...){
 
 #' Extract grob element by name
 #' Not mine, found somewhere
-#' @param myggplot
-#' @param el
+#' @param myggplot plot to extract grob from
+#' @param el element name to extract
 #'
 #' @return grob element
 #' @export

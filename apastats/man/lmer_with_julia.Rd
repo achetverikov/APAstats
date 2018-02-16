@@ -7,7 +7,9 @@
 lmer_with_julia(myform, dataset)
 }
 \arguments{
-\item{dataset}{}
+\item{myform}{formula to use}
+
+\item{dataset}{dataset to use}
 }
 \value{
 result

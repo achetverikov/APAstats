@@ -7,11 +7,33 @@
 paste_and(x, sep = ", ", suffix = "")
 }
 \arguments{
-\item{suffix}{}
+\item{x}{vector of strings}
+
+\item{sep}{separator (is not used for only two groups)}
+
+\item{suffix}{suffix to append to each value before the separator}
 }
 \value{
-result
+a string iterating the values in x
 }
 \description{
 Paste several strings, add 'and' before last
+}
+\examples{
+data(iris)
+# get mean petal width and SD by group
+res <- as.vector(by(iris$Sepal.Width, iris$Species, describe.mean.sd))
+res
+paste_and(res)
+paste_and(res, sep = ';')
+
+data(faces)
+# get mean response times (in ms) by response accuracy
+res <- as.vector(by(faces$answerTime*1000, faces$correct, describe.mean.sd))
+res
+# no comma with two groups
+paste_and(res)
+paste_and(res, suffix = ' ms')
+
+
 }

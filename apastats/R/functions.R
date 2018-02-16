@@ -19,7 +19,7 @@ omit.zeroes <- function (x, digits=2)
 #' Formatted rounding
 #'
 #' @param x A number
-#' @param digits Number of decimal digits to keep ()
+#' @param digits Number of decimal digits to keep
 #'
 #' @return Value A number rounded to the specified number of digits
 #' @export
@@ -89,8 +89,8 @@ format.results <- function(res_str, type='pandoc'){
 
 #' Describe Pearson test results
 #'
-#' @param rc an object from \code{cor.test}
-#' @param ... other arguments passed to \code{format.results}
+#' @param rc an object from \link[stats]{cor.test}
+#' @param ... other arguments passed to \link{format.results}
 #'
 #' @return A string with correlation coefficient, sample size, and p-value.
 #' @export
@@ -106,10 +106,10 @@ describe.r <- function(rc,...){
 
 #' Describe t-test results
 #'
-#' @param t an object from \code{t.test}
+#' @param t an object from \link[stats]{t.test}
 #' @param show.mean  include mean value in results (useful for one-sample test)
 #' @param abs should we show the sign of t-test
-#' @param ... other arguments passed to \code{format.results}
+#' @param ... other arguments passed to \link{format.results}
 #'
 #' @return A string with t-test value, degrees of freedom, p-value, and, optionally, a mean with 95% confidence interval in square brackets.
 #' @export
@@ -142,7 +142,7 @@ describe.ttest <- function (t,show.mean=F, abs=F,...){
 #' @param abs should we show the absolute value if the t-test (T) or keep its sign (F, default)
 #' @param aggregate_by do the aggregation by the thrird variable(s): either NULL (default), a single vector variable, or a list of variables to aggregate by.
 #' @param transform_means a function to transform means and confidence intervals (default: NULL)
-#' @param ...
+#' @param ... other parameters passed to \link{format.results}
 #'
 #' @return result
 #' @export
@@ -234,7 +234,7 @@ describe.roc.diff <- function (roc_diff){
 #' @param tbl - MxN table on which to compute chi^2 (if not a table, will try to make a table out of it)
 #' @param v - add Cramer's V (default: T)
 #' @param addN - add N (default: T)
-#' @param ...
+#' @param ... other parameters passed to \link{format.results}
 #'
 #' @return result
 #' @export
@@ -263,12 +263,12 @@ describe.chi <- function (tbl, v=T, addN=T,...){
 
 #' Describe aov results
 #'
-#' @param fit
-#' @param term
-#' @param type
-#' @param ...
+#' @param fit fitted aov model
+#' @param term model term to describe (a string with the term name or its sequential number)
+#' @param type anova SS type (e.g., 2 or 3)
+#' @param ... other parameters passed to describe.Anova
 #'
-#' @return result
+#' @return formatted string with F(df_numerator, df_denomiator) = F_value, p =/< p_value
 #' @export
 #'
 
@@ -300,9 +300,9 @@ describe.anova <- function (anova_res, rown=2, f.digits=2,...){
 #' Describe lmerTest anova results
 #'
 #' @param afit - lmerTest anova results
-#' @param term - term name
+#' @param term model term to describe (a string with the term name or its sequential number)
 #' @param f.digits - decimal digits for F
-#' @param ...
+#' @param ... other parameters passed to \link{format.results}
 #'
 #' @return formatted string describing the results of anova
 #' @export
@@ -321,13 +321,20 @@ describe.lmtaov <- function (afit, term, f.digits=2, ...){
 
 #' Describe Anova results
 #'
-#' @param afit
-#' @param term
-#' @param f.digits
-#' @param ...
+#' @param afit fitted \link[car]{Anova} model
+#' @param term model term to describe (a string with the term name or its sequential number)
+#' @param f.digits number of digits for F
+#' @param ... other parameters passed to \link{format.results}
 #'
 #' @return result
 #' @export
+#'
+#' @examples
+#' library(car)
+#' mod <- lm(conformity ~ fcategory*partner.status, data=Moore, contrasts=list(fcategory=contr.sum, partner.status=contr.sum))
+#' afit <- Anova(mod)
+#' describe.Anova(afit, 'fcategory')
+#' describe.Anova(afit, 2, 4)
 #'
 
 describe.Anova <- function (afit, term, f.digits=2, ...){
@@ -338,14 +345,14 @@ describe.Anova <- function (afit, term, f.digits=2, ...){
 #' Describe regression model (GLM, GLMer, lm, lm.circular, ...)
 #'
 #' @param fit model object
-#' @param term model term to describe
+#' @param term model term to describe (a string with the term name or its sequential number)
 #' @param dtype description type (1: t, p;  2: B(SE), p; 3: B, SE, t, p; or other: B (SE), t)
 #' @param b.digits how many digits to use for _B_ and _SE_
 #' @param t.digits how many digits to use for _t_
 #' @param test.df should we include degrees of freedom in description?
 #' @param eff.size should we include effect size (currently implemented only for simple regression)?
 #' @param adj.digits automatically adjusts digits so that B or SE would not show up as "0.00"
-#' @param ...
+#' @param ... other parameters passed to \link{format.results}
 #'
 #' @return result
 #' @export
@@ -433,7 +440,7 @@ describe.glm <- function (fit, term=NULL, dtype=1, b.digits=2, t.digits=2, test.
     if (fit_class != 'merModLmerTest') {
       dfs<-summary(fit)$df[2]
     }
-    if (all.equal(dfs, as.integer(dfs))){
+    if (isTRUE(all.equal(dfs, as.integer(dfs)))){
       dfs <- as.character(round(dfs))
     }
     else {
@@ -446,7 +453,7 @@ describe.glm <- function (fit, term=NULL, dtype=1, b.digits=2, t.digits=2, test.
   res_df<-data.frame(B = f.round(afit[, 1], 2), SE = f.round(afit[, 2], 2), Stat = f.round(afit[, 3], t.digits), p = if(p.as.number) zapsmall(as.vector(afit[,4]),4) else round.p(afit[, 4]), eff=row.names(afit),row.names = row.names(afit))
 
   if (dtype==1) {
-    res_df$str<-sprintf(paste0("\\emph{",t_z,"} %s, \\emph{p} %s"), round.p(afit[, 3], digits=t.digits, strip=F), round.p(afit[, 4]))
+    res_df$str<-sprintf(paste0("\\emph{",t_z,"}",dfs," %s, \\emph{p} %s"), round.p(afit[, 3], digits=t.digits, strip=F), round.p(afit[, 4]))
   }
   else if (dtype==2){
     res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f (%.",b.digits,"f), \\emph{p} %s"), afit[, 1], afit[, 2], round.p(afit[, 4]))
@@ -481,7 +488,7 @@ describe.glm <- function (fit, term=NULL, dtype=1, b.digits=2, t.digits=2, test.
 #' @param sd SD (not used if x is provided)
 #' @param digits number of digits used for description (default: 2)
 #' @param type "p" for SD in parentheses (default), "c" for SD after comma
-#' @param ... other arguments passed to format.results
+#' @param ... other arguments passed to \link{format.results}
 #'
 #' @return formatted string
 #' @export
@@ -507,16 +514,30 @@ describe.mean.sd <- function(x = NULL, m = NULL, sd = NULL, digits=2, type = 'p'
 
 #' Describe mean and confidence intervals
 #'
-#' @param x
-#' @param digits
-#' @param ...
+#' @param x value that should be described
+#' @param bootCI use bootstrapped (T, default) or Gaussian (F) confidence intervals
+#' @param addCI add "95\% CI =" before confidence intervals (default: F)
+#' @param digits number of digits to use
+#' @param ... other arguments passed to \link{format.results}
 #'
-#' @return result
+#' @return a string with a mean followed by confidence intervals in square brackets.
+#'
 #' @export
 #'
+#' @examples
+#'
+#' x <- runif(100, 0, 50)
+#' describe.mean.conf(x)
+#' describe.mean.conf(x, bootCI = F)
+#' describe.mean.conf(x, digits = 5)
 
-describe.mean.conf <- function(x, digits=2,...){
-  format.results(with(as.list(Hmisc::smean.cl.normal(x)),sprintf(paste0("\\emph{M} = %.",digits,"f [%.",digits,"f, %.",digits,"f]"), Mean, Lower, Upper)), ...)
+describe.mean.conf <- function(x, bootCI = T, addCI = F, digits = 2,...){
+  if (bootCI)
+    res <- Hmisc::smean.cl.boot(x)
+  else
+    res <- Hmisc::smean.cl.normal(x)
+  ci_str <- ifelse(addCI, ', 95%% \\emph{CI} =','')
+  format.results(with(as.list(res),sprintf(paste0("\\emph{M} = %.",digits,"f",ci_str," [%.",digits,"f, %.",digits,"f]"), Mean, Lower, Upper)), ...)
 }
 
 #' Describe lmerTest results
@@ -526,7 +547,7 @@ describe.mean.conf <- function(x, digits=2,...){
 #' @param sfit *summary* object from lmerTest::lmer model
 #' @param factor name or number of the factor that needs to be describe
 #' @param dtype description type ("B"/"t")
-#' @param ... other parameters passed to format.results
+#' @param ... other parameters passed to \link{format.results}
 #'
 #' @return Formatted string
 #' @export
@@ -596,11 +617,11 @@ describe.lht <- function (hyp, ...){
 }
 #' Describe contrasts created by lsmeans
 #'
-#' @param obj - summary object from lsmeans::contrast
-#' @param term - contrast number
-#' @param dtype - description type, "t", "B", or any other letter
-#' @param df - should we include DF in t-test description
-#' @param ... other parameters passed to format.results
+#' @param obj summary object from lsmeans::contrast
+#' @param term contrast number
+#' @param dtype description type, "t", "B", or any other letter
+#' @param df include DF in t-test description (default: False)
+#' @param ... other parameters passed to \link{format.results}
 #'
 #' @return string with formatted results
 #' @export
@@ -634,12 +655,14 @@ describe.lsmeans<-function(obj, term, dtype='B', df=F, ...){
 
 #' Describe lmer results
 #'
-#' @param fm
-#' @param pv
-#' @param digits
-#' @param incl.rel
-#' @param dtype
-#' @param incl.p
+#' This function is deprecated in favor of \link{describe.glm}
+#'
+#' @param fm LMER model from lme4
+#' @param pv p values table (from Anova)
+#' @param digits number of digits in results (default: 2)
+#' @param incl.rel include the relation sign for _p_
+#' @param dtype description type (B or t)
+#' @param incl.p include p values
 #'
 #' @return result
 #' @export
@@ -672,8 +695,8 @@ describe.lmer <- function (fm, pv, digits = c(2, 2, 2), incl.rel = 0, dtype="B",
 #'
 #' A shortcut for describe.glm(..., short=4)
 #'
-#' @param fm
-#' @param term
+#' @param fm LMER model from lme4
+#' @param term model term to describe (a string with the term name or its sequential number)
 #' @param  digits number of digits for B and SD
 #' @param  adj.digits automatically adjusts digits so that B would not show up as "0.00"
 #' @return result
@@ -686,12 +709,19 @@ ins.lmer <- function (fm, term=NULL, digits=2, adj.digits=T){
 
 #' Describe mean and confidence intervals for binomial variable
 #'
-#' @param x
-#' @param digits
+#' @param x a vector of values
+#' @param digits number of digits in results (default: 2)
 #'
-#' @return result
+#' @return a string with the mean and confidence interval in square brackets
 #' @export
 #'
+#' @examples
+#'
+#' describe.binom.mean.conf(faces$correct[1:100])
+#' # note that it is slightly different from asymptotic CI
+#' describe.mean.conf(faces$correct[1:100], bootCI = F)
+#' # although similar to the bootstrapped CI
+#' describe.mean.conf(faces$correct[1:100], bootCI = T)
 
 describe.binom.mean.conf <- function(x, digits=2){
   format.results(with( data.frame(Hmisc::binconf(sum(x),length(x))),sprintf(paste0("\\emph{M} = %.",digits,"f [%.",digits,"f, %.",digits,"f]"), PointEst, Lower, Upper)))
@@ -702,13 +732,13 @@ describe.binom.mean.conf <- function(x, digits=2){
 #' Provides formatted string like _F_(DFn, DFd) = ..., _p_ ..., eta2 = ... based on ezANOVA results
 #'
 #' @param ezfit ezANOVA object
-#' @param term name or sequential number of the term in the model
+#' @param term model term to describe (a string with the term name or its sequential number)
 #' @param include_eta add eta^2 for the model (default: True)
 #' @param spher_corr use sphericity corrections	(default: True)
 #' @param eta_digits number of digits to use for eta^2 (default: 2)
 #' @param f_digits number of digits to use for F (default: 2)
 #' @param df_digits number of digits to use for df (default: 0)
-#' @param ... other parameters passed to format.results
+#' @param ... other parameters passed to \link{format.results}
 #'
 #' @return string with formatted results
 #' @export
@@ -740,7 +770,7 @@ describe.ezanova <- function(ezfit, term, include_eta=T, spher_corr=T, eta_digit
 #' Returns formatted string with mean and SD from ezStats object
 #'
 #' @param ez_stats data.frame returned by ezStats
-#' @param term name or sequential number of the term in the model (see details)
+#' @param term model term to describe (a string with the term name or its sequential number)
 #' @param ... other parameters passed to describe.mean.sd
 #'
 #' If a string is used for a term and there is more than one factor, "X:Y:Z" format is assumed (value in first column : value in the second, and so on). If no term is supplied, the first row is used. So if you need to select a term based on two or more variables, you can also just filter ezStats result beforehand (or use a row number as a term).
@@ -766,8 +796,8 @@ describe.ezstats <- function(ezstats_res, term = 1, ...){
 
 #' Describe Hartigans' dip test results
 #'
-#' @param x
-#' @param ...
+#' @param x Hartigans' dip test results
+#' @param ... other parameters passed to \link{format.results}
 #'
 #' @return result
 #' @export
@@ -781,11 +811,11 @@ describe.dip.test <- function(x,...){
 
 #' Describe bimodality test results
 #'
-#' @param x
-#' @param start_vec
-#' @param ...
+#' @param x value vector for \link[bimodalitytest]{bimodality.test}
+#' @param start_vec start vector for \link[bimodalitytest]{bimodality.test}
+#' @param ... other parameters passed to \link{format.results}
 #'
-#' @return result
+#' @return a string with the LR (likelihood ratio) and p
 #' @export
 #'
 
@@ -795,30 +825,36 @@ describe.bimod.test <- function(x,start_vec=NA,...){
   format.results(res,...)
 }
 
-#' Show table of means and confidence intervals by group
+#' Get a list of means and confidence intervals by group
 #'
-#' @param x
-#' @param by
-#' @param digits
-#' @param binom
+#' @param x value to compute the mean for
+#' @param by group labels
+#' @param digits number of digits in results (default: 2)
+#' @param binom compute binomial CI instead of the usual ones
 #'
-#' @return result
+#' @return a list of means and CI with keys corresponding to the group labels
 #' @export
+#'
+#' @examples
+#' table.mean.conf.by(faces$answerTime, faces$correct, 4)
 #'
 
 table.mean.conf.by <- function(x, by, digits=2, binom=F){
-  tapply(x, by, table.mean.conf, digits=2, binom=F)
+  tapply(x, by, table.mean.conf, digits, binom)
 }
 
-#' Show table of means and confidence interval
+#' Get a list with means and confidence intervals
 #'
-#' @param x
-#' @param digits
-#' @param binom
-#' @param ...
+#' @param x value to compute the mean for
+#' @param digits number of digits in results (default: 2)
+#' @param binom compute binomial CI instead of the usual ones
+#' @param ... other parameters passed to \link{format.results}
 #'
-#' @return result
+#' @return a list with a mean and CI
 #' @export
+#'
+#' @examples
+#' table.mean.conf(faces$correct)
 #'
 
 table.mean.conf <- function(x, digits=2, binom=F, ...) {
@@ -827,7 +863,7 @@ table.mean.conf <- function(x, digits=2, binom=F, ...) {
     colnames(res)<-c('Mean', 'Lower', 'Upper')
   }
   else{
-    res<-as.list(smean.cl.normal(x))
+    res<-as.list(smean.cl.boot(x))
   }
   res<-with(res,c(f.round(Mean, digits), sprintf(paste0("[%.",digits,"f, %.",digits,"f]"), Lower, Upper)))
   res
@@ -835,12 +871,29 @@ table.mean.conf <- function(x, digits=2, binom=F, ...) {
 
 #' Paste several strings, add 'and' before last
 #'
-#' @param x
-#' @param sep
-#' @param suffix
+#' @param x vector of strings
+#' @param sep separator (is not used for only two groups)
+#' @param suffix suffix to append to each value before the separator
 #'
-#' @return result
+#' @return a string iterating the values in x
 #' @export
+#'
+#' @examples
+#' data(iris)
+#' # get mean petal width and SD by group
+#' res <- as.vector(by(iris$Sepal.Width, iris$Species, describe.mean.sd))
+#' res
+#' paste_and(res)
+#' paste_and(res, sep = ';')
+#'
+#' data(faces)
+#' # get mean response times (in ms) by response accuracy
+#' res <- as.vector(by(faces$answerTime*1000, faces$correct, describe.mean.sd))
+#' res
+#' # no comma with two groups
+#' paste_and(res)
+#' paste_and(res, suffix = ' ms')
+#'
 #'
 
 paste_and<-function(x, sep=', ', suffix=''){
@@ -853,8 +906,8 @@ paste_and<-function(x, sep=', ', suffix=''){
 #'
 #' Fits maximal model
 #'
-#' @param myform
-#' @param dataset
+#' @param myform formula to use
+#' @param dataset dataset to use
 #'
 #' @return result
 #' @export
@@ -940,11 +993,11 @@ aggr2<-function (x, by, fun, ...){
 
 #' Describe BayesFactor results
 #'
-#' @param bf an object of \code{BFBayesFactor} class
+#' @param bf an object of \link[BayesFactor]{BFBayesFactor} class
 #' @param digits number of digits to use
 #' @param top_limit numbers above that limit (or below the digits limit) will be converted to exponential notation (if convert_to_power is TRUE)
 #' @param convert_to_power enable or distable converting of very small or very large numbers to exponential notation
-#' @param ... other parameters passed to format.results
+#' @param ... other parameters passed to \link{format.results}
 #' @return string describing the result
 #' @note Code for converting to exponential notation is based on http://dankelley.github.io/r/2015/03/22/scinot.html
 #' @export

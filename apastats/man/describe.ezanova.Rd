@@ -11,7 +11,7 @@ describe.ezanova(ezfit, term, include_eta = T, spher_corr = T,
 \arguments{
 \item{ezfit}{ezANOVA object}
 
-\item{term}{name or sequential number of the term in the model}
+\item{term}{model term to describe (a string with the term name or its sequential number)}
 
 \item{include_eta}{add eta^2 for the model (default: True)}
 
@@ -23,7 +23,7 @@ describe.ezanova(ezfit, term, include_eta = T, spher_corr = T,
 
 \item{df_digits}{number of digits to use for df (default: 0)}
 
-\item{...}{other parameters passed to format.results}
+\item{...}{other parameters passed to \link{format.results}}
 }
 \value{
 string with formatted results

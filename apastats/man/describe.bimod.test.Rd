@@ -7,10 +7,14 @@
 describe.bimod.test(x, start_vec = NA, ...)
 }
 \arguments{
-\item{...}{}
+\item{x}{value vector for \link[bimodalitytest]{bimodality.test}}
+
+\item{start_vec}{start vector for \link[bimodalitytest]{bimodality.test}}
+
+\item{...}{other parameters passed to \link{format.results}}
 }
 \value{
-result
+a string with the LR (likelihood ratio) and p
 }
 \description{
 Describe bimodality test results

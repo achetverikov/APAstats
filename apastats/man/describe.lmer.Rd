@@ -8,11 +8,21 @@ describe.lmer(fm, pv, digits = c(2, 2, 2), incl.rel = 0, dtype = "B",
   incl.p = T)
 }
 \arguments{
-\item{incl.p}{}
+\item{fm}{LMER model from lme4}
+
+\item{pv}{p values table (from Anova)}
+
+\item{digits}{number of digits in results (default: 2)}
+
+\item{incl.rel}{include the relation sign for _p_}
+
+\item{dtype}{description type (B or t)}
+
+\item{incl.p}{include p values}
 }
 \value{
 result
 }
 \description{
-Describe lmer results
+This function is deprecated in favor of \link{describe.glm}
 }

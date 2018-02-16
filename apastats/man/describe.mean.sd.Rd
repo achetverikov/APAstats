@@ -18,7 +18,7 @@ describe.mean.sd(x = NULL, m = NULL, sd = NULL, digits = 2,
 
 \item{type}{"p" for SD in parentheses (default), "c" for SD after comma}
 
-\item{...}{other arguments passed to format.results}
+\item{...}{other arguments passed to \link{format.results}}
 }
 \value{
 formatted string

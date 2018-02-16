@@ -2,16 +2,18 @@
 % Please edit documentation in R/plotting.R
 \name{scale_y_exp}
 \alias{scale_y_exp}
-\title{Transform exponential scale back to normal}
+\title{Exponentiate scale}
 \usage{
 scale_y_exp(digits = 0, ...)
 }
 \arguments{
+\item{digits}{number of digits to use in lables}
+
 \item{...}{other arguments passed to scale_y_continuous}
 }
 \value{
 scale
 }
 \description{
-Transform exponential scale back to normal
+Helps to transform log-scale back to normal
 }

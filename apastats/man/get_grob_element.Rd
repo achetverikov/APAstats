@@ -8,7 +8,9 @@ Not mine, found somewhere}
 get_grob_element(myggplot, el = "guide-box")
 }
 \arguments{
-\item{el}{}
+\item{myggplot}{plot to extract grob from}
+
+\item{el}{element name to extract}
 }
 \value{
 grob element

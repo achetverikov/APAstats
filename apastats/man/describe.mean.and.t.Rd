@@ -27,7 +27,7 @@ describe.mean.and.t(x, by, which.mean = 1, digits = 2, paired = F,
 
 \item{transform_means}{a function to transform means and confidence intervals (default: NULL)}
 
-\item{...}{}
+\item{...}{other parameters passed to \link{format.results}}
 }
 \value{
 result

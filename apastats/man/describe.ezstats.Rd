@@ -7,7 +7,7 @@
 describe.ezstats(ezstats_res, term = 1, ...)
 }
 \arguments{
-\item{term}{name or sequential number of the term in the model (see details)}
+\item{term}{model term to describe (a string with the term name or its sequential number)}
 
 \item{...}{other parameters passed to describe.mean.sd
 

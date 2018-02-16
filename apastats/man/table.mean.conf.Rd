@@ -2,16 +2,26 @@
 % Please edit documentation in R/functions.R
 \name{table.mean.conf}
 \alias{table.mean.conf}
-\title{Show table of means and confidence interval}
+\title{Get a list with means and confidence intervals}
 \usage{
 table.mean.conf(x, digits = 2, binom = F, ...)
 }
 \arguments{
-\item{...}{}
+\item{x}{value to compute the mean for}
+
+\item{digits}{number of digits in results (default: 2)}
+
+\item{binom}{compute binomial CI instead of the usual ones}
+
+\item{...}{other parameters passed to \link{format.results}}
 }
 \value{
-result
+a list with a mean and CI
 }
 \description{
-Show table of means and confidence interval
+Get a list with means and confidence intervals
+}
+\examples{
+table.mean.conf(faces$correct)
+
 }

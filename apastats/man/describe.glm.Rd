@@ -11,7 +11,7 @@ describe.glm(fit, term = NULL, dtype = 1, b.digits = 2, t.digits = 2,
 \arguments{
 \item{fit}{model object}
 
-\item{term}{model term to describe}
+\item{term}{model term to describe (a string with the term name or its sequential number)}
 
 \item{dtype}{description type (1: t, p;  2: B(SE), p; 3: B, SE, t, p; or other: B (SE), t)}
 
@@ -25,7 +25,7 @@ describe.glm(fit, term = NULL, dtype = 1, b.digits = 2, t.digits = 2,
 
 \item{adj.digits}{automatically adjusts digits so that B or SE would not show up as "0.00"}
 
-\item{...}{}
+\item{...}{other parameters passed to \link{format.results}}
 }
 \value{
 result

@@ -13,7 +13,7 @@ describe.chi(tbl, v = T, addN = T, ...)
 
 \item{addN}{- add N (default: T)}
 
-\item{...}{}
+\item{...}{other parameters passed to \link{format.results}}
 }
 \value{
 result

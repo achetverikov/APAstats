@@ -7,13 +7,13 @@
 describe.ttest(t, show.mean = F, abs = F, ...)
 }
 \arguments{
-\item{t}{an object from \code{t.test}}
+\item{t}{an object from \link[stats]{t.test}}
 
 \item{show.mean}{include mean value in results (useful for one-sample test)}
 
 \item{abs}{should we show the sign of t-test}
 
-\item{...}{other arguments passed to \code{format.results}}
+\item{...}{other arguments passed to \link{format.results}}
 }
 \value{
 A string with t-test value, degrees of freedom, p-value, and, optionally, a mean with 95% confidence interval in square brackets.

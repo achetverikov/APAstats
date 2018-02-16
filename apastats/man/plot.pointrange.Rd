@@ -12,6 +12,8 @@
   exp_y = F, print_aggregated_data = F, do_aggregate = F)
 }
 \arguments{
+\item{...}{the first element is assumed to be the dataset and the second one is assumed to be a list of plot aesthetics (e.g., aes(x = varA, y=varB))}
+
 \item{pos}{position adjustment function (e.g., position_dodge())}
 
 \item{pointsize}{size for the points (e.g., "I(1)")}
@@ -42,7 +44,7 @@
 
 \item{pretty_y_axis}{prettify y axis}
 
-\item{exp_y}{exponentiate y}
+\item{exp_y}{exponentiate y (it's better to use this than scale_y_exp if pretty_breaks_y is used)}
 
 \item{print_aggregated_data}{print aggregated data used for plotting to console}
 

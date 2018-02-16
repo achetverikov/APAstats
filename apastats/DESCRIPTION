@@ -1,10 +1,10 @@
 Package: apastats
 Type: Package
 Title: APA-style results
-Version: 0.1
+Version: 0.2
 Date: 2015-07-29
 Author: Andrey Chetverikov
-Maintainer: Andrey Chetverikov <achetverikov@psy.spbu.ru>
+Maintainer: Andrey Chetverikov <@achetverikov>
 Description: Proper formatting of statistical results in accordance with
     American Psychological Association Manual, 6th ed., and some convenient plotting
     functions

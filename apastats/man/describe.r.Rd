@@ -7,9 +7,9 @@
 describe.r(rc, ...)
 }
 \arguments{
-\item{rc}{an object from \code{cor.test}}
+\item{rc}{an object from \link[stats]{cor.test}}
 
-\item{...}{other arguments passed to \code{format.results}}
+\item{...}{other arguments passed to \link{format.results}}
 }
 \value{
 A string with correlation coefficient, sample size, and p-value.

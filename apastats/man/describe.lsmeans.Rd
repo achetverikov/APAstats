@@ -7,15 +7,15 @@
 describe.lsmeans(obj, term, dtype = "B", df = F, ...)
 }
 \arguments{
-\item{obj}{- summary object from lsmeans::contrast}
+\item{obj}{summary object from lsmeans::contrast}
 
-\item{term}{- contrast number}
+\item{term}{contrast number}
 
-\item{dtype}{- description type, "t", "B", or any other letter}
+\item{dtype}{description type, "t", "B", or any other letter}
 
-\item{df}{- should we include DF in t-test description}
+\item{df}{include DF in t-test description (default: False)}
 
-\item{...}{other parameters passed to format.results}
+\item{...}{other parameters passed to \link{format.results}}
 }
 \value{
 string with formatted results
