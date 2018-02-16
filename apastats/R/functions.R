@@ -433,7 +433,7 @@ describe.glm <- function (fit, term=NULL, dtype=1, b.digits=2, t.digits=2, test.
     if (fit_class != 'merModLmerTest') {
       dfs<-summary(fit)$df[2]
     }
-    if (all.equal(dfs, as.integer(dfs))){
+    if (isTRUE(all.equal(dfs, as.integer(dfs)))){
       dfs <- as.character(round(dfs))
     }
     else {
@@ -446,7 +446,7 @@ describe.glm <- function (fit, term=NULL, dtype=1, b.digits=2, t.digits=2, test.
   res_df<-data.frame(B = f.round(afit[, 1], 2), SE = f.round(afit[, 2], 2), Stat = f.round(afit[, 3], t.digits), p = if(p.as.number) zapsmall(as.vector(afit[,4]),4) else round.p(afit[, 4]), eff=row.names(afit),row.names = row.names(afit))
 
   if (dtype==1) {
-    res_df$str<-sprintf(paste0("\\emph{",t_z,"} %s, \\emph{p} %s"), round.p(afit[, 3], digits=t.digits, strip=F), round.p(afit[, 4]))
+    res_df$str<-sprintf(paste0("\\emph{",t_z,"}",dfs," %s, \\emph{p} %s"), round.p(afit[, 3], digits=t.digits, strip=F), round.p(afit[, 4]))
   }
   else if (dtype==2){
     res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f (%.",b.digits,"f), \\emph{p} %s"), afit[, 1], afit[, 2], round.p(afit[, 4]))
