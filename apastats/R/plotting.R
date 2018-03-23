@@ -88,6 +88,8 @@ base.breaks.y <- function(x, addSegment=T, ...){
 #' @param print_aggregated_data print aggregated data used for plotting to console
 #' @param do_aggregate - aggregate data by all conditions before plotting (False)
 #'
+#' @details For point and line properties (e.g., pointfill) passing NULL allows to avoid setting these values (useful when they are mapped to some variables).
+#'
 #' @return plot of pointrange
 #' @export plot.pointrange
 #' @method generic class
@@ -137,14 +139,28 @@ plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), lines
     p<-p+custom_geom
   }
 
+  line_params<-list(position=pos)
+  if (!is.null(linesize))
+    line_params<-append(line_params, list(size=linesize))
   if (connecting_line)
-    p<-p+geom_line(position=pos, size=linesize)
+    p<-p+do.call(geom_line, line_params)
 
-  p<-p+geom_linerange(size=linesize, position=pos)
+  p<-p+do.call(geom_linerange, line_params)
+
+  point_params<-list(position=pos)
 
   if (!is.null(pointshape)) {
-    p<-p+geom_point(size=pointsize, position=pos, fill=pointfill, shape=pointshape)
-  } else p<-p+geom_point(size=pointsize, position=pos, fill=pointfill)
+    point_params<-append(point_params, list(shape = pointshape))
+  }
+  if (!is.null(pointfill)) {
+    point_params<-append(point_params, list(fill = pointfill))
+  }
+  if (!is.null(pointsize)) {
+    point_params<-append(point_params, list(size = pointsize))
+  }
+
+  p<-p+do.call(geom_point, point_params)
+
 
 
 
