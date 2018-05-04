@@ -265,15 +265,15 @@ describe.chi <- function (tbl, v=T, addN=T,...){
 #'
 #' @param fit fitted aov model
 #' @param term model term to describe (a string with the term name or its sequential number)
-#' @param type anova SS type (e.g., 2 or 3)
+#' @param sstype anova SS type (e.g., 2 or 3)
 #' @param ... other parameters passed to describe.Anova
 #'
 #' @return formatted string with F(df_numerator, df_denomiator) = F_value, p =/< p_value
 #' @export
 #'
 
-describe.aov <- function (fit, term, type=2,...){
-  afit<-as.data.frame(car::Anova(fit, type=type))
+describe.aov <- function (fit, term, sstype = 2, ...){
+  afit<-as.data.frame(car::Anova(fit, type = sstype))
 
   describe.Anova(afit, term, ...)
 }
@@ -487,7 +487,7 @@ describe.glm <- function (fit, term=NULL, dtype=1, b.digits=2, t.digits=2, test.
 #' @param m mean (not used if x is provided)
 #' @param sd SD (not used if x is provided)
 #' @param digits number of digits used for description (default: 2)
-#' @param type "p" for SD in parentheses (default), "c" for SD after comma
+#' @param dtype "p" for SD in parentheses (default), "c" for SD after comma
 #' @param ... other arguments passed to \link{format.results}
 #'
 #' @return formatted string
@@ -498,10 +498,10 @@ describe.glm <- function (fit, term=NULL, dtype=1, b.digits=2, t.digits=2, test.
 #' x <- rnorm(1000, 50, 25)
 #' describe.mean.sd(x)
 #' describe.mean.sd(x, 0)
-#' describe.mean.sd(x, type = 'c')
+#' describe.mean.sd(x, dtype = 'c')
 
-describe.mean.sd <- function(x = NULL, m = NULL, sd = NULL, digits=2, type = 'p', ...){
-  if (type == 'c'){s1 <- ', '; s2 <- ''}
+describe.mean.sd <- function(x = NULL, m = NULL, sd = NULL, digits=2, dtype = 'p', ...){
+  if (dtype == 'c'){s1 <- ', '; s2 <- ''}
   else {s1 <- ' ('; s2 <- ')'}
 
   if (!is.null(x)){
