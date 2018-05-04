@@ -4,14 +4,14 @@
 \alias{describe.aov}
 \title{Describe aov results}
 \usage{
-describe.aov(fit, term, type = 2, ...)
+describe.aov(fit, term, sstype = 2, ...)
 }
 \arguments{
 \item{fit}{fitted aov model}
 
 \item{term}{model term to describe (a string with the term name or its sequential number)}
 
-\item{type}{anova SS type (e.g., 2 or 3)}
+\item{sstype}{anova SS type (e.g., 2 or 3)}
 
 \item{...}{other parameters passed to describe.Anova}
 }

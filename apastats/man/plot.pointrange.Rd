@@ -56,6 +56,9 @@ plot of pointrange
 \description{
 Pointrange plot
 }
+\details{
+For point and line properties (e.g., pointfill) passing NULL allows to avoid setting these values (useful when they are mapped to some variables).
+}
 \examples{
 data(faces)
 plot.pointrange(faces, aes(x=user_gender, color=stim_gender, y=answerTime))+ylab('RT')

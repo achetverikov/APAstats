@@ -5,7 +5,7 @@
 \title{Describe mean and SD}
 \usage{
 describe.mean.sd(x = NULL, m = NULL, sd = NULL, digits = 2,
-  type = "p", ...)
+  dtype = "p", ...)
 }
 \arguments{
 \item{x}{vector of values}
@@ -16,7 +16,7 @@ describe.mean.sd(x = NULL, m = NULL, sd = NULL, digits = 2,
 
 \item{digits}{number of digits used for description (default: 2)}
 
-\item{type}{"p" for SD in parentheses (default), "c" for SD after comma}
+\item{dtype}{"p" for SD in parentheses (default), "c" for SD after comma}
 
 \item{...}{other arguments passed to \link{format.results}}
 }
@@ -31,5 +31,5 @@ Computes mean and SD for a vector (or just uses mean and sd if provided) and ret
 x <- rnorm(1000, 50, 25)
 describe.mean.sd(x)
 describe.mean.sd(x, 0)
-describe.mean.sd(x, type = 'c')
+describe.mean.sd(x, dtype = 'c')
 }
