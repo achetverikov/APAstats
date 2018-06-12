@@ -912,7 +912,7 @@ paste_and<-function(x, sep=', ', suffix=''){
 #' @return result
 #' @export
 #' @examples
-#'
+#' \dontrun{
 #' load.libs(c('lme4','rjulia','data.table'))
 #' julia_init()
 #' data(faces)
@@ -933,7 +933,7 @@ paste_and<-function(x, sep=', ', suffix=''){
 #' ptm <- proc.time()
 #' lmer_with_julia(answerTime~correct*stim_gender*user_gender+(1|uid), faces)
 #' proc.time() - ptm
-#'
+#' }
 
 
 lmer_with_julia<-function(myform, dataset){
