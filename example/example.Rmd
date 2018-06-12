@@ -1,14 +1,15 @@
 ---
 output:
   html_document:
-    keep_md: yes
-    fig_width: 3.5
     fig_height: 3
+    fig_width: 3.5
+    keep_md: yes
 ---
+
 See the Rmd file here: https://raw.githubusercontent.com/ralfer/apa_format_and_misc/master/example/example.Rmd
 
 ```{r, cache=F}
-source('../functions.R', chdir=T)
+library(apastats)
 load.libs(c('data.table','knitr'))
 opts_chunk$set(message=F)
 ```
@@ -21,7 +22,8 @@ t_res
 One sample Student's t-test demonstrated that X significantly higher than zero, `r describe.ttest(t_res)`.
 
 ```{r}
-with(sleep, describe.mean.and.t( extra, group, which.mean = 3, paired=T))
+data("sleep")
+describe.mean.and.t(sleep$extra, sleep$group, which.mean = 3, paired=T)
 
 ```
 
@@ -39,13 +41,13 @@ describe.glm(lm_res)
 ```
 
 ```{r}
-describe.glm(glm_res, "SexFemale:SurvivedYes", short=1)
-describe.glm(glm_res, "SexFemale:SurvivedYes", short=2)
-describe.glm(glm_res, "SexFemale:SurvivedYes", short=3)
-describe.glm(glm_res, "SexFemale:SurvivedYes", short=3, test_df=T)
+describe.glm(glm_res, "SexFemale:SurvivedYes", dtype=1)
+describe.glm(glm_res, "SexFemale:SurvivedYes", dtype=2)
+describe.glm(glm_res, "SexFemale:SurvivedYes", dtype=3)
+describe.glm(glm_res, "SexFemale:SurvivedYes", dtype=3, test.df=T)
 ```
 
-Adults had lower chances of survival on Titanic than children, `r describe.glm(glm_res, "AgeAdult:SurvivedYes")`, and women had higher chances than men, `r describe.glm(glm_res, "SexFemale:SurvivedYes", short=3)`. 
+Adults had lower chances of survival on Titanic than children, `r describe.glm(glm_res, "AgeAdult:SurvivedYes")`, and women had higher chances than men, `r describe.glm(glm_res, "SexFemale:SurvivedYes", dtype=3)`. 
 
 ```{r}
 require(ez)
@@ -84,6 +86,7 @@ grid.arrange(p1, p2, ncol=2)
 Sometimes it is useful to analyze data log-transformed (e.g., in reaction time analyses), but to show it untransformed. _scale_y_exp_ comes in handy.
 
 ```{r}
+library(scales)
 temp <- tempfile()
 download.file("http://cogjournal.org/2/1/files/ChetverikovRJCS2015SOMdata.zip",temp)
 faces <- data.table(read.csv(unz(temp, "faces_data.csv"), header = T))
