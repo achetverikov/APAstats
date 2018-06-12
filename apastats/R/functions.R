@@ -315,7 +315,8 @@ describe.anova <- function (anova_res, rown=2, f.digits=2,...){
 #' afit <- anova(fit)
 #' describe.lmtaov(afit, 'correct:stim_gender')
 describe.lmtaov <- function (afit, term, f.digits=2, ...){
-  res_str<-sprintf(paste0("\\emph{F}(%.0f, %.1f) = %.",f.digits,"f, \\emph{p} %s"), afit[term,"NumDF"], afit[term,"DenDF"], afit[term, "F.value"], round.p(afit[term, "Pr(>F)"]))
+  afit <- data.frame(afit)
+  res_str<-sprintf(paste0("\\emph{F}(%.0f, %.1f) = %.",f.digits,"f, \\emph{p} %s"), afit[term,"NumDF"], afit[term,"DenDF"], afit[term, "F.value"], round.p(afit[term, "Pr..F."]))
   format.results(res_str, ...)
 }
 
