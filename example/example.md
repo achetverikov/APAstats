@@ -6,8 +6,6 @@ output:
     keep_md: yes
 ---
 
-This file is a bit outdated, it's better to use the examples provided in the help files to specific functions. 
-
 See the Rmd file here: https://raw.githubusercontent.com/ralfer/apa_format_and_misc/master/example/example.Rmd
 
 
@@ -39,16 +37,16 @@ t_res
 ## 	One Sample t-test
 ## 
 ## data:  rnorm(20, mean = 10, sd = 2)
-## t = 23.977, df = 19, p-value = 1.151e-15
+## t = 32.338, df = 19, p-value < 2.2e-16
 ## alternative hypothesis: true mean is not equal to 0
 ## 95 percent confidence interval:
-##   8.685791 10.347253
+##   9.299656 10.586773
 ## sample estimates:
 ## mean of x 
-##  9.516522
+##  9.943215
 ```
 
-One sample Student's t-test demonstrated that X significantly higher than zero, _t_(19.0) = 23.98, _p_ < .001.
+One sample Student's t-test demonstrated that X significantly higher than zero, _t_(19.0) = 32.34, _p_ < .001.
 
 
 ```r
@@ -57,10 +55,10 @@ describe.mean.and.t(sleep$extra, sleep$group, which.mean = 3, paired=T)
 ```
 
 ```
-## [1] "_M_ = 0.75 [-0.25, 1.84] vs. _M_ = 2.33 [1.22, 3.53], _t_(9.0) = -4.06, _p_ = .003"
+## [1] "_M_ = 0.75 [-0.25, 1.78] vs. _M_ = 2.33 [1.21, 3.49], _t_(9.0) = -4.06, _p_ = .003"
 ```
 
-Student's t-test showed that increase in hours of sleep compared to control was lower in group 1 than in group 2, _M_ = 0.75 [-0.24, 1.86] vs. _M_ = 2.33 [1.13, 3.50], _t_(9.0) = -4.06, _p_ = .003. 
+Student's t-test showed that increase in hours of sleep compared to control was lower in group 1 than in group 2, _M_ = 0.75 [-0.27, 1.73] vs. _M_ = 2.33 [1.22, 3.45], _t_(9.0) = -4.06, _p_ = .003. 
 
 
 
