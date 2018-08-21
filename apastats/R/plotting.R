@@ -103,11 +103,17 @@ base.breaks.y <- function(x, addSegment=T, ...){
 
 
 plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), linesize=I(1), pointfill=I('white'), pointshape=NULL, within_subj=F, wid='uid', bars='ci', withinvars=NULL, betweenvars=NULL, x_as_numeric=F, custom_geom=NULL, connecting_line=F, pretty_breaks_y=F, pretty_y_axis=F, exp_y=F, print_aggregated_data=F, do_aggregate = F){
+
   library(ggplot2)
   ellipses<-list(...)
   plot_f<-ellipses[[2]]
-  withinvars<-c(withinvars, as.character(unlist(plot_f[names(plot_f)!='y'])))
+
+  if (class(plot_f['y'])=='uneval'){
+    plot_f <- sapply(plot_f, function(x) sub('~','',deparse(x)))
+  }
   dv<-as.character(plot_f['y'][[1]])
+  withinvars<-c(withinvars, as.character(unlist(plot_f[names(plot_f)!='y'])))
+
   plot_data<-as.data.frame(ellipses[[1]])
   plot_data<-plot_data[!is.na(plot_data[,dv]),]
   aes_list<-modifyList(lapply(plot_f[names(plot_f)!='y'],as.character),list(y=dv, ymin='ymin', ymax='ymax'))
