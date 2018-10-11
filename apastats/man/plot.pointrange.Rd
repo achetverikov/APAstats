@@ -4,12 +4,14 @@
 \alias{plot.pointrange}
 \title{Pointrange plot}
 \usage{
-\method{generic}{class}(..., pos = position_dodge(0.3), pointsize = I(3),
-  linesize = I(1), pointfill = I("white"), pointshape = NULL,
-  within_subj = F, wid = "uid", bars = "ci", withinvars = NULL,
-  betweenvars = NULL, x_as_numeric = F, custom_geom = NULL,
-  connecting_line = F, pretty_breaks_y = F, pretty_y_axis = F,
-  exp_y = F, print_aggregated_data = F, do_aggregate = F)
+\method{generic}{class}(..., pos = position_dodge(0.3),
+  pointsize = I(3), linesize = I(1), pointfill = I("white"),
+  pointshape = NULL, within_subj = F, wid = "uid", bars = "ci",
+  withinvars = NULL, betweenvars = NULL, x_as_numeric = F,
+  custom_geom = NULL, connecting_line = F, pretty_breaks_y = F,
+  pretty_y_axis = F, exp_y = F, print_aggregated_data = F,
+  do_aggregate = F, add_margin = F, margin_label = "all",
+  margin_x_vals = NULL)
 }
 \arguments{
 \item{...}{the first element is assumed to be the dataset and the second one is assumed to be a list of plot aesthetics (e.g., aes(x = varA, y=varB))}
@@ -48,7 +50,13 @@
 
 \item{print_aggregated_data}{print aggregated data used for plotting to console}
 
-\item{do_aggregate}{- aggregate data by all conditions before plotting (False)}
+\item{do_aggregate}{aggregate data by all conditions before plotting (False)}
+
+\item{add_margin}{add margin that would show the aggregate over all or subset of x-axis values (T/F)}
+
+\item{margin_label}{margin label to use}
+
+\item{margin_x_vals}{which levels of x-axis variable to aggregate over (NULL means all of them)}
 }
 \value{
 plot of pointrange

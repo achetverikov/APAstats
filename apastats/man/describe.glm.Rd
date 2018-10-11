@@ -4,9 +4,9 @@
 \alias{describe.glm}
 \title{Describe regression model (GLM, GLMer, lm, lm.circular, ...)}
 \usage{
-describe.glm(fit, term = NULL, dtype = 1, b.digits = 2, t.digits = 2,
-  test.df = F, p.as.number = F, term.pattern = NULL, eff.size = F,
-  adj.digits = F, ...)
+describe.glm(fit, term = NULL, dtype = 1, b.digits = 2,
+  t.digits = 2, test.df = F, p.as.number = F, term.pattern = NULL,
+  eff.size = F, adj.digits = F, ...)
 }
 \arguments{
 \item{fit}{model object}

@@ -5,8 +5,8 @@
 \title{Describe two-sample t-test with means and effect sizes}
 \usage{
 describe.mean.and.t(x, by, which.mean = 1, digits = 2, paired = F,
-  eff.size = F, abs = F, aggregate_by = NULL, transform_means = NULL,
-  ...)
+  eff.size = F, abs = F, aggregate_by = NULL,
+  transform_means = NULL, ...)
 }
 \arguments{
 \item{x}{dependent variable}
