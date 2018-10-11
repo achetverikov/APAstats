@@ -86,7 +86,10 @@ base.breaks.y <- function(x, addSegment=T, ...){
 #' @param pretty_y_axis prettify y axis
 #' @param exp_y exponentiate y (it's better to use this than scale_y_exp if pretty_breaks_y is used)
 #' @param print_aggregated_data print aggregated data used for plotting to console
-#' @param do_aggregate - aggregate data by all conditions before plotting (False)
+#' @param do_aggregate aggregate data by all conditions before plotting (False)
+#' @param add_margin add margin that would show the aggregate over all or subset of x-axis values (T/F)
+#' @param margin_label margin label to use
+#' @param margin_x_vals which levels of x-axis variable to aggregate over (NULL means all of them)
 #'
 #' @details For point and line properties (e.g., pointfill) passing NULL allows to avoid setting these values (useful when they are mapped to some variables).
 #'
@@ -102,83 +105,103 @@ base.breaks.y <- function(x, addSegment=T, ...){
 #' plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), withinvars=c('stim_gender'), betweenvars = c('user_gender'), print_aggregated_data = T, wid='uid', within_subj=T, exp_y=T, bars='ci', do_aggregate = T)+ylab('RT')
 
 
-plot.pointrange <- function (..., pos=position_dodge(0.3), pointsize=I(3), linesize=I(1), pointfill=I('white'), pointshape=NULL, within_subj=F, wid='uid', bars='ci', withinvars=NULL, betweenvars=NULL, x_as_numeric=F, custom_geom=NULL, connecting_line=F, pretty_breaks_y=F, pretty_y_axis=F, exp_y=F, print_aggregated_data=F, do_aggregate = F){
-
+plot.pointrange<-function (..., pos = position_dodge(0.3), pointsize = I(3), linesize = I(1),
+                           pointfill = I("white"), pointshape = NULL, within_subj = F,
+                           wid = "uid", bars = "ci", withinvars = NULL, betweenvars = NULL,
+                           x_as_numeric = F, custom_geom = NULL, connecting_line = F,
+                           pretty_breaks_y = F, pretty_y_axis = F, exp_y = F, print_aggregated_data = F,
+                           do_aggregate = F, add_margin = F, margin_label = 'all', margin_x_vals = NULL){
   library(ggplot2)
-  ellipses<-list(...)
-  plot_f<-ellipses[[2]]
-
-  if (class(plot_f['y'])=='uneval'){
-    plot_f <- sapply(plot_f, function(x) sub('~','',deparse(x)))
+  ellipses <- list(...)
+  plot_f <- ellipses[[2]]
+  if (class(plot_f["y"]) == "uneval") {
+    plot_f <- sapply(plot_f, function(x) sub("~", "", deparse(x)))
   }
-  dv<-as.character(plot_f['y'][[1]])
-  withinvars<-c(withinvars, as.character(unlist(plot_f[names(plot_f)!='y'])))
-
-  plot_data<-as.data.frame(ellipses[[1]])
-  plot_data<-plot_data[!is.na(plot_data[,dv]),]
-  aes_list<-modifyList(lapply(plot_f[names(plot_f)!='y'],as.character),list(y=dv, ymin='ymin', ymax='ymax'))
-  #print(aes_list)
+  dv <- as.character(plot_f["y"][[1]])
+  withinvars <- c(withinvars, as.character(unlist(plot_f[names(plot_f) !=
+                                                           "y"])))
+  plot_data <- as.data.frame(ellipses[[1]])
+  plot_data <- plot_data[!is.na(plot_data[, dv]), ]
+  aes_list <- modifyList(lapply(plot_f[names(plot_f) != "y"],
+                                as.character), list(y = dv, ymin = "ymin", ymax = "ymax"))
   if (do_aggregate) {
-    plot_data<-apastats:::summarySE(plot_data, measurevar=dv, groupvars = c(withinvars,betweenvars, wid), na.rm=T)
+    plot_data <- apastats:::summarySE(plot_data, measurevar = dv,
+                                      groupvars = c(withinvars, betweenvars, wid), na.rm = T)
   }
-  if (within_subj){
-    aggr_data<-apastats:::summarySEwithin(plot_data, measurevar=dv, withinvars = withinvars, betweenvars=betweenvars, idvar=wid, na.rm=T)
-  } else {
-    aggr_data<-apastats:::summarySE(plot_data, measurevar=dv, groupvars = c(withinvars,betweenvars), na.rm=T)
+  if (within_subj) {
+    aggr_data <- apastats:::summarySEwithin(plot_data, measurevar = dv,
+                                            withinvars = withinvars, betweenvars = betweenvars,
+                                            idvar = wid, na.rm = T)
   }
-  if (x_as_numeric){
-    aggr_data[, aes_list$x]<-as.numeric(as.character(aggr_data[, aes_list$x]))
+  else {
+    aggr_data <- apastats:::summarySE(plot_data, measurevar = dv,
+                                      groupvars = c(withinvars, betweenvars), na.rm = T)
   }
-  aggr_data$ymin<-aggr_data[,dv]-aggr_data[,bars]
-  aggr_data$ymax<-aggr_data[,dv]+aggr_data[,bars]
-  if (exp_y){
-    aggr_data$ymin<-exp(aggr_data$ymin)
-    aggr_data$ymax<-exp(aggr_data$ymax)
-    aggr_data[,dv]<-exp(aggr_data[,dv])
+  if (x_as_numeric) {
+    aggr_data[, aes_list$x] <- as.numeric(as.character(aggr_data[,                                                                  aes_list$x]))
   }
-  if (print_aggregated_data){
+  if (add_margin){
+    if (is.null(margin_x_vals)) {
+      margin_x_vals <- unique(aggr_data[, aes_list$x])
+    }
+    data_for_margin<-aggr_data[aggr_data[, aes_list$x] %in% margin_x_vals,]
+    if (within_subj){
+      summ_data_for_margin<-apastats:::summarySEwithin(data_for_margin, measurevar = dv,
+                                                       withinvars = withinvars[withinvars %nin% aes_list$x], betweenvars = betweenvars[betweenvars %nin% aes_list$x], idvar = aes_list$x, na.rm = T)
+    } else {
+      groupvars = c(withinvars, betweenvars)
+      summ_data_for_margin<-apastats:::summarySE(data_for_margin, measurevar = dv,
+                                                 groupvars = groupvars[groupvars %nin% aes_list$x], na.rm = T)
+    }
+    summ_data_for_margin[,aes_list$x]<-margin_label
+    aggr_data<-plyr::rbind.fill(aggr_data, summ_data_for_margin)
+
+    x_levels <- unique(aggr_data[, aes_list$x])
+    aggr_data[, aes_list$x]<-factor(aggr_data[, aes_list$x], levels = c(x_levels[x_levels!=margin_label], margin_label))
+  }
+  aggr_data$ymin <- aggr_data[, dv] - aggr_data[, bars]
+  aggr_data$ymax <- aggr_data[, dv] + aggr_data[, bars]
+  if (exp_y) {
+    aggr_data$ymin <- exp(aggr_data$ymin)
+    aggr_data$ymax <- exp(aggr_data$ymax)
+    aggr_data[, dv] <- exp(aggr_data[, dv])
+  }
+  if (print_aggregated_data) {
     print(aggr_data)
   }
-  p<-ggplot(aggr_data, do.call(aes_string,aes_list))
-
-  if (!is.null(custom_geom)){
-    p<-p+custom_geom
+  p <- ggplot(aggr_data, do.call(aes_string, aes_list))
+  if (!is.null(custom_geom)) {
+    p <- p + custom_geom
   }
-
-  line_params<-list(position=pos)
+  line_params <- list(position = pos)
   if (!is.null(linesize))
-    line_params<-append(line_params, list(size=linesize))
+    line_params <- append(line_params, list(size = linesize))
   if (connecting_line)
-    p<-p+do.call(geom_line, line_params)
-
-  p<-p+do.call(geom_linerange, line_params)
-
-  point_params<-list(position=pos)
-
+    p <- p + do.call(geom_line, line_params)
+  p <- p + do.call(geom_linerange, line_params)
+  point_params <- list(position = pos)
   if (!is.null(pointshape)) {
-    point_params<-append(point_params, list(shape = pointshape))
+    point_params <- append(point_params, list(shape = pointshape))
   }
   if (!is.null(pointfill)) {
-    point_params<-append(point_params, list(fill = pointfill))
+    point_params <- append(point_params, list(fill = pointfill))
   }
   if (!is.null(pointsize)) {
-    point_params<-append(point_params, list(size = pointsize))
+    point_params <- append(point_params, list(size = pointsize))
   }
-
-  p<-p+do.call(geom_point, point_params)
-
-
-
-
-  if (pretty_breaks_y){
-    y_range<-c(min(aggr_data$ymin),max(aggr_data$ymax))
-    breaks<-labeling::extended(y_range[1],y_range[2],5)
-    limits<-range(c(breaks,y_range))
-    p<-p+scale_y_continuous(breaks=breaks)+coord_cartesian(ylim=limits)
-    if (pretty_y_axis){
-      d <- data.frame(x=-Inf, xend=-Inf, y=min(breaks), yend=max(breaks))
-
-      p<-p+geom_segment(data=data.frame(x=-Inf,xend=-Inf, y=min(breaks), yend=max(breaks)),aes(x=x,xend=xend, y=y, yend=yend),inherit.aes=F)
+  p <- p + do.call(geom_point, point_params)
+  if (pretty_breaks_y) {
+    y_range <- c(min(aggr_data$ymin), max(aggr_data$ymax))
+    breaks <- labeling::extended(y_range[1], y_range[2], 5)
+    limits <- range(c(breaks, y_range))
+    p <- p + scale_y_continuous(breaks = breaks) + coord_cartesian(ylim = limits)
+    if (pretty_y_axis) {
+      d <- data.frame(x = -Inf, xend = -Inf, y = min(breaks),
+                      yend = max(breaks))
+      p <- p + geom_segment(data = data.frame(x = -Inf,
+                                              xend = -Inf, y = min(breaks), yend = max(breaks)),
+                            aes(x = x, xend = xend, y = y, yend = yend),
+                            inherit.aes = F)
     }
   }
   p
