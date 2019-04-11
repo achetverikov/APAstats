@@ -73,7 +73,7 @@ round.p <- function(values, include.rel=1,digits=3, strip.lead.zeros=T, replace.
 #' Internal function used to convert latex-formatted results to pandoc style.
 #'
 #' @param res_str text
-#' @param type 'pandoc' or 'latex'
+#' @param type 'pandoc', 'latex', or 'plotmath' (the latter is very poorly implemented)
 #'
 #' @return \code{res_str} with latex 'emph' tags replaced with pandoc '_'
 #' @export format.results
@@ -81,9 +81,14 @@ round.p <- function(values, include.rel=1,digits=3, strip.lead.zeros=T, replace.
 format.results <- function(res_str, type='pandoc'){
   if (type=='latex'){
     res_str
-  }
-  else if (type=='pandoc'){
+  } else if (type=='pandoc'){
     stringr::str_replace_all(res_str,'\\\\emph\\{(.*?)\\}','_\\1_')
+  } else if (type == "plotmath") {
+    res_str<-stringi::stri_replace_all(res_str, regex = c("\\\\emph\\{(.*?)\\}",'='),
+                                        replacement = c("italic($1)",'=='), vectorize_all=F)
+    if (grepl(',',res_str)){
+      res_str <- paste0('list(',res_str,')')
+    }
   }
 }
 
