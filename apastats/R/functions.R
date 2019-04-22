@@ -382,6 +382,7 @@ describe.Anova <- function (afit, term, f.digits=2, ...){
 #' ## End(Not run)
 
 
+
 describe.glm <- function (fit, term=NULL, dtype=1, b.digits=2, t.digits=2, test.df=F, p.as.number=F, term.pattern=NULL, eff.size = F, adj.digits=F, ...){
   requireNamespace('plyr')
   requireNamespace('Hmisc')
@@ -403,9 +404,9 @@ describe.glm <- function (fit, term=NULL, dtype=1, b.digits=2, t.digits=2, test.
   }
   else {
 
-    if (fit_class == 'merModLmerTest'){
+    if (grepl('merModLmerTest',fit_class)){
       requireNamespace('lmerTest')
-      afit <- data.frame(coef(lmerTest::summary(fit)))
+      afit <- data.frame(coef(summary(fit)))
       if (test.df){
         dfs<-afit[,3]
       }
@@ -443,7 +444,7 @@ describe.glm <- function (fit, term=NULL, dtype=1, b.digits=2, t.digits=2, test.
   }
 
   if (test.df){
-    if (fit_class != 'merModLmerTest') {
+    if (!grepl('merModLmerTest', fit_class)) {
       dfs<-summary(fit)$df[2]
     }
     if (isTRUE(all.equal(dfs, as.integer(dfs)))){
