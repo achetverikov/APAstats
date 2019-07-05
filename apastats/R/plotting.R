@@ -80,7 +80,7 @@ base.breaks.y <- function(x, addSegment=T, ...){
 #' @param withinvars within-subject variables
 #' @param betweenvars between-subject variables
 #' @param x_as_numeric should we treat x as numeric (otherwise it is treated as is)?
-#' @param custom_geom any custom geom to add befor points and connecting line
+#' @param custom_geom_before any custom geom to add before points and connecting line (geoms that should be on top of the pointrange can be added in a usual manner)
 #' @param connecting_line should we add connecting line (T/F)?
 #' @param pretty_breaks_y prettify y breaks
 #' @param pretty_y_axis prettify y axis
@@ -90,6 +90,8 @@ base.breaks.y <- function(x, addSegment=T, ...){
 #' @param add_margin add margin that would show the aggregate over all or subset of x-axis values (T/F)
 #' @param margin_label margin label to use
 #' @param margin_x_vals which levels of x-axis variable to aggregate over (NULL means all of them)
+#' @param bars_instead_of_points use geom_bar instead of geom_point
+#' @param geom_bar_params parameters for geom_bar if it is used
 #'
 #' @details For point and line properties (e.g., pointfill) passing NULL allows to avoid setting these values (useful when they are mapped to some variables).
 #'
@@ -108,9 +110,9 @@ base.breaks.y <- function(x, addSegment=T, ...){
 plot.pointrange<-function (..., pos = position_dodge(0.3), pointsize = I(3), linesize = I(1),
                            pointfill = I("white"), pointshape = NULL, within_subj = F,
                            wid = "uid", bars = "ci", withinvars = NULL, betweenvars = NULL,
-                           x_as_numeric = F, custom_geom = NULL, connecting_line = F,
+                           x_as_numeric = F, custom_geom_before = NULL, connecting_line = F,
                            pretty_breaks_y = F, pretty_y_axis = F, exp_y = F, print_aggregated_data = F,
-                           do_aggregate = F, add_margin = F, margin_label = 'all', margin_x_vals = NULL){
+                           do_aggregate = F, add_margin = F, margin_label = 'all', margin_x_vals = NULL, bars_instead_of_points = F, geom_bar_params = NULL){
   library(ggplot2)
   ellipses <- list(...)
   plot_f <- ellipses[[2]]
@@ -170,8 +172,8 @@ plot.pointrange<-function (..., pos = position_dodge(0.3), pointsize = I(3), lin
     print(aggr_data)
   }
   p <- ggplot(aggr_data, do.call(aes_string, aes_list))
-  if (!is.null(custom_geom)) {
-    p <- p + custom_geom
+  if (!is.null(custom_geom_before)) {
+    p <- p + custom_geom_before
   }
   line_params <- list(position = pos)
   if (!is.null(linesize))
@@ -189,7 +191,12 @@ plot.pointrange<-function (..., pos = position_dodge(0.3), pointsize = I(3), lin
   if (!is.null(pointsize)) {
     point_params <- append(point_params, list(size = pointsize))
   }
-  p <- p + do.call(geom_point, point_params)
+  if (!bars_instead_of_points){
+    p <- p + do.call(geom_point, point_params)
+  } else {
+    p <- p + do.call(geom_bar, geom_bar_params)
+    }
+
   if (pretty_breaks_y) {
     y_range <- c(min(aggr_data$ymin), max(aggr_data$ymax))
     breaks <- labeling::extended(y_range[1], y_range[2], 5)
@@ -346,8 +353,11 @@ grid_arrange_shared_legend<-function(..., stack = 'v', one_sub=F, heights=F, wid
 #'
 #'
 ac_shape_pal<-function(){
-  manual_pal(unname(c(22,24,25,23,21,1:5)))
-
+    shapes <- c(22,24,25,23,21,1:5)
+    max_n <- length(shapes)
+    f <- manual_pal(shapes)
+    attr(f, "max_n") <- max_n
+    f
 }
 
 #' Nice palette of shapes
