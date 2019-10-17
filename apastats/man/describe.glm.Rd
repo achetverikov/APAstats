@@ -48,6 +48,6 @@ describe.glm(fit, 'body', 3, test.df = 1)
 describe.glm(fit)
 ## Not run:
 require(rockchalk)
-describe.glm(fit, 'body', 4, eff.size=T)
+describe.glm(fit, 'body', 4, eff.size = TRUE)
 ## End(Not run)
 }

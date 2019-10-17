@@ -4,7 +4,8 @@
 \alias{describe.mean.conf}
 \title{Describe mean and confidence intervals}
 \usage{
-describe.mean.conf(x, bootCI = T, addCI = F, digits = 2, ...)
+describe.mean.conf(x, bootCI = T, addCI = F, digits = 2,
+  transform.means = NULL, ...)
 }
 \arguments{
 \item{x}{value that should be described}
@@ -14,6 +15,8 @@ describe.mean.conf(x, bootCI = T, addCI = F, digits = 2, ...)
 \item{addCI}{add "95\% CI =" before confidence intervals (default: F)}
 
 \item{digits}{number of digits to use}
+
+\item{transform.means}{an optional function to transform the means and CI to another scale}
 
 \item{...}{other arguments passed to \link{format.results}}
 }
@@ -29,4 +32,5 @@ x <- runif(100, 0, 50)
 describe.mean.conf(x)
 describe.mean.conf(x, bootCI = F)
 describe.mean.conf(x, digits = 5)
+describe.mean.conf(x, transform.means = function(val) val*2)
 }

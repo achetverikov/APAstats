@@ -8,10 +8,11 @@
   pointsize = I(3), linesize = I(1), pointfill = I("white"),
   pointshape = NULL, within_subj = F, wid = "uid", bars = "ci",
   withinvars = NULL, betweenvars = NULL, x_as_numeric = F,
-  custom_geom = NULL, connecting_line = F, pretty_breaks_y = F,
-  pretty_y_axis = F, exp_y = F, print_aggregated_data = F,
-  do_aggregate = F, add_margin = F, margin_label = "all",
-  margin_x_vals = NULL)
+  custom_geom_before = NULL, connecting_line = F,
+  pretty_breaks_y = F, pretty_y_axis = F, exp_y = F,
+  print_aggregated_data = F, do_aggregate = F, add_margin = F,
+  margin_label = "all", margin_x_vals = NULL,
+  bars_instead_of_points = F, geom_bar_params = NULL)
 }
 \arguments{
 \item{...}{the first element is assumed to be the dataset and the second one is assumed to be a list of plot aesthetics (e.g., aes(x = varA, y=varB))}
@@ -38,7 +39,7 @@
 
 \item{x_as_numeric}{should we treat x as numeric (otherwise it is treated as is)?}
 
-\item{custom_geom}{any custom geom to add befor points and connecting line}
+\item{custom_geom_before}{any custom geom to add before points and connecting line (geoms that should be on top of the pointrange can be added in a usual manner)}
 
 \item{connecting_line}{should we add connecting line (T/F)?}
 
@@ -57,6 +58,10 @@
 \item{margin_label}{margin label to use}
 
 \item{margin_x_vals}{which levels of x-axis variable to aggregate over (NULL means all of them)}
+
+\item{bars_instead_of_points}{use geom_bar instead of geom_point}
+
+\item{geom_bar_params}{parameters for geom_bar if it is used}
 }
 \value{
 plot of pointrange

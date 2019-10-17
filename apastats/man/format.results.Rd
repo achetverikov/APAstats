@@ -9,7 +9,7 @@
 \arguments{
 \item{res_str}{text}
 
-\item{type}{'pandoc' or 'latex'}
+\item{type}{'pandoc', 'latex', or 'plotmath' (the latter is very poorly implemented)}
 }
 \value{
 \code{res_str} with latex 'emph' tags replaced with pandoc '_'

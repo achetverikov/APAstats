@@ -1,19 +1,21 @@
 Package: apastats
 Type: Package
 Title: APA-style results
-Version: 0.2
-Date: 2015-07-29
-Author: Andrey Chetverikov
+Version: 0.3
+Date: 2019-10-16
+Author: Andrey Chetverikov (http://andreychetverikov.org)
 Maintainer: Andrey Chetverikov <andrey.a.chetverikov@gmail.com>
 Description: Proper formatting of statistical results in accordance with
     American Psychological Association Manual, 6th ed., and some convenient plotting
     functions
 License: GPL-3
+Encoding: UTF-8
 Imports:
     stringr,
     ggplot2,
     gridExtra,
-    Rmisc
+    Rmisc,
+    stats
 Suggests:
     lme4,
     bimodalitytest,
@@ -25,4 +27,4 @@ Suggests:
     plyr,
     Hmisc
 LazyData: TRUE
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1

@@ -146,7 +146,7 @@ describe.ttest <- function (t,show.mean=F, abs=F,...){
 #' @param eff.size should we include effect size (default: F)
 #' @param abs should we show the absolute value if the t-test (T) or keep its sign (F, default)
 #' @param aggregate_by do the aggregation by the thrird variable(s): either NULL (default), a single vector variable, or a list of variables to aggregate by.
-#' @param transform_means a function to transform means and confidence intervals (default: NULL)
+#' @param transform.means a function to transform means and confidence intervals (default: NULL)
 #' @param ... other parameters passed to \link{format.results}
 #'
 #' @return result
@@ -164,10 +164,10 @@ describe.ttest <- function (t,show.mean=F, abs=F,...){
 #' describe.mean.and.t(rt, gr, which.mean = 3, aggregate_by = sid)
 #' log_rt <- log(rt*1000)
 #' describe.mean.and.t(log_rt, gr, which.mean = 3, aggregate_by = sid)
-#' describe.mean.and.t(log_rt, gr, which.mean = 3, aggregate_by = sid, transform_means = exp)
+#' describe.mean.and.t(log_rt, gr, which.mean = 3, aggregate_by = sid, transform.means = exp)
 
 
-describe.mean.and.t <- function(x, by, which.mean=1, digits=2, paired=F, eff.size=F, abs=F, aggregate_by=NULL, transform_means = NULL, ...){
+describe.mean.and.t <- function(x, by, which.mean=1, digits=2, paired=F, eff.size=F, abs=F, aggregate_by=NULL, transform.means = NULL, ...){
   requireNamespace('Hmisc')
   if (lengthu(by)!=2)
     stop('"by" should have exactly two levels')
@@ -180,7 +180,7 @@ describe.mean.and.t <- function(x, by, which.mean=1, digits=2, paired=F, eff.siz
   }
   summaries<-Hmisc::summarize(x, by, Hmisc::smean.cl.boot)
 
-  if (!is.null(transform_means)){
+  if (!is.null(transform.means)){
     summaries[,c('x','Lower','Upper')]<-sapply(summaries[,c('x','Lower','Upper')], exp)
   }
 
@@ -378,7 +378,7 @@ describe.Anova <- function (afit, term, f.digits=2, ...){
 #' describe.glm(fit)
 #' ## Not run:
 #' require(rockchalk)
-#' describe.glm(fit, 'body', 4, eff.size=T)
+#' describe.glm(fit, 'body', 4, eff.size = TRUE)
 #' ## End(Not run)
 
 
@@ -460,16 +460,16 @@ describe.glm <- function (fit, term=NULL, dtype=1, b.digits=2, t.digits=2, test.
   res_df<-data.frame(B = f.round(afit[, 1], 2), SE = f.round(afit[, 2], 2), Stat = f.round(afit[, 3], t.digits), p = if(p.as.number) zapsmall(as.vector(afit[,4]),4) else round.p(afit[, 4]), eff=row.names(afit),row.names = row.names(afit))
 
   if (dtype==1) {
-    res_df$str<-sprintf(paste0("\\emph{",t_z,"}",dfs," %s, \\emph{p} %s"), round.p(afit[, 3], digits=t.digits, strip=F), round.p(afit[, 4]))
+    res_df$str<-sprintf(paste0("\\emph{",t_z,"}",dfs," %s, \\emph{p} %s"), round.p(afit[, 3], digits=t.digits, strip.lead.zeros=F), round.p(afit[, 4]))
   }
   else if (dtype==2){
     res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f (%.",b.digits,"f), \\emph{p} %s"), afit[, 1], afit[, 2], round.p(afit[, 4]))
   }
   else if (dtype==3){
-    res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f, \\emph{SE} = %.",b.digits,"f,  \\emph{",t_z,"}", dfs," %s, \\emph{p} %s"), afit[, 1], afit[, 2], round.p(afit[, 3], digits=t.digits, strip=F, replace.very.small = 0.01), round.p(afit[, 4]))
+    res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f, \\emph{SE} = %.",b.digits,"f,  \\emph{",t_z,"}", dfs," %s, \\emph{p} %s"), afit[, 1], afit[, 2], round.p(afit[, 3], digits=t.digits, strip.lead.zeros=F, replace.very.small = 0.01), round.p(afit[, 4]))
   }
   else if (dtype==4) {
-    res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f (%.",b.digits,"f),  \\emph{",t_z,"}", dfs," %s"), afit[, 1], afit[, 2], round.p(afit[, 3], digits=t.digits, strip=F, replace.very.small = 0.01))
+    res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f (%.",b.digits,"f),  \\emph{",t_z,"}", dfs," %s"), afit[, 1], afit[, 2], round.p(afit[, 3], digits=t.digits, strip.lead.zeros=F, replace.very.small = 0.01))
   }
 
   if (eff.size&!exists('ess')){
@@ -525,6 +525,7 @@ describe.mean.sd <- function(x = NULL, m = NULL, sd = NULL, digits=2, dtype = 'p
 #' @param bootCI use bootstrapped (T, default) or Gaussian (F) confidence intervals
 #' @param addCI add "95\% CI =" before confidence intervals (default: F)
 #' @param digits number of digits to use
+#' @param transform.means an optional function to transform the means and CI to another scale
 #' @param ... other arguments passed to \link{format.results}
 #'
 #' @return a string with a mean followed by confidence intervals in square brackets.
@@ -537,14 +538,20 @@ describe.mean.sd <- function(x = NULL, m = NULL, sd = NULL, digits=2, dtype = 'p
 #' describe.mean.conf(x)
 #' describe.mean.conf(x, bootCI = F)
 #' describe.mean.conf(x, digits = 5)
+#' describe.mean.conf(x, transform.means = function(val) val*2)
 
-describe.mean.conf <- function(x, bootCI = T, addCI = F, digits = 2,...){
+describe.mean.conf<-function (x, bootCI = T, addCI = F, digits = 2, transform.means = NULL, ...)
+{
   if (bootCI)
     res <- Hmisc::smean.cl.boot(x)
-  else
-    res <- Hmisc::smean.cl.normal(x)
-  ci_str <- ifelse(addCI, ', 95%% \\emph{CI} =','')
-  format.results(with(as.list(res),sprintf(paste0("\\emph{M} = %.",digits,"f",ci_str," [%.",digits,"f, %.",digits,"f]"), Mean, Lower, Upper)), ...)
+  else res <- Hmisc::smean.cl.normal(x)
+  if (!is.null(transform.means)){
+    res <- sapply(res, transform.means)
+  }
+  ci_str <- ifelse(addCI, ", 95%% \\emph{CI} =", "")
+  format.results(with(as.list(res), sprintf(paste0("\\emph{M} = %.",
+                                                   digits, "f", ci_str, " [%.", digits, "f, %.", digits,
+                                                   "f]"), Mean, Lower, Upper)), ...)
 }
 
 #' Describe lmerTest results
@@ -593,10 +600,10 @@ describe.lmert <- function (sfit, factor, dtype='t',...){
 
 #' Describe linearHypothesis test results
 #'
-#' @param hyp - hypothesis from \link[car]{linearHypothesis}
-#' @param ... - additional papameters passed to \link{format.results}
+#' @param hyp hypothesis from \link[car]{linearHypothesis}
+#' @param ... additional papameters passed to \link{format.results}
 #'
-#' @return results of Χ^2 or F test
+#' @return results of \eqn{\chi^2} or _F_ test
 #' @export
 #'
 #' @examples
@@ -609,6 +616,8 @@ describe.lmert <- function (sfit, factor, dtype='t',...){
 #'
 #' res.chi <- linearHypothesis(mod.davis, c("(Intercept) = 0", "repwt = 1"), test = "Chisq")
 #' describe.lht(res.chi)
+
+
 describe.lht <- function (hyp, ...){
   res<-hyp[2,]
 
@@ -622,6 +631,7 @@ describe.lht <- function (hyp, ...){
     format.results(do.call(sprintf, c(list('\\emph{F}(%g, %g) = %.2f, \\emph{p} %s'), res)),...)
   }
 }
+
 #' Describe contrasts created by lsmeans
 #'
 #' @param obj summary object from lsmeans::contrast
@@ -1027,4 +1037,80 @@ describe.bf<-function(bf, digits = 2, top_limit = 10000, convert_to_power = T, .
     format.results(paste0("\\emph{BF} = $",bf_val, "\\times 10^{", as.integer(exponent), "}$"),...)
   }
   else format.results(sprintf(paste0("\\emph{BF} = %.",digits,"f"),exp(bf@bayesFactor[1])),...)
+}
+
+#' Describe brms model results
+#'
+#' @param mod model object
+#' @param term model term to describe
+#' @param trans an optional function to transform the results to another scale (default: NULL)
+#' @param digits number of digits in the output
+#' @param eff.size string describing how to compute an effect size (currently, either 'fe_to_all', 'part_fe', or 'part_fe_re')
+#' @param eff.size.type type of the effect size ('r' or 'r2')
+#'
+#' @param ... other parameters passed to \link{format.results}
+#'
+#' @return string describing the result
+#' @export
+#'
+#' @examples
+#' ## Not run:
+#' require(brms)
+#' x <- rnorm(500, sd = 6)
+#' y <- 4*x + rnorm(500)
+#' fit <- brm(y~x, data=data.frame(x,y), chains = 1, iter = 500)
+#' describe.brm(fit, 'x')
+#' # convert x to another scale for output
+#' describe.brm(fit, 'x', trans = function(val) val+5)
+#' ## End(Not run)
+
+
+describe.brm<-function(mod, term, trans = NULL, digits = 2, eff.size = F, eff.size.type = 'r', ...){
+
+  post_samp <- posterior_samples(mod, c(paste0('b_',term)), exact_match = T)
+  if (ncol(post_samp)>1){
+    warning(paste('More than one match using',term,'term' ))
+  }
+  post_samp = post_samp[,1]
+  if (is.function(trans)){
+    post_samp = trans(post_samp)
+  }
+  hpdi<-bayestestR::hdi(post_samp, ci = 0.95)
+
+  # it is tricky to compute partial R2, this is just one of the approaches
+  es = NULL
+
+  if ('fe_to_all'== eff.size){
+    var_term = var(mod$data[,term]*fixef(mod)[term,'Estimate'])
+    var_tot = var(fitted(mod)[,1])+var(resid(mod)[,1])
+    es = var_term/var_tot
+  }  else if ('part_fe'==eff.size){
+
+    var_res = var(resid(mod)[,1])
+    # var_f = var(fitted(mod, re_formula = NA)[,1])
+    var_term = var(mod$data[,term]*fixef(mod)[term,'Estimate'])
+    es = var_term/(var_term+var_res)
+  } else if ('part_fe_re'==eff.size){
+
+    var_res = var(resid(mod)[,1])
+
+    term_re <- data.table(ranef(mod)[[1]][,,term], keep.rownames = T)
+    mod_data_preds <- merge(mod$data, term_re, by.x = names(ranef(mod)), by.y = 'rn')
+    var_term = var(mod_data_preds[,term]*(fixef(mod)[term,'Estimate']+mod_data_preds[,'Estimate']))
+    var_tot = var_term+var_res
+
+    es = var_term/var_tot
+  }
+
+
+  res_str <- sprintf(paste0('\\emph{b} = %.',digits, 'f, 95%% HPDI = [%.',digits,'f, %.',digits,'f]'),mean(post_samp), hpdi[,'CI_low'], hpdi[,'CI_high'])
+  if (!is.null(es)) {
+    if (eff.size.type=='r')
+      res_str <- paste0('_r_ = ', f.round(sqrt(es), digits = digits),', ',res_str)
+    else
+      res_str <- paste0(res_str, ', $R^2_part$ = ', f.round(es, digits = digits))
+  }
+
+  format.results(res_str,...)
+
 }

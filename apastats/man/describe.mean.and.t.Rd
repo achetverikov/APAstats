@@ -6,7 +6,7 @@
 \usage{
 describe.mean.and.t(x, by, which.mean = 1, digits = 2, paired = F,
   eff.size = F, abs = F, aggregate_by = NULL,
-  transform_means = NULL, ...)
+  transform.means = NULL, ...)
 }
 \arguments{
 \item{x}{dependent variable}
@@ -25,7 +25,7 @@ describe.mean.and.t(x, by, which.mean = 1, digits = 2, paired = F,
 
 \item{aggregate_by}{do the aggregation by the thrird variable(s): either NULL (default), a single vector variable, or a list of variables to aggregate by.}
 
-\item{transform_means}{a function to transform means and confidence intervals (default: NULL)}
+\item{transform.means}{a function to transform means and confidence intervals (default: NULL)}
 
 \item{...}{other parameters passed to \link{format.results}}
 }
@@ -47,5 +47,5 @@ sid <- faces$sid
 describe.mean.and.t(rt, gr, which.mean = 3, aggregate_by = sid)
 log_rt <- log(rt*1000)
 describe.mean.and.t(log_rt, gr, which.mean = 3, aggregate_by = sid)
-describe.mean.and.t(log_rt, gr, which.mean = 3, aggregate_by = sid, transform_means = exp)
+describe.mean.and.t(log_rt, gr, which.mean = 3, aggregate_by = sid, transform.means = exp)
 }

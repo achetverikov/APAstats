@@ -7,12 +7,12 @@
 describe.lht(hyp, ...)
 }
 \arguments{
-\item{hyp}{- hypothesis from \link[car]{linearHypothesis}}
+\item{hyp}{hypothesis from \link[car]{linearHypothesis}}
 
-\item{...}{- additional papameters passed to \link{format.results}}
+\item{...}{additional papameters passed to \link{format.results}}
 }
 \value{
-results of Χ^2 or F test
+results of \eqn{\chi^2} or _F_ test
 }
 \description{
 Describe linearHypothesis test results
