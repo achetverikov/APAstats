@@ -1047,6 +1047,7 @@ describe.bf<-function(bf, digits = 2, top_limit = 10000, convert_to_power = T, .
 #' @param digits number of digits in the output
 #' @param eff.size string describing how to compute an effect size (currently, either 'fe_to_all', 'part_fe', or 'part_fe_re')
 #' @param eff.size.type type of the effect size ('r' or 'r2')
+#' @param nsamples number of samples to use for the effect size computations
 #'
 #' @param ... other parameters passed to \link{format.results}
 #'
@@ -1065,7 +1066,7 @@ describe.bf<-function(bf, digits = 2, top_limit = 10000, convert_to_power = T, .
 #' ## End(Not run)
 
 
-describe.brm<-function(mod, term, trans = NULL, digits = 2, eff.size = F, eff.size.type = 'r', ...){
+describe.brm<-function(mod, term, trans = NULL, digits = 2, eff.size = F, eff.size.type = 'r', nsamples = 100, ...){
 
   post_samp <- posterior_samples(mod, c(paste0('b_',term)), exact_match = T)
   if (ncol(post_samp)>1){
@@ -1079,24 +1080,22 @@ describe.brm<-function(mod, term, trans = NULL, digits = 2, eff.size = F, eff.si
 
   # it is tricky to compute partial R2, this is just one of the approaches
   es = NULL
+  if (eff.size!=F){
+    var_res = var(resid(mod, nsamples = nsamples)[,1])
+    var_term = var(mod$data[,term, with = F]*fixef(mod)[term,'Estimate'])
 
+  }
   if ('fe_to_all'== eff.size){
-    var_term = var(mod$data[,term]*fixef(mod)[term,'Estimate'])
-    var_tot = var(fitted(mod)[,1])+var(resid(mod)[,1])
+    var_tot = var(fitted(mod, nsamples = nsamples)[,1])+var_res
     es = var_term/var_tot
   }  else if ('part_fe'==eff.size){
-
-    var_res = var(resid(mod)[,1])
     # var_f = var(fitted(mod, re_formula = NA)[,1])
-    var_term = var(mod$data[,term]*fixef(mod)[term,'Estimate'])
     es = var_term/(var_term+var_res)
   } else if ('part_fe_re'==eff.size){
 
-    var_res = var(resid(mod)[,1])
-
     term_re <- data.table(ranef(mod)[[1]][,,term], keep.rownames = T)
     mod_data_preds <- merge(mod$data, term_re, by.x = names(ranef(mod)), by.y = 'rn')
-    var_term = var(mod_data_preds[,term]*(fixef(mod)[term,'Estimate']+mod_data_preds[,'Estimate']))
+    var_term = var(mod_data_preds[,term, with = F]*(fixef(mod)[term,'Estimate'] + mod_data_preds[,'Estimate']))
     var_tot = var_term+var_res
 
     es = var_term/var_tot
