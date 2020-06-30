@@ -1,6 +1,6 @@
 # R functions for formatting results in APA style and other stuff
 
-## What is it? 
+## What is it?
 
 Functions for APA-style formatting for statistical tests results in markdown or LaTeX and other miscellanous stuff.
 
@@ -22,6 +22,7 @@ Functions for APA-style formatting for statistical tests results in markdown or 
 | describe.lmert | Describe lmerTest results|
 | describe.lmtaov | Describe lmerTest anova results|
 | describe.lsmeans | Describe contrasts created by lsmeans|
+| describe.emmeans | Describe contrasts created by emmeans|
 | describe.mean.and.t | Describe two-sample t-test with means and effect sizes|
 | describe.mean.conf | Describe mean and confidence intervals|
 | describe.mean.sd | Describe mean and SD|
@@ -39,14 +40,14 @@ devtools::install_github('achetverikov/apastats',subdir='apastats')
 library(apastats)
 ```
 
-## How to use? 
+## How to use?
 
-Most of the functions have names like "describe.something" where something is a name of statistical test or R function. 
+Most of the functions have names like "describe.something" where something is a name of statistical test or R function.
 
-They take results of statistical test as input and provide a formatted output. So, for example, if you use repeated measures ANOVA, you can easily get something like "_F_(3, 54) = 516.61, _p_ < .001" from _ezANOVA_ results. 
+They take results of statistical test as input and provide a formatted output. So, for example, if you use repeated measures ANOVA, you can easily get something like "_F_(3, 54) = 516.61, _p_ < .001" from _ezANOVA_ results.
 
 Methods included:
-- chi-squared 
+- chi-squared
 - Pearson r
 - t-test
 - ANOVA, rm ANOVA
@@ -60,5 +61,4 @@ Some examples can be found here: https://github.com/achetverikov/apastats/blob/m
 
 ## Disclaimer
 
-Everything is provided as is, contributions are welcome, authors of borrowed functions are mentioned in functions descriptions. 
-
+Everything is provided as is, contributions are welcome, authors of borrowed functions are mentioned in functions descriptions.

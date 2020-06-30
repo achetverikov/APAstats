@@ -670,6 +670,46 @@ describe.lsmeans<-function(obj, term, dtype='B', df=F, ...){
   format.results(res_str,...)
 }
 
+
+#' Describe contrasts created by emmeans
+#'
+#' @param obj summary object from emmeans::contrast
+#' @param term contrast number
+#' @param dtype description type, "t", "B", or any other letter
+#' @param df include DF in t-test description (default: False)
+#' @param ... other parameters passed to \link{format.results}
+#'
+#' @return string with formatted results
+#' @export
+#'
+#' @examples
+#'
+#' require(emmeans)
+#' warp.lm <- lm(breaks ~ wool*tension, data = warpbreaks)
+#' warp.lsm <- emmeans(warp.lm, ~ tension | wool)
+#' (sum_contr<-summary(contrast(warp.lsm, 'trt.vs.ctrl')))
+#' describe.emmeans(sum_contr, 1)
+#' describe.emmeans(sum_contr, 3)
+#' describe.emmeans(sum_contr, 3, dtype='t')
+#' describe.emmeans(sum_contr, 3, dtype='c')
+#' describe.emmeans(sum_contr, 3, dtype='c', df=T)
+
+
+describe.emmeans<-function(obj, term, dtype='B', df=F, ...){
+  obj <- as.data.frame(obj[term,])
+  if (dtype=="t"){
+   res_str<-sprintf("\\emph{%s}%s = %.2f, \\emph{p} %s", 't', ifelse(df, paste0('(', round(obj['df']),')'),''), obj$t.ratio, round.p(obj$p.value))
+  }
+  else if (dtype=="B"){
+   res_str<-sprintf("\\emph{B} = %.2f (%.2f), \\emph{p} %s", obj$estimate, obj$SE, round.p(obj$p.value))
+  }
+  else{
+   res_str<-sprintf("\\emph{B} = %.2f (%.2f), \\emph{%s}%s = %.2f, \\emph{p} %s", obj$estimate, obj$SE,  't', ifelse(df, paste0('(', round(obj$df),')'),''), obj$t.ratio, round.p(obj$p.value))
+  }
+  format.results(res_str,...)
+}
+
+
 #' Describe lmer results
 #'
 #' This function is deprecated in favor of \link{describe.glm}
