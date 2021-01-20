@@ -4,8 +4,13 @@
 \alias{round.p}
 \title{Round *p*-value}
 \usage{
-\method{round}{p}(values, include.rel = 1, digits = 3,
-  strip.lead.zeros = T, replace.very.small = 0.001)
+\method{round}{p}(
+  values,
+  include.rel = 1,
+  digits = 3,
+  strip.lead.zeros = T,
+  replace.very.small = 0.001
+)
 }
 \arguments{
 \item{values}{a vector of p-values}

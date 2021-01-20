@@ -4,8 +4,14 @@
 \alias{describe.mean.conf}
 \title{Describe mean and confidence intervals}
 \usage{
-describe.mean.conf(x, bootCI = T, addCI = F, digits = 2,
-  transform.means = NULL, ...)
+describe.mean.conf(
+  x,
+  bootCI = T,
+  addCI = F,
+  digits = 2,
+  transform.means = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{value that should be described}

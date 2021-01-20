@@ -4,8 +4,14 @@
 \alias{describe.lmer}
 \title{Describe lmer results}
 \usage{
-describe.lmer(fm, pv, digits = c(2, 2, 2), incl.rel = 0, dtype = "B",
-  incl.p = T)
+describe.lmer(
+  fm,
+  pv,
+  digits = c(2, 2, 2),
+  incl.rel = 0,
+  dtype = "B",
+  incl.p = T
+)
 }
 \arguments{
 \item{fm}{LMER model from lme4}

@@ -4,7 +4,9 @@
 \name{faces}
 \alias{faces}
 \title{Faces identification experiment data}
-\format{A data.table with 2580 observations and 6 variables.}
+\format{
+A data.table with 2580 observations and 6 variables.
+}
 \source{
 \href{http://cogjournal.org/2/1/files/ChetverikovRJCS2015SOMdata.zip}{Supplemental data for Chetverikov (2015)}
 }

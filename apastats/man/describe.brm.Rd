@@ -4,8 +4,17 @@
 \alias{describe.brm}
 \title{Describe brms model results}
 \usage{
-describe.brm(mod, term, trans = NULL, digits = 2, eff.size = F,
-  eff.size.type = "r", ...)
+describe.brm(
+  mod,
+  term,
+  trans = NULL,
+  digits = 2,
+  eff.size = F,
+  eff.size.type = "r",
+  nsamples = 100,
+  ci.type = "HPDI",
+  ...
+)
 }
 \arguments{
 \item{mod}{model object}
@@ -19,6 +28,8 @@ describe.brm(mod, term, trans = NULL, digits = 2, eff.size = F,
 \item{eff.size}{string describing how to compute an effect size (currently, either 'fe_to_all', 'part_fe', or 'part_fe_re')}
 
 \item{eff.size.type}{type of the effect size ('r' or 'r2')}
+
+\item{nsamples}{number of samples to use for the effect size computations}
 
 \item{...}{other parameters passed to \link{format.results}}
 }

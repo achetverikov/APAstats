@@ -4,15 +4,32 @@
 \alias{plot.pointrange}
 \title{Pointrange plot}
 \usage{
-\method{generic}{class}(..., pos = position_dodge(0.3),
-  pointsize = I(3), linesize = I(1), pointfill = I("white"),
-  pointshape = NULL, within_subj = F, wid = "uid", bars = "ci",
-  withinvars = NULL, betweenvars = NULL, x_as_numeric = F,
-  custom_geom_before = NULL, connecting_line = F,
-  pretty_breaks_y = F, pretty_y_axis = F, exp_y = F,
-  print_aggregated_data = F, do_aggregate = F, add_margin = F,
-  margin_label = "all", margin_x_vals = NULL,
-  bars_instead_of_points = F, geom_bar_params = NULL)
+\method{generic}{class}(
+  ...,
+  pos = position_dodge(0.3),
+  pointsize = I(3),
+  linesize = I(1),
+  pointfill = I("white"),
+  pointshape = NULL,
+  within_subj = F,
+  wid = "uid",
+  bars = "ci",
+  withinvars = NULL,
+  betweenvars = NULL,
+  x_as_numeric = F,
+  custom_geom_before = NULL,
+  connecting_line = F,
+  pretty_breaks_y = F,
+  pretty_y_axis = F,
+  exp_y = F,
+  print_aggregated_data = F,
+  do_aggregate = F,
+  add_margin = F,
+  margin_label = "all",
+  margin_x_vals = NULL,
+  bars_instead_of_points = F,
+  geom_bar_params = NULL
+)
 }
 \arguments{
 \item{...}{the first element is assumed to be the dataset and the second one is assumed to be a list of plot aesthetics (e.g., aes(x = varA, y=varB))}

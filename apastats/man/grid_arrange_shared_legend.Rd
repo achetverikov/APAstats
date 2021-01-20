@@ -4,9 +4,16 @@
 \alias{grid_arrange_shared_legend}
 \title{Arrange several plots with one legend and/or one x-axis title}
 \usage{
-grid_arrange_shared_legend(..., stack = "v", one_sub = F,
-  heights = F, widths = F, one_x_axis = F, legend_pos = "b",
-  share_legend = T)
+grid_arrange_shared_legend(
+  ...,
+  stack = "v",
+  one_sub = F,
+  heights = F,
+  widths = F,
+  one_x_axis = F,
+  legend_pos = "b",
+  share_legend = T
+)
 }
 \arguments{
 \item{...}{- two or more ggplot2 plots}

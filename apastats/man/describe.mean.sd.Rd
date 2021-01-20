@@ -4,8 +4,7 @@
 \alias{describe.mean.sd}
 \title{Describe mean and SD}
 \usage{
-describe.mean.sd(x = NULL, m = NULL, sd = NULL, digits = 2,
-  dtype = "p", ...)
+describe.mean.sd(x = NULL, m = NULL, sd = NULL, digits = 2, dtype = "p", ...)
 }
 \arguments{
 \item{x}{vector of values}

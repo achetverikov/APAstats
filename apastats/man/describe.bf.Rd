@@ -4,8 +4,7 @@
 \alias{describe.bf}
 \title{Describe BayesFactor results}
 \usage{
-describe.bf(bf, digits = 2, top_limit = 10000, convert_to_power = T,
-  ...)
+describe.bf(bf, digits = 2, top_limit = 10000, convert_to_power = T, ...)
 }
 \arguments{
 \item{bf}{an object of \link[BayesFactor]{BFBayesFactor} class}

@@ -5,8 +5,16 @@
 \title{Describe ezANOVA results
 Provides formatted string like _F_(DFn, DFd) = ..., _p_ ..., eta2 = ... based on ezANOVA results}
 \usage{
-describe.ezanova(ezfit, term, include_eta = T, spher_corr = T,
-  eta_digits = 2, f_digits = 2, df_digits = 0, ...)
+describe.ezanova(
+  ezfit,
+  term,
+  include_eta = T,
+  spher_corr = T,
+  eta_digits = 2,
+  f_digits = 2,
+  df_digits = 0,
+  ...
+)
 }
 \arguments{
 \item{ezfit}{ezANOVA object}
