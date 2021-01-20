@@ -1106,7 +1106,7 @@ describe.bf<-function(bf, digits = 2, top_limit = 10000, convert_to_power = T, .
 #' ## End(Not run)
 
 
-describe.brm<-function(mod, term, trans = NULL, digits = 2, eff.size = F, eff.size.type = 'r', nsamples = 100, ...){
+describe.brm<-function(mod, term, trans = NULL, digits = 2, eff.size = F, eff.size.type = 'r', nsamples = 100, ci.type = 'HPDI', ...){
 
   post_samp <- posterior_samples(mod, c(paste0('b_',term)), exact_match = T)
   if (ncol(post_samp)>1){
@@ -1116,8 +1116,10 @@ describe.brm<-function(mod, term, trans = NULL, digits = 2, eff.size = F, eff.si
   if (is.function(trans)){
     post_samp = trans(post_samp)
   }
-  hpdi<-bayestestR::hdi(post_samp, ci = 0.95)
-
+  if (ci.type == 'HPDI')
+    ci <- bayestestR::hdi(post_samp, ci = 0.95)
+  else
+    ci <- bayestestR::eti(post_samp, ci = 0.95)
   # it is tricky to compute partial R2, this is just one of the approaches
   es = NULL
   if (eff.size!=F){
@@ -1142,7 +1144,7 @@ describe.brm<-function(mod, term, trans = NULL, digits = 2, eff.size = F, eff.si
   }
 
 
-  res_str <- sprintf(paste0('\\emph{b} = %.',digits, 'f, 95%% HPDI = [%.',digits,'f, %.',digits,'f]'),mean(post_samp), hpdi[,'CI_low'], hpdi[,'CI_high'])
+  res_str <- sprintf(paste0('\\emph{b} = %.',digits, 'f, 95%% %s = [%.',digits,'f, %.',digits,'f]'),mean(post_samp), ci.type, ci[,'CI_low'], ci[,'CI_high'])
   if (!is.null(es)) {
     if (eff.size.type=='r')
       res_str <- paste0('_r_ = ', f.round(sqrt(es), digits = digits),', ',res_str)
