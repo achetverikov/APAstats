@@ -466,10 +466,10 @@ describe.glm <- function (fit, term=NULL, dtype=1, b.digits=2, t.digits=2, test.
     res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f (%.",b.digits,"f), \\emph{p} %s"), afit[, 1], afit[, 2], round.p(afit[, 4]))
   }
   else if (dtype==3){
-    res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f, \\emph{SE} = %.",b.digits,"f,  \\emph{",t_z,"}", dfs," %s, \\emph{p} %s"), afit[, 1], afit[, 2], round.p(afit[, 3], digits=t.digits, strip.lead.zeros=F, replace.very.small = 0.01), round.p(afit[, 4]))
+    res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f, \\emph{SE} = %.",b.digits,"f, \\emph{",t_z,"}", dfs," %s, \\emph{p} %s"), afit[, 1], afit[, 2], round.p(afit[, 3], digits=t.digits, strip.lead.zeros=F, replace.very.small = 0.01), round.p(afit[, 4]))
   }
   else if (dtype==4) {
-    res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f (%.",b.digits,"f),  \\emph{",t_z,"}", dfs," %s"), afit[, 1], afit[, 2], round.p(afit[, 3], digits=t.digits, strip.lead.zeros=F, replace.very.small = 0.01))
+    res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f (%.",b.digits,"f), \\emph{",t_z,"}", dfs," %s"), afit[, 1], afit[, 2], round.p(afit[, 3], digits=t.digits, strip.lead.zeros=F, replace.very.small = 0.01))
   }
 
   if (eff.size&!exists('ess')){
