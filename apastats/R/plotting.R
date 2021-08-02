@@ -92,6 +92,8 @@ base.breaks.y <- function(x, addSegment=T, ...){
 #' @param margin_x_vals which levels of x-axis variable to aggregate over (NULL means all of them)
 #' @param bars_instead_of_points use geom_bar instead of geom_point
 #' @param geom_bar_params parameters for geom_bar if it is used
+#' @param add_jitter add jittered individual data points
+#' @param individual_points_params a list of parameters for the individual data points
 #'
 #' @details For point and line properties (e.g., pointfill) passing NULL allows to avoid setting these values (useful when they are mapped to some variables).
 #'
@@ -107,22 +109,26 @@ base.breaks.y <- function(x, addSegment=T, ...){
 #' plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), withinvars=c('stim_gender'), betweenvars = c('user_gender'), print_aggregated_data = T, wid='uid', within_subj=T, exp_y=T, bars='ci', do_aggregate = T)+ylab('RT')
 
 
-plot.pointrange<-function (..., pos = position_dodge(0.3), pointsize = I(3), linesize = I(1),
+plot.pointrange<-function (data, mapping, pos = position_dodge(0.3), pointsize = I(3), linesize = I(1),
                            pointfill = I("white"), pointshape = NULL, within_subj = F,
                            wid = "uid", bars = "ci", withinvars = NULL, betweenvars = NULL,
                            x_as_numeric = F, custom_geom_before = NULL, connecting_line = F,
                            pretty_breaks_y = F, pretty_y_axis = F, exp_y = F, print_aggregated_data = F,
-                           do_aggregate = F, add_margin = F, margin_label = 'all', margin_x_vals = NULL, bars_instead_of_points = F, geom_bar_params = NULL){
+                           do_aggregate = F, add_margin = F, margin_label = 'all', margin_x_vals = NULL,
+                           bars_instead_of_points = F, geom_bar_params = NULL, add_jitter = F,
+                           individual_points_params = list()){
   library(ggplot2)
-  ellipses <- list(...)
-  plot_f <- ellipses[[2]]
+  # ellipses <- list(...)
+  # plot_f <- ellipses[[2]]
+  plot_f <- mapping
   if (class(plot_f["y"]) == "uneval") {
     plot_f <- sapply(plot_f, function(x) sub("~", "", deparse(x)))
   }
   dv <- as.character(plot_f["y"][[1]])
   withinvars <- c(withinvars, as.character(unlist(plot_f[names(plot_f) !=
                                                            "y"])))
-  plot_data <- as.data.frame(ellipses[[1]])
+  # plot_data <- as.data.frame(ellipses[[1]])
+  plot_data <- as.data.frame(data)
   plot_data <- plot_data[!is.na(plot_data[, dv]), ]
   aes_list <- modifyList(lapply(plot_f[names(plot_f) != "y"],
                                 as.character), list(y = dv, ymin = "ymin", ymax = "ymax"))
@@ -167,6 +173,7 @@ plot.pointrange<-function (..., pos = position_dodge(0.3), pointsize = I(3), lin
     aggr_data$ymin <- exp(aggr_data$ymin)
     aggr_data$ymax <- exp(aggr_data$ymax)
     aggr_data[, dv] <- exp(aggr_data[, dv])
+    plot_data[,dv] <- exp(plot_data[,dv])
   }
   if (print_aggregated_data) {
     print(aggr_data)
@@ -191,11 +198,17 @@ plot.pointrange<-function (..., pos = position_dodge(0.3), pointsize = I(3), lin
   if (!is.null(pointsize)) {
     point_params <- append(point_params, list(size = pointsize))
   }
+  if (add_jitter){
+    default_ind_pp <- list(size = pointsize/2, fill = 'lightgray', position = position_jitterdodge(dodge.width = pos$width, jitter.width = 0.1))
+    individual_points_params <- append(individual_points_params, default_ind_pp[setdiff(names(default_ind_pp), names(individual_points_params))])
+    p <- p+do.call(geom_jitter, append(individual_points_params, list(data = plot_data, mapping = do.call(aes_string, aes_list[!names(aes_list)%in%c('ymax','ymin')]), inherit.aes = F)))
+  }
   if (!bars_instead_of_points){
     p <- p + do.call(geom_point, point_params)
   } else {
     p <- p + do.call(geom_bar, geom_bar_params)
-    }
+  }
+
 
   if (pretty_breaks_y) {
     y_range <- c(min(aggr_data$ymin), max(aggr_data$ymax))
@@ -213,7 +226,6 @@ plot.pointrange<-function (..., pos = position_dodge(0.3), pointsize = I(3), lin
   }
   p
 }
-
 #' Exponentiate scale
 #'
 #' Helps to transform log-scale back to normal
