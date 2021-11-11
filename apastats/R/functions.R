@@ -495,6 +495,8 @@ describe.glm <- function (fit, term=NULL, dtype=1, b.digits=2, t.digits=2, test.
 #' @param sd SD (not used if x is provided)
 #' @param digits number of digits used for description (default: 2)
 #' @param dtype "p" for SD in parentheses (default), "c" for SD after comma
+#' @param m_units a character to add units (e.g., "°" for degrees) to the mean
+#' @param sd_units a character to add units (e.g., "°" for degrees) to SD
 #' @param ... other arguments passed to \link{format.results}
 #'
 #' @return formatted string
@@ -507,16 +509,23 @@ describe.glm <- function (fit, term=NULL, dtype=1, b.digits=2, t.digits=2, test.
 #' describe.mean.sd(x, 0)
 #' describe.mean.sd(x, dtype = 'c')
 
-describe.mean.sd <- function(x = NULL, m = NULL, sd = NULL, digits=2, dtype = 'p', ...){
-  if (dtype == 'c'){s1 <- ', '; s2 <- ''}
-  else {s1 <- ' ('; s2 <- ')'}
-
-  if (!is.null(x)){
-    m_sd <- as.list(Hmisc::smean.sd(x))
-    m <- m_sd$Mean
-    sd <- m_sd$SD
-  }
-  format.results(sprintf("\\emph{M} = %.*f%s\\emph{SD} = %.*f%s", digits, m, s1, digits, sd, s2), ...)
+describe.mean.sd <- function (x = NULL, m = NULL, sd = NULL, digits = 2, dtype = "p", m_units = '', sd_units = '', ...) 
+{
+    if (dtype == "c") {
+        s1 <- ", "
+        s2 <- ""
+    }
+    else {
+        s1 <- " ("
+        s2 <- ")"
+    }
+    if (!is.null(x)) {
+        m_sd <- as.list(Hmisc::smean.sd(x))
+        m <- m_sd$Mean
+        sd <- m_sd$SD
+    }
+    format.results(sprintf("\\emph{M} = %.*f%s%s\\emph{SD} = %.*f%s%s", 
+        digits, m, m_units, s1, digits, sd, sd_units, s2), ...)
 }
 
 #' Describe mean and confidence intervals
