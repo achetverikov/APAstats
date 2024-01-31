@@ -4,7 +4,16 @@
 \alias{describe.mean.sd}
 \title{Describe mean and SD}
 \usage{
-describe.mean.sd(x = NULL, m = NULL, sd = NULL, digits = 2, dtype = "p", ...)
+describe.mean.sd(
+  x = NULL,
+  m = NULL,
+  sd = NULL,
+  digits = 2,
+  dtype = "p",
+  m_units = "",
+  sd_units = "",
+  ...
+)
 }
 \arguments{
 \item{x}{vector of values}
@@ -16,6 +25,10 @@ describe.mean.sd(x = NULL, m = NULL, sd = NULL, digits = 2, dtype = "p", ...)
 \item{digits}{number of digits used for description (default: 2)}
 
 \item{dtype}{"p" for SD in parentheses (default), "c" for SD after comma}
+
+\item{m_units}{a character to add units (e.g., "°" for degrees) to the mean}
+
+\item{sd_units}{a character to add units (e.g., "°" for degrees) to SD}
 
 \item{...}{other arguments passed to \link{format.results}}
 }
