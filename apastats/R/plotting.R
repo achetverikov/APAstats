@@ -8,8 +8,6 @@
 #' @return scale_(x or y)_continuous with pretty breaks and accompaniying geom_segment if addSegment == T
 #' @export
 #'
-#' @examples
-#'
 base.breaks<-function(x, scale='x', addSegment=T, ...){
   b <- pretty(x)
 
@@ -208,7 +206,6 @@ plot.pointrange<-function (data, mapping, pos = position_dodge(0.3), pointsize =
   } else {
     p <- p + do.call(geom_bar, geom_bar_params)
   }
-
 
   if (pretty_breaks_y) {
     y_range <- c(min(aggr_data$ymin), max(aggr_data$ymax))

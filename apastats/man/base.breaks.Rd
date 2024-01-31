@@ -21,6 +21,3 @@ scale_(x or y)_continuous with pretty breaks and accompaniying geom_segment if a
 \description{
 Tufte-like breaks for axes
 }
-\examples{
-
-}

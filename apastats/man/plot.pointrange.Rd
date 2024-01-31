@@ -5,7 +5,8 @@
 \title{Pointrange plot}
 \usage{
 \method{generic}{class}(
-  ...,
+  data,
+  mapping,
   pos = position_dodge(0.3),
   pointsize = I(3),
   linesize = I(1),
@@ -28,12 +29,12 @@
   margin_label = "all",
   margin_x_vals = NULL,
   bars_instead_of_points = F,
-  geom_bar_params = NULL
+  geom_bar_params = NULL,
+  add_jitter = F,
+  individual_points_params = list()
 )
 }
 \arguments{
-\item{...}{the first element is assumed to be the dataset and the second one is assumed to be a list of plot aesthetics (e.g., aes(x = varA, y=varB))}
-
 \item{pos}{position adjustment function (e.g., position_dodge())}
 
 \item{pointsize}{size for the points (e.g., "I(1)")}
@@ -79,6 +80,12 @@
 \item{bars_instead_of_points}{use geom_bar instead of geom_point}
 
 \item{geom_bar_params}{parameters for geom_bar if it is used}
+
+\item{add_jitter}{add jittered individual data points}
+
+\item{individual_points_params}{a list of parameters for the individual data points}
+
+\item{...}{the first element is assumed to be the dataset and the second one is assumed to be a list of plot aesthetics (e.g., aes(x = varA, y=varB))}
 }
 \value{
 plot of pointrange
