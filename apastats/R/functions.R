@@ -20,6 +20,7 @@ omit.zeroes <- function (x, digits=2)
 #'
 #' @param x A number
 #' @param digits Number of decimal digits to keep
+#' @param strip.lead.zeros remove zero before decimal point (default is false)
 #'
 #' @return Value A number rounded to the specified number of digits
 #' @export
@@ -29,8 +30,13 @@ omit.zeroes <- function (x, digits=2)
 #' f.round(5.8251)
 #' f.round(5.82999, digits=3)
 #' f.round(5.82999, digits=4)
-f.round <- function (x, digits=2){
-  stringr::str_trim(format(round(as.numeric(x), digits), nsmall=digits))
+f.round <- function (x, digits = 2, strip.lead.zeros = F) {
+    values_string <- stringr::str_trim(format(round(as.numeric(x), digits), nsmall = digits))
+    if(strip.lead.zeros){
+        values_string <- sub("^0", "", values_string)
+        values_string <- sub("^-0", "-", values_string)
+    }
+    return(values_string)
 }
 
 #' Round *p*-value
