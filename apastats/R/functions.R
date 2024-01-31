@@ -292,8 +292,6 @@ describe.aov <- function (fit, term, sstype = 2, ...){
 #' @return Formatted string with F (or chi2), df, and p
 #' @export
 #'
-#' @examples
-#'
 describe.anova <- function (anova_res, rown=2, f.digits=2,...){
   if ('F' %in% names(anova_res)){
     res_str<-sprintf(paste0("\\emph{F}(%.0f, %.0f) = %.",f.digits,"f, \\emph{p} %s"), anova_res[rown,"Df"], anova_res[rown,"Res.Df"], anova_res[rown, "F"], round.p(anova_res[rown, "Pr(>F)"]))
@@ -344,7 +342,9 @@ describe.lmtaov <- function (afit, term, f.digits=2, ...){
 #'
 
 describe.Anova <- function (afit, term, f.digits=2, ...){
-  res_str<-sprintf(paste0("\\emph{F}(%i, %i) = %.",f.digits,"f, \\emph{p} %s"), afit[term,"Df"], afit["Residuals","Df"], afit[term, "F value"], round.p(afit[term, "Pr(>F)"]))
+  if ('Df.res' %in% colnames(afit)){
+    res_str<-sprintf(paste0("\\emph{F}(%i, %.",f.digits,"f) = %.",f.digits,"f, \\emph{p} %s"), afit[term,"Df"], afit[term,"Df.res"], afit[term, "F"], round.p(afit[term, "Pr(>F)"]))
+  } else res_str<-sprintf(paste0("\\emph{F}(%i, %i) = %.",f.digits,"f, \\emph{p} %s"), afit[term,"Df"], afit["Residuals","Df"], afit[term, "F value"], round.p(afit[term, "Pr(>F)"]))
   format.results(res_str, ...)
 }
 
@@ -683,7 +683,7 @@ describe.lsmeans<-function(obj, term, dtype='B', df=F, ...){
 #' Describe contrasts created by emmeans
 #'
 #' @param obj summary object from emmeans::contrast
-#' @param term contrast number
+#' @param term contrast number(s)
 #' @param dtype description type, "t", "B", or any other letter
 #' @param df include DF in t-test description (default: False)
 #' @param ... other parameters passed to \link{format.results}
@@ -706,14 +706,15 @@ describe.lsmeans<-function(obj, term, dtype='B', df=F, ...){
 
 describe.emmeans<-function(obj, term, dtype='B', df=F, ...){
   obj <- as.data.frame(obj[term,])
+  df_str <- ifelse(df, sprintf('(%i)', round(obj$df)),'')
   if (dtype=="t"){
-   res_str<-sprintf("\\emph{%s}%s = %.2f, \\emph{p} %s", 't', ifelse(df, paste0('(', round(obj['df']),')'),''), obj$t.ratio, round.p(obj$p.value))
+    res_str<-sprintf("\\emph{%s}%s = %.2f, \\emph{p} %s", 't', df, obj$t.ratio, round.p(obj$p.value))
   }
   else if (dtype=="B"){
-   res_str<-sprintf("\\emph{B} = %.2f (%.2f), \\emph{p} %s", obj$estimate, obj$SE, round.p(obj$p.value))
+    res_str<-sprintf("\\emph{B} = %.2f (%.2f), \\emph{p} %s", obj$estimate, obj$SE, round.p(obj$p.value))
   }
   else{
-   res_str<-sprintf("\\emph{B} = %.2f (%.2f), \\emph{%s}%s = %.2f, \\emph{p} %s", obj$estimate, obj$SE,  't', ifelse(df, paste0('(', round(obj$df),')'),''), obj$t.ratio, round.p(obj$p.value))
+    res_str<-sprintf("\\emph{B} = %.2f (%.2f), \\emph{%s}%s = %.2f, \\emph{p} %s", obj$estimate, obj$SE,  't', df_str, obj$t.ratio, round.p(obj$p.value))
   }
   format.results(res_str,...)
 }
@@ -804,7 +805,8 @@ describe.binom.mean.conf <- function(x, digits=2){
 #' @param eta_digits number of digits to use for eta^2 (default: 2)
 #' @param f_digits number of digits to use for F (default: 2)
 #' @param df_digits number of digits to use for df (default: 0)
-#' @param ... other parameters passed to \link{format.results}
+#' @param append_to_table should the results be added to the original ezANOVA table (default: False)
+#' @param ... other parameters passed to \link{format.results} 
 #'
 #' @return string with formatted results
 #' @export
@@ -818,17 +820,25 @@ describe.binom.mean.conf <- function(x, digits=2){
 #' describe.ezanova(ez_res, 'user_gender:stim_gender', eta_digits = 3)
 #' describe.ezanova(ez_res, 3, eta_digits = 3)
 
-describe.ezanova <- function(ezfit, term, include_eta=T, spher_corr=T, eta_digits = 2, f_digits = 2, df_digits = 0, ...){
+describe.ezanova <- function(ezfit, term, include_eta=T, spher_corr=T, eta_digits = 2, f_digits = 2, df_digits = 0, append_to_table = F, ...){
   eza<-ezfit$ANOVA
   if (spher_corr&('Sphericity Corrections' %in% names(ezfit))){
     eza<-merge(eza, ezfit$`Sphericity Corrections`, by='Effect', all.x=T)
     eza[!is.na(eza$GGe),'p']<-eza[!is.na(eza$GGe),]$`p[GG]`
   }
   rownames(eza)<-eza$Effect
-
-  suffix <- ifelse(include_eta, sprintf(', $\\eta$^2^~G~ %s', round.p(eza[term, "ges"], digits = eta_digits, replace.very.small = 10^(-eta_digits))),'')
+  
+  suffix <- sprintf(', $\\eta$^2^~G~ %s', round.p(eza[term, "ges"], 
+                                                  digits = eta_digits, 
+                                                  replace.very.small = 10^(-eta_digits)))
+  if (include_eta==F){
+    suffix <- rep('',length(suffix))
+  }
   res<-format.results(sprintf("\\emph{F}(%.*f, %.*f) = %.*f, \\emph{p} %s%s", df_digits, eza[term,"DFn"], df_digits, eza[term,"DFd"],f_digits,eza[term,"F"],round.p(eza[term,"p"]), suffix),...)
-  res
+  if (append_to_table){
+    cbind(eza[term, ], res)
+  } else res
+  
 }
 
 #' Describe ezStats results

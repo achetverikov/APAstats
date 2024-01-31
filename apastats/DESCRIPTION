@@ -27,4 +27,4 @@ Suggests:
     plyr,
     Hmisc
 LazyData: TRUE
-RoxygenNote: 7.1.0
+RoxygenNote: 7.3.1

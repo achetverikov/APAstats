@@ -13,6 +13,7 @@ describe.ezanova(
   eta_digits = 2,
   f_digits = 2,
   df_digits = 0,
+  append_to_table = F,
   ...
 )
 }
@@ -30,6 +31,8 @@ describe.ezanova(
 \item{f_digits}{number of digits to use for F (default: 2)}
 
 \item{df_digits}{number of digits to use for df (default: 0)}
+
+\item{append_to_table}{should the results be added to the original ezANOVA table (default: False)}
 
 \item{...}{other parameters passed to \link{format.results}}
 }

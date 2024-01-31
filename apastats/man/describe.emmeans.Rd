@@ -9,7 +9,7 @@ describe.emmeans(obj, term, dtype = "B", df = F, ...)
 \arguments{
 \item{obj}{summary object from emmeans::contrast}
 
-\item{term}{contrast number}
+\item{term}{contrast number(s)}
 
 \item{dtype}{description type, "t", "B", or any other letter}
 
