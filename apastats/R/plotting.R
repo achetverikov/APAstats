@@ -124,6 +124,9 @@ plot.pointrange<-function (data, mapping, pos = position_dodge(0.3), pointsize =
   }
   dv <- as.character(plot_f["y"][[1]])
   plot_vars <- as.character(unlist(plot_f[names(plot_f) != "y"]))
+  if (length(setdiff(plot_vars, c(betweenvars, withinvars)))>0){
+    warning(paste0('Variables ', paste_and(unique(setdiff(plot_vars, c(betweenvars, withinvars)))),' are not listed in withinvars or betweenvars but are used as plot parameters. They would be considered as betweenvars. '))
+  }
   betweenvars <- union(betweenvars, setdiff(plot_vars, withinvars))
   withinvars <- unique(withinvars)
   # plot_data <- as.data.frame(ellipses[[1]])
@@ -136,6 +139,9 @@ plot.pointrange<-function (data, mapping, pos = position_dodge(0.3), pointsize =
                                       groupvars = c(withinvars, betweenvars, wid), na.rm = TRUE)
   }
   if (within_subj) {
+    if (length(withinvars)==0 || is.null(withinvars)){
+      stop('Within-subject plot can only be made if there is at least one within-subject variable listed in withinvars parameter.')
+    }
     # aggr_data <- apastats:::summarySEwithin(plot_data, measurevar = dv,
     #                                         withinvars = withinvars, betweenvars = betweenvars,
     #                                         idvar = wid, na.rm = TRUE)
@@ -176,10 +182,9 @@ plot.pointrange<-function (data, mapping, pos = position_dodge(0.3), pointsize =
     aggr_data$ymin <- aggr_data[, 'center'] + aggr_data[, 'lowerwidth']
     aggr_data$ymax <- aggr_data[, 'center'] + aggr_data[, 'upperwidth']
     aggr_data[,dv] <- aggr_data$center
-    plot_data[,dv] <- aggr_data$center
   } else {
-  aggr_data$ymin <- aggr_data[, dv] - aggr_data[, bars]
-  aggr_data$ymax <- aggr_data[, dv] + aggr_data[, bars]
+    aggr_data$ymin <- aggr_data[, dv] - aggr_data[, bars]
+    aggr_data$ymax <- aggr_data[, dv] + aggr_data[, bars]
   }
   if (exp_y) {
     aggr_data$ymin <- exp(aggr_data$ymin)
