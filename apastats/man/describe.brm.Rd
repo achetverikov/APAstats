@@ -9,7 +9,7 @@ describe.brm(
   term,
   trans = NULL,
   digits = 2,
-  eff.size = F,
+  eff.size = FALSE,
   eff.size.type = "r",
   nsamples = 100,
   ci.type = "HPDI",
@@ -40,7 +40,7 @@ string describing the result
 Describe brms model results
 }
 \examples{
-## Not run:
+\dontrun{
 require(brms)
 x <- rnorm(500, sd = 6)
 y <- 4*x + rnorm(500)
@@ -48,5 +48,5 @@ fit <- brm(y~x, data=data.frame(x,y), chains = 1, iter = 500)
 describe.brm(fit, 'x')
 # convert x to another scale for output
 describe.brm(fit, 'x', trans = function(val) val+5)
-## End(Not run)
+}
 }

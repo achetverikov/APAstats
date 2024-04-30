@@ -9,9 +9,9 @@ describe.mean.and.t(
   by,
   which.mean = 1,
   digits = 2,
-  paired = F,
-  eff.size = F,
-  abs = F,
+  paired = FALSE,
+  eff.size = FALSE,
+  abs = FALSE,
   aggregate_by = NULL,
   transform.means = NULL,
   ...
@@ -26,11 +26,11 @@ describe.mean.and.t(
 
 \item{digits}{number of digits in results (default: 2)}
 
-\item{paired}{should it be a paired test (default: F)}
+\item{paired}{should it be a paired test (default: FALSE)}
 
-\item{eff.size}{should we include effect size (default: F)}
+\item{eff.size}{should we include effect size (default: FALSE)}
 
-\item{abs}{should we show the absolute value if the t-test (T) or keep its sign (F, default)}
+\item{abs}{should we show the absolute value if the t-test (T) or keep its sign (FALSE, default)}
 
 \item{aggregate_by}{do the aggregation by the thrird variable(s): either NULL (default), a single vector variable, or a list of variables to aggregate by.}
 
@@ -50,7 +50,7 @@ rt <- faces$answerTime
 gr <- faces$stim_gender
 describe.mean.and.t(rt, gr)
 describe.mean.and.t(rt, gr, which.mean = 3)
-describe.mean.and.t(rt, gr, eff.size = T)
+describe.mean.and.t(rt, gr, eff.size = TRUE)
 
 sid <- faces$sid
 describe.mean.and.t(rt, gr, which.mean = 3, aggregate_by = sid)

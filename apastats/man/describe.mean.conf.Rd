@@ -6,8 +6,8 @@
 \usage{
 describe.mean.conf(
   x,
-  bootCI = T,
-  addCI = F,
+  bootCI = TRUE,
+  addCI = FALSE,
   digits = 2,
   transform.means = NULL,
   ...
@@ -36,7 +36,7 @@ Describe mean and confidence intervals
 
 x <- runif(100, 0, 50)
 describe.mean.conf(x)
-describe.mean.conf(x, bootCI = F)
+describe.mean.conf(x, bootCI = FALSE)
 describe.mean.conf(x, digits = 5)
 describe.mean.conf(x, transform.means = function(val) val*2)
 }

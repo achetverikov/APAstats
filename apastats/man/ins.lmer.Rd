@@ -4,7 +4,7 @@
 \alias{ins.lmer}
 \title{Describe lmer in-text}
 \usage{
-ins.lmer(fm, term = NULL, digits = 2, adj.digits = T)
+ins.lmer(fm, term = NULL, digits = 2, adj.digits = TRUE)
 }
 \arguments{
 \item{fm}{LMER model from lme4}

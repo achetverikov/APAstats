@@ -21,7 +21,7 @@ Describe mean and confidence intervals for binomial variable
 
 describe.binom.mean.conf(faces$correct[1:100])
 # note that it is slightly different from asymptotic CI
-describe.mean.conf(faces$correct[1:100], bootCI = F)
+describe.mean.conf(faces$correct[1:100], bootCI = FALSE)
 # although similar to the bootstrapped CI
-describe.mean.conf(faces$correct[1:100], bootCI = T)
+describe.mean.conf(faces$correct[1:100], bootCI = TRUE)
 }

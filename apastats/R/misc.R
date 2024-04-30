@@ -1,7 +1,7 @@
 #' Mean with na.rm=T
 #'
 #' @param x a vector of numbers
-#' @param ...
+#' @param ... other arguments passed to mean
 #'
 #' @return mean of x with NA removed
 #' @export

@@ -4,7 +4,7 @@
 \alias{describe.ttest}
 \title{Describe t-test results}
 \usage{
-describe.ttest(t, show.mean = F, abs = F, ...)
+describe.ttest(t, show.mean = FALSE, abs = FALSE, ...)
 }
 \arguments{
 \item{t}{an object from \link[stats]{t.test}}
@@ -24,6 +24,6 @@ Describe t-test results
 \examples{
 t_res<-t.test(rnorm(20, mean = -10, sd=2))
 describe.ttest(t_res)
-describe.ttest(t_res, show.mean=T)
-describe.ttest(t_res, show.mean=T, abs=T)
+describe.ttest(t_res, show.mean=TRUE)
+describe.ttest(t_res, show.mean=TRUE, abs=TRUE)
 }

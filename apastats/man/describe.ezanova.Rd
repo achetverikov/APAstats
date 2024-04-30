@@ -8,12 +8,12 @@ Provides formatted string like _F_(DFn, DFd) = ..., _p_ ..., eta2 = ... based on
 describe.ezanova(
   ezfit,
   term,
-  include_eta = T,
-  spher_corr = T,
+  include_eta = TRUE,
+  spher_corr = TRUE,
   eta_digits = 2,
   f_digits = 2,
   df_digits = 0,
-  append_to_table = F,
+  append_to_table = FALSE,
   ...
 )
 }

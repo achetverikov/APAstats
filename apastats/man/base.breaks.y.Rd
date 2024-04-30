@@ -4,7 +4,7 @@
 \alias{base.breaks.y}
 \title{Tufte-like breaks for Y axis}
 \usage{
-base.breaks.y(x, addSegment = T, ...)
+base.breaks.y(x, addSegment = TRUE, ...)
 }
 \arguments{
 \item{x}{vector of numbers to create breaks from}

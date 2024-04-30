@@ -10,7 +10,7 @@ describe.lmer(
   digits = c(2, 2, 2),
   incl.rel = 0,
   dtype = "B",
-  incl.p = T
+  incl.p = TRUE
 )
 }
 \arguments{

@@ -10,11 +10,11 @@ describe.glm(
   dtype = 1,
   b.digits = 2,
   t.digits = 2,
-  test.df = F,
-  p.as.number = F,
+  test.df = FALSE,
+  p.as.number = FALSE,
   term.pattern = NULL,
-  eff.size = F,
-  adj.digits = F,
+  eff.size = FALSE,
+  adj.digits = FALSE,
   ...
 )
 }
@@ -56,8 +56,8 @@ describe.glm(fit, 'body', 3)
 describe.glm(fit, 'body', 4)
 describe.glm(fit, 'body', 3, test.df = 1)
 describe.glm(fit)
-## Not run:
+\dontrun{
 require(rockchalk)
 describe.glm(fit, 'body', 4, eff.size = TRUE)
-## End(Not run)
+}
 }

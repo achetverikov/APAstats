@@ -4,7 +4,7 @@
 \alias{table.mean.conf}
 \title{Get a list with means and confidence intervals}
 \usage{
-table.mean.conf(x, digits = 2, binom = F, ...)
+table.mean.conf(x, digits = 2, binom = FALSE, ...)
 }
 \arguments{
 \item{x}{value to compute the mean for}

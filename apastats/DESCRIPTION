@@ -1,13 +1,13 @@
 Package: apastats
 Type: Package
 Title: APA-style results
-Version: 0.3
+Version: 0.4
 Date: 2019-10-16
 Author: Andrey Chetverikov (http://andreychetverikov.org)
 Maintainer: Andrey Chetverikov <andrey.a.chetverikov@gmail.com>
 Description: Proper formatting of statistical results in accordance with
     American Psychological Association Manual, 6th ed., and some convenient plotting
-    functions
+    functions.
 License: GPL-3
 Encoding: UTF-8
 Imports:
@@ -23,8 +23,15 @@ Suggests:
     dip.test,
     ordinal,
     scales,
+    BayesFactor,
+    brms,
     car,
     plyr,
-    Hmisc
+    superb,
+    reshape2,
+    lsmeans,
+    emmeans,
+    Hmisc, 
+    lmerTest
 LazyData: TRUE
 RoxygenNote: 7.3.1

@@ -4,12 +4,14 @@
 \alias{f.round}
 \title{Formatted rounding}
 \usage{
-f.round(x, digits = 2)
+f.round(x, digits = 2, strip.lead.zeros = FALSE)
 }
 \arguments{
 \item{x}{A number}
 
 \item{digits}{Number of decimal digits to keep}
+
+\item{strip.lead.zeros}{remove zero before decimal point (default is false)}
 }
 \value{
 Value A number rounded to the specified number of digits

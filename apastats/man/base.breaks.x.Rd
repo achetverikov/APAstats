@@ -4,7 +4,7 @@
 \alias{base.breaks.x}
 \title{Tufte-like breaks for X axis}
 \usage{
-base.breaks.x(x, addSegment = T, ...)
+base.breaks.x(x, addSegment = TRUE, ...)
 }
 \arguments{
 \item{x}{vector of numbers to create breaks from}

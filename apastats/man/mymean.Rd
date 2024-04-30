@@ -9,7 +9,7 @@ mymean(x, ...)
 \arguments{
 \item{x}{a vector of numbers}
 
-\item{...}{}
+\item{...}{other arguments passed to mean}
 }
 \value{
 mean of x with NA removed

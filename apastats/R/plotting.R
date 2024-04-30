@@ -5,10 +5,10 @@
 #' @param addSegment should we add a line to the scale? (T/F)
 #' @param ... other parameters passed to scale_(x or y)_continuous
 #'
-#' @return scale_(x or y)_continuous with pretty breaks and accompaniying geom_segment if addSegment == T
+#' @return scale_(x or y)_continuous with pretty breaks and accompaniying geom_segment if addSegment == TRUE
 #' @export
 #'
-base.breaks<-function(x, scale='x', addSegment=T, ...){
+base.breaks<-function(x, scale='x', addSegment= TRUE, ...){
   b <- pretty(x)
 
   b[1]<-min(x)
@@ -44,7 +44,7 @@ base.breaks<-function(x, scale='x', addSegment=T, ...){
 #'
 #'
 
-base.breaks.x <- function(x, addSegment=T, ...){
+base.breaks.x <- function(x, addSegment= TRUE, ...){
   base.breaks(x, scale = 'x', addSegment = addSegment, ...)
 }
 
@@ -59,7 +59,7 @@ base.breaks.x <- function(x, addSegment=T, ...){
 #'
 #'
 
-base.breaks.y <- function(x, addSegment=T, ...){
+base.breaks.y <- function(x, addSegment= TRUE, ...){
   base.breaks(x, scale = 'y', addSegment = addSegment, ...)
 }
 
@@ -101,10 +101,10 @@ base.breaks.y <- function(x, addSegment=T, ...){
 #' @examples
 #' data(faces)
 #' plot.pointrange(faces, aes(x=user_gender, color=stim_gender, y=answerTime))+ylab('RT')
-#' plot.pointrange(faces, aes(x=user_gender, color=stim_gender, y=answerTime), wid='uid', within_subj=T, withinvars=c('stim_gender'), betweenvars=c('user_gender'))+ylab('RT')
-#' plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), wid='uid', withinvars=c('stim_gender'), betweenvars=c('user_gender'), within_subj=T, bars='se')+ylab('RT')
-#' plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), wid='uid', withinvars=c('stim_gender'), betweenvars=c('user_gender'), within_subj=T, bars='se', print_aggregated_data=T)+ylab('RT')
-#' plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), withinvars=c('stim_gender'), betweenvars = c('user_gender'), print_aggregated_data = T, wid='uid', within_subj=T, exp_y=T, bars='ci', do_aggregate = T)+ylab('RT')
+#' plot.pointrange(faces, aes(x=user_gender, color=stim_gender, y=answerTime), wid='uid', within_subj= TRUE, withinvars=c('stim_gender'), betweenvars=c('user_gender'))+ylab('RT')
+#' plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), wid='uid', withinvars=c('stim_gender'), betweenvars=c('user_gender'), within_subj= TRUE, bars='se')+ylab('RT')
+#' plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), wid='uid', withinvars=c('stim_gender'), betweenvars=c('user_gender'), within_subj= TRUE, bars='se', print_aggregated_data= TRUE)+ylab('RT')
+#' plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), withinvars=c('stim_gender'), betweenvars = c('user_gender'), print_aggregated_data = TRUE, wid='uid', within_subj= TRUE, exp_y= TRUE, bars='ci', do_aggregate = TRUE)+ylab('RT')
 
 
 plot.pointrange<-function (data, mapping, pos = position_dodge(0.3), pointsize = I(3), linesize = I(1),
@@ -123,8 +123,9 @@ plot.pointrange<-function (data, mapping, pos = position_dodge(0.3), pointsize =
     plot_f <- sapply(plot_f, function(x) sub("~", "", deparse(x)))
   }
   dv <- as.character(plot_f["y"][[1]])
-  withinvars <- c(withinvars, as.character(unlist(plot_f[names(plot_f) !=
-                                                           "y"])))
+  plot_vars <- as.character(unlist(plot_f[names(plot_f) != "y"]))
+  betweenvars <- union(betweenvars, setdiff(plot_vars, withinvars))
+  withinvars <- unique(withinvars)
   # plot_data <- as.data.frame(ellipses[[1]])
   plot_data <- as.data.frame(data)
   plot_data <- plot_data[!is.na(plot_data[, dv]), ]
@@ -132,16 +133,21 @@ plot.pointrange<-function (data, mapping, pos = position_dodge(0.3), pointsize =
                                 as.character), list(y = dv, ymin = "ymin", ymax = "ymax"))
   if (do_aggregate) {
     plot_data <- apastats:::summarySE(plot_data, measurevar = dv,
-                                      groupvars = c(withinvars, betweenvars, wid), na.rm = T)
+                                      groupvars = c(withinvars, betweenvars, wid), na.rm = TRUE)
   }
   if (within_subj) {
-    aggr_data <- apastats:::summarySEwithin(plot_data, measurevar = dv,
-                                            withinvars = withinvars, betweenvars = betweenvars,
-                                            idvar = wid, na.rm = T)
+    # aggr_data <- apastats:::summarySEwithin(plot_data, measurevar = dv,
+    #                                         withinvars = withinvars, betweenvars = betweenvars,
+    #                                         idvar = wid, na.rm = TRUE)
+
+    aggr_data <- plot_data[!is.na(plot_data[[dv]]),] |> 
+      apastats::get_superb_ci(value_var = dv, within =  withinvars, between = betweenvars, wid = wid, errorbar = bars)
+    
   }
   else {
     aggr_data <- apastats:::summarySE(plot_data, measurevar = dv,
-                                      groupvars = c(withinvars, betweenvars), na.rm = T)
+                                      groupvars = c(withinvars, betweenvars),
+                                      na.rm = TRUE)
   }
   if (x_as_numeric) {
     aggr_data[, aes_list$x] <- as.numeric(as.character(aggr_data[,                                                                  aes_list$x]))
@@ -153,11 +159,12 @@ plot.pointrange<-function (data, mapping, pos = position_dodge(0.3), pointsize =
     data_for_margin<-aggr_data[aggr_data[, aes_list$x] %in% margin_x_vals,]
     if (within_subj){
       summ_data_for_margin<-apastats:::summarySEwithin(data_for_margin, measurevar = dv,
-                                                       withinvars = withinvars[withinvars %nin% aes_list$x], betweenvars = betweenvars[betweenvars %nin% aes_list$x], idvar = aes_list$x, na.rm = T)
+                                                       withinvars = withinvars[withinvars %nin% aes_list$x], betweenvars = betweenvars[betweenvars %nin% aes_list$x], idvar = aes_list$x, na.rm = TRUE)
+      
     } else {
       groupvars = c(withinvars, betweenvars)
       summ_data_for_margin<-apastats:::summarySE(data_for_margin, measurevar = dv,
-                                                 groupvars = groupvars[groupvars %nin% aes_list$x], na.rm = T)
+                                                 groupvars = groupvars[groupvars %nin% aes_list$x], na.rm = TRUE)
     }
     summ_data_for_margin[,aes_list$x]<-margin_label
     aggr_data<-plyr::rbind.fill(aggr_data, summ_data_for_margin)
@@ -165,8 +172,15 @@ plot.pointrange<-function (data, mapping, pos = position_dodge(0.3), pointsize =
     x_levels <- unique(aggr_data[, aes_list$x])
     aggr_data[, aes_list$x]<-factor(aggr_data[, aes_list$x], levels = c(x_levels[x_levels!=margin_label], margin_label))
   }
+  if (within_subj) {
+    aggr_data$ymin <- aggr_data[, 'center'] + aggr_data[, 'lowerwidth']
+    aggr_data$ymax <- aggr_data[, 'center'] + aggr_data[, 'upperwidth']
+    aggr_data[,dv] <- aggr_data$center
+    plot_data[,dv] <- aggr_data$center
+  } else {
   aggr_data$ymin <- aggr_data[, dv] - aggr_data[, bars]
   aggr_data$ymax <- aggr_data[, dv] + aggr_data[, bars]
+  }
   if (exp_y) {
     aggr_data$ymin <- exp(aggr_data$ymin)
     aggr_data$ymax <- exp(aggr_data$ymax)
@@ -255,105 +269,6 @@ get_grob_element<-function(myggplot, el='guide-box'){
   return(legend)
 }
 
-#' Arrange several plots with one legend and/or one x-axis title
-#'
-#' Based on a function from https://github.com/hadley/ggplot2/wiki/Share-a-legend-between-two-ggplot2-graphs
-#'
-#' @param ... - two or more ggplot2 plots
-#' @param stack - stack direction, "h" (horizontal) or "v" (vertical)
-#' @param one_sub - one x-axis label for all plots? T/F
-#' @param heights - a vector of heights for vertically arranged plots
-#' @param widths - a vector of widths for horizontally arranged plots
-#' @param one_x_axis - one x-axis for all plots? T/F
-#' @param legend position - "t" (top),"b" (bottom), "l" (left), or "r" (right)
-#'
-#' @return plots arranged with grid.arrange
-#' @export
-#'
-#' @examples
-#' load.libs(c('data.table','ggplot2','scales','grid'))
-#' data(faces)
-#'
-#' p1<-plot.pointrange(faces[correct==1, ], aes(x=user_gender, color=stim_gender, y=answerTime), wid='uid', within_subj=T)+labs(x="Participant's gender", color="Face Gender", y='Untransformed RT')
-#' p2<-plot.pointrange(faces, aes(x=user_gender, color=stim_gender, y=correct), wid='uid')+labs(x="Participant's gender", color="Face Gender" ,y='Accuracy')
-#' grid_arrange_shared_legend(p1, p2, stack = 'horizontal')
-#' grid_arrange_shared_legend(p1, p2, stack = 'vertical')
-#'
-#' #one_x_axis=T has a small bug for now; the labels are not aligned properly
-#' grid_arrange_shared_legend(p1+theme(plot.margin=unit(rep(0,4),'lines'), legend.position='top'),p2+theme(plot.margin=unit(rep(0,4),'lines')), stack='v', one_x_axis = T, one_sub = T,  legend_pos='t')
-#'
-#' grid_arrange_shared_legend(p1, p2, stack = 'v', heights=c(0.7,0.2))
-#'
-
-
-grid_arrange_shared_legend<-function(..., stack = 'v', one_sub=F, heights=F, widths=F, one_x_axis=F, legend_pos='b', share_legend=T) {
-  require('gridExtra')
-  require('grid')
-
-  plots <- list(...)
-  if (share_legend){
-    legend <- get_grob_element(plots[[1]])
-    plots<-lapply(plots, function(x) x + theme(legend.position="none"))
-    lheight <- sum(legend$heights)
-    lwidth <- sum(legend$widths)
-  }
-  if (one_x_axis){
-    x_axis_grob<-get_grob_element(plots[[1]], 'axis-b')
-    if (length(x_axis_grob)>1&'gtable' %in% class(x_axis_grob[[2]])){
-      x_axis_height<-x_axis_grob[[2]]$heights[1]
-      x_axis_grob<-x_axis_grob[[2]]
-    }
-    else {
-      x_axis_height<-x_axis_grob$height
-    }
-    plots<-lapply(plots, function(x) x + theme(axis.text.x=element_blank(), axis.ticks.x=element_blank()))
-  }
-
-  if (one_sub) {
-    tryCatch({
-    if (compareVersion(as.character(packageVersion('ggplot2')),'2.2.0')>=0){
-      x_lab_grob<-get_grob_element(plots[[1]], 'xlab-b')
-    } else x_lab_grob<-get_grob_element(plots[[1]], 'xlab')
-
-
-    }, error = function(e) {print('Cannot extract x-axis title from the plot object'); stop(e)})
-    plots<-lapply(plots, function(x) x + xlab(NULL))
-  }
-
-  if (heights==F){
-    heights=grid::unit(rep_len(1, length(plots)), "null")
-  }
-
-  if (widths==F){
-    widths=grid::unit(rep_len(1, length(plots)), "null")
-  }
-
-  stack <- substr(stack, 0, 1)
-  if (stack=='v'){
-    p<-do.call(gridExtra::arrangeGrob, append(plots, list(heights=heights)))
-    if (one_x_axis){
-
-      p<- grid.arrange(gridExtra::arrangeGrob(p, x_axis_grob, ncol = 1, heights = unit.c(unit(1, "npc") - unit(1,'cm'), x_axis_height)))
-    }
-  } else {
-    p<-do.call(gridExtra::arrangeGrob, append(plots, list(nrow=1, widths=widths)))
-  }
-  if (share_legend){
-    if (legend_pos=='t')
-      p<-gridExtra::arrangeGrob( legend, p, ncol = 1, heights = unit.c(lheight, unit(1, "npc") - lheight))
-    else if (legend_pos=='b')
-      p<-gridExtra::arrangeGrob(p, legend, ncol = 1, heights = unit.c(unit(1, "npc") - lheight, lheight))
-    else if (legend_pos=='r')
-      p<-gridExtra::arrangeGrob(p, legend, nrow = 1, widths = unit.c(unit(1, "npc") - lwidth, lwidth))
-    else if (legend_pos=='l')
-      p<-gridExtra::arrangeGrob(legend, p, nrow = 1, widths = unit.c(lwidth, unit(1, "npc") - lwidth))
-  }
-  if (one_sub) {
-    xlab_h<- unit(1.2,'lines') #sum(xlab_grob$heights)
-    p<-gridExtra::arrangeGrob(p, x_lab_grob,  ncol = 1, heights = unit.c(unit(1, "npc") - xlab_h, xlab_h))
-  }
-  grid.arrange(p)
-}
 
 #' Internal function for palette of shapes
 #'

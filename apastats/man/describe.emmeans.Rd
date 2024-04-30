@@ -4,7 +4,7 @@
 \alias{describe.emmeans}
 \title{Describe contrasts created by emmeans}
 \usage{
-describe.emmeans(obj, term, dtype = "B", df = F, ...)
+describe.emmeans(obj, term, dtype = "B", df = FALSE, ...)
 }
 \arguments{
 \item{obj}{summary object from emmeans::contrast}
@@ -27,11 +27,11 @@ Describe contrasts created by emmeans
 
 require(emmeans)
 warp.lm <- lm(breaks ~ wool*tension, data = warpbreaks)
-warp.lsm <- emmeans(warp.lm, ~ tension | wool)
+warp.lsm <- emmeans::emmeans(warp.lm, ~ tension | wool)
 (sum_contr<-summary(contrast(warp.lsm, 'trt.vs.ctrl')))
 describe.emmeans(sum_contr, 1)
 describe.emmeans(sum_contr, 3)
 describe.emmeans(sum_contr, 3, dtype='t')
 describe.emmeans(sum_contr, 3, dtype='c')
-describe.emmeans(sum_contr, 3, dtype='c', df=T)
+describe.emmeans(sum_contr, 3, dtype='c', df=TRUE)
 }

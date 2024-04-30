@@ -8,7 +8,7 @@
   values,
   include.rel = 1,
   digits = 3,
-  strip.lead.zeros = T,
+  strip.lead.zeros = TRUE,
   replace.very.small = 0.001
 )
 }
@@ -32,7 +32,7 @@ If p-value is <= 0.001, returns ".001" else returns p-value rounded to the speci
 \examples{
 round.p(c(0.025, 0.0001, 0.001, 0.568))
 round.p(c(0.025, 0.0001, 0.001, 0.568), digits=2)
-round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=F)
-round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=F, strip.lead.zeros=F)
-round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=F, strip.lead.zeros=F, replace.very.small = 0.01)
+round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=FALSE)
+round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=FALSE, strip.lead.zeros=FALSE)
+round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=FALSE, strip.lead.zeros=FALSE, replace.very.small = 0.01)
 }

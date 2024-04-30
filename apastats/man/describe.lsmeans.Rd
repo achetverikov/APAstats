@@ -4,7 +4,7 @@
 \alias{describe.lsmeans}
 \title{Describe contrasts created by lsmeans}
 \usage{
-describe.lsmeans(obj, term, dtype = "B", df = F, ...)
+describe.lsmeans(obj, term, dtype = "B", df = FALSE, ...)
 }
 \arguments{
 \item{obj}{summary object from lsmeans::contrast}
@@ -25,13 +25,13 @@ Describe contrasts created by lsmeans
 }
 \examples{
 
-require(lsmeans)
+requireNamespace('lsmeans')
 warp.lm <- lm(breaks ~ wool*tension, data = warpbreaks)
-warp.lsm <- lsmeans(warp.lm, ~ tension | wool)
-(sum_contr<-summary(contrast(warp.lsm, 'trt.vs.ctrl')))
+warp.lsm <- lsmeans::lsmeans(warp.lm, ~ tension | wool)
+(sum_contr<-summary(lsmeans::contrast(warp.lsm, 'trt.vs.ctrl')))
 describe.lsmeans(sum_contr, 1)
 describe.lsmeans(sum_contr, 3)
 describe.lsmeans(sum_contr, 3, dtype='t')
 describe.lsmeans(sum_contr, 3, dtype='c')
-describe.lsmeans(sum_contr, 3, dtype='c', df=T)
+describe.lsmeans(sum_contr, 3, dtype='c', df=TRUE)
 }

@@ -4,7 +4,7 @@
 \alias{describe.chi}
 \title{Describe $chi^2$ results}
 \usage{
-describe.chi(tbl, v = T, addN = T, ...)
+describe.chi(tbl, v = TRUE, addN = TRUE, ...)
 }
 \arguments{
 \item{tbl}{- MxN table on which to compute chi^2 (if not a table, will try to make a table out of it)}
@@ -27,7 +27,7 @@ Describe Pearson $chi^2$ results. Note that the function takes table as an input
 ## ---------------------
 ## From Agresti(2007) p.39
 M <- as.table(rbind(c(762, 327, 468), c(484, 239, 477)))
-dimnames(M) <- list(gender = c("F", "M"),
+dimnames(M) <- list(gender = c("FALSE", "M"),
                     party = c("Democrat","Independent", "Republican"))
 (Xsq <- chisq.test(M))  # Prints test summary
 ## ----------------------

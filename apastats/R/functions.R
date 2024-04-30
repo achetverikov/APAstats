@@ -30,7 +30,7 @@ omit.zeroes <- function (x, digits=2)
 #' f.round(5.8251)
 #' f.round(5.82999, digits=3)
 #' f.round(5.82999, digits=4)
-f.round <- function (x, digits = 2, strip.lead.zeros = F) {
+f.round <- function (x, digits = 2, strip.lead.zeros = FALSE) {
     values_string <- stringr::str_trim(format(round(as.numeric(x), digits), nsmall = digits))
     if(strip.lead.zeros){
         values_string <- sub("^0", "", values_string)
@@ -54,10 +54,10 @@ f.round <- function (x, digits = 2, strip.lead.zeros = F) {
 #' @examples
 #' round.p(c(0.025, 0.0001, 0.001, 0.568))
 #' round.p(c(0.025, 0.0001, 0.001, 0.568), digits=2)
-#' round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=F)
-#' round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=F, strip.lead.zeros=F)
-#' round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=F, strip.lead.zeros=F, replace.very.small = 0.01)
-round.p <- function(values, include.rel=1,digits=3, strip.lead.zeros=T, replace.very.small = 0.001){
+#' round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=FALSE)
+#' round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=FALSE, strip.lead.zeros=FALSE)
+#' round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=FALSE, strip.lead.zeros=FALSE, replace.very.small = 0.01)
+round.p <- function(values, include.rel=1,digits=3, strip.lead.zeros=TRUE, replace.very.small = 0.001){
   values<-as.numeric(values)
   rel <- ifelse(include.rel,"= ","")
   values_string <- format(round(values,digits=digits),nsmall=digits)
@@ -91,7 +91,7 @@ format.results <- function(res_str, type='pandoc'){
     stringr::str_replace_all(res_str,'\\\\emph\\{(.*?)\\}','_\\1_')
   } else if (type == "plotmath") {
     res_str<-stringi::stri_replace_all(res_str, regex = c("\\\\emph\\{(.*?)\\}",'='),
-                                        replacement = c("italic($1)",'=='), vectorize_all=F)
+                                        replacement = c("italic($1)",'=='), vectorize_all=FALSE)
     if (grepl(',',res_str)){
       res_str <- paste0('list(',res_str,')')
     }
@@ -128,12 +128,12 @@ describe.r <- function(rc,...){
 #' @examples
 #' t_res<-t.test(rnorm(20, mean = -10, sd=2))
 #' describe.ttest(t_res)
-#' describe.ttest(t_res, show.mean=T)
-#' describe.ttest(t_res, show.mean=T, abs=T)
+#' describe.ttest(t_res, show.mean=TRUE)
+#' describe.ttest(t_res, show.mean=TRUE, abs=TRUE)
 
-describe.ttest <- function (t,show.mean=F, abs=F,...){
+describe.ttest <- function (t,show.mean=FALSE, abs=FALSE,...){
   if (abs) t$statistic<-abs(t$statistic)
-  if (show.mean==T)
+  if (show.mean==TRUE)
     res_str=sprintf("\\emph{M} = %.2f [%.2f, %.2f], \\emph{t}(%.1f) = %.2f, \\emph{p} %s", t$estimate, t$conf.int[1], t$conf.int[2],t$parameter, t$statistic, round.p(t$p.value))
   else
     res_str=sprintf("\\emph{t}(%.1f) = %.2f, \\emph{p} %s",  t$parameter, t$statistic, round.p(t$p.value))
@@ -148,9 +148,9 @@ describe.ttest <- function (t,show.mean=F, abs=F,...){
 #' @param by independent variable
 #' @param which.mean which mean to show (0 - none, 1 - first group (default), 2 - second group, 3 - both)
 #' @param digits number of digits in results (default: 2)
-#' @param paired should it be a paired test (default: F)
-#' @param eff.size should we include effect size (default: F)
-#' @param abs should we show the absolute value if the t-test (T) or keep its sign (F, default)
+#' @param paired should it be a paired test (default: FALSE)
+#' @param eff.size should we include effect size (default: FALSE)
+#' @param abs should we show the absolute value if the t-test (T) or keep its sign (FALSE, default)
 #' @param aggregate_by do the aggregation by the thrird variable(s): either NULL (default), a single vector variable, or a list of variables to aggregate by.
 #' @param transform.means a function to transform means and confidence intervals (default: NULL)
 #' @param ... other parameters passed to \link{format.results}
@@ -164,7 +164,7 @@ describe.ttest <- function (t,show.mean=F, abs=F,...){
 #' gr <- faces$stim_gender
 #' describe.mean.and.t(rt, gr)
 #' describe.mean.and.t(rt, gr, which.mean = 3)
-#' describe.mean.and.t(rt, gr, eff.size = T)
+#' describe.mean.and.t(rt, gr, eff.size = TRUE)
 #'
 #' sid <- faces$sid
 #' describe.mean.and.t(rt, gr, which.mean = 3, aggregate_by = sid)
@@ -173,7 +173,7 @@ describe.ttest <- function (t,show.mean=F, abs=F,...){
 #' describe.mean.and.t(log_rt, gr, which.mean = 3, aggregate_by = sid, transform.means = exp)
 
 
-describe.mean.and.t <- function(x, by, which.mean=1, digits=2, paired=F, eff.size=F, abs=F, aggregate_by=NULL, transform.means = NULL, ...){
+describe.mean.and.t <- function(x, by, which.mean=1, digits=2, paired=FALSE, eff.size=FALSE, abs=FALSE, aggregate_by=NULL, transform.means = NULL, ...){
   requireNamespace('Hmisc')
   if (lengthu(by)!=2)
     stop('"by" should have exactly two levels')
@@ -256,13 +256,13 @@ describe.roc.diff <- function (roc_diff){
 #' ## ---------------------
 #' ## From Agresti(2007) p.39
 #' M <- as.table(rbind(c(762, 327, 468), c(484, 239, 477)))
-#' dimnames(M) <- list(gender = c("F", "M"),
+#' dimnames(M) <- list(gender = c("FALSE", "M"),
 #'                     party = c("Democrat","Independent", "Republican"))
 #' (Xsq <- chisq.test(M))  # Prints test summary
 #' ## ----------------------
 #' describe.chi(M) # Note that describe.chi should be used for the table, not the chi2
 #'
-describe.chi <- function (tbl, v=T, addN=T,...){
+describe.chi <- function (tbl, v=TRUE, addN=TRUE,...){
   if (length(dim(tbl))!=2&!is.matrix(tbl)) tbl<-table(tbl)
   chi<-chisq.test(tbl)
   cv <- sqrt(chi$statistic / (sum(tbl) * min(dim(tbl) - 1 )))
@@ -279,7 +279,7 @@ describe.chi <- function (tbl, v=T, addN=T,...){
 #' @param sstype anova SS type (e.g., 2 or 3)
 #' @param ... other parameters passed to describe.Anova
 #'
-#' @return formatted string with F(df_numerator, df_denomiator) = F_value, p =/< p_value
+#' @return formatted string with FALSE(df_numerator, df_denomiator) = F_value, p =/< p_value
 #' @export
 #'
 
@@ -310,7 +310,7 @@ describe.anova <- function (anova_res, rown=2, f.digits=2,...){
 #'
 #' @param afit - lmerTest anova results
 #' @param term model term to describe (a string with the term name or its sequential number)
-#' @param f.digits - decimal digits for F
+#' @param f.digits - decimal digits for F value
 #' @param ... other parameters passed to \link{format.results}
 #'
 #' @return formatted string describing the results of anova
@@ -382,14 +382,14 @@ describe.Anova <- function (afit, term, f.digits=2, ...){
 #' describe.glm(fit, 'body', 4)
 #' describe.glm(fit, 'body', 3, test.df = 1)
 #' describe.glm(fit)
-#' ## Not run:
+#' \dontrun{
 #' require(rockchalk)
 #' describe.glm(fit, 'body', 4, eff.size = TRUE)
-#' ## End(Not run)
+#' }
 
 
 
-describe.glm <- function (fit, term=NULL, dtype=1, b.digits=2, t.digits=2, test.df=F, p.as.number=F, term.pattern=NULL, eff.size = F, adj.digits=F, ...){
+describe.glm <- function (fit, term=NULL, dtype=1, b.digits=2, t.digits=2, test.df=FALSE, p.as.number=FALSE, term.pattern=NULL, eff.size = FALSE, adj.digits=FALSE, ...){
   requireNamespace('plyr')
   requireNamespace('Hmisc')
 
@@ -404,7 +404,7 @@ describe.glm <- function (fit, term=NULL, dtype=1, b.digits=2, t.digits=2, test.
     afit<-data.frame(fit$coefficients, fit$se.coef, fit$t.values, fit$p.values)
     t_z<-'t'
     if (test.df){
-      test.df=F
+      test.df=FALSE
       warning('df for lm.circular are not implemented')
     }
   }
@@ -466,16 +466,16 @@ describe.glm <- function (fit, term=NULL, dtype=1, b.digits=2, t.digits=2, test.
   res_df<-data.frame(B = f.round(afit[, 1], 2), SE = f.round(afit[, 2], 2), Stat = f.round(afit[, 3], t.digits), p = if(p.as.number) zapsmall(as.vector(afit[,4]),4) else round.p(afit[, 4]), eff=row.names(afit),row.names = row.names(afit))
 
   if (dtype==1) {
-    res_df$str<-sprintf(paste0("\\emph{",t_z,"}",dfs," %s, \\emph{p} %s"), round.p(afit[, 3], digits=t.digits, strip.lead.zeros=F), round.p(afit[, 4]))
+    res_df$str<-sprintf(paste0("\\emph{",t_z,"}",dfs," %s, \\emph{p} %s"), round.p(afit[, 3], digits=t.digits, strip.lead.zeros=FALSE), round.p(afit[, 4]))
   }
   else if (dtype==2){
     res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f (%.",b.digits,"f), \\emph{p} %s"), afit[, 1], afit[, 2], round.p(afit[, 4]))
   }
   else if (dtype==3){
-    res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f, \\emph{SE} = %.",b.digits,"f, \\emph{",t_z,"}", dfs," %s, \\emph{p} %s"), afit[, 1], afit[, 2], round.p(afit[, 3], digits=t.digits, strip.lead.zeros=F, replace.very.small = 0.01), round.p(afit[, 4]))
+    res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f, \\emph{SE} = %.",b.digits,"f, \\emph{",t_z,"}", dfs," %s, \\emph{p} %s"), afit[, 1], afit[, 2], round.p(afit[, 3], digits=t.digits, strip.lead.zeros=FALSE, replace.very.small = 0.01), round.p(afit[, 4]))
   }
   else if (dtype==4) {
-    res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f (%.",b.digits,"f), \\emph{",t_z,"}", dfs," %s"), afit[, 1], afit[, 2], round.p(afit[, 3], digits=t.digits, strip.lead.zeros=F, replace.very.small = 0.01))
+    res_df$str<-sprintf(paste0("\\emph{B} = %.",b.digits,"f (%.",b.digits,"f), \\emph{",t_z,"}", dfs," %s"), afit[, 1], afit[, 2], round.p(afit[, 3], digits=t.digits, strip.lead.zeros=FALSE, replace.very.small = 0.01))
   }
 
   if (eff.size&!exists('ess')){
@@ -551,11 +551,11 @@ describe.mean.sd <- function (x = NULL, m = NULL, sd = NULL, digits = 2, dtype =
 #'
 #' x <- runif(100, 0, 50)
 #' describe.mean.conf(x)
-#' describe.mean.conf(x, bootCI = F)
+#' describe.mean.conf(x, bootCI = FALSE)
 #' describe.mean.conf(x, digits = 5)
 #' describe.mean.conf(x, transform.means = function(val) val*2)
 
-describe.mean.conf<-function (x, bootCI = T, addCI = F, digits = 2, transform.means = NULL, ...)
+describe.mean.conf<-function (x, bootCI = TRUE, addCI = FALSE, digits = 2, transform.means = NULL, ...)
 {
   if (bootCI)
     res <- Hmisc::smean.cl.boot(x)
@@ -660,18 +660,18 @@ describe.lht <- function (hyp, ...){
 #'
 #' @examples
 #'
-#' require(lsmeans)
+#' requireNamespace('lsmeans')
 #' warp.lm <- lm(breaks ~ wool*tension, data = warpbreaks)
-#' warp.lsm <- lsmeans(warp.lm, ~ tension | wool)
-#' (sum_contr<-summary(contrast(warp.lsm, 'trt.vs.ctrl')))
+#' warp.lsm <- lsmeans::lsmeans(warp.lm, ~ tension | wool)
+#' (sum_contr<-summary(lsmeans::contrast(warp.lsm, 'trt.vs.ctrl')))
 #' describe.lsmeans(sum_contr, 1)
 #' describe.lsmeans(sum_contr, 3)
 #' describe.lsmeans(sum_contr, 3, dtype='t')
 #' describe.lsmeans(sum_contr, 3, dtype='c')
-#' describe.lsmeans(sum_contr, 3, dtype='c', df=T)
+#' describe.lsmeans(sum_contr, 3, dtype='c', df=TRUE)
 
 
-describe.lsmeans<-function(obj, term, dtype='B', df=F, ...){
+describe.lsmeans<-function(obj, term, dtype='B', df=FALSE, ...){
   obj<-obj[term,]
   if (dtype=="t"){
     res_str<-sprintf("\\emph{%s}%s = %.2f, \\emph{p} %s", 't', ifelse(df, paste0('(', round(obj['df']),')'),''), obj['t.ratio'], round.p(obj['p.value']))
@@ -701,20 +701,20 @@ describe.lsmeans<-function(obj, term, dtype='B', df=F, ...){
 #'
 #' require(emmeans)
 #' warp.lm <- lm(breaks ~ wool*tension, data = warpbreaks)
-#' warp.lsm <- emmeans(warp.lm, ~ tension | wool)
+#' warp.lsm <- emmeans::emmeans(warp.lm, ~ tension | wool)
 #' (sum_contr<-summary(contrast(warp.lsm, 'trt.vs.ctrl')))
 #' describe.emmeans(sum_contr, 1)
 #' describe.emmeans(sum_contr, 3)
 #' describe.emmeans(sum_contr, 3, dtype='t')
 #' describe.emmeans(sum_contr, 3, dtype='c')
-#' describe.emmeans(sum_contr, 3, dtype='c', df=T)
+#' describe.emmeans(sum_contr, 3, dtype='c', df=TRUE)
 
 
-describe.emmeans<-function(obj, term, dtype='B', df=F, ...){
+describe.emmeans<-function(obj, term, dtype='B', df=FALSE, ...){
   obj <- as.data.frame(obj[term,])
   df_str <- ifelse(df, sprintf('(%i)', round(obj$df)),'')
   if (dtype=="t"){
-    res_str<-sprintf("\\emph{%s}%s = %.2f, \\emph{p} %s", 't', df, obj$t.ratio, round.p(obj$p.value))
+    res_str<-sprintf("\\emph{%s}%s = %.2f, \\emph{p} %s", 't', df_str, obj$t.ratio, round.p(obj$p.value))
   }
   else if (dtype=="B"){
     res_str<-sprintf("\\emph{B} = %.2f (%.2f), \\emph{p} %s", obj$estimate, obj$SE, round.p(obj$p.value))
@@ -741,7 +741,7 @@ describe.emmeans<-function(obj, term, dtype='B', df=F, ...){
 #' @export
 #'
 
-describe.lmer <- function (fm, pv, digits = c(2, 2, 2), incl.rel = 0, dtype="B", incl.p=T)
+describe.lmer <- function (fm, pv, digits = c(2, 2, 2), incl.rel = 0, dtype="B", incl.p=TRUE)
 {
   .Deprecated("describe.glm")
   cc <- lme4::fixef(fm)
@@ -751,7 +751,7 @@ describe.lmer <- function (fm, pv, digits = c(2, 2, 2), incl.rel = 0, dtype="B",
   for (i in c(1:3)) {
     data[, i] <- format(round(data[, i], digits[i]), nsmall = digits[i])
   }
-  if (incl.p==F){
+  if (incl.p==FALSE){
     data$str<-sprintf("\\emph{t} = %s, \\emph{p} %s", data$t, round.p(data[, 4],1))
   }
   if (dtype=="t"){
@@ -776,7 +776,7 @@ describe.lmer <- function (fm, pv, digits = c(2, 2, 2), incl.rel = 0, dtype="B",
 #' @export
 #'
 
-ins.lmer <- function (fm, term=NULL, digits=2, adj.digits=T){
+ins.lmer <- function (fm, term=NULL, digits=2, adj.digits=TRUE){
   describe.glm(fm, term=term, b.digits=digits, adj.digits = adj.digits, dtype=4)
 }
 
@@ -792,9 +792,9 @@ ins.lmer <- function (fm, term=NULL, digits=2, adj.digits=T){
 #'
 #' describe.binom.mean.conf(faces$correct[1:100])
 #' # note that it is slightly different from asymptotic CI
-#' describe.mean.conf(faces$correct[1:100], bootCI = F)
+#' describe.mean.conf(faces$correct[1:100], bootCI = FALSE)
 #' # although similar to the bootstrapped CI
-#' describe.mean.conf(faces$correct[1:100], bootCI = T)
+#' describe.mean.conf(faces$correct[1:100], bootCI = TRUE)
 
 describe.binom.mean.conf <- function(x, digits=2){
   format.results(with( data.frame(Hmisc::binconf(sum(x),length(x))),sprintf(paste0("\\emph{M} = %.",digits,"f [%.",digits,"f, %.",digits,"f]"), PointEst, Lower, Upper)))
@@ -826,10 +826,10 @@ describe.binom.mean.conf <- function(x, digits=2){
 #' describe.ezanova(ez_res, 'user_gender:stim_gender', eta_digits = 3)
 #' describe.ezanova(ez_res, 3, eta_digits = 3)
 
-describe.ezanova <- function(ezfit, term, include_eta=T, spher_corr=T, eta_digits = 2, f_digits = 2, df_digits = 0, append_to_table = F, ...){
+describe.ezanova <- function(ezfit, term, include_eta=TRUE, spher_corr=TRUE, eta_digits = 2, f_digits = 2, df_digits = 0, append_to_table = FALSE, ...){
   eza<-ezfit$ANOVA
   if (spher_corr&('Sphericity Corrections' %in% names(ezfit))){
-    eza<-merge(eza, ezfit$`Sphericity Corrections`, by='Effect', all.x=T)
+    eza<-merge(eza, ezfit$`Sphericity Corrections`, by='Effect', all.x=TRUE)
     eza[!is.na(eza$GGe),'p']<-eza[!is.na(eza$GGe),]$`p[GG]`
   }
   rownames(eza)<-eza$Effect
@@ -837,7 +837,7 @@ describe.ezanova <- function(ezfit, term, include_eta=T, spher_corr=T, eta_digit
   suffix <- sprintf(', $\\eta$^2^~G~ %s', round.p(eza[term, "ges"], 
                                                   digits = eta_digits, 
                                                   replace.very.small = 10^(-eta_digits)))
-  if (include_eta==F){
+  if (include_eta==FALSE){
     suffix <- rep('',length(suffix))
   }
   res<-format.results(sprintf("\\emph{F}(%.*f, %.*f) = %.*f, \\emph{p} %s%s", df_digits, eza[term,"DFn"], df_digits, eza[term,"DFd"],f_digits,eza[term,"F"],round.p(eza[term,"p"]), suffix),...)
@@ -921,7 +921,7 @@ describe.bimod.test <- function(x,start_vec=NA,...){
 #' table.mean.conf.by(faces$answerTime, faces$correct, 4)
 #'
 
-table.mean.conf.by <- function(x, by, digits=2, binom=F){
+table.mean.conf.by <- function(x, by, digits=2, binom=FALSE){
   tapply(x, by, table.mean.conf, digits, binom)
 }
 
@@ -939,13 +939,13 @@ table.mean.conf.by <- function(x, by, digits=2, binom=F){
 #' table.mean.conf(faces$correct)
 #'
 
-table.mean.conf <- function(x, digits=2, binom=F, ...) {
+table.mean.conf <- function(x, digits=2, binom=FALSE, ...) {
   if (binom){
     res<-data.frame(binconf(sum(x),length(x)))
     colnames(res)<-c('Mean', 'Lower', 'Upper')
   }
   else{
-    res<-as.list(smean.cl.boot(x))
+    res<-as.list(Hmisc::smean.cl.boot(x))
   }
   res<-with(res,c(f.round(Mean, digits), sprintf(paste0("[%.",digits,"f, %.",digits,"f]"), Lower, Upper)))
   res
@@ -1027,7 +1027,7 @@ lmer_with_julia<-function(myform, dataset){
   myform<-formula(myform)
   grouping_var<-all.vars(lme4::findbars(myform)[[1]])
 
-  dataset<-na.omit(dataset[,all.vars(myform), with=F])
+  dataset<-na.omit(dataset[,all.vars(myform), with=FALSE])
   mm<-model.matrix(lme4::nobars(myform), dataset)
   mm<-ordinal::drop.coef(mm)
   truenames<-colnames(mm)
@@ -1094,7 +1094,7 @@ aggr2<-function (x, by, fun, ...){
 #' describe.bf(bfs[2]/bfs[14])
 #'
 
-describe.bf<-function(bf, digits = 2, top_limit = 10000, convert_to_power = T, ...){
+describe.bf<-function(bf, digits = 2, top_limit = 10000, convert_to_power = TRUE, ...){
   bf_val <- exp(bf@bayesFactor[1])
   if ((bf_val<(10^(-digits)) | bf_val > top_limit) & convert_to_power){
     exponent <- floor(log10(bf_val))
@@ -1120,7 +1120,7 @@ describe.bf<-function(bf, digits = 2, top_limit = 10000, convert_to_power = T, .
 #' @export
 #'
 #' @examples
-#' ## Not run:
+#' \dontrun{
 #' require(brms)
 #' x <- rnorm(500, sd = 6)
 #' y <- 4*x + rnorm(500)
@@ -1128,12 +1128,12 @@ describe.bf<-function(bf, digits = 2, top_limit = 10000, convert_to_power = T, .
 #' describe.brm(fit, 'x')
 #' # convert x to another scale for output
 #' describe.brm(fit, 'x', trans = function(val) val+5)
-#' ## End(Not run)
+#' }
 
 
-describe.brm<-function(mod, term, trans = NULL, digits = 2, eff.size = F, eff.size.type = 'r', nsamples = 100, ci.type = 'HPDI', ...){
+describe.brm<-function(mod, term, trans = NULL, digits = 2, eff.size = FALSE, eff.size.type = 'r', nsamples = 100, ci.type = 'HPDI', ...){
 
-  post_samp <- posterior_samples(mod, c(paste0('b_',term)), exact_match = T)
+  post_samp <- posterior_samples(mod, c(paste0('b_',term)), exact_match = TRUE)
   if (ncol(post_samp)>1){
     warning(paste('More than one match using',term,'term' ))
   }
@@ -1145,11 +1145,12 @@ describe.brm<-function(mod, term, trans = NULL, digits = 2, eff.size = F, eff.si
     ci <- bayestestR::hdi(post_samp, ci = 0.95)
   else
     ci <- bayestestR::eti(post_samp, ci = 0.95)
-  # it is tricky to compute partial R2, this is just one of the approaches
-  es = NULL
-  if (eff.size!=F){
+  # it is tricky to compute partial R2, this is just one of the approaches 
+  
+  es <- NULL
+  if (eff.size!=FALSE){
     var_res = var(resid(mod, nsamples = nsamples)[,1])
-    var_term = var(mod$data[,term, with = F]*fixef(mod)[term,'Estimate'])
+    var_term = var(mod$data[,term, with = FALSE]*fixef(mod)[term,'Estimate'])
 
   }
   if ('fe_to_all'== eff.size){
@@ -1160,9 +1161,9 @@ describe.brm<-function(mod, term, trans = NULL, digits = 2, eff.size = F, eff.si
     es = var_term/(var_term+var_res)
   } else if ('part_fe_re'==eff.size){
 
-    term_re <- data.table(ranef(mod)[[1]][,,term], keep.rownames = T)
+    term_re <- data.table(ranef(mod)[[1]][,,term], keep.rownames = TRUE)
     mod_data_preds <- merge(mod$data, term_re, by.x = names(ranef(mod)), by.y = 'rn')
-    var_term = var(mod_data_preds[,term, with = F]*(fixef(mod)[term,'Estimate'] + mod_data_preds[,'Estimate']))
+    var_term = var(mod_data_preds[,term, with = FALSE]*(fixef(mod)[term,'Estimate'] + mod_data_preds[,'Estimate']))
     var_tot = var_term+var_res
 
     es = var_term/var_tot
@@ -1179,4 +1180,63 @@ describe.brm<-function(mod, term, trans = NULL, digits = 2, eff.size = F, eff.si
 
   format.results(res_str,...)
 
+}
+
+#' Get within-subject CI using the superb package
+#'
+#' @param data dataframe to use
+#' @param wid subject variable or another clustering variable (string)
+#' @param within within-subject variables (vector of strings)
+#' @param value_var dependent variable (string) 
+#' @param between between-subject variables (vector of strings)
+#' @param adjustments adjustment settings as used for \link[superb]{superData} (default: single CI estimates, Cousineau-Morey adjustment)
+#'
+#' @return dataframe with computed CIs 
+#' @export
+#'
+#' @examples
+#' data(faces)
+#' get_superb_ci(faces, 'uid', 'stim_gender', 'answerTime')
+#' 
+get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustments = list(purpose = "single", decorrelation = "CM"), errorbar = 'CI'){
+  require('superb')
+  requireNamespace('reshape2')
+  errorbar <- toupper(errorbar)
+  for (x in within){
+    if (!is.factor(data[[x]])) {
+      warning(paste0("Converting \"", x, "\" to factor."))
+      data[[x]] = factor(data[[wid]])
+    }
+  }
+  
+  dcast_form <- paste0(paste0(c(wid, between), collapse = '+'), '~', paste0(within, collapse = '+'))
+  wide_data <- reshape2::dcast(data, dcast_form, value.var = value_var, fun.aggregate = mean)
+  if (anyNA(wide_data)){
+    print(wide_data)
+    stop('NAs present after aggregation')
+  }
+  WSFactors <- sapply(within, \(x) paste0(x, '(',length(levels(data[[x]])),')'))
+  variables <- colnames(wide_data)[(2+length(between)):length( colnames(wide_data))]
+  WSDesign <- do.call(expand.grid, lapply(within, \(x) c(1:length(levels(data[[x]])))))
+  if (length(within)>1){
+    WSDesign <- WSDesign[do.call(order, WSDesign), ]
+  }
+  
+  WSDesign <- apply(WSDesign, 1, as.vector, simplify = FALSE)
+  suppressMessages({
+    spp_data <- superb::superbData(wide_data, 
+                           WSFactors = WSFactors,
+                           factorOrder = c(within, between),
+                           adjustments = adjustments,
+                           variables = variables,
+                           WSDesign = WSDesign,
+                           BSFactors = between,
+                           errorbar = errorbar
+    )})
+  spp_data <- spp_data$summaryStatistics
+  for (x in within){
+    spp_data[[x]] <- factor(spp_data[[x]], levels = c(1:length(levels(data[[x]]))), 
+                            labels = levels(data[[x]]))
+  }
+  spp_data
 }

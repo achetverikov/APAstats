@@ -16,7 +16,7 @@ describe.aov(fit, term, sstype = 2, ...)
 \item{...}{other parameters passed to describe.Anova}
 }
 \value{
-formatted string with F(df_numerator, df_denomiator) = F_value, p =/< p_value
+formatted string with FALSE(df_numerator, df_denomiator) = F_value, p =/< p_value
 }
 \description{
 Describe aov results

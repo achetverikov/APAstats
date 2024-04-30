@@ -4,7 +4,7 @@
 \alias{table.mean.conf.by}
 \title{Get a list of means and confidence intervals by group}
 \usage{
-table.mean.conf.by(x, by, digits = 2, binom = F)
+table.mean.conf.by(x, by, digits = 2, binom = FALSE)
 }
 \arguments{
 \item{x}{value to compute the mean for}

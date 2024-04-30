@@ -11,7 +11,7 @@ describe.lmtaov(afit, term, f.digits = 2, ...)
 
 \item{term}{model term to describe (a string with the term name or its sequential number)}
 
-\item{f.digits}{- decimal digits for F}
+\item{f.digits}{- decimal digits for F value}
 
 \item{...}{other parameters passed to \link{format.results}}
 }

@@ -99,8 +99,8 @@ For point and line properties (e.g., pointfill) passing NULL allows to avoid set
 \examples{
 data(faces)
 plot.pointrange(faces, aes(x=user_gender, color=stim_gender, y=answerTime))+ylab('RT')
-plot.pointrange(faces, aes(x=user_gender, color=stim_gender, y=answerTime), wid='uid', within_subj=T, withinvars=c('stim_gender'), betweenvars=c('user_gender'))+ylab('RT')
-plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), wid='uid', withinvars=c('stim_gender'), betweenvars=c('user_gender'), within_subj=T, bars='se')+ylab('RT')
-plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), wid='uid', withinvars=c('stim_gender'), betweenvars=c('user_gender'), within_subj=T, bars='se', print_aggregated_data=T)+ylab('RT')
-plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), withinvars=c('stim_gender'), betweenvars = c('user_gender'), print_aggregated_data = T, wid='uid', within_subj=T, exp_y=T, bars='ci', do_aggregate = T)+ylab('RT')
+plot.pointrange(faces, aes(x=user_gender, color=stim_gender, y=answerTime), wid='uid', within_subj= TRUE, withinvars=c('stim_gender'), betweenvars=c('user_gender'))+ylab('RT')
+plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), wid='uid', withinvars=c('stim_gender'), betweenvars=c('user_gender'), within_subj= TRUE, bars='se')+ylab('RT')
+plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), wid='uid', withinvars=c('stim_gender'), betweenvars=c('user_gender'), within_subj= TRUE, bars='se', print_aggregated_data= TRUE)+ylab('RT')
+plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), withinvars=c('stim_gender'), betweenvars = c('user_gender'), print_aggregated_data = TRUE, wid='uid', within_subj= TRUE, exp_y= TRUE, bars='ci', do_aggregate = TRUE)+ylab('RT')
 }

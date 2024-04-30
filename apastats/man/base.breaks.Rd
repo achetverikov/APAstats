@@ -4,7 +4,7 @@
 \alias{base.breaks}
 \title{Tufte-like breaks for axes}
 \usage{
-base.breaks(x, scale = "x", addSegment = T, ...)
+base.breaks(x, scale = "x", addSegment = TRUE, ...)
 }
 \arguments{
 \item{x}{vector of numbers to create breaks from}
@@ -16,7 +16,7 @@ base.breaks(x, scale = "x", addSegment = T, ...)
 \item{...}{other parameters passed to scale_(x or y)_continuous}
 }
 \value{
-scale_(x or y)_continuous with pretty breaks and accompaniying geom_segment if addSegment == T
+scale_(x or y)_continuous with pretty breaks and accompaniying geom_segment if addSegment == TRUE
 }
 \description{
 Tufte-like breaks for axes
