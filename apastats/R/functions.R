@@ -90,9 +90,10 @@ format.results <- function(res_str, type='pandoc'){
   } else if (type=='pandoc'){
     stringr::str_replace_all(res_str,'\\\\emph\\{(.*?)\\}','_\\1_')
   } else if (type == "plotmath") {
-    res_str<-stringi::stri_replace_all(res_str, regex = c("\\\\emph\\{(.*?)\\}",'='),
-                                        replacement = c("italic($1)",'=='), vectorize_all=FALSE)
-    if (grepl(',',res_str)){
+    res_str <- stringi::stri_replace_all(res_str, 
+                                         regex = c("\\\\emph\\{(.*?)\\}",'=','_([^_=^ ]*)'),
+                                         replacement = c("italic($1)",'==','[$1]'), vectorize_all=FALSE)
+    if (any(grepl(',',res_str))){
       res_str <- paste0('list(',res_str,')')
     }
   }
@@ -481,7 +482,7 @@ describe.glm <- function (fit, term=NULL, dtype=1, b.digits=2, t.digits=2, test.
   if (eff.size&!exists('ess')){
     stop('Effect sizes are not implemented for THAT kind of models yet.')
   } else if (eff.size) {
-    res_df$str<-paste0(res_df$str, ', $R_part^2$', round.p(c(NA,ess),digits = ifelse(min(ess)<0.01,3,2) ))
+    res_df$str<-paste0(res_df$str, ', \\emph{R}_{part}^2', round.p(c(NA,ess),digits = ifelse(min(ess)<0.01,3,2) ))
   }
 
   res_df$str<-format.results(res_df$str, ...)
@@ -515,7 +516,7 @@ describe.glm <- function (fit, term=NULL, dtype=1, b.digits=2, t.digits=2, test.
 #' describe.mean.sd(x, 0)
 #' describe.mean.sd(x, dtype = 'c')
 
-describe.mean.sd <- function (x = NULL, m = NULL, sd = NULL, digits = 2, dtype = "p", m_units = '', sd_units = '', ...) 
+describe.mean.sd <- function (x = NULL, m = NULL, sd = NULL, digits = 2, dtype = "p", m_units = '', sd_units = '', ...)
 {
     if (dtype == "c") {
         s1 <- ", "
@@ -530,7 +531,7 @@ describe.mean.sd <- function (x = NULL, m = NULL, sd = NULL, digits = 2, dtype =
         m <- m_sd$Mean
         sd <- m_sd$SD
     }
-    format.results(sprintf("\\emph{M} = %.*f%s%s\\emph{SD} = %.*f%s%s", 
+    format.results(sprintf("\\emph{M} = %.*f%s%s\\emph{SD} = %.*f%s%s",
         digits, m, m_units, s1, digits, sd, sd_units, s2), ...)
 }
 
@@ -812,7 +813,7 @@ describe.binom.mean.conf <- function(x, digits=2){
 #' @param f_digits number of digits to use for F (default: 2)
 #' @param df_digits number of digits to use for df (default: 0)
 #' @param append_to_table should the results be added to the original ezANOVA table (default: False)
-#' @param ... other parameters passed to \link{format.results} 
+#' @param ... other parameters passed to \link{format.results}
 #'
 #' @return string with formatted results
 #' @export
@@ -833,9 +834,9 @@ describe.ezanova <- function(ezfit, term, include_eta=TRUE, spher_corr=TRUE, eta
     eza[!is.na(eza$GGe),'p']<-eza[!is.na(eza$GGe),]$`p[GG]`
   }
   rownames(eza)<-eza$Effect
-  
-  suffix <- sprintf(', $\\eta$^2^~G~ %s', round.p(eza[term, "ges"], 
-                                                  digits = eta_digits, 
+
+  suffix <- sprintf(', $\\eta$^2^~G~ %s', round.p(eza[term, "ges"],
+                                                  digits = eta_digits,
                                                   replace.very.small = 10^(-eta_digits)))
   if (include_eta==FALSE){
     suffix <- rep('',length(suffix))
@@ -844,7 +845,7 @@ describe.ezanova <- function(ezfit, term, include_eta=TRUE, spher_corr=TRUE, eta
   if (append_to_table){
     cbind(eza[term, ], res)
   } else res
-  
+
 }
 
 #' Describe ezStats results
@@ -1145,8 +1146,8 @@ describe.brm<-function(mod, term, trans = NULL, digits = 2, eff.size = FALSE, ef
     ci <- bayestestR::hdi(post_samp, ci = 0.95)
   else
     ci <- bayestestR::eti(post_samp, ci = 0.95)
-  # it is tricky to compute partial R2, this is just one of the approaches 
-  
+  # it is tricky to compute partial R2, this is just one of the approaches
+
   es <- NULL
   if (eff.size!=FALSE){
     var_res = var(resid(mod, nsamples = nsamples)[,1])
@@ -1187,17 +1188,17 @@ describe.brm<-function(mod, term, trans = NULL, digits = 2, eff.size = FALSE, ef
 #' @param data dataframe to use
 #' @param wid subject variable or another clustering variable (string)
 #' @param within within-subject variables (vector of strings)
-#' @param value_var dependent variable (string) 
+#' @param value_var dependent variable (string)
 #' @param between between-subject variables (vector of strings)
 #' @param adjustments adjustment settings as used for \link[superb]{superData} (default: single CI estimates, Cousineau-Morey adjustment)
 #'
-#' @return dataframe with computed CIs 
+#' @return dataframe with computed CIs
 #' @export
 #'
 #' @examples
 #' data(faces)
 #' get_superb_ci(faces, 'uid', 'stim_gender', 'answerTime')
-#' 
+#'
 get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustments = list(purpose = "single", decorrelation = "CM"), errorbar = 'CI'){
   require('superb')
   requireNamespace('reshape2')
@@ -1208,7 +1209,7 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
       data[[x]] = factor(data[[wid]])
     }
   }
-  
+
   dcast_form <- paste0(paste0(c(wid, between), collapse = '+'), '~', paste0(within, collapse = '+'))
   wide_data <- reshape2::dcast(data, dcast_form, value.var = value_var, fun.aggregate = mean)
   if (anyNA(wide_data)){
@@ -1221,10 +1222,10 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
   if (length(within)>1){
     WSDesign <- WSDesign[do.call(order, WSDesign), ]
   }
-  
+
   WSDesign <- apply(WSDesign, 1, as.vector, simplify = FALSE)
   suppressMessages({
-    spp_data <- superb::superbData(wide_data, 
+    spp_data <- superb::superbData(wide_data,
                            WSFactors = WSFactors,
                            factorOrder = c(within, between),
                            adjustments = adjustments,
@@ -1232,10 +1233,11 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
                            WSDesign = WSDesign,
                            BSFactors = between,
                            errorbar = errorbar
-    )})
+    )
+  })
   spp_data <- spp_data$summaryStatistics
   for (x in within){
-    spp_data[[x]] <- factor(spp_data[[x]], levels = c(1:length(levels(data[[x]]))), 
+    spp_data[[x]] <- factor(spp_data[[x]], levels = c(1:length(levels(data[[x]]))),
                             labels = levels(data[[x]]))
   }
   spp_data
