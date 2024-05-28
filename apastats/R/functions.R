@@ -1206,7 +1206,7 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
   for (x in within){
     if (!is.factor(data[[x]])) {
       warning(paste0("Converting \"", x, "\" to factor."))
-      data[[x]] = factor(data[[wid]])
+      data[[x]] = factor(data[[x]])
     }
   }
 
