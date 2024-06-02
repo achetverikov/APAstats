@@ -90,7 +90,7 @@ format.results <- function(res_str, type='pandoc'){
   } else if (type=='pandoc'){
     stringr::str_replace_all(res_str,'\\\\emph\\{(.*?)\\}','_\\1_')
   } else if (type == "plotmath") {
-    res_str <- stringi::stri_replace_all(res_str, 
+    res_str <- stringi::stri_replace_all(res_str,
                                          regex = c("\\\\emph\\{(.*?)\\}",'=','_([^_=^ ]*)'),
                                          replacement = c("italic($1)",'==','[$1]'), vectorize_all=FALSE)
     if (any(grepl(',',res_str))){
@@ -1224,6 +1224,8 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
   }
 
   WSDesign <- apply(WSDesign, 1, as.vector, simplify = FALSE)
+  colnames_wsd <- colnames(wide_data)
+  if (!all(grepl('^[\\w. ]+$', colnames_wsd))) warning('Within- and between-subject factors levels should only contain letters, digits, underscores, or spaces. If you experience errors, try removing special characters from factor levels.')
   suppressMessages({
     spp_data <- superb::superbData(wide_data,
                            WSFactors = WSFactors,
