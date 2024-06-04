@@ -92,6 +92,7 @@ base.breaks.y <- function(x, addSegment= TRUE, ...){
 #' @param geom_bar_params parameters for geom_bar if it is used
 #' @param add_jitter add jittered individual data points
 #' @param individual_points_params a list of parameters for the individual data points
+#' @param drop_NA_subj drop subjects that have NAs after aggregation when computing within-subject errorbars
 #'
 #' @details For point and line properties (e.g., pointfill) passing NULL allows to avoid setting these values (useful when they are mapped to some variables).
 #'
@@ -114,7 +115,7 @@ plot.pointrange<-function (data, mapping, pos = position_dodge(0.3), pointsize =
                            pretty_breaks_y = F, pretty_y_axis = F, exp_y = F, print_aggregated_data = F,
                            do_aggregate = F, add_margin = F, margin_label = 'all', margin_x_vals = NULL,
                            bars_instead_of_points = F, geom_bar_params = NULL, add_jitter = F,
-                           individual_points_params = list()){
+                           individual_points_params = list(), drop_NA_subj = F){
   library(ggplot2)
   # ellipses <- list(...)
   # plot_f <- ellipses[[2]]
@@ -147,7 +148,7 @@ plot.pointrange<-function (data, mapping, pos = position_dodge(0.3), pointsize =
     #                                         idvar = wid, na.rm = TRUE)
 
     aggr_data <- plot_data[!is.na(plot_data[[dv]]),] |> 
-      apastats::get_superb_ci(value_var = dv, within =  withinvars, between = betweenvars, wid = wid, errorbar = bars)
+      apastats::get_superb_ci(value_var = dv, within =  withinvars, between = betweenvars, wid = wid, errorbar = bars, drop_NA_subj = drop_NA_subj)
     
   }
   else {

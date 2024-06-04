@@ -1199,7 +1199,7 @@ describe.brm<-function(mod, term, trans = NULL, digits = 2, eff.size = FALSE, ef
 #' data(faces)
 #' get_superb_ci(faces, 'uid', 'stim_gender', 'answerTime')
 #'
-get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustments = list(purpose = "single", decorrelation = "CM"), errorbar = 'CI'){
+get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustments = list(purpose = "single", decorrelation = "CM"), errorbar = 'CI', drop_NA_subj = F){
   require('superb')
   requireNamespace('reshape2')
   errorbar <- toupper(errorbar)
@@ -1213,8 +1213,12 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
   dcast_form <- paste0(paste0(c(wid, between), collapse = '+'), '~', paste0(within, collapse = '+'))
   wide_data <- reshape2::dcast(data, dcast_form, value.var = value_var, fun.aggregate = mean)
   if (anyNA(wide_data)){
-    print(wide_data)
-    stop('NAs present after aggregation')
+    print(wide_data[!complete.cases(wide_data),])
+    if (drop_NA_subj){
+      n_dropped <- sum(!complete.cases(wide_data))
+      wide_data <- wide_data[complete.cases(wide_data),]
+      warning(sprintf('NAs present after aggregation, dropping %i rows',n_dropped))
+    } else stop('NAs present after aggregation')
   }
   WSFactors <- sapply(within, \(x) paste0(x, '(',length(levels(data[[x]])),')'))
   variables <- colnames(wide_data)[(2+length(between)):length( colnames(wide_data))]
