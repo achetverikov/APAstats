@@ -1229,7 +1229,7 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
 
   WSDesign <- apply(WSDesign, 1, as.vector, simplify = FALSE)
   colnames_wsd <- colnames(wide_data)
-  if (!all(grepl('^[\\w. ]+$', colnames_wsd))) warning('Within- and between-subject factors levels should only contain letters, digits, underscores, or spaces. If you experience errors, try removing special characters from factor levels.')
+  if (!all(grepl('^[\\w. ]+$', colnames_wsd, perl = T))) warning('Within- and between-subject factors levels should only contain letters, digits, underscores, dots, or spaces. If you experience errors, try removing special characters from factor levels.')
   suppressMessages({
     spp_data <- superb::superbData(wide_data,
                            WSFactors = WSFactors,
