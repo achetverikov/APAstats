@@ -11,7 +11,8 @@ get_superb_ci(
   value_var,
   between = NULL,
   adjustments = list(purpose = "single", decorrelation = "CM"),
-  errorbar = "CI"
+  errorbar = "CI",
+  drop_NA_subj = F
 )
 }
 \arguments{

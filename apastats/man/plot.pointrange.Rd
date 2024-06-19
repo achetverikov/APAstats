@@ -31,7 +31,8 @@
   bars_instead_of_points = F,
   geom_bar_params = NULL,
   add_jitter = F,
-  individual_points_params = list()
+  individual_points_params = list(),
+  drop_NA_subj = F
 )
 }
 \arguments{
@@ -84,6 +85,8 @@
 \item{add_jitter}{add jittered individual data points}
 
 \item{individual_points_params}{a list of parameters for the individual data points}
+
+\item{drop_NA_subj}{drop subjects that have NAs after aggregation when computing within-subject errorbars}
 
 \item{...}{the first element is assumed to be the dataset and the second one is assumed to be a list of plot aesthetics (e.g., aes(x = varA, y=varB))}
 }
