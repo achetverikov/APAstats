@@ -93,6 +93,7 @@ base.breaks.y <- function(x, addSegment= TRUE, ...){
 #' @param add_jitter add jittered individual data points
 #' @param individual_points_params a list of parameters for the individual data points
 #' @param drop_NA_subj drop subjects that have NAs after aggregation when computing within-subject errorbars
+#' @param design design type to help avoid explicitly listing variables as withinvars all the time (values: between (default) - all vars not explicitly mentioned are treated as between; within - all vars not explicitly mentioned are treated as within)
 #'
 #' @details For point and line properties (e.g., pointfill) passing NULL allows to avoid setting these values (useful when they are mapped to some variables).
 #'
@@ -115,7 +116,7 @@ plot.pointrange<-function (data, mapping, pos = position_dodge(0.3), pointsize =
                            pretty_breaks_y = F, pretty_y_axis = F, exp_y = F, print_aggregated_data = F,
                            do_aggregate = F, add_margin = F, margin_label = 'all', margin_x_vals = NULL,
                            bars_instead_of_points = F, geom_bar_params = NULL, add_jitter = F,
-                           individual_points_params = list(), drop_NA_subj = F){
+                           individual_points_params = list(), drop_NA_subj = F, design = 'between'){
   library(ggplot2)
   # ellipses <- list(...)
   # plot_f <- ellipses[[2]]
@@ -126,10 +127,18 @@ plot.pointrange<-function (data, mapping, pos = position_dodge(0.3), pointsize =
   dv <- as.character(plot_f["y"][[1]])
   plot_vars <- as.character(unlist(plot_f[names(plot_f) != "y"]))
   if (length(setdiff(plot_vars, c(betweenvars, withinvars)))>0){
-    warning(paste0('Variables ', paste_and(unique(setdiff(plot_vars, c(betweenvars, withinvars)))),' are not listed in withinvars or betweenvars but are used as plot parameters. They would be considered as betweenvars. '))
+    if (design == 'between'){
+      warning(paste0('Variables ', paste_and(unique(setdiff(plot_vars, c(betweenvars, withinvars)))),' are not listed in withinvars or betweenvars but are used as plot parameters. They would be considered as betweenvars. '))
+      betweenvars <- union(betweenvars, setdiff(plot_vars, withinvars))
+    } else {
+      warning(paste0('Variables ', paste_and(unique(setdiff(plot_vars, c(betweenvars, withinvars)))),' are not listed in withinvars or betweenvars but are used as plot parameters. They would be considered as withinvars '))
+      withinvars <- union(withinvars, setdiff(plot_vars, betweenvars))
+    }
   }
-  betweenvars <- union(betweenvars, setdiff(plot_vars, withinvars))
+
   withinvars <- unique(withinvars)
+  betweenvars <- unique(betweenvars)
+
   # plot_data <- as.data.frame(ellipses[[1]])
   plot_data <- as.data.frame(data)
   plot_data <- plot_data[!is.na(plot_data[, dv]), ]
@@ -147,9 +156,9 @@ plot.pointrange<-function (data, mapping, pos = position_dodge(0.3), pointsize =
     #                                         withinvars = withinvars, betweenvars = betweenvars,
     #                                         idvar = wid, na.rm = TRUE)
 
-    aggr_data <- plot_data[!is.na(plot_data[[dv]]),] |> 
+    aggr_data <- plot_data[!is.na(plot_data[[dv]]),] |>
       apastats::get_superb_ci(value_var = dv, within =  withinvars, between = betweenvars, wid = wid, errorbar = bars, drop_NA_subj = drop_NA_subj)
-    
+
   }
   else {
     aggr_data <- apastats:::summarySE(plot_data, measurevar = dv,
@@ -167,7 +176,7 @@ plot.pointrange<-function (data, mapping, pos = position_dodge(0.3), pointsize =
     if (within_subj){
       summ_data_for_margin<-apastats:::summarySEwithin(data_for_margin, measurevar = dv,
                                                        withinvars = withinvars[withinvars %nin% aes_list$x], betweenvars = betweenvars[betweenvars %nin% aes_list$x], idvar = aes_list$x, na.rm = TRUE)
-      
+
     } else {
       groupvars = c(withinvars, betweenvars)
       summ_data_for_margin<-apastats:::summarySE(data_for_margin, measurevar = dv,

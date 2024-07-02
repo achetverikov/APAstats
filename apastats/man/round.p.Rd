@@ -35,4 +35,5 @@ round.p(c(0.025, 0.0001, 0.001, 0.568), digits=2)
 round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=FALSE)
 round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=FALSE, strip.lead.zeros=FALSE)
 round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=FALSE, strip.lead.zeros=FALSE, replace.very.small = 0.01)
+
 }

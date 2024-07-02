@@ -7,7 +7,7 @@
 describe.roc.diff(roc_diff)
 }
 \arguments{
-\item{roc_diff}{}
+\item{roc_diff}{a difference between the ROC curves}
 }
 \value{
 result

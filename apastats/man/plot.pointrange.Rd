@@ -32,7 +32,8 @@
   geom_bar_params = NULL,
   add_jitter = F,
   individual_points_params = list(),
-  drop_NA_subj = F
+  drop_NA_subj = F,
+  design = "between"
 )
 }
 \arguments{
@@ -87,6 +88,8 @@
 \item{individual_points_params}{a list of parameters for the individual data points}
 
 \item{drop_NA_subj}{drop subjects that have NAs after aggregation when computing within-subject errorbars}
+
+\item{design}{design type to help avoid explicitly listing variables as withinvars all the time (values: between (default) - all vars not explicitly mentioned are treated as between; within - all vars not explicitly mentioned are treated as within)}
 
 \item{...}{the first element is assumed to be the dataset and the second one is assumed to be a list of plot aesthetics (e.g., aes(x = varA, y=varB))}
 }

@@ -12,6 +12,8 @@ adv_cut(
   num_labels = F,
   labels = NULL,
   include_oob = T,
+  labels_at_means = T,
+  label_pairs_format = "[\%.2f, \%.2f]",
   ...
 )
 }
@@ -30,9 +32,13 @@ adv_cut(
 
 \item{include_oob}{include values outside of the boundaries provided in `cuts` (default: TRUE)}
 
+\item{labels_at_means}{should labels be created as means between cuts (T) or as pairs of cuts (F)}
+
+\item{label_pairs_format}{formatting string to use when labels are generated from pairs of cuts (default: [\%.2f, \%.2f])}
+
 \item{...}{other parameters passed to `base::cut`
 
-If `ncuts` is used, then the variable is cut into N cuts either of equal group size (eq_groups = T) or equally distant from each other (eq_groups = F). If `labels` are not provided, they are generated as  means between cuts.}
+If `ncuts` is used, then the variable is cut into N cuts either of equal group size (eq_groups = T) or equally distant from each other (eq_groups = F). If `labels` are not provided, they are generated as  means between cuts if labels_at_means is T.}
 }
 \value{
 a vector of group labels the same length as the original value vector
@@ -48,7 +54,8 @@ sort(x)
 adv_cut(x, ncuts = 5)
 adv_cut(x, ncuts = 5, eq_groups = TRUE)
 adv_cut(x, ncuts = 5, eq_groups = TRUE, num_labels = TRUE)
-adv_cut(x, ncuts = 5, eq_groups = TRUE, cuts = seq(0,100, by = 20))
-
-
+adv_cut(x, ncuts = 5, eq_groups = TRUE, labels_at_means = F)
+adv_cut(x, cuts = seq(0,100, by = 20))
+adv_cut(x, cuts = seq(0,100, by = 20), labels_at_means = F)
+adv_cut(x, cuts = seq(0,100, by = 20), labels_at_means = F, label_pairs_format = '[\%i, \%i]')
 }

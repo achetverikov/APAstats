@@ -15,7 +15,8 @@ Imports:
     ggplot2,
     gridExtra,
     Rmisc,
-    stats
+    stats,
+    utils
 Suggests:
     lme4,
     bimodalitytest,

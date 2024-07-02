@@ -57,21 +57,21 @@ f.round <- function (x, digits = 2, strip.lead.zeros = FALSE) {
 #' round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=FALSE)
 #' round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=FALSE, strip.lead.zeros=FALSE)
 #' round.p(c(0.025, 0.0001, 0.001, 0.568), include.rel=FALSE, strip.lead.zeros=FALSE, replace.very.small = 0.01)
-round.p <- function(values, include.rel=1,digits=3, strip.lead.zeros=TRUE, replace.very.small = 0.001){
-  values<-as.numeric(values)
-  rel <- ifelse(include.rel,"= ","")
-  values_string <- format(round(values,digits=digits),nsmall=digits)
-  if (strip.lead.zeros){
+#'
+round.p <- function(values, include.rel = 1, digits = 3, strip.lead.zeros = TRUE, replace.very.small = 0.001) {
+  values <- as.numeric(values)
+  rel <- ifelse(include.rel, "= ", "")
+  values_string <- format(round(values, digits = digits), nsmall = digits)
+  if (strip.lead.zeros) {
     values_string <- sub("^0", "", values_string)
   }
-  values_string <- paste(rel,values_string, sep="")
+  values_string <- paste(rel, values_string, sep = "")
 
-  if (!is.null(replace.very.small)){
-    values_string[abs(values)<=replace.very.small]<-paste0("< ",ifelse(strip.lead.zeros,sub("^0", "", replace.very.small),replace.very.small))
+  if (!is.null(replace.very.small)) {
+    values_string[abs(values) <= replace.very.small] <- paste0("< ", ifelse(strip.lead.zeros, sub("^0", "", replace.very.small), replace.very.small))
   }
 
   values_string
-
 }
 
 #' Format results
@@ -229,7 +229,7 @@ lmer.fixef <- function (fit.lmer){
 
 #' Describe differences between ROC curves
 #'
-#' @param roc_diff
+#' @param roc_diff a difference between the ROC curves
 #'
 #' @return result
 #' @export
@@ -1232,7 +1232,7 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
 
   WSDesign <- apply(WSDesign, 1, as.vector, simplify = FALSE)
   colnames_wsd <- colnames(wide_data)
-  
+
   if (!all(grepl('^[\\w. ]+$', colnames_wsd, perl = T))) warning('Within- and between-subject factors levels should only contain letters, digits, underscores, dots, or spaces. If you experience errors, try removing special characters from factor levels.')
 
   suppressMessages({
@@ -1263,9 +1263,11 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
 #' @param num_labels should the labels be transformed into numbers (default: FALSE)
 #' @param labels a vector of labels to use for the groups (default: NULL)
 #' @param include_oob include values outside of the boundaries provided in `cuts` (default: TRUE)
+#' @param labels_at_means should labels be created as means between cuts (T) or as pairs of cuts (F)
+#' @param label_pairs_format formatting string to use when labels are generated from pairs of cuts (default: [\%.2f, \%.2f])
 #' @param ... other parameters passed to `base::cut`
 #'
-#' If `ncuts` is used, then the variable is cut into N cuts either of equal group size (eq_groups = T) or equally distant from each other (eq_groups = F). If `labels` are not provided, they are generated as  means between cuts. 
+#' If `ncuts` is used, then the variable is cut into N cuts either of equal group size (eq_groups = T) or equally distant from each other (eq_groups = F). If `labels` are not provided, they are generated as  means between cuts if labels_at_means is T.
 #'
 #' @return a vector of group labels the same length as the original value vector
 #' @export
@@ -1274,15 +1276,17 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
 #' set.seed(1)
 #' x <- sample(1:100, 20)
 #' sort(x)
-#' 
+#'
 #' adv_cut(x, ncuts = 5)
 #' adv_cut(x, ncuts = 5, eq_groups = TRUE)
 #' adv_cut(x, ncuts = 5, eq_groups = TRUE, num_labels = TRUE)
-#' adv_cut(x, ncuts = 5, eq_groups = TRUE, cuts = seq(0,100, by = 20))
-#' 
-#' 
+#' adv_cut(x, ncuts = 5, eq_groups = TRUE, labels_at_means = F)
+#' adv_cut(x, cuts = seq(0,100, by = 20))
+#' adv_cut(x, cuts = seq(0,100, by = 20), labels_at_means = F)
+#' adv_cut(x, cuts = seq(0,100, by = 20), labels_at_means = F, label_pairs_format = '[%i, %i]')
+
 adv_cut <- function(x, ncuts = NULL, eq_groups = F, cuts = NULL, num_labels = F,
-                    labels = NULL, include_oob = T, ...) {
+                    labels = NULL, include_oob = T, labels_at_means = T, label_pairs_format =  '[%.2f, %.2f]', ...) {
   if (!is.null(ncuts)) {
     if (eq_groups) {
       cuts <- Hmisc::cut2(x, g = ncuts, onlycuts = T)
@@ -1290,20 +1294,22 @@ adv_cut <- function(x, ncuts = NULL, eq_groups = F, cuts = NULL, num_labels = F,
       cuts <- seq(min(x), max(x), length.out = ncuts + 1)
     }
   }
-  
+
   if (include_oob) {
     x[x > max(cuts)] <- max(cuts)
     x[x <= min(cuts)] <- min(cuts) + 1e-12
   }
-  
+
   s <- cut(x, breaks = cuts, ...)
-  
+
   if (is.null(labels)) {
-    labels <- seq_mean(cuts)
+    if (labels_at_means){
+      labels <- seq_mean(cuts)
+    } else labels <- sapply(1:(length(cuts)-1), \(i) sprintf(label_pairs_format, cuts[i], cuts[i+1]))
   }
 
   levels(s) <- labels
-  
+
   if (num_labels) {
     s <- as.numeric(as.character(s))
   }
@@ -1318,9 +1324,9 @@ adv_cut <- function(x, ncuts = NULL, eq_groups = F, cuts = NULL, num_labels = F,
 #' @export
 #'
 #' @examples
-#' 
+#'
 #' seq_mean(c(1, 3, 5, 7, 10))
-#' 
+#'
 seq_mean <- function(x) {
   x[1:(length(x) - 1)] + diff(x) / 2
 }
