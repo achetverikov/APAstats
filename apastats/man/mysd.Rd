@@ -9,7 +9,7 @@ mysd(x, ...)
 \arguments{
 \item{x}{a vector of numbers}
 
-\item{...}{}
+\item{...}{other arguments passed to sd}
 }
 \value{
 sd of x with NA removed

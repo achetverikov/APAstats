@@ -31,6 +31,8 @@ describe.brm(
 
 \item{nsamples}{number of samples to use for the effect size computations}
 
+\item{ci.type}{type of intervals to use (currently, all that is not HPDI is treated as ETI using `bayestestR::eti`)}
+
 \item{...}{other parameters passed to \link{format.results}}
 }
 \value{

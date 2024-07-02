@@ -31,6 +31,10 @@ describe.glm(
 
 \item{test.df}{should we include degrees of freedom in description?}
 
+\item{p.as.number}{should the p-values be transformed to numbers (T) or shown as strings (F)?}
+
+\item{term.pattern}{return only the model terms matching the regex pattern (grepl is used)}
+
 \item{eff.size}{should we include effect size (currently implemented only for simple regression)?}
 
 \item{adj.digits}{automatically adjusts digits so that B or SE would not show up as "0.00"}

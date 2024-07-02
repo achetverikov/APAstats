@@ -7,13 +7,13 @@
 describe.ezstats(ezstats_res, term = 1, ...)
 }
 \arguments{
+\item{ezstats_res}{data.frame returned by ezStats}
+
 \item{term}{model term to describe (a string with the term name or its sequential number)}
 
 \item{...}{other parameters passed to describe.mean.sd
 
 If a string is used for a term and there is more than one factor, "X:Y:Z" format is assumed (value in first column : value in the second, and so on). If no term is supplied, the first row is used. So if you need to select a term based on two or more variables, you can also just filter ezStats result beforehand (or use a row number as a term).}
-
-\item{ez_stats}{data.frame returned by ezStats}
 }
 \value{
 string with formatted results

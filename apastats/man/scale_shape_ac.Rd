@@ -7,7 +7,7 @@
 scale_shape_ac(...)
 }
 \arguments{
-\item{...}{}
+\item{...}{other arguments passed to discrete_scale}
 }
 \value{
 scale with nice shapes palette

@@ -215,7 +215,7 @@ describe.mean.and.t <- function(x, by, which.mean=1, digits=2, paired=FALSE, eff
 
 #' Get nice matrix of fixed effects from lmer
 #'
-#' @param fit.lmer
+#' @param fit.lmer fitted `lme4::lmer` model object
 #'
 #' @return result
 #' @export
@@ -365,6 +365,8 @@ describe.Anova <- function (afit, term, f.digits=2, ...){
 #' @param test.df should we include degrees of freedom in description?
 #' @param eff.size should we include effect size (currently implemented only for simple regression)?
 #' @param adj.digits automatically adjusts digits so that B or SE would not show up as "0.00"
+#' @param p.as.number should the p-values be transformed to numbers (T) or shown as strings (F)?
+#' @param term.pattern return only the model terms matching the regex pattern (grepl is used)
 #' @param ... other parameters passed to \link{format.results}
 #'
 #' @return result
@@ -852,7 +854,7 @@ describe.ezanova <- function(ezfit, term, include_eta=TRUE, spher_corr=TRUE, eta
 #'
 #' Returns formatted string with mean and SD from ezStats object
 #'
-#' @param ez_stats data.frame returned by ezStats
+#' @param ezstats_res data.frame returned by ezStats
 #' @param term model term to describe (a string with the term name or its sequential number)
 #' @param ... other parameters passed to describe.mean.sd
 #'
@@ -993,7 +995,6 @@ paste_and<-function(x, sep=', ', suffix=''){
 #' @param dataset dataset to use
 #'
 #' @return result
-#' @export
 #' @examples
 #' \dontrun{
 #' load.libs(c('lme4','rjulia','data.table'))
@@ -1114,7 +1115,7 @@ describe.bf<-function(bf, digits = 2, top_limit = 10000, convert_to_power = TRUE
 #' @param eff.size string describing how to compute an effect size (currently, either 'fe_to_all', 'part_fe', or 'part_fe_re')
 #' @param eff.size.type type of the effect size ('r' or 'r2')
 #' @param nsamples number of samples to use for the effect size computations
-#'
+#' @param ci.type type of intervals to use (currently, all that is not HPDI is treated as ETI using `bayestestR::eti`)
 #' @param ... other parameters passed to \link{format.results}
 #'
 #' @return string describing the result
@@ -1189,8 +1190,10 @@ describe.brm<-function(mod, term, trans = NULL, digits = 2, eff.size = FALSE, ef
 #' @param wid subject variable or another clustering variable (string)
 #' @param within within-subject variables (vector of strings)
 #' @param value_var dependent variable (string)
-#' @param between between-subject variables (vector of strings)
+#' @param between between-subject variables (vector of strings; default: NULL)
 #' @param adjustments adjustment settings as used for \link[superb]{superData} (default: single CI estimates, Cousineau-Morey adjustment)
+#' @param errorbar type of error bars to use (CI/SE)
+#' @param drop_NA_subj should subjects with NA values be dropped? (default: FALSE)
 #'
 #' @return dataframe with computed CIs
 #' @export
@@ -1249,4 +1252,75 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
                             labels = levels(data[[x]]))
   }
   spp_data
+}
+
+#' Cut numeric variable into groups (bins) with advanced options
+#'
+#' @param x vector of numeric values to cut into groups
+#' @param ncuts number of cuts (default: NULL)
+#' @param eq_groups should the groups be equal (default: FALSE)
+#' @param cuts where to put the cuts (default: NULL), not used if ncuts is used
+#' @param num_labels should the labels be transformed into numbers (default: FALSE)
+#' @param labels a vector of labels to use for the groups (default: NULL)
+#' @param include_oob include values outside of the boundaries provided in `cuts` (default: TRUE)
+#' @param ... other parameters passed to `base::cut`
+#'
+#' If `ncuts` is used, then the variable is cut into N cuts either of equal group size (eq_groups = T) or equally distant from each other (eq_groups = F). If `labels` are not provided, they are generated as  means between cuts. 
+#'
+#' @return a vector of group labels the same length as the original value vector
+#' @export
+#'
+#' @examples
+#' set.seed(1)
+#' x <- sample(1:100, 20)
+#' sort(x)
+#' 
+#' adv_cut(x, ncuts = 5)
+#' adv_cut(x, ncuts = 5, eq_groups = TRUE)
+#' adv_cut(x, ncuts = 5, eq_groups = TRUE, num_labels = TRUE)
+#' adv_cut(x, ncuts = 5, eq_groups = TRUE, cuts = seq(0,100, by = 20))
+#' 
+#' 
+adv_cut <- function(x, ncuts = NULL, eq_groups = F, cuts = NULL, num_labels = F,
+                    labels = NULL, include_oob = T, ...) {
+  if (!is.null(ncuts)) {
+    if (eq_groups) {
+      cuts <- Hmisc::cut2(x, g = ncuts, onlycuts = T)
+    } else {
+      cuts <- seq(min(x), max(x), length.out = ncuts + 1)
+    }
+  }
+  
+  if (include_oob) {
+    x[x > max(cuts)] <- max(cuts)
+    x[x <= min(cuts)] <- min(cuts) + 1e-12
+  }
+  
+  s <- cut(x, breaks = cuts, ...)
+  
+  if (is.null(labels)) {
+    labels <- seq_mean(cuts)
+  }
+
+  levels(s) <- labels
+  
+  if (num_labels) {
+    s <- as.numeric(as.character(s))
+  }
+  s
+}
+
+#' Get the means between the points of a sequence
+#'
+#' @param x a vector of numeric values
+#'
+#' @return means between consecutive values
+#' @export
+#'
+#' @examples
+#' 
+#' seq_mean(c(1, 3, 5, 7, 10))
+#' 
+seq_mean <- function(x) {
+  x[1:(length(x) - 1)] + diff(x) / 2
 }

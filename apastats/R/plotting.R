@@ -292,7 +292,7 @@ ac_shape_pal<-function(){
 
 #' Nice palette of shapes
 #'
-#' @param ...
+#' @param ... other arguments passed to discrete_scale
 #'
 #' @return scale with nice shapes palette
 #' @export

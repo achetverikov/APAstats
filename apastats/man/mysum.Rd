@@ -9,7 +9,7 @@ mysum(x, ...)
 \arguments{
 \item{x}{a vector of numbers}
 
-\item{...}{}
+\item{...}{other arguments passed to sum}
 }
 \value{
 sum of x with NA removed

@@ -17,7 +17,7 @@ mymean <- function (x, ...){
 #' SD with na.rm=T
 #'
 #' @param x a vector of numbers
-#' @param ...
+#' @param ... other arguments passed to sd
 #'
 #' @return sd of x with NA removed
 #' @export
@@ -33,7 +33,7 @@ mysd <- function (x,...){
 #' Sum with na.rm=T
 #'
 #' @param x a vector of numbers
-#' @param ...
+#' @param ... other arguments passed to sum
 #'
 #' @return sum of x with NA removed
 #' @export

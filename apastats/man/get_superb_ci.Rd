@@ -24,9 +24,13 @@ get_superb_ci(
 
 \item{value_var}{dependent variable (string)}
 
-\item{between}{between-subject variables (vector of strings)}
+\item{between}{between-subject variables (vector of strings; default: NULL)}
 
 \item{adjustments}{adjustment settings as used for \link[superb]{superData} (default: single CI estimates, Cousineau-Morey adjustment)}
+
+\item{errorbar}{type of error bars to use (CI/SE)}
+
+\item{drop_NA_subj}{should subjects with NA values be dropped? (default: FALSE)}
 }
 \value{
 dataframe with computed CIs
