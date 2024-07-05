@@ -116,12 +116,12 @@ plot.pointrange<-function (data, mapping, pos = position_dodge(0.3), pointsize =
                            pretty_breaks_y = F, pretty_y_axis = F, exp_y = F, print_aggregated_data = F,
                            do_aggregate = F, add_margin = F, margin_label = 'all', margin_x_vals = NULL,
                            bars_instead_of_points = F, geom_bar_params = NULL, add_jitter = F,
-                           individual_points_params = list(), drop_NA_subj = F, design = 'between'){
+                           individual_points_params = list(), drop_NA_subj = F, design = 'between', debug = F){
   library(ggplot2)
   # ellipses <- list(...)
   # plot_f <- ellipses[[2]]
   plot_f <- mapping
-  if (class(plot_f["y"]) == "uneval") {
+  if (inherits(plot_f["y"], "uneval")) {
     plot_f <- sapply(plot_f, function(x) sub("~", "", deparse(x)))
   }
   dv <- as.character(plot_f["y"][[1]])
@@ -157,7 +157,7 @@ plot.pointrange<-function (data, mapping, pos = position_dodge(0.3), pointsize =
     #                                         idvar = wid, na.rm = TRUE)
 
     aggr_data <- plot_data[!is.na(plot_data[[dv]]),] |>
-      apastats::get_superb_ci(value_var = dv, within =  withinvars, between = betweenvars, wid = wid, errorbar = bars, drop_NA_subj = drop_NA_subj)
+      apastats::get_superb_ci(value_var = dv, within =  withinvars, between = betweenvars, wid = wid, errorbar = bars, drop_NA_subj = drop_NA_subj, debug = debug)
 
   }
   else {

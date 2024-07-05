@@ -33,7 +33,8 @@
   add_jitter = F,
   individual_points_params = list(),
   drop_NA_subj = F,
-  design = "between"
+  design = "between",
+  debug = F
 )
 }
 \arguments{

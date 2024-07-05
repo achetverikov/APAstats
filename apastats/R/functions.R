@@ -318,10 +318,9 @@ describe.anova <- function (anova_res, rown=2, f.digits=2,...){
 #' @export
 #'
 #' @examples
-#' load.libs(c('lme4','lmerTest'))
 #' data(faces)
 #'
-#' fit <- lmer(answerTime~correct*stim_gender+(1+correct*stim_gender|uid), faces)
+#' fit <- lmerTest::lmer(answerTime~correct*stim_gender+(1+correct*stim_gender|uid), faces)
 #' afit <- anova(fit)
 #' describe.lmtaov(afit, 'correct:stim_gender')
 describe.lmtaov <- function (afit, term, f.digits=2, ...){
@@ -341,9 +340,9 @@ describe.lmtaov <- function (afit, term, f.digits=2, ...){
 #' @export
 #'
 #' @examples
-#' library(car)
+#' 
 #' mod <- lm(conformity ~ fcategory*partner.status, data=Moore, contrasts=list(fcategory=contr.sum, partner.status=contr.sum))
-#' afit <- Anova(mod)
+#' afit <- car::Anova(mod)
 #' describe.Anova(afit, 'fcategory')
 #' describe.Anova(afit, 2, 4)
 #'
@@ -987,67 +986,6 @@ paste_and<-function(x, sep=', ', suffix=''){
   paste0(paste0(x[1:(length(x)-1)], collapse=collapse), last_sep,x[length(x)], suffix)
 }
 
-#' Run lmer with Julia
-#'
-#' Fits maximal model
-#'
-#' @param myform formula to use
-#' @param dataset dataset to use
-#'
-#' @return result
-#' @examples
-#' \dontrun{
-#' load.libs(c('lme4','rjulia','data.table'))
-#' julia_init()
-#' data(faces)
-#'
-#' ptm <- proc.time()
-#' summary(lmer(answerTime~correct*stim_gender+(1+correct*stim_gender|uid), faces))
-#' proc.time() - ptm
-#'
-#' ptm <- proc.time()
-#' lmer_with_julia(answerTime~correct*stim_gender+(1|uid), faces)
-#' proc.time() - ptm
-#'
-#' #Bizzare model - user gender cannot be a random effect within users, only for demonstration
-#' ptm <- proc.time()
-#' summary(lmer(answerTime~correct*stim_gender*user_gender+(1+correct*stim_gender*user_gender|uid), faces))
-#' proc.time() - ptm
-#'
-#' ptm <- proc.time()
-#' lmer_with_julia(answerTime~correct*stim_gender*user_gender+(1|uid), faces)
-#' proc.time() - ptm
-#' }
-
-
-lmer_with_julia<-function(myform, dataset){
-  #Note that julia_init() should be run before using that function
-  require('formula.tools')
-  requireNamespace('ordinal')
-  rjulia::j2r('using MixedModels')
-
-  myform<-formula(myform)
-  grouping_var<-all.vars(lme4::findbars(myform)[[1]])
-
-  dataset<-na.omit(dataset[,all.vars(myform), with=FALSE])
-  mm<-model.matrix(lme4::nobars(myform), dataset)
-  mm<-ordinal::drop.coef(mm)
-  truenames<-colnames(mm)
-  mm<-mm[,2:ncol(mm)] #removing Intercept
-  names_for_julia<-letters[1:ncol(mm)]
-  colnames(mm)<-names_for_julia
-  mm<-cbind(mm, dataset)
-  new.formula<-paste0(formula.tools::lhs(myform),'~',paste(names_for_julia, collapse = '+'),'+(',paste(names_for_julia, collapse = '+'),'|',grouping_var,')')
-  rjulia::r2j(mm,'mm')
-  expr<-paste0('mod_fit = fit(lmm(',new.formula,',mm))')
-  print(expr)
-  rjulia::j2r(expr)
-
-  res<-rjulia::j2r('DataFrame(Estimate=fixef(mod_fit), StdError = stderr(mod_fit), Z = fixef(mod_fit)./stderr(mod_fit))')
-  row.names(res)<-truenames
-  res<-round(res, 2)
-  res
-}
 
 #' Double aggregation
 #'
@@ -1202,16 +1140,30 @@ describe.brm<-function(mod, term, trans = NULL, digits = 2, eff.size = FALSE, ef
 #' data(faces)
 #' get_superb_ci(faces, 'uid', 'stim_gender', 'answerTime')
 #'
-get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustments = list(purpose = "single", decorrelation = "CM"), errorbar = 'CI', drop_NA_subj = F){
+get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustments = list(purpose = "single", decorrelation = "CM"), errorbar = 'CI', drop_NA_subj = F, drop_missing_levels = T, debug = F){
   require('superb')
   requireNamespace('reshape2')
   errorbar <- toupper(errorbar)
-  for (x in within){
+  for (x in c(within, between)){
     if (!is.factor(data[[x]])) {
-      warning(paste0("Converting \"", x, "\" to factor."))
+      warning(paste0("Converting \"", x, "\" to a factor."))
       data[[x]] = factor(data[[x]])
+    } else if (drop_missing_levels & length(levels(data[[x]]))!=length(unique(data[[x]]))){
+        message(paste0("Some levels of \"", x, "\" seem to be absent in the data, excluding them."))
+        data[[x]] = factor(data[[x]])
+        message(paste0("New levels of \"", x, "\": ", paste(levels(data[[x]]), collapse = ', ')))
+    }
+    if (any(is.na(data[[x]]))){
+      stop(sprintf("NAs present in \"%s\", they should be removed from all variables beforehand.",x))
     }
   }
+  for (x in c(wid, value_var)){
+    if (any(is.na(data[[x]]))){
+      stop(sprintf("NAs present in \"%s\", they should be removed from all variables beforehand.",x))
+    }
+  }
+
+
 
   dcast_form <- paste0(paste0(c(wid, between), collapse = '+'), '~', paste0(within, collapse = '+'))
   wide_data <- reshape2::dcast(data, dcast_form, value.var = value_var, fun.aggregate = mean)
@@ -1225,13 +1177,23 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
   }
   WSFactors <- sapply(within, \(x) paste0(x, '(',length(levels(data[[x]])),')'))
   variables <- colnames(wide_data)[(2+length(between)):length( colnames(wide_data))]
+
   WSDesign <- do.call(expand.grid, lapply(within, \(x) c(1:length(levels(data[[x]])))))
   if (length(within)>1){
     WSDesign <- WSDesign[do.call(order, WSDesign), ]
   }
 
   WSDesign <- apply(WSDesign, 1, as.vector, simplify = FALSE)
+
+  if (debug == T) {
+    message('WSDesign: ')
+    print(WSDesign)
+    message('wide_data: ')
+
+    print(wide_data)
+  }
   colnames_wsd <- colnames(wide_data)
+
 
   if (!all(grepl('^[\\w. ]+$', colnames_wsd, perl = T))) warning('Within- and between-subject factors levels should only contain letters, digits, underscores, dots, or spaces. If you experience errors, try removing special characters from factor levels.')
 

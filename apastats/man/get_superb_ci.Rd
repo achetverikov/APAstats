@@ -12,7 +12,9 @@ get_superb_ci(
   between = NULL,
   adjustments = list(purpose = "single", decorrelation = "CM"),
   errorbar = "CI",
-  drop_NA_subj = F
+  drop_NA_subj = F,
+  drop_missing_levels = T,
+  debug = F
 )
 }
 \arguments{
