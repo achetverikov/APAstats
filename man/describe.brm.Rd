@@ -45,10 +45,10 @@ Describe brms model results
 \dontrun{
 require(brms)
 x <- rnorm(500, sd = 6)
-y <- 4*x + rnorm(500)
-fit <- brm(y~x, data=data.frame(x,y), chains = 1, iter = 500)
-describe.brm(fit, 'x')
+y <- 4 * x + rnorm(500)
+fit <- brm(y ~ x, data = data.frame(x, y), chains = 1, iter = 500)
+describe.brm(fit, "x")
 # convert x to another scale for output
-describe.brm(fit, 'x', trans = function(val) val+5)
+describe.brm(fit, "x", trans = function(val) val + 5)
 }
 }

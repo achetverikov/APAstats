@@ -22,10 +22,9 @@ formatted string describing the results of anova
 Describe lmerTest anova results
 }
 \examples{
-load.libs(c('lme4','lmerTest'))
 data(faces)
 
-fit <- lmer(answerTime~correct*stim_gender+(1+correct*stim_gender|uid), faces)
+fit <- lmerTest::lmer(answerTime ~ correct * stim_gender + (1 + correct * stim_gender | uid), faces)
 afit <- anova(fit)
-describe.lmtaov(afit, 'correct:stim_gender')
+describe.lmtaov(afit, "correct:stim_gender")
 }

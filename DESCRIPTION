@@ -1,8 +1,7 @@
 Package: apastats
 Type: Package
 Title: APA-style results
-Version: 0.4
-Date: 2019-10-16
+Version: 0.5
 Author: Andrey Chetverikov (http://andreychetverikov.org)
 Maintainer: Andrey Chetverikov <andrey.a.chetverikov@gmail.com>
 Description: Proper formatting of statistical results in accordance with
@@ -12,16 +11,11 @@ License: GPL-3
 Encoding: UTF-8
 Imports:
     stringr,
-    ggplot2,
-    gridExtra,
-    Rmisc,
-    stats,
     utils
 Suggests:
     lme4,
-    bimodalitytest,
     ez,
-    dip.test,
+    diptest,
     ordinal,
     scales,
     BayesFactor,
@@ -33,6 +27,15 @@ Suggests:
     lsmeans,
     emmeans,
     Hmisc, 
-    lmerTest
+    lmerTest,
+    bayestestR,
+    rockchalk,
+    carData
+Depends:
+    stats,
+    ggplot2,
+    data.table,
+    R (>= 3.5)
 LazyData: TRUE
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
+Additional_repositories: 

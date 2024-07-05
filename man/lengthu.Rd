@@ -16,7 +16,7 @@ number of unique values in x
 Counts unique values
 }
 \examples{
-x<-c(5,7,8,9,5,7)
+x <- c(5, 7, 8, 9, 5, 7)
 length(x)
 lengthu(x)
 }

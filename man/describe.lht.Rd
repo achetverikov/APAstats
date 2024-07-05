@@ -19,12 +19,11 @@ Describe linearHypothesis test results
 }
 \examples{
 
-library(car)
-mod.davis <- lm(weight ~ repwt, data=Davis)
+mod.davis <- lm(weight ~ repwt, data = carData::Davis)
 
-res <- linearHypothesis(mod.davis, c("(Intercept) = 0", "repwt = 1"))
+res <- car::linearHypothesis(mod.davis, c("(Intercept) = 0", "repwt = 1"))
 describe.lht(res)
 
-res.chi <- linearHypothesis(mod.davis, c("(Intercept) = 0", "repwt = 1"), test = "Chisq")
+res.chi <- car::linearHypothesis(mod.davis, c("(Intercept) = 0", "repwt = 1"), test = "Chisq")
 describe.lht(res.chi)
 }

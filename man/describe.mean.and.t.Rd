@@ -54,7 +54,7 @@ describe.mean.and.t(rt, gr, eff.size = TRUE)
 
 sid <- faces$sid
 describe.mean.and.t(rt, gr, which.mean = 3, aggregate_by = sid)
-log_rt <- log(rt*1000)
+log_rt <- log(rt * 1000)
 describe.mean.and.t(log_rt, gr, which.mean = 3, aggregate_by = sid)
 describe.mean.and.t(log_rt, gr, which.mean = 3, aggregate_by = sid, transform.means = exp)
 }

@@ -49,19 +49,19 @@ Describe regression model (GLM, GLMer, lm, lm.circular, ...)
 }
 \examples{
 
-utils::data(Animals, package = "MASS")
-Animals$body<-log(Animals$body)
-Animals$brain<-log(Animals$brain)
-fit <- lm(brain~body, Animals)
-describe.glm(fit, 'body')
-describe.glm(fit, '(Intercept)')
-describe.glm(fit, 'body', 2)
-describe.glm(fit, 'body', 3)
-describe.glm(fit, 'body', 4)
-describe.glm(fit, 'body', 3, test.df = 1)
+Animals <- MASS::Animals
+Animals$body <- log(Animals$body)
+Animals$brain <- log(Animals$brain)
+fit <- lm(brain ~ body, Animals)
+describe.glm(fit, "body")
+describe.glm(fit, "(Intercept)")
+describe.glm(fit, "body", 2)
+describe.glm(fit, "body", 3)
+describe.glm(fit, "body", 4)
+describe.glm(fit, "body", 3, test.df = 1)
 describe.glm(fit)
 \dontrun{
 require(rockchalk)
-describe.glm(fit, 'body', 4, eff.size = TRUE)
+describe.glm(fit, "body", 4, eff.size = TRUE)
 }
 }

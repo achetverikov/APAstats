@@ -22,8 +22,8 @@ A string with t-test value, degrees of freedom, p-value, and, optionally, a mean
 Describe t-test results
 }
 \examples{
-t_res<-t.test(rnorm(20, mean = -10, sd=2))
+t_res <- t.test(rnorm(20, mean = -10, sd = 2))
 describe.ttest(t_res)
-describe.ttest(t_res, show.mean=TRUE)
-describe.ttest(t_res, show.mean=TRUE, abs=TRUE)
+describe.ttest(t_res, show.mean = TRUE)
+describe.ttest(t_res, show.mean = TRUE, abs = TRUE)
 }

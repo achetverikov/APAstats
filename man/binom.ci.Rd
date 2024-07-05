@@ -16,5 +16,5 @@ a vector of mean, lower CI, upper CI, and length of x
 Binomial confidence interval as a vector
 }
 \examples{
-binom.ci(rbinom(500, 1, prob=0.7))
+binom.ci(rbinom(500, 1, prob = 0.7))
 }

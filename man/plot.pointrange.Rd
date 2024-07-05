@@ -4,7 +4,7 @@
 \alias{plot.pointrange}
 \title{Pointrange plot}
 \usage{
-\method{generic}{class}(
+\method{plot}{pointrange}(
   data,
   mapping,
   pos = position_dodge(0.3),
@@ -38,6 +38,10 @@
 )
 }
 \arguments{
+\item{data}{the dataset to use}
+
+\item{mapping}{a list of plot aesthetics (e.g., aes(x = varA, y=varB))}
+
 \item{pos}{position adjustment function (e.g., position_dodge())}
 
 \item{pointsize}{size for the points (e.g., "I(1)")}
@@ -92,7 +96,7 @@
 
 \item{design}{design type to help avoid explicitly listing variables as withinvars all the time (values: between (default) - all vars not explicitly mentioned are treated as between; within - all vars not explicitly mentioned are treated as within)}
 
-\item{...}{the first element is assumed to be the dataset and the second one is assumed to be a list of plot aesthetics (e.g., aes(x = varA, y=varB))}
+\item{debug}{outputs additional debugging info if TRUE}
 }
 \value{
 plot of pointrange
@@ -105,9 +109,26 @@ For point and line properties (e.g., pointfill) passing NULL allows to avoid set
 }
 \examples{
 data(faces)
-plot.pointrange(faces, aes(x=user_gender, color=stim_gender, y=answerTime))+ylab('RT')
-plot.pointrange(faces, aes(x=user_gender, color=stim_gender, y=answerTime), wid='uid', within_subj= TRUE, withinvars=c('stim_gender'), betweenvars=c('user_gender'))+ylab('RT')
-plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), wid='uid', withinvars=c('stim_gender'), betweenvars=c('user_gender'), within_subj= TRUE, bars='se')+ylab('RT')
-plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), wid='uid', withinvars=c('stim_gender'), betweenvars=c('user_gender'), within_subj= TRUE, bars='se', print_aggregated_data= TRUE)+ylab('RT')
-plot.pointrange(faces, aes(x=user_gender, shape=stim_gender, y=answerTime), withinvars=c('stim_gender'), betweenvars = c('user_gender'), print_aggregated_data = TRUE, wid='uid', within_subj= TRUE, exp_y= TRUE, bars='ci', do_aggregate = TRUE)+ylab('RT')
+# between-subject CI
+plot.pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime)) + ylab("RT")
+
+# within-subject CI
+plot.pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
+     within_subj = TRUE, withinvars = c("stim_gender"), betweenvars = c("user_gender")) +
+     ylab("RT")
+     
+# with bars showing standard errors
+plot.pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
+     within_subj = TRUE, withinvars = c("stim_gender"), betweenvars = c("user_gender"),
+     bars = 'se') + ylab("RT")
+     
+# same but also printing out aggregated data
+plot.pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
+     within_subj = TRUE, withinvars = c("stim_gender"), betweenvars = c("user_gender"),
+     bars = 'se', print_aggregated_data = TRUE) + ylab("RT")
+     
+# CIs with aggregating the data beforehand and using exp-transformed y-axis
+plot.pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
+     within_subj = TRUE, withinvars = c("stim_gender"), betweenvars = c("user_gender"),
+     bars = 'ci', exp_y = TRUE, do_aggregate = TRUE) + ylab("RT")
 }

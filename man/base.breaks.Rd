@@ -2,9 +2,15 @@
 % Please edit documentation in R/plotting.R
 \name{base.breaks}
 \alias{base.breaks}
+\alias{base.breaks.x}
+\alias{base.breaks.y}
 \title{Tufte-like breaks for axes}
 \usage{
 base.breaks(x, scale = "x", addSegment = TRUE, ...)
+
+base.breaks.x(x, addSegment = TRUE, ...)
+
+base.breaks.y(x, addSegment = TRUE, ...)
 }
 \arguments{
 \item{x}{vector of numbers to create breaks from}
@@ -20,4 +26,20 @@ scale_(x or y)_continuous with pretty breaks and accompaniying geom_segment if a
 }
 \description{
 Tufte-like breaks for axes
+}
+\section{Functions}{
+\itemize{
+\item \code{base.breaks.x()}: Tufte-like breaks for X axis
+
+\item \code{base.breaks.y()}: Tufte-like breaks for Y axis
+
+}}
+\examples{
+p <- ggplot(faces, aes(x = answerTime, y = correct)) + 
+  geom_smooth(method = glm, method.args = list(family = 'binomial')) +
+  theme_minimal()
+ 
+p 
+p + base.breaks(faces$answerTime, scale = 'x') + base.breaks(faces$correct, scale = 'y')
+
 }

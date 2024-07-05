@@ -2,13 +2,12 @@
 % Please edit documentation in R/plotting.R
 \name{get_grob_element}
 \alias{get_grob_element}
-\title{Extract grob element by name
-Not mine, found somewhere}
+\title{Extract grob element by name}
 \usage{
-get_grob_element(myggplot, el = "guide-box")
+get_grob_element(ggplot_obj, el = "guide-box")
 }
 \arguments{
-\item{myggplot}{plot to extract grob from}
+\item{ggplot_obj}{plot to extract grob from}
 
 \item{el}{element name to extract}
 }
@@ -17,5 +16,4 @@ grob element
 }
 \description{
 Extract grob element by name
-Not mine, found somewhere
 }

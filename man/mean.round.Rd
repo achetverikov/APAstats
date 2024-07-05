@@ -4,12 +4,12 @@
 \alias{mean.round}
 \title{Rounded mean}
 \usage{
-\method{generic}{class}(x, ...)
+\method{mean}{round}(x, ...)
 }
 \arguments{
 \item{x}{a number}
 
-\item{digits}{decimal places}
+\item{...}{other arguments passed to [apastats::f.round]}
 }
 \value{
 Mean rounded to the specified number of digits (string)
@@ -18,7 +18,7 @@ Mean rounded to the specified number of digits (string)
 Mean rounded to the specified number of digits
 }
 \examples{
-mean.round(c(10,99))
-mean.round(c(10,99,NA))
-mean.round(c(10,99), 2)
+mean.round(c(10, 99))
+mean.round(c(10, 99, NA))
+mean.round(c(10, 99), 2)
 }

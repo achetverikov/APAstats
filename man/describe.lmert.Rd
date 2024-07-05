@@ -23,12 +23,11 @@ Note that this function uses *summary* object from lmerTest::lmer model and not 
 }
 \examples{
 
-library(lmerTest)
-fm <- lmer(Reaction ~ Days + (Days|Subject), sleepstudy)
+fm <- lmerTest::lmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)
 fms <- summary(fm)
-describe.lmert(fms, 'Days')
-describe.lmert(fms, '(Intercept)')
+describe.lmert(fms, "Days")
+describe.lmert(fms, "(Intercept)")
 describe.lmert(fms, 2)
-describe.lmert(fms, 'Days', 'B')
+describe.lmert(fms, "Days", "B")
 
 }

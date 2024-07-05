@@ -44,11 +44,13 @@ Describe ezANOVA results
 Provides formatted string like _F_(DFn, DFd) = ..., _p_ ..., eta2 = ... based on ezANOVA results
 }
 \examples{
-library(ez)
+
 data(faces)
-ez_res <- ezANOVA(faces[faces$correct==1], dv = answerTime, wid = uid, within = stim_gender, between=user_gender)
-describe.ezanova(ez_res, 'user_gender')
-describe.ezanova(ez_res, 'user_gender', eta_digits = 3)
-describe.ezanova(ez_res, 'user_gender:stim_gender', eta_digits = 3)
+faces$uid <- factor(faces$uid)
+ez_res <- ez::ezANOVA(faces[faces$correct == 1], dv = answerTime, 
+                      wid = uid, within = stim_gender, between = user_gender)
+describe.ezanova(ez_res, "user_gender")
+describe.ezanova(ez_res, "user_gender", eta_digits = 3)
+describe.ezanova(ez_res, "user_gender:stim_gender", eta_digits = 3)
 describe.ezanova(ez_res, 3, eta_digits = 3)
 }

@@ -7,7 +7,7 @@
 describe.bf(bf, digits = 2, top_limit = 10000, convert_to_power = TRUE, ...)
 }
 \arguments{
-\item{bf}{an object of \link[BayesFactor]{BFBayesFactor} class}
+\item{bf}{an object of [BayesFactor::BFBayesFactor] class}
 
 \item{digits}{number of digits to use}
 
@@ -15,7 +15,7 @@ describe.bf(bf, digits = 2, top_limit = 10000, convert_to_power = TRUE, ...)
 
 \item{convert_to_power}{enable or distable converting of very small or very large numbers to exponential notation}
 
-\item{...}{other parameters passed to \link{format.results}}
+\item{...}{other parameters passed to [apastats::format.results]}
 }
 \value{
 string describing the result
@@ -28,11 +28,11 @@ Code for converting to exponential notation is based on http://dankelley.github.
 }
 \examples{
 
-require('BayesFactor')
+require("BayesFactor")
 data(puzzles)
 
-bfs <- anovaBF(RT ~ shape*color + ID, data = puzzles, progress=FALSE)
+bfs <- anovaBF(RT ~ shape * color + ID, data = puzzles, progress = FALSE)
 describe.bf(bfs[1])
-describe.bf(bfs[2]/bfs[14])
+describe.bf(bfs[2] / bfs[14])
 
 }

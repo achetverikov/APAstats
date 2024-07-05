@@ -26,12 +26,12 @@ Describe contrasts created by emmeans
 \examples{
 
 require(emmeans)
-warp.lm <- lm(breaks ~ wool*tension, data = warpbreaks)
+warp.lm <- lm(breaks ~ wool * tension, data = warpbreaks)
 warp.lsm <- emmeans::emmeans(warp.lm, ~ tension | wool)
-(sum_contr<-summary(contrast(warp.lsm, 'trt.vs.ctrl')))
+(sum_contr <- summary(contrast(warp.lsm, "trt.vs.ctrl")))
 describe.emmeans(sum_contr, 1)
 describe.emmeans(sum_contr, 3)
-describe.emmeans(sum_contr, 3, dtype='t')
-describe.emmeans(sum_contr, 3, dtype='c')
-describe.emmeans(sum_contr, 3, dtype='c', df=TRUE)
+describe.emmeans(sum_contr, 3, dtype = "t")
+describe.emmeans(sum_contr, 3, dtype = "c")
+describe.emmeans(sum_contr, 3, dtype = "c", df = TRUE)
 }

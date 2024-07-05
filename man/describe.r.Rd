@@ -18,8 +18,8 @@ A string with correlation coefficient, sample size, and p-value.
 Describe Pearson test results
 }
 \examples{
-x<-rnorm(40)
-y<-x*2+rnorm(40)
-rc<-cor.test(x,y)
+x <- rnorm(40)
+y <- x * 2 + rnorm(40)
+rc <- cor.test(x, y)
 describe.r(rc)
 }

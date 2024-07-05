@@ -16,9 +16,9 @@ data.frame without empty columns
 Drop empty (consisting of NA only) columns from a data.frame. Based on http://stackoverflow.com/a/2644009/1344028
 }
 \examples{
-df<-data.frame(x=rnorm(20), y=rep('A', 20), z=rep(NA, 20))
+df <- data.frame(x = rnorm(20), y = rep("A", 20), z = rep(NA, 20))
 str(df)
-df<-drop.empty.cols(df)
+df <- drop.empty.cols(df)
 str(df)
 
 }

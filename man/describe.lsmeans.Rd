@@ -25,13 +25,12 @@ Describe contrasts created by lsmeans
 }
 \examples{
 
-requireNamespace('lsmeans')
-warp.lm <- lm(breaks ~ wool*tension, data = warpbreaks)
+warp.lm <- lm(breaks ~ wool * tension, data = warpbreaks)
 warp.lsm <- lsmeans::lsmeans(warp.lm, ~ tension | wool)
-(sum_contr<-summary(lsmeans::contrast(warp.lsm, 'trt.vs.ctrl')))
+(sum_contr <- summary(lsmeans::contrast(warp.lsm, "trt.vs.ctrl")))
 describe.lsmeans(sum_contr, 1)
 describe.lsmeans(sum_contr, 3)
-describe.lsmeans(sum_contr, 3, dtype='t')
-describe.lsmeans(sum_contr, 3, dtype='c')
-describe.lsmeans(sum_contr, 3, dtype='c', df=TRUE)
+describe.lsmeans(sum_contr, 3, dtype = "t")
+describe.lsmeans(sum_contr, 3, dtype = "c")
+describe.lsmeans(sum_contr, 3, dtype = "c", df = TRUE)
 }

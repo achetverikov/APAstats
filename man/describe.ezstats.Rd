@@ -22,12 +22,13 @@ string with formatted results
 Returns formatted string with mean and SD from ezStats object
 }
 \examples{
-library(ez)
 data(faces)
-ezstats_res <- ezStats(faces, dv = answerTime, wid = uid, within = .(stim_gender,correct))
+faces$uid <- factor(faces$uid)
+faces$correct <- factor(faces$correct)
+ezstats_res <- ez::ezStats(faces, dv = answerTime, wid = uid, within = .(stim_gender, correct))
 ezstats_res
-describe.ezstats(ezstats_res, 'M:0')
+describe.ezstats(ezstats_res, "M:0")
 describe.ezstats(ezstats_res, 2)
-describe.ezstats(ezstats_res, 2, digits=1)
+describe.ezstats(ezstats_res, 2, digits = 1)
 
 }

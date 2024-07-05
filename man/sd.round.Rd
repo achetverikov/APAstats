@@ -9,7 +9,7 @@ sd.round(x, ...)
 \arguments{
 \item{x}{a number}
 
-\item{digits}{decimal places}
+\item{...}{other arguments passed to [apastats::f.round]}
 }
 \value{
 Mean rounded to the specified number of digits (string)
@@ -18,7 +18,7 @@ Mean rounded to the specified number of digits (string)
 SD rounded to the specified number of digits
 }
 \examples{
-sd.round(c(10,99))
-sd.round(c(10,99,NA))
-sd.round(c(10,99), 2)
+sd.round(c(10, 99))
+sd.round(c(10, 99, NA))
+sd.round(c(10, 99), 2)
 }

@@ -38,5 +38,5 @@ x <- runif(100, 0, 50)
 describe.mean.conf(x)
 describe.mean.conf(x, bootCI = FALSE)
 describe.mean.conf(x, digits = 5)
-describe.mean.conf(x, transform.means = function(val) val*2)
+describe.mean.conf(x, transform.means = function(val) val * 2)
 }

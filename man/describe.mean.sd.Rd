@@ -43,5 +43,5 @@ Computes mean and SD for a vector (or just uses mean and sd if provided) and ret
 x <- rnorm(1000, 50, 25)
 describe.mean.sd(x)
 describe.mean.sd(x, 0)
-describe.mean.sd(x, dtype = 'c')
+describe.mean.sd(x, dtype = "c")
 }

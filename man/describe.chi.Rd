@@ -27,9 +27,11 @@ Describe Pearson $chi^2$ results. Note that the function takes table as an input
 ## ---------------------
 ## From Agresti(2007) p.39
 M <- as.table(rbind(c(762, 327, 468), c(484, 239, 477)))
-dimnames(M) <- list(gender = c("FALSE", "M"),
-                    party = c("Democrat","Independent", "Republican"))
-(Xsq <- chisq.test(M))  # Prints test summary
+dimnames(M) <- list(
+  gender = c("FALSE", "M"),
+  party = c("Democrat", "Independent", "Republican")
+)
+(Xsq <- chisq.test(M)) # Prints test summary
 ## ----------------------
 describe.chi(M) # Note that describe.chi should be used for the table, not the chi2
 
