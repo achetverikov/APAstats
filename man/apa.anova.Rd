@@ -4,24 +4,25 @@
 \alias{apa.anova}
 \title{Describe the results of \link[car:Anova]{car::Anova} model or of a \link[stats:anova]{stats::anova} model comparison}
 \usage{
-\method{apa}{anova}(anova_res, term = 2, f.digits = 2, ...)
+\method{apa}{anova}(obj, term = 2, f.digits = 2, ...)
 }
 \arguments{
-\item{anova_res}{anova results}
+\item{obj}{anova results}
 
 \item{term}{model term to describe (a string with the term name or its sequential number, default: 2)}
 
 \item{f.digits}{number of digits in the results (default: 2)}
 
-\item{...}{other parameters passed to \link{format.results}
-
-When using model comparison version, \code{term} can only be a number.}
+\item{...}{other parameters passed to \link{format.results}}
 }
 \value{
 Formatted string with F (or chi2), df, and p
 }
 \description{
 Describe the results of \link[car:Anova]{car::Anova} model or of a \link[stats:anova]{stats::anova} model comparison
+}
+\details{
+When using model comparison version, \code{term} can only be a number.
 }
 \examples{
 # model comparison version

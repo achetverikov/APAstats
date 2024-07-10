@@ -4,20 +4,25 @@
 \alias{apa.aov}
 \title{Describe aov results}
 \usage{
-\method{apa}{aov}(fit, term, sstype = 2, ...)
+\method{apa}{aov}(obj, term = term, sstype = 2, ...)
 }
 \arguments{
-\item{fit}{fitted aov model}
+\item{obj}{fitted aov model}
 
 \item{term}{model term to describe (a string with the term name or its sequential number)}
 
 \item{sstype}{anova SS type (e.g., 2 or 3)}
 
-\item{...}{other parameters passed to apa.Anova}
+\item{...}{other parameters passed to apa.anova}
 }
 \value{
 formatted string with FALSE(df_numerator, df_denomiator) = F_value, p =/< p_value
 }
 \description{
 Describe aov results
+}
+\examples{
+fit <- aov(answerTime ~ stim_gender*user_gender, data = faces)
+apa(fit, 'stim_gender')
+
 }

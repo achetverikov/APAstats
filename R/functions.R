@@ -14,11 +14,13 @@ apa <- function(obj, ...){
 
 #' Describe the results of [car::Anova] model or of a [stats::anova] model comparison 
 #'
-#' @param anova_res anova results
+#' @param obj ANOVA results from [car::Anova] or [stats::anova]
 #' @param term model term to describe (a string with the term name or its sequential number, default: 2)
 #' @param f.digits number of digits in the results (default: 2)
 #' @param ... other parameters passed to [apastats::format.results]
-#'
+#' 
+#' @details
+#' 
 #' When using model comparison version, `term` can only be a number.
 #'  
 #' @return Formatted string with F (or chi2), df, and p
@@ -26,6 +28,7 @@ apa <- function(obj, ...){
 #' @export
 #'
 #' @examples
+#
 #' # model comparison version
 #' mod1 <- lm(conformity ~ 1, data = carData::Moore)
 #' mod2 <- lm(conformity ~ fcategory, data = carData::Moore, contrasts = list(fcategory = contr.sum))
@@ -44,35 +47,41 @@ apa <- function(obj, ...){
 #' apa(afit, "fcategory")
 #' apa(afit, 2, 4)
 
-apa.anova <- function(anova_res, term = 2, f.digits = 2, ...) {
+apa.anova <- function(obj, term = 2, f.digits = 2, ...) {
   if ("Df.res" %in% colnames(afit)) {
-    res_str <- sprintf(paste0("\\emph{F}(%i, %.", f.digits, "f) = %.", f.digits, "f, \\emph{p} %s"), anova_res[term, "Df"], anova_res[term, "Df.res"], anova_res[term, "F"], round.p(anova_res[term, "Pr(>F)"]))
-  } else if ("F" %in% names(anova_res)) {
-    res_str <- sprintf(paste0("\\emph{F}(%.0f, %.0f) = %.", f.digits, "f, \\emph{p} %s"), anova_res[term, "Df"], anova_res[term, "Res.Df"], anova_res[term, "F"], round.p(anova_res[term, "Pr(>F)"]))
-  } else if ("Chisq" %in% names(anova_res)) {
-    res_str <- sprintf(paste0("$\\chi^2$(%i) = %.", f.digits, "f, \\emph{p} %s"), anova_res[term, "Df"], anova_res[term, "Chisq"], round.p(anova_res[term, "Pr(>Chisq)"]))
+    res_str <- sprintf(paste0("\\emph{F}(%i, %.", f.digits, "f) = %.", f.digits, "f, \\emph{p} %s"), obj[term, "Df"], obj[term, "Df.res"], obj[term, "F"], round.p(obj[term, "Pr(>F)"]))
+  } else if ("F" %in% names(obj)) {
+    res_str <- sprintf(paste0("\\emph{F}(%.0f, %.0f) = %.", f.digits, "f, \\emph{p} %s"), obj[term, "Df"], obj[term, "Res.Df"], obj[term, "F"], round.p(obj[term, "Pr(>F)"]))
+  } else if ("Chisq" %in% names(obj)) {
+    res_str <- sprintf(paste0("$\\chi^2$(%i) = %.", f.digits, "f, \\emph{p} %s"), obj[term, "Df"], obj[term, "Chisq"], round.p(obj[term, "Pr(>Chisq)"]))
+  } else if ("F value" %in% names(obj)) {
+    res_str <- sprintf(paste0("\\emph{F}(%i, %i) = %.", f.digits, "f, \\emph{p} %s"), obj[term, "Df"], obj["Residuals", "Df"], obj[term, "F value"], round.p(afit[term, "Pr(>F)"]))
   } else {
-    res_str <- sprintf(paste0("\\emph{F}(%i, %i) = %.", f.digits, "f, \\emph{p} %s"), anova_res[term, "Df"], anova_res["Residuals", "Df"], anova_res[term, "F value"], round.p(afit[term, "Pr(>F)"]))
+    stop('The object does not have one of the expected columns (F / F value / Chisq)')
   }
   
   format.results(res_str, ...)
 }
 
-#' Describe aov results
+#' Describe [stats::aov] results
 #'
-#' @param fit fitted aov model
+#' @param obj fitted [stats::aov] model
 #' @param term model term to describe (a string with the term name or its sequential number)
 #' @param sstype anova SS type (e.g., 2 or 3)
-#' @param ... other parameters passed to apa.Anova
+#' @param ... other parameters passed to apa.anova
 #'
 #' @return formatted string with FALSE(df_numerator, df_denomiator) = F_value, p =/< p_value
+#' @method apa aov
 #' @export
+#' 
+#' @examples
+#' fit <- aov(answerTime ~ stim_gender*user_gender, data = faces)
+#' apa(fit, 'stim_gender')
 #'
 
-apa.aov <- function(fit, term, sstype = 2, ...) {
-  afit <- as.data.frame(car::Anova(fit, type = sstype))
-  
-  apa.Anova(afit, term, ...)
+apa.aov <- function(obj, term = term, sstype = 2, ...) {
+  afit <- car::Anova(obj, type = sstype)
+  apa(afit, term = term, ...)
 }
 
 #' Describe BayesFactor results
