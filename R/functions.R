@@ -11,7 +11,7 @@
 #'
 #' @examples
 #'
-#' mod <- lm(conformity ~ fcategory * partner.status, data = Moore, contrasts = list(fcategory = contr.sum, partner.status = contr.sum))
+#' mod <- lm(conformity ~ fcategory * partner.status, data = carData::Moore, contrasts = list(fcategory = contr.sum, partner.status = contr.sum))
 #' afit <- car::Anova(mod)
 #' describe.Anova(afit, "fcategory")
 #' describe.Anova(afit, 2, 4)
