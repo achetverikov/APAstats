@@ -2,7 +2,7 @@
 % Please edit documentation in R/misc.R
 \name{round.p}
 \alias{round.p}
-\title{Round *p*-value}
+\title{Round \emph{p}-value}
 \usage{
 \method{round}{p}(
   values,

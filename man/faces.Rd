@@ -20,12 +20,12 @@ This dataset contains data on response times in a face identification task. The 
 You are free to use it under a Creative Commons Attribution 4.0 International License. When used in research papers, please cite: Chetverikov, A.A. (2015). Linear mixed effects regression in cognitive studies. The Russian Journal of Cognitive Science, 2(1), 41-51. URL: http://cogjournal.org/2/1/pdf/ChetverikovRJCS2015.pdf
 
 \itemize{
- \item uid. participant ID
- \item sid. stimulus ID
- \item stim_gender. stimulus gender
- \item user_gender. participant's gender
- \item correct. response accuracy
- \item answerTime. response time
+\item uid. participant ID
+\item sid. stimulus ID
+\item stim_gender. stimulus gender
+\item user_gender. participant's gender
+\item correct. response accuracy
+\item answerTime. response time
 }
 }
 \references{

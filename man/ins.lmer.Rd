@@ -19,5 +19,5 @@ ins.lmer(fm, term = NULL, digits = 2, adj.digits = TRUE)
 result
 }
 \description{
-A shortcut for describe.glm(..., short=4)
+A shortcut for apa.glm(..., short=4)
 }

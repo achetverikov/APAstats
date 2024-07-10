@@ -28,7 +28,7 @@ get_superb_ci(
 
 \item{between}{between-subject variables (vector of strings; default: NULL)}
 
-\item{adjustments}{adjustment settings as used for [superb::superData] (default: single CI estimates, Cousineau-Morey adjustment)}
+\item{adjustments}{adjustment settings as used for \link[superb:superbData]{superb::superbData} (default: single CI estimates, Cousineau-Morey adjustment)}
 
 \item{errorbar}{type of error bars to use (CI/SE)}
 

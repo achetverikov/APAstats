@@ -20,9 +20,9 @@ the apastats package. They will removed in later releases.
 \section{Details}{
 
 \tabular{rl}{
-  \code{mymean} \tab now a synonym for \code{\link{mean.nn}}\cr
-  \code{mysum} \tab now a synonym for \code{\link{sum.nn}}\cr
-  \code{mysd} \tab now a synonym for \code{\link{sd.nn}}\cr
+\code{mymean} \tab now a synonym for \code{\link{mean.nn}}\cr
+\code{mysum} \tab now a synonym for \code{\link{sum.nn}}\cr
+\code{mysd} \tab now a synonym for \code{\link{sd.nn}}\cr
 }
 }
 

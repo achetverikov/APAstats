@@ -7,7 +7,7 @@
 lmer.fixef(fit.lmer)
 }
 \arguments{
-\item{fit.lmer}{fitted `lme4::lmer` model object}
+\item{fit.lmer}{fitted \code{lme4::lmer} model object}
 }
 \value{
 result

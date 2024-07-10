@@ -1,75 +1,90 @@
-
-#' Describe Anova results
+#' Describe an object in APA style
 #'
-#' @param afit fitted \link[car]{Anova} model
-#' @param term model term to describe (a string with the term name or its sequential number)
-#' @param f.digits number of digits for F
-#' @param ... other parameters passed to \link{format.results}
+#' @param obj an object to describe
+#' @param ... other arguments passed to 
 #'
-#' @return result
-#' @export describe.Anova
-#'
-#' @examples
-#'
-#' mod <- lm(conformity ~ fcategory * partner.status, data = carData::Moore, contrasts = list(fcategory = contr.sum, partner.status = contr.sum))
-#' afit <- car::Anova(mod)
-#' describe.Anova(afit, "fcategory")
-#' describe.Anova(afit, 2, 4)
-
-describe.Anova <- function(afit, term, f.digits = 2, ...) {
-  if ("Df.res" %in% colnames(afit)) {
-    res_str <- sprintf(paste0("\\emph{F}(%i, %.", f.digits, "f) = %.", f.digits, "f, \\emph{p} %s"), afit[term, "Df"], afit[term, "Df.res"], afit[term, "F"], round.p(afit[term, "Pr(>F)"]))
-  } else {
-    res_str <- sprintf(paste0("\\emph{F}(%i, %i) = %.", f.digits, "f, \\emph{p} %s"), afit[term, "Df"], afit["Residuals", "Df"], afit[term, "F value"], round.p(afit[term, "Pr(>F)"]))
-  }
-  format.results(res_str, ...)
+#' @return description in APA (American Psychological Association) format
+#' @export
+#' 
+apa <- function(obj, ...){
+  UseMethod('apa')
 }
 
-#' Describe the results of model comparison with anova
+
+
+#' Describe the results of [car::Anova] model or of a [stats::anova] model comparison 
 #'
 #' @param anova_res anova results
-#' @param rown row number (default: 2)
+#' @param term model term to describe (a string with the term name or its sequential number, default: 2)
 #' @param f.digits number of digits in the results (default: 2)
 #' @param ... other parameters passed to [apastats::format.results]
 #'
+#' When using model comparison version, `term` can only be a number.
+#'  
 #' @return Formatted string with F (or chi2), df, and p
+#' @method apa anova
 #' @export
 #'
-describe.anova <- function(anova_res, rown = 2, f.digits = 2, ...) {
-  if ("F" %in% names(anova_res)) {
-    res_str <- sprintf(paste0("\\emph{F}(%.0f, %.0f) = %.", f.digits, "f, \\emph{p} %s"), anova_res[rown, "Df"], anova_res[rown, "Res.Df"], anova_res[rown, "F"], round.p(anova_res[rown, "Pr(>F)"]))
+#' @examples
+#' # model comparison version
+#' mod1 <- lm(conformity ~ 1, data = carData::Moore)
+#' mod2 <- lm(conformity ~ fcategory, data = carData::Moore, contrasts = list(fcategory = contr.sum))
+#' mod3 <- lm(conformity ~ fcategory * partner.status, data = carData::Moore, contrasts = list(fcategory = contr.sum, partner.status = contr.sum))
+#' anova_obj <- anova(mod1, mod2, mod3)
+#' 
+#' anova_obj
+#' apa(anova_obj)
+#' apa(anova_obj, 3)
+#' 
+#' # car::Anova version
+#' mod <- lm(conformity ~ fcategory * partner.status, data = carData::Moore, contrasts = list(fcategory = contr.sum, partner.status = contr.sum))
+#' afit <- car::Anova(mod)
+#' 
+#' afit
+#' apa(afit, "fcategory")
+#' apa(afit, 2, 4)
+
+apa.anova <- function(anova_res, term = 2, f.digits = 2, ...) {
+  if ("Df.res" %in% colnames(afit)) {
+    res_str <- sprintf(paste0("\\emph{F}(%i, %.", f.digits, "f) = %.", f.digits, "f, \\emph{p} %s"), anova_res[term, "Df"], anova_res[term, "Df.res"], anova_res[term, "F"], round.p(anova_res[term, "Pr(>F)"]))
+  } else if ("F" %in% names(anova_res)) {
+    res_str <- sprintf(paste0("\\emph{F}(%.0f, %.0f) = %.", f.digits, "f, \\emph{p} %s"), anova_res[term, "Df"], anova_res[term, "Res.Df"], anova_res[term, "F"], round.p(anova_res[term, "Pr(>F)"]))
+  } else if ("Chisq" %in% names(anova_res)) {
+    res_str <- sprintf(paste0("$\\chi^2$(%i) = %.", f.digits, "f, \\emph{p} %s"), anova_res[term, "Df"], anova_res[term, "Chisq"], round.p(anova_res[term, "Pr(>Chisq)"]))
   } else {
-    res_str <- sprintf(paste0("$\\chi^2$(%i) = %.", f.digits, "f, \\emph{p} %s"), anova_res[rown, "Df"], anova_res[rown, "Chisq"], round.p(anova_res[rown, "Pr(>Chisq)"]))
+    res_str <- sprintf(paste0("\\emph{F}(%i, %i) = %.", f.digits, "f, \\emph{p} %s"), anova_res[term, "Df"], anova_res["Residuals", "Df"], anova_res[term, "F value"], round.p(afit[term, "Pr(>F)"]))
   }
+  
   format.results(res_str, ...)
 }
+
 #' Describe aov results
 #'
 #' @param fit fitted aov model
 #' @param term model term to describe (a string with the term name or its sequential number)
 #' @param sstype anova SS type (e.g., 2 or 3)
-#' @param ... other parameters passed to describe.Anova
+#' @param ... other parameters passed to apa.Anova
 #'
 #' @return formatted string with FALSE(df_numerator, df_denomiator) = F_value, p =/< p_value
 #' @export
 #'
 
-describe.aov <- function(fit, term, sstype = 2, ...) {
+apa.aov <- function(fit, term, sstype = 2, ...) {
   afit <- as.data.frame(car::Anova(fit, type = sstype))
-
-  describe.Anova(afit, term, ...)
+  
+  apa.Anova(afit, term, ...)
 }
 
 #' Describe BayesFactor results
 #'
-#' @param bf an object of [BayesFactor::BFBayesFactor] class
+#' @param bf an object of [BayesFactor] class
 #' @param digits number of digits to use
 #' @param top_limit numbers above that limit (or below the digits limit) will be converted to exponential notation (if convert_to_power is TRUE)
-#' @param convert_to_power enable or distable converting of very small or very large numbers to exponential notation
+#' @param convert_to_power enable or disable converting of very small or very large numbers to exponential notation
 #' @param ... other parameters passed to [apastats::format.results]
 #' @return string describing the result
 #' @note Code for converting to exponential notation is based on http://dankelley.github.io/r/2015/03/22/scinot.html
-#' @export describe.bf
+#' @export apa.bf
 #'
 #' @examples
 #'
@@ -77,10 +92,10 @@ describe.aov <- function(fit, term, sstype = 2, ...) {
 #' data(puzzles)
 #'
 #' bfs <- anovaBF(RT ~ shape * color + ID, data = puzzles, progress = FALSE)
-#' describe.bf(bfs[1])
-#' describe.bf(bfs[2] / bfs[14])
+#' apa(bfs[1])
+#' apa(bfs[2] / bfs[14])
 #'
-describe.bf <- function(bf, digits = 2, top_limit = 10000, convert_to_power = TRUE, ...) {
+apa.bf <- function(bf, digits = 2, top_limit = 10000, convert_to_power = TRUE, ...) {
   bf_val <- exp(bf@bayesFactor[1])
   if ((bf_val < (10^(-digits)) | bf_val > top_limit) & convert_to_power) {
     exponent <- floor(log10(bf_val))
@@ -96,16 +111,16 @@ describe.bf <- function(bf, digits = 2, top_limit = 10000, convert_to_power = TR
 #' @param digits number of digits in results (default: 2)
 #'
 #' @return a string with the mean and confidence interval in square brackets
-#' @export describe.binom.mean.conf
+#' @export apa.binom.mean.conf
 #'
 #' @examples
 #'
-#' describe.binom.mean.conf(faces$correct[1:100])
+#' apa.binom.mean.conf(faces$correct[1:100])
 #' # note that it is slightly different from asymptotic CI
-#' describe.mean.conf(faces$correct[1:100], bootCI = FALSE)
+#' apa.mean.conf(faces$correct[1:100], bootCI = FALSE)
 #' # although similar to the bootstrapped CI
-#' describe.mean.conf(faces$correct[1:100], bootCI = TRUE)
-describe.binom.mean.conf <- function(x, digits = 2) {
+#' apa.mean.conf(faces$correct[1:100], bootCI = TRUE)
+apa.binom.mean.conf <- function(x, digits = 2) {
   format.results(with(data.frame(Hmisc::binconf(sum(x), length(x))), sprintf(paste0("\\emph{M} = %.", digits, "f [%.", digits, "f, %.", digits, "f]"), PointEst, Lower, Upper)))
 }
 #' Describe brms model results
@@ -122,7 +137,7 @@ describe.binom.mean.conf <- function(x, digits = 2) {
 #'
 #' @return string describing the result
 #' @importFrom data.table data.table
-#' @export describe.brm
+#' @export apa.brm
 #'
 #' @examples
 #' \dontrun{
@@ -130,11 +145,11 @@ describe.binom.mean.conf <- function(x, digits = 2) {
 #' x <- rnorm(500, sd = 6)
 #' y <- 4 * x + rnorm(500)
 #' fit <- brm(y ~ x, data = data.frame(x, y), chains = 1, iter = 500)
-#' describe.brm(fit, "x")
+#' apa(fit, "x")
 #' # convert x to another scale for output
-#' describe.brm(fit, "x", trans = function(val) val + 5)
+#' apa(fit, "x", trans = function(val) val + 5)
 #' }
-describe.brm <- function(mod, term, trans = NULL, digits = 2, eff.size = FALSE, eff.size.type = "r", nsamples = 100, ci.type = "HPDI", ...) {
+apa.brm <- function(mod, term, trans = NULL, digits = 2, eff.size = FALSE, eff.size.type = "r", nsamples = 100, ci.type = "HPDI", ...) {
   post_samp <- brms::posterior_samples(mod, c(paste0("b_", term)), exact_match = TRUE)
   if (ncol(post_samp) > 1) {
     warning(paste("More than one match using", term, "term"))
@@ -149,7 +164,7 @@ describe.brm <- function(mod, term, trans = NULL, digits = 2, eff.size = FALSE, 
     ci <- bayestestR::eti(post_samp, ci = 0.95)
   }
   # it is tricky to compute partial R2, this is just one of the approaches
-
+  
   es <- NULL
   if (eff.size != FALSE) {
     var_res <- var(resid(mod, nsamples = nsamples)[, 1])
@@ -166,11 +181,11 @@ describe.brm <- function(mod, term, trans = NULL, digits = 2, eff.size = FALSE, 
     mod_data_preds <- merge(mod$data, term_re, by.x = names(brms::ranef(mod)), by.y = "rn")
     var_term <- var(mod_data_preds[, term, with = FALSE] * (brms::fixef(mod)[term, "Estimate"] + mod_data_preds[, "Estimate"]))
     var_tot <- var_term + var_res
-
+    
     es <- var_term / var_tot
   }
-
-
+  
+  
   res_str <- sprintf(paste0("\\emph{b} = %.", digits, "f, 95%% %s = [%.", digits, "f, %.", digits, "f]"), mean(post_samp), ci.type, ci[, "CI_low"], ci[, "CI_high"])
   if (!is.null(es)) {
     if (eff.size.type == "r") {
@@ -179,7 +194,7 @@ describe.brm <- function(mod, term, trans = NULL, digits = 2, eff.size = FALSE, 
       res_str <- paste0(res_str, ", $R^2_part$ = ", f.round(es, digits = digits))
     }
   }
-
+  
   format.results(res_str, ...)
 }
 #' Describe $chi^2$ results
@@ -206,9 +221,9 @@ describe.brm <- function(mod, term, trans = NULL, digits = 2, eff.size = FALSE, 
 #' )
 #' (Xsq <- chisq.test(M)) # Prints test summary
 #' ## ----------------------
-#' describe.chi(M) # Note that describe.chi should be used for the table, not the chi2
+#' apa.chi(M) # Note that apa.chi should be used for the table, not the chi2
 #'
-describe.chi <- function(tbl, v = TRUE, addN = TRUE, ...) {
+apa.chi <- function(tbl, v = TRUE, addN = TRUE, ...) {
   if (length(dim(tbl)) != 2 & !is.matrix(tbl)) tbl <- table(tbl)
   chi <- chisq.test(tbl)
   cv <- sqrt(chi$statistic / (sum(tbl) * min(dim(tbl) - 1)))
@@ -225,7 +240,7 @@ describe.chi <- function(tbl, v = TRUE, addN = TRUE, ...) {
 #' @export
 #'
 
-describe.dip.test <- function(x, ...) {
+apa.dip.test <- function(x, ...) {
   res <- diptest::dip.test(x)
   res <- sprintf("\\emph{D} = %.2f, \\emph{p} %s", res$statistic, round.p(res$p.value))
   format.results(res, ...)
@@ -247,12 +262,12 @@ describe.dip.test <- function(x, ...) {
 #' warp.lm <- lm(breaks ~ wool * tension, data = warpbreaks)
 #' warp.lsm <- emmeans::emmeans(warp.lm, ~ tension | wool)
 #' (sum_contr <- summary(contrast(warp.lsm, "trt.vs.ctrl")))
-#' describe.emmeans(sum_contr, 1)
-#' describe.emmeans(sum_contr, 3)
-#' describe.emmeans(sum_contr, 3, dtype = "t")
-#' describe.emmeans(sum_contr, 3, dtype = "c")
-#' describe.emmeans(sum_contr, 3, dtype = "c", df = TRUE)
-describe.emmeans <- function(obj, term, dtype = "B", df = FALSE, ...) {
+#' apa(sum_contr, 1)
+#' apa(sum_contr, 3)
+#' apa(sum_contr, 3, dtype = "t")
+#' apa(sum_contr, 3, dtype = "c")
+#' apa(sum_contr, 3, dtype = "c", df = TRUE)
+apa.emmeans <- function(obj, term, dtype = "B", df = FALSE, ...) {
   obj <- as.data.frame(obj[term, ])
   df_str <- ifelse(df, sprintf("(%i)", round(obj$df)), "")
   if (dtype == "t") {
@@ -286,21 +301,21 @@ describe.emmeans <- function(obj, term, dtype = "B", df = FALSE, ...) {
 #' faces$uid <- factor(faces$uid)
 #' ez_res <- ez::ezANOVA(faces[faces$correct == 1], dv = answerTime, 
 #'                       wid = uid, within = stim_gender, between = user_gender)
-#' describe.ezanova(ez_res, "user_gender")
-#' describe.ezanova(ez_res, "user_gender", eta_digits = 3)
-#' describe.ezanova(ez_res, "user_gender:stim_gender", eta_digits = 3)
-#' describe.ezanova(ez_res, 3, eta_digits = 3)
-describe.ezanova <- function(ezfit, term, include_eta = TRUE, spher_corr = TRUE, eta_digits = 2, f_digits = 2, df_digits = 0, append_to_table = FALSE, ...) {
+#' apa(ez_res, "user_gender")
+#' apa(ez_res, "user_gender", eta_digits = 3)
+#' apa(ez_res, "user_gender:stim_gender", eta_digits = 3)
+#' apa(ez_res, 3, eta_digits = 3)
+apa.ezanova <- function(ezfit, term, include_eta = TRUE, spher_corr = TRUE, eta_digits = 2, f_digits = 2, df_digits = 0, append_to_table = FALSE, ...) {
   eza <- ezfit$ANOVA
   if (spher_corr & ("Sphericity Corrections" %in% names(ezfit))) {
     eza <- merge(eza, ezfit$`Sphericity Corrections`, by = "Effect", all.x = TRUE)
     eza[!is.na(eza$GGe), "p"] <- eza[!is.na(eza$GGe), ]$`p[GG]`
   }
   rownames(eza) <- eza$Effect
-
+  
   suffix <- sprintf(", $\\eta$^2^~G~ %s", round.p(eza[term, "ges"],
-    digits = eta_digits,
-    replace.very.small = 10^(-eta_digits)
+                                                  digits = eta_digits,
+                                                  replace.very.small = 10^(-eta_digits)
   ))
   if (include_eta == FALSE) {
     suffix <- rep("", length(suffix))
@@ -318,7 +333,7 @@ describe.ezanova <- function(ezfit, term, include_eta = TRUE, spher_corr = TRUE,
 #'
 #' @param ezstats_res data.frame returned by ezStats
 #' @param term model term to describe (a string with the term name or its sequential number)
-#' @param ... other parameters passed to describe.mean.sd
+#' @param ... other parameters passed to apa.mean.sd
 #'
 #' If a string is used for a term and there is more than one factor, "X:Y:Z" format is assumed (value in first column : value in the second, and so on). If no term is supplied, the first row is used. So if you need to select a term based on two or more variables, you can also just filter ezStats result beforehand (or use a row number as a term).
 #'
@@ -331,13 +346,13 @@ describe.ezanova <- function(ezfit, term, include_eta = TRUE, spher_corr = TRUE,
 #' faces$correct <- factor(faces$correct)
 #' ezstats_res <- ez::ezStats(faces, dv = answerTime, wid = uid, within = .(stim_gender, correct))
 #' ezstats_res
-#' describe.ezstats(ezstats_res, "M:0")
-#' describe.ezstats(ezstats_res, 2)
-#' describe.ezstats(ezstats_res, 2, digits = 1)
+#' apa(ezstats_res, "M:0")
+#' apa(ezstats_res, 2)
+#' apa(ezstats_res, 2, digits = 1)
 #'
-describe.ezstats <- function(ezstats_res, term = 1, ...) {
+apa.ezstats <- function(ezstats_res, term = 1, ...) {
   rownames(ezstats_res) <- apply(ezstats_res[, 1:(which(colnames(ezstats_res) == "N") - 1)], 1, paste, collapse = ":")
-  with(ezstats_res[term, ], describe.mean.sd(m = Mean, sd = SD, ...))
+  with(ezstats_res[term, ], apa.mean.sd(m = Mean, sd = SD, ...))
 }
 #' Describe regression model (GLM, GLMer, lm, lm.circular, ...)
 #'
@@ -362,24 +377,24 @@ describe.ezstats <- function(ezstats_res, term = 1, ...) {
 #' Animals$body <- log(Animals$body)
 #' Animals$brain <- log(Animals$brain)
 #' fit <- lm(brain ~ body, Animals)
-#' describe.glm(fit, "body")
-#' describe.glm(fit, "(Intercept)")
-#' describe.glm(fit, "body", 2)
-#' describe.glm(fit, "body", 3)
-#' describe.glm(fit, "body", 4)
-#' describe.glm(fit, "body", 3, test.df = 1)
-#' describe.glm(fit)
+#' apa(fit, "body")
+#' apa(fit, "(Intercept)")
+#' apa(fit, "body", 2)
+#' apa(fit, "body", 3)
+#' apa(fit, "body", 4)
+#' apa(fit, "body", 3, test.df = 1)
+#' apa(fit)
 #' \dontrun{
 #' require(rockchalk)
-#' describe.glm(fit, "body", 4, eff.size = TRUE)
+#' apa(fit, "body", 4, eff.size = TRUE)
 #' }
-describe.glm <- function(fit, term = NULL, dtype = 1, b.digits = 2, t.digits = 2, test.df = FALSE, p.as.number = FALSE, term.pattern = NULL, eff.size = FALSE, adj.digits = FALSE, ...) {
+apa.glm <- function(fit, term = NULL, dtype = 1, b.digits = 2, t.digits = 2, test.df = FALSE, p.as.number = FALSE, term.pattern = NULL, eff.size = FALSE, adj.digits = FALSE, ...) {
   fit_package <- attr(class(fit), "package")
   fit_class <- class(fit)[1]
   fit_family <- family(fit)[1]
-
+  
   if (!is.numeric(dtype) | dtype < 0 | dtype > 4) dtype <- 3
-
+  
   if (fit_class == "lm.circular.cl") {
     print(1)
     afit <- data.frame(fit$coefficients, fit$se.coef, fit$t.values, fit$p.values)
@@ -422,7 +437,7 @@ describe.glm <- function(fit, term = NULL, dtype = 1, b.digits = 2, t.digits = 2
       b.digits <- b.digits + 1
     }
   }
-
+  
   if (length(attr(terms(fit), "term.labels")) == (length(rownames(afit)) + 1)) {
     rownames(afit) <- c("Intercept", attr(terms(fit), "term.labels"))
   }
@@ -432,7 +447,7 @@ describe.glm <- function(fit, term = NULL, dtype = 1, b.digits = 2, t.digits = 2
     }
     afit$pvals <- 2 * pnorm(-abs(afit[, 3]))
   }
-
+  
   if (test.df) {
     if (!grepl("merModLmerTest", fit_class)) {
       dfs <- summary(fit)$df[2]
@@ -446,9 +461,9 @@ describe.glm <- function(fit, term = NULL, dtype = 1, b.digits = 2, t.digits = 2
   } else {
     dfs <- ""
   }
-
+  
   res_df <- data.frame(B = f.round(afit[, 1], 2), SE = f.round(afit[, 2], 2), Stat = f.round(afit[, 3], t.digits), p = if (p.as.number) zapsmall(as.vector(afit[, 4]), 4) else round.p(afit[, 4]), eff = row.names(afit), row.names = row.names(afit))
-
+  
   if (dtype == 1) {
     res_df$str <- sprintf(paste0("\\emph{", t_z, "}", dfs, " %s, \\emph{p} %s"), round.p(afit[, 3], digits = t.digits, strip.lead.zeros = FALSE), round.p(afit[, 4]))
   } else if (dtype == 2) {
@@ -458,13 +473,13 @@ describe.glm <- function(fit, term = NULL, dtype = 1, b.digits = 2, t.digits = 2
   } else if (dtype == 4) {
     res_df$str <- sprintf(paste0("\\emph{B} = %.", b.digits, "f (%.", b.digits, "f), \\emph{", t_z, "}", dfs, " %s"), afit[, 1], afit[, 2], round.p(afit[, 3], digits = t.digits, strip.lead.zeros = FALSE, replace.very.small = 0.01))
   }
-
+  
   if (eff.size & !exists("ess")) {
     stop("Effect sizes are not implemented for THAT kind of models yet.")
   } else if (eff.size) {
     res_df$str <- paste0(res_df$str, ", \\emph{R}_{part}^2", round.p(c(NA, ess), digits = ifelse(min(ess) < 0.01, 3, 2)))
   }
-
+  
   res_df$str <- format.results(res_df$str, ...)
   if (!is.null(term)) {
     res_df[term, "str"]
@@ -486,13 +501,13 @@ describe.glm <- function(fit, term = NULL, dtype = 1, b.digits = 2, t.digits = 2
 #' mod.davis <- lm(weight ~ repwt, data = carData::Davis)
 #'
 #' res <- car::linearHypothesis(mod.davis, c("(Intercept) = 0", "repwt = 1"))
-#' describe.lht(res)
+#' apa(res)
 #'
 #' res.chi <- car::linearHypothesis(mod.davis, c("(Intercept) = 0", "repwt = 1"), test = "Chisq")
-#' describe.lht(res.chi)
-describe.lht <- function(hyp, ...) {
+#' apa(res.chi)
+apa.lht <- function(hyp, ...) {
   res <- hyp[2, ]
-
+  
   if ("Chisq" %in% names(res)) {
     res <- res[c("Df", "Chisq", "Pr(>Chisq)")]
     res[3] <- round.p(res[3])
@@ -505,7 +520,7 @@ describe.lht <- function(hyp, ...) {
 }
 #' Describe lmer results
 #'
-#' This function is deprecated in favor of \link{describe.glm}
+#' This function is deprecated in favor of \link{apa.glm}
 #'
 #' @param fm LMER model from lme4
 #' @param pv p values table (from Anova)
@@ -518,8 +533,8 @@ describe.lht <- function(hyp, ...) {
 #' @export
 #'
 
-describe.lmer <- function(fm, pv, digits = c(2, 2, 2), incl.rel = 0, dtype = "B", incl.p = TRUE) {
-  .Deprecated("describe.glm")
+apa.lmer <- function(fm, pv, digits = c(2, 2, 2), incl.rel = 0, dtype = "B", incl.p = TRUE) {
+  .Deprecated("apa.glm")
   cc <- lme4::fixef(fm)
   ss <- sqrt(diag(as.matrix(vcov(fm))))
   data <- data.frame(
@@ -556,12 +571,12 @@ describe.lmer <- function(fm, pv, digits = c(2, 2, 2), incl.rel = 0, dtype = "B"
 #'
 #' fm <- lmerTest::lmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)
 #' fms <- summary(fm)
-#' describe.lmert(fms, "Days")
-#' describe.lmert(fms, "(Intercept)")
-#' describe.lmert(fms, 2)
-#' describe.lmert(fms, "Days", "B")
+#' apa(fms, "Days")
+#' apa(fms, "(Intercept)")
+#' apa(fms, 2)
+#' apa(fms, "Days", "B")
 #'
-describe.lmert <- function(sfit, factor, dtype = "t", ...) {
+apa.lmert <- function(sfit, factor, dtype = "t", ...) {
   coef <- sfit$coefficients[factor, ]
   if (sfit$objClass == "glmerMod") {
     test_name <- "z"
@@ -593,8 +608,8 @@ describe.lmert <- function(sfit, factor, dtype = "t", ...) {
 #'
 #' fit <- lmerTest::lmer(answerTime ~ correct * stim_gender + (1 + correct * stim_gender | uid), faces)
 #' afit <- anova(fit)
-#' describe.lmtaov(afit, "correct:stim_gender")
-describe.lmtaov <- function(afit, term, f.digits = 2, ...) {
+#' apa(afit, "correct:stim_gender")
+apa.lmtaov <- function(afit, term, f.digits = 2, ...) {
   afit <- data.frame(afit)
   res_str <- sprintf(paste0("\\emph{F}(%.0f, %.1f) = %.", f.digits, "f, \\emph{p} %s"), afit[term, "NumDF"], afit[term, "DenDF"], afit[term, "F.value"], round.p(afit[term, "Pr..F."]))
   format.results(res_str, ...)
@@ -615,12 +630,12 @@ describe.lmtaov <- function(afit, term, f.digits = 2, ...) {
 #' warp.lm <- lm(breaks ~ wool * tension, data = warpbreaks)
 #' warp.lsm <- lsmeans::lsmeans(warp.lm, ~ tension | wool)
 #' (sum_contr <- summary(lsmeans::contrast(warp.lsm, "trt.vs.ctrl")))
-#' describe.lsmeans(sum_contr, 1)
-#' describe.lsmeans(sum_contr, 3)
-#' describe.lsmeans(sum_contr, 3, dtype = "t")
-#' describe.lsmeans(sum_contr, 3, dtype = "c")
-#' describe.lsmeans(sum_contr, 3, dtype = "c", df = TRUE)
-describe.lsmeans <- function(obj, term, dtype = "B", df = FALSE, ...) {
+#' apa(sum_contr, 1)
+#' apa(sum_contr, 3)
+#' apa(sum_contr, 3, dtype = "t")
+#' apa(sum_contr, 3, dtype = "c")
+#' apa(sum_contr, 3, dtype = "c", df = TRUE)
+apa.lsmeans <- function(obj, term, dtype = "B", df = FALSE, ...) {
   obj <- obj[term, ]
   if (dtype == "t") {
     res_str <- sprintf("\\emph{%s}%s = %.2f, \\emph{p} %s", "t", ifelse(df, paste0("(", round(obj["df"]), ")"), ""), obj["t.ratio"], round.p(obj["p.value"]))
@@ -652,16 +667,16 @@ describe.lsmeans <- function(obj, term, dtype = "B", df = FALSE, ...) {
 #' data(faces)
 #' rt <- faces$answerTime
 #' gr <- faces$stim_gender
-#' describe.mean.and.t(rt, gr)
-#' describe.mean.and.t(rt, gr, which.mean = 3)
-#' describe.mean.and.t(rt, gr, eff.size = TRUE)
+#' apa.mean.and.t(rt, gr)
+#' apa.mean.and.t(rt, gr, which.mean = 3)
+#' apa.mean.and.t(rt, gr, eff.size = TRUE)
 #'
 #' sid <- faces$sid
-#' describe.mean.and.t(rt, gr, which.mean = 3, aggregate_by = sid)
+#' apa.mean.and.t(rt, gr, which.mean = 3, aggregate_by = sid)
 #' log_rt <- log(rt * 1000)
-#' describe.mean.and.t(log_rt, gr, which.mean = 3, aggregate_by = sid)
-#' describe.mean.and.t(log_rt, gr, which.mean = 3, aggregate_by = sid, transform.means = exp)
-describe.mean.and.t <- function(x, by, which.mean = 1, digits = 2, paired = FALSE, eff.size = FALSE, abs = FALSE, aggregate_by = NULL, transform.means = NULL, ...) {
+#' apa.mean.and.t(log_rt, gr, which.mean = 3, aggregate_by = sid)
+#' apa.mean.and.t(log_rt, gr, which.mean = 3, aggregate_by = sid, transform.means = exp)
+apa.mean.and.t <- function(x, by, which.mean = 1, digits = 2, paired = FALSE, eff.size = FALSE, abs = FALSE, aggregate_by = NULL, transform.means = NULL, ...) {
   
   Lower <- Upper <- NULL  # due to NSE notes in R CMD check
   
@@ -679,13 +694,13 @@ describe.mean.and.t <- function(x, by, which.mean = 1, digits = 2, paired = FALS
     by <- aggr_df$by
   }
   summaries <- Hmisc::summarize(x, by, Hmisc::smean.cl.boot)
-
+  
   if (!is.null(transform.means)) {
     summaries[, c("x", "Lower", "Upper")] <- sapply(summaries[, c("x", "Lower", "Upper")], exp)
   }
-
+  
   summaries <- transform(summaries, mean.descr = sprintf(paste0("\\emph{M} = %.", digits, "f [%.", digits, "f, %.", digits, "f]"), x, Lower, Upper))
-
+  
   if (which.mean == 3) {
     means <- paste0(summaries[1, "mean.descr"], " vs. ", summaries[2, "mean.descr"], ", ")
   } else if (which.mean == 0) {
@@ -693,14 +708,14 @@ describe.mean.and.t <- function(x, by, which.mean = 1, digits = 2, paired = FALS
   } else {
     means <- paste0(summaries[which.mean, "mean.descr"], ", ")
   }
-
+  
   if (paired){
     if (length(x[by==unique(by)[1]])!=length(x[by==unique(by)[2]])){
       stop('For a paired t-test groups defined by `by` should have equal length.')
     }
     t_res <- t.test(x[by==unique(by)[1]],x[by==unique(by)[2]], paired = T)
   } else t_res <- t.test(x~by)
-  res_str <- paste0(means, describe.ttest(t_res, abs = abs))
+  res_str <- paste0(means, apa.ttest(t_res, abs = abs))
   if (eff.size) {
     if (!requireNamespace("lsr", quietly = TRUE)) {
       warning("Cannot compute effect size. The 'lsr' package is not available. Please install it using install.packages('lsr').")
@@ -711,17 +726,17 @@ describe.mean.and.t <- function(x, by, which.mean = 1, digits = 2, paired = FALS
     }
     
   }
-
+  
   format.results(res_str, ...)
 }
 #' Describe mean and confidence intervals
 #'
 #' @param x value that should be described
 #' @param bootCI use bootstrapped (T, default) or Gaussian (F) confidence intervals
-#' @param addCI add "95\% CI =" before confidence intervals (default: F)
+#' @param addCI adds "95% CI =" before confidence intervals (default: F)
 #' @param digits number of digits to use
 #' @param transform.means an optional function to transform the means and CI to another scale
-#' @param ... other arguments passed to \link{format.results}
+#' @param ... other arguments passed to [apastats::format.results]
 #'
 #' @return a string with a mean followed by confidence intervals in square brackets.
 #'
@@ -730,11 +745,12 @@ describe.mean.and.t <- function(x, by, which.mean = 1, digits = 2, paired = FALS
 #' @examples
 #'
 #' x <- runif(100, 0, 50)
-#' describe.mean.conf(x)
-#' describe.mean.conf(x, bootCI = FALSE)
-#' describe.mean.conf(x, digits = 5)
-#' describe.mean.conf(x, transform.means = function(val) val * 2)
-describe.mean.conf <- function(x, bootCI = TRUE, addCI = FALSE, digits = 2, transform.means = NULL, ...) {
+#' apa.mean.conf(x)
+#' apa.mean.conf(x, bootCI = FALSE)
+#' apa.mean.conf(x, digits = 5)
+#' apa.mean.conf(x, transform.means = function(val) val * 2)
+#' 
+apa.mean.conf <- function(x, bootCI = TRUE, addCI = FALSE, digits = 2, transform.means = NULL, ...) {
   if (bootCI) {
     res <- Hmisc::smean.cl.boot(x)
   } else {
@@ -769,10 +785,10 @@ describe.mean.conf <- function(x, bootCI = TRUE, addCI = FALSE, digits = 2, tran
 #' @examples
 #'
 #' x <- rnorm(1000, 50, 25)
-#' describe.mean.sd(x)
-#' describe.mean.sd(x, 0)
-#' describe.mean.sd(x, dtype = "c")
-describe.mean.sd <- function(x = NULL, m = NULL, sd = NULL, digits = 2, dtype = "p", m_units = "", sd_units = "", ...) {
+#' apa.mean.sd(x)
+#' apa.mean.sd(x, 0)
+#' apa.mean.sd(x, dtype = "c")
+apa.mean.sd <- function(x = NULL, m = NULL, sd = NULL, digits = 2, dtype = "p", m_units = "", sd_units = "", ...) {
   if (dtype == "c") {
     s1 <- ", "
     s2 <- ""
@@ -802,8 +818,8 @@ describe.mean.sd <- function(x = NULL, m = NULL, sd = NULL, digits = 2, dtype = 
 #' x <- rnorm(40)
 #' y <- x * 2 + rnorm(40)
 #' rc <- cor.test(x, y)
-#' describe.r(rc)
-describe.r <- function(rc, ...) {
+#' apa(rc)
+apa.r <- function(rc, ...) {
   format.results(sprintf("\\emph{r}(%.0f) = %.2f, \\emph{p} %s", rc$parameter, rc$estimate, round.p(rc$p.value)), ...)
 }
 #' Describe differences between ROC curves
@@ -814,7 +830,7 @@ describe.r <- function(rc, ...) {
 #' @export
 #'
 
-describe.roc.diff <- function(roc_diff) {
+apa.roc.diff <- function(roc_diff) {
   sprintf("\\emph{D} = %0.2f, \\emph{p} %s", roc_diff$statistic, round.p(roc_diff$p.value))
 }
 #' Describe t-test results
@@ -829,10 +845,10 @@ describe.roc.diff <- function(roc_diff) {
 #'
 #' @examples
 #' t_res <- t.test(rnorm(20, mean = -10, sd = 2))
-#' describe.ttest(t_res)
-#' describe.ttest(t_res, show.mean = TRUE)
-#' describe.ttest(t_res, show.mean = TRUE, abs = TRUE)
-describe.ttest <- function(t, show.mean = FALSE, abs = FALSE, ...) {
+#' apa(t_res)
+#' apa(t_res, show.mean = TRUE)
+#' apa(t_res, show.mean = TRUE, abs = TRUE)
+apa.ttest <- function(t, show.mean = FALSE, abs = FALSE, ...) {
   if (abs) t$statistic <- abs(t$statistic)
   if (show.mean == TRUE) {
     res_str <- sprintf("\\emph{M} = %.2f [%.2f, %.2f], \\emph{t}(%.1f) = %.2f, \\emph{p} %s", t$estimate, t$conf.int[1], t$conf.int[2], t$parameter, t$statistic, round.p(t$p.value))
@@ -843,7 +859,7 @@ describe.ttest <- function(t, show.mean = FALSE, abs = FALSE, ...) {
 }
 #' Describe lmer in-text
 #'
-#' A shortcut for describe.glm(..., short=4)
+#' A shortcut for apa.glm(..., short=4)
 #'
 #' @param fm LMER model from lme4
 #' @param term model term to describe (a string with the term name or its sequential number)
@@ -854,7 +870,7 @@ describe.ttest <- function(t, show.mean = FALSE, abs = FALSE, ...) {
 #'
 
 ins.lmer <- function(fm, term = NULL, digits = 2, adj.digits = TRUE) {
-  describe.glm(fm, term = term, b.digits = digits, adj.digits = adj.digits, dtype = 4)
+  apa.glm(fm, term = term, b.digits = digits, adj.digits = adj.digits, dtype = 4)
 }
 #' Get a list with means and confidence intervals
 #'

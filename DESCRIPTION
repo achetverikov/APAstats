@@ -38,4 +38,5 @@ Depends:
     R (>= 3.5)
 LazyData: TRUE
 RoxygenNote: 7.3.2
+Roxygen: list(markdown = TRUE)
 Additional_repositories: 

@@ -148,7 +148,7 @@ load.libs <- function(libs) {
 }
 
 
-#' Cut numeric variable into groups (bins) with advanced options
+#' Cut a numeric variable into groups (bins) with advanced options
 #'
 #' @param x vector of numeric values to cut into groups
 #' @param ncuts number of cuts (default: NULL)
@@ -158,8 +158,8 @@ load.libs <- function(libs) {
 #' @param labels a vector of labels to use for the groups (default: NULL)
 #' @param include_oob include values outside of the boundaries provided in `cuts` (default: TRUE)
 #' @param labels_at_means should labels be created as means between cuts (T) or as pairs of cuts (F)
-#' @param label_pairs_format formatting string to use when labels are generated from pairs of cuts (default: [\%.2f, \%.2f])
-#' @param ... other parameters passed to `base::cut`
+#' @param label_pairs_format formatting string to use when labels are generated from pairs of cuts (default: \[%.2f, %.2f\])
+#' @param ... other parameters passed to [base::cut]
 #'
 #' If `ncuts` is used, then the variable is cut into N cuts either of equal group size (eq_groups = TRUE) or equally distant from each other (eq_groups = FALSE). If `labels` are not provided, they are generated as  means between cuts if labels_at_means is T.
 #'
@@ -177,7 +177,9 @@ load.libs <- function(libs) {
 #' adv_cut(x, ncuts = 5, eq_groups = TRUE, labels_at_means = FALSE)
 #' adv_cut(x, cuts = seq(0, 100, by = 20))
 #' adv_cut(x, cuts = seq(0, 100, by = 20), labels_at_means = FALSE)
-#' adv_cut(x, cuts = seq(0, 100, by = 20), labels_at_means = FALSE, label_pairs_format = "[%i, %i]")
+#' adv_cut(x, cuts = seq(0, 100, by = 20), 
+#'            labels_at_means = FALSE, label_pairs_format = "[%i, %i]")
+#' 
 adv_cut <- function(x, ncuts = NULL, eq_groups = FALSE, cuts = NULL, num_labels = FALSE,
                     labels = NULL, include_oob = TRUE, labels_at_means = TRUE, label_pairs_format = "[%.2f, %.2f]", ...) {
   if (!is.null(ncuts)) {
@@ -406,7 +408,7 @@ paste_and <- function(x, sep = ", ", suffix = "") {
 #' @param within within-subject variables (vector of strings)
 #' @param value_var dependent variable (string)
 #' @param between between-subject variables (vector of strings; default: NULL)
-#' @param adjustments adjustment settings as used for [superb::superData] (default: single CI estimates, Cousineau-Morey adjustment)
+#' @param adjustments adjustment settings as used for [superb::superbData] (default: single CI estimates, Cousineau-Morey adjustment)
 #' @param errorbar type of error bars to use (CI/SE)
 #' @param drop_NA_subj should subjects with NA values be dropped? (default: FALSE)
 #' @param drop_missing_levels should the missing levels of the variables in within/between be dropped? (default: TRUE)
