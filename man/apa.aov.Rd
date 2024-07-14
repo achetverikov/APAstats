@@ -2,12 +2,12 @@
 % Please edit documentation in R/functions.R
 \name{apa.aov}
 \alias{apa.aov}
-\title{Describe aov results}
+\title{Describe \link[stats:aov]{stats::aov} results}
 \usage{
 \method{apa}{aov}(obj, term = term, sstype = 2, ...)
 }
 \arguments{
-\item{obj}{fitted aov model}
+\item{obj}{fitted \link[stats:aov]{stats::aov} model}
 
 \item{term}{model term to describe (a string with the term name or its sequential number)}
 
@@ -16,10 +16,10 @@
 \item{...}{other parameters passed to apa.anova}
 }
 \value{
-formatted string with FALSE(df_numerator, df_denomiator) = F_value, p =/< p_value
+formatted string with F(df_numerator, df_denomiator) = F_value, p =/< p_value
 }
 \description{
-Describe aov results
+Describe \link[stats:aov]{stats::aov} results
 }
 \examples{
 fit <- aov(answerTime ~ stim_gender*user_gender, data = faces)

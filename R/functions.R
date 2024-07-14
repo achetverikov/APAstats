@@ -17,7 +17,7 @@ apa <- function(obj, ...){
 #' @param obj ANOVA results from [car::Anova] or [stats::anova]
 #' @param term model term to describe (a string with the term name or its sequential number, default: 2)
 #' @param f.digits number of digits in the results (default: 2)
-#' @param ... other parameters passed to [apastats::format.results]
+#' @param ... other parameters passed to [apastats2::format.results]
 #' 
 #' @details
 #' 
@@ -46,16 +46,17 @@ apa <- function(obj, ...){
 #' afit
 #' apa(afit, "fcategory")
 #' apa(afit, 2, 4)
+#' 
 
 apa.anova <- function(obj, term = 2, f.digits = 2, ...) {
-  if ("Df.res" %in% colnames(afit)) {
+  if ("Df.res" %in% colnames(obj)) {
     res_str <- sprintf(paste0("\\emph{F}(%i, %.", f.digits, "f) = %.", f.digits, "f, \\emph{p} %s"), obj[term, "Df"], obj[term, "Df.res"], obj[term, "F"], round.p(obj[term, "Pr(>F)"]))
   } else if ("F" %in% names(obj)) {
     res_str <- sprintf(paste0("\\emph{F}(%.0f, %.0f) = %.", f.digits, "f, \\emph{p} %s"), obj[term, "Df"], obj[term, "Res.Df"], obj[term, "F"], round.p(obj[term, "Pr(>F)"]))
   } else if ("Chisq" %in% names(obj)) {
     res_str <- sprintf(paste0("$\\chi^2$(%i) = %.", f.digits, "f, \\emph{p} %s"), obj[term, "Df"], obj[term, "Chisq"], round.p(obj[term, "Pr(>Chisq)"]))
   } else if ("F value" %in% names(obj)) {
-    res_str <- sprintf(paste0("\\emph{F}(%i, %i) = %.", f.digits, "f, \\emph{p} %s"), obj[term, "Df"], obj["Residuals", "Df"], obj[term, "F value"], round.p(afit[term, "Pr(>F)"]))
+    res_str <- sprintf(paste0("\\emph{F}(%i, %i) = %.", f.digits, "f, \\emph{p} %s"), obj[term, "Df"], obj["Residuals", "Df"], obj[term, "F value"], round.p(obj[term, "Pr(>F)"]))
   } else {
     stop('The object does not have one of the expected columns (F / F value / Chisq)')
   }
@@ -70,7 +71,7 @@ apa.anova <- function(obj, term = 2, f.digits = 2, ...) {
 #' @param sstype anova SS type (e.g., 2 or 3)
 #' @param ... other parameters passed to apa.anova
 #'
-#' @return formatted string with FALSE(df_numerator, df_denomiator) = F_value, p =/< p_value
+#' @return formatted string with F(df_numerator, df_denomiator) = F_value, p =/< p_value
 #' @method apa aov
 #' @export
 #' 
@@ -86,14 +87,15 @@ apa.aov <- function(obj, term = term, sstype = 2, ...) {
 
 #' Describe BayesFactor results
 #'
-#' @param bf an object of [BayesFactor] class
+#' @param obj an object of [BayesFactor] class `BFBayesFactor`
 #' @param digits number of digits to use
 #' @param top_limit numbers above that limit (or below the digits limit) will be converted to exponential notation (if convert_to_power is TRUE)
 #' @param convert_to_power enable or disable converting of very small or very large numbers to exponential notation
-#' @param ... other parameters passed to [apastats::format.results]
+#' @param ... other parameters passed to [apastats2::format.results]
 #' @return string describing the result
 #' @note Code for converting to exponential notation is based on http://dankelley.github.io/r/2015/03/22/scinot.html
-#' @export apa.bf
+#' @method apa BFBayesFactor
+#' @export apa.BFBayesFactor
 #'
 #' @examples
 #'
@@ -104,8 +106,8 @@ apa.aov <- function(obj, term = term, sstype = 2, ...) {
 #' apa(bfs[1])
 #' apa(bfs[2] / bfs[14])
 #'
-apa.bf <- function(bf, digits = 2, top_limit = 10000, convert_to_power = TRUE, ...) {
-  bf_val <- exp(bf@bayesFactor[1])
+apa.BFBayesFactor <- function(obj, digits = 2, top_limit = 10000, convert_to_power = TRUE, ...) {
+  bf_val <- exp(obj@bayesFactor[1])
   if ((bf_val < (10^(-digits)) | bf_val > top_limit) & convert_to_power) {
     exponent <- floor(log10(bf_val))
     bf_val <- round(bf_val / 10^exponent, digits = digits)
@@ -114,27 +116,10 @@ apa.bf <- function(bf, digits = 2, top_limit = 10000, convert_to_power = TRUE, .
     format.results(sprintf(paste0("\\emph{BF} = %.", digits, "f"), exp(bf@bayesFactor[1])), ...)
   }
 }
-#' Describe mean and confidence intervals for binomial variable
-#'
-#' @param x a vector of values
-#' @param digits number of digits in results (default: 2)
-#'
-#' @return a string with the mean and confidence interval in square brackets
-#' @export apa.binom.mean.conf
-#'
-#' @examples
-#'
-#' apa.binom.mean.conf(faces$correct[1:100])
-#' # note that it is slightly different from asymptotic CI
-#' apa.mean.conf(faces$correct[1:100], bootCI = FALSE)
-#' # although similar to the bootstrapped CI
-#' apa.mean.conf(faces$correct[1:100], bootCI = TRUE)
-apa.binom.mean.conf <- function(x, digits = 2) {
-  format.results(with(data.frame(Hmisc::binconf(sum(x), length(x))), sprintf(paste0("\\emph{M} = %.", digits, "f [%.", digits, "f, %.", digits, "f]"), PointEst, Lower, Upper)))
-}
+
 #' Describe brms model results
 #'
-#' @param mod model object
+#' @param obj model object
 #' @param term model term to describe
 #' @param trans an optional function to transform the results to another scale (default: NULL)
 #' @param digits number of digits in the output
@@ -146,7 +131,8 @@ apa.binom.mean.conf <- function(x, digits = 2) {
 #'
 #' @return string describing the result
 #' @importFrom data.table data.table
-#' @export apa.brm
+#' @method apa brmsfit
+#' @export apa.brmsfit
 #'
 #' @examples
 #' \dontrun{
@@ -158,8 +144,8 @@ apa.binom.mean.conf <- function(x, digits = 2) {
 #' # convert x to another scale for output
 #' apa(fit, "x", trans = function(val) val + 5)
 #' }
-apa.brm <- function(mod, term, trans = NULL, digits = 2, eff.size = FALSE, eff.size.type = "r", nsamples = 100, ci.type = "HPDI", ...) {
-  post_samp <- brms::posterior_samples(mod, c(paste0("b_", term)), exact_match = TRUE)
+apa.brmsfit <- function(obj, term, trans = NULL, digits = 2, eff.size = FALSE, eff.size.type = "r", nsamples = 100, ci.type = "HPDI", ...) {
+  post_samp <- brms::posterior_samples(obj, c(paste0("b_", term)), exact_match = TRUE)
   if (ncol(post_samp) > 1) {
     warning(paste("More than one match using", term, "term"))
   }
@@ -176,19 +162,19 @@ apa.brm <- function(mod, term, trans = NULL, digits = 2, eff.size = FALSE, eff.s
   
   es <- NULL
   if (eff.size != FALSE) {
-    var_res <- var(resid(mod, nsamples = nsamples)[, 1])
-    var_term <- var(mod$data[, term, with = FALSE] * brms::fixef(mod)[term, "Estimate"])
+    var_res <- var(resid(obj, nsamples = nsamples)[, 1])
+    var_term <- var(obj$data[, term, with = FALSE] * brms::fixef(obj)[term, "Estimate"])
   }
   if ("fe_to_all" == eff.size) {
-    var_tot <- var(fitted(mod, nsamples = nsamples)[, 1]) + var_res
+    var_tot <- var(fitted(obj, nsamples = nsamples)[, 1]) + var_res
     es <- var_term / var_tot
   } else if ("part_fe" == eff.size) {
-    # var_f = var(fitted(mod, re_formula = NA)[,1])
+    # var_f = var(fitted(obj, re_formula = NA)[,1])
     es <- var_term / (var_term + var_res)
   } else if ("part_fe_re" == eff.size) {
-    term_re <- data.table(brms::ranef(mod)[[1]][, , term], keep.rownames = TRUE)
-    mod_data_preds <- merge(mod$data, term_re, by.x = names(brms::ranef(mod)), by.y = "rn")
-    var_term <- var(mod_data_preds[, term, with = FALSE] * (brms::fixef(mod)[term, "Estimate"] + mod_data_preds[, "Estimate"]))
+    term_re <- data.table(brms::ranef(obj)[[1]][, , term], keep.rownames = TRUE)
+    mod_data_preds <- merge(obj$data, term_re, by.x = names(brms::ranef(obj)), by.y = "rn")
+    var_term <- var(mod_data_preds[, term, with = FALSE] * (brms::fixef(obj)[term, "Estimate"] + mod_data_preds[, "Estimate"]))
     var_tot <- var_term + var_res
     
     es <- var_term / var_tot
@@ -206,16 +192,28 @@ apa.brm <- function(mod, term, trans = NULL, digits = 2, eff.size = FALSE, eff.s
   
   format.results(res_str, ...)
 }
-#' Describe $chi^2$ results
-#'
-#' Describe Pearson $chi^2$ results. Note that the function takes table as an input rather than $chi^2$ object - this is necessary to get Cramer's V.
-#'
-#' @param tbl - MxN table on which to compute chi^2 (if not a table, will try to make a table out of it)
-#' @param v - add Cramer's V (default: T)
-#' @param addN - add N (default: T)
+
+#' Describe the results of $\chi^2$ or Hartigans' dip tests
+#' @param obj a result from [stats::chisq.test] or [diptest::dip.test]
 #' @param ... other parameters passed to \link{format.results}
+#' @method apa htest
+#' @return formatted results string
+#' 
+apa.htest <- function(obj, ...){
+  if (obj$method=="Pearson's Chi-squared test"){
+    apa.chisq(obj, ...)
+  } else if (obj$method == "Hartigans' dip test for unimodality / multimodality"){
+    apa.dip.test(obj, ...)
+  } else {
+    stop('The method from obj$method is not recognized')
+  }
+}
+
 #'
-#' @return result
+#' @param v add Cramer's V (default: T)
+#' @param addN add N (default: T)
+#'
+#' @describeIn apa.htest Describe Pearson $\\chi^2$ results
 #' @export
 #'
 #' @examples
@@ -230,30 +228,35 @@ apa.brm <- function(mod, term, trans = NULL, digits = 2, eff.size = FALSE, eff.s
 #' )
 #' (Xsq <- chisq.test(M)) # Prints test summary
 #' ## ----------------------
-#' apa.chi(M) # Note that apa.chi should be used for the table, not the chi2
+#' apa(Xsq)
 #'
-apa.chi <- function(tbl, v = TRUE, addN = TRUE, ...) {
+#'
+apa.chisq <- function(obj, v = TRUE, addN = TRUE, ...) {
+  tbl <- obj$observed
   if (length(dim(tbl)) != 2 & !is.matrix(tbl)) tbl <- table(tbl)
-  chi <- chisq.test(tbl)
-  cv <- sqrt(chi$statistic / (sum(tbl) * min(dim(tbl) - 1)))
+  cv <- sqrt(obj$statistic / (sum(tbl) * min(dim(tbl) - 1)))
   n <- sum(tbl)
-  res <- sprintf("$\\chi^2$(%i%s) = %.2f, \\emph{p} %s%s", chi$parameter, ifelse(addN, paste0(", \\emph{N} = ", sum(tbl)), ""), chi$statistic, round.p(chi$p.value), ifelse(v, paste0(", \\emph{V} = ", omit.zeroes(round(cv, 2)))))
+  res <- sprintf("$\\chi^2$(%i%s) = %.2f, \\emph{p} %s%s", obj$parameter, ifelse(addN, paste0(", \\emph{N} = ", sum(tbl)), ""), obj$statistic, round.p(obj$p.value), ifelse(v, paste0(", \\emph{V} = ", omit.zeroes(round(cv, 2)))))
   format.results(res, ...)
 }
-#' Describe Hartigans' dip test results
-#'
-#' @param x Hartigans' dip test results
-#' @param ... other parameters passed to \link{format.results}
-#'
-#' @return result
-#' @export
-#'
 
-apa.dip.test <- function(x, ...) {
-  res <- diptest::dip.test(x)
-  res <- sprintf("\\emph{D} = %.2f, \\emph{p} %s", res$statistic, round.p(res$p.value))
+
+
+#' @describeIn apa.htest Describe Hartigans' dip test results
+#' @export
+#' 
+#' @examples
+#' requireNamespace('diptest')
+#' data(statfaculty, package = 'diptest')
+#' (d.t <- dip.test(statfaculty))
+#' apa(d.t)
+#' 
+apa.dip.test <- function(obj, ...) {
+  res <- sprintf("\\emph{D} = %.2f, \\emph{p} %s", obj$statistic, round.p(obj$p.value))
   format.results(res, ...)
 }
+
+
 #' Describe contrasts created by emmeans
 #'
 #' @param obj summary object from emmeans::contrast
@@ -738,6 +741,25 @@ apa.mean.and.t <- function(x, by, which.mean = 1, digits = 2, paired = FALSE, ef
   
   format.results(res_str, ...)
 }
+
+#' Describe mean and confidence intervals for binomial variable
+#'
+#' @param x a vector of values
+#' @param digits number of digits in results (default: 2)
+#'
+#' @return a string with the mean and confidence interval in square brackets
+#' @export apa.binom.mean.conf
+#'
+#' @examples
+#'
+#' apa.binom.mean.conf(faces$correct[1:100])
+#' # note that it is slightly different from asymptotic CI
+#' apa.mean.conf(faces$correct[1:100], bootCI = FALSE)
+#' # although similar to the bootstrapped CI
+#' apa.mean.conf(faces$correct[1:100], bootCI = TRUE)
+apa.binom.mean.conf <- function(x, digits = 2) {
+  format.results(with(data.frame(Hmisc::binconf(sum(x), length(x))), sprintf(paste0("\\emph{M} = %.", digits, "f [%.", digits, "f, %.", digits, "f]"), PointEst, Lower, Upper)))
+}
 #' Describe mean and confidence intervals
 #'
 #' @param x value that should be described
@@ -745,7 +767,7 @@ apa.mean.and.t <- function(x, by, which.mean = 1, digits = 2, paired = FALSE, ef
 #' @param addCI adds "95% CI =" before confidence intervals (default: F)
 #' @param digits number of digits to use
 #' @param transform.means an optional function to transform the means and CI to another scale
-#' @param ... other arguments passed to [apastats::format.results]
+#' @param ... other arguments passed to [apastats2::format.results]
 #'
 #' @return a string with a mean followed by confidence intervals in square brackets.
 #'

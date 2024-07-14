@@ -1,7 +1,7 @@
-Package: apastats
+Package: apastats2
 Type: Package
 Title: APA-style results
-Version: 0.5
+Version: 1.0.0
 Author: Andrey Chetverikov (http://andreychetverikov.org)
 Maintainer: Andrey Chetverikov <andrey.a.chetverikov@gmail.com>
 Description: Proper formatting of statistical results in accordance with

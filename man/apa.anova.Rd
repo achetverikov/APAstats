@@ -7,7 +7,7 @@
 \method{apa}{anova}(obj, term = 2, f.digits = 2, ...)
 }
 \arguments{
-\item{obj}{anova results}
+\item{obj}{ANOVA results from \link[car:Anova]{car::Anova} or \link[stats:anova]{stats::anova}}
 
 \item{term}{model term to describe (a string with the term name or its sequential number, default: 2)}
 
@@ -42,4 +42,5 @@ afit <- car::Anova(mod)
 afit
 apa(afit, "fcategory")
 apa(afit, 2, 4)
+
 }

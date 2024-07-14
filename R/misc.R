@@ -103,7 +103,7 @@ binom.ci <- function(x) {
 #' Mean rounded to the specified number of digits
 #'
 #' @param x a number
-#' @param ... other arguments passed to [apastats::f.round]
+#' @param ... other arguments passed to [apastats2::f.round]
 #' 
 #' @return Mean rounded to the specified number of digits (string)
 #' @export mean.round
@@ -121,7 +121,7 @@ mean.round <- function(x, ...) {
 #' SD rounded to the specified number of digits
 #'
 #' @param x a number
-#' @param ... other arguments passed to [apastats::f.round]
+#' @param ... other arguments passed to [apastats2::f.round]
 #'
 #' @return Mean rounded to the specified number of digits (string)
 #' @export
@@ -142,7 +142,7 @@ sd.round <- function(x, ...) {
 #' @export
 #'
 #' @examples
-#' load.libs(c("ggplot2", "apastats", "Hmisc"))
+#' load.libs(c("ggplot2", "apastats2", "Hmisc"))
 load.libs <- function(libs) {
   suppressMessages(invisible(lapply(libs, require, character.only = TRUE)))
 }

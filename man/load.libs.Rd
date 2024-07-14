@@ -16,5 +16,5 @@ None
 Quietly load libraries
 }
 \examples{
-load.libs(c("ggplot2", "apastats", "Hmisc"))
+load.libs(c("ggplot2", "apastats2", "Hmisc"))
 }
