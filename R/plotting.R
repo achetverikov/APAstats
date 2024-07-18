@@ -168,7 +168,7 @@ plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
     as.character
   ), list(y = dv, ymin = "ymin", ymax = "ymax"))
   if (do_aggregate) {
-    plot_data <- apastats:::summarySE(plot_data,
+    plot_data <- summarySE(plot_data,
       measurevar = dv,
       groupvars = c(withinvars, betweenvars, wid), na.rm = TRUE
     )
@@ -177,14 +177,14 @@ plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
     if (length(withinvars) == 0 || is.null(withinvars)) {
       stop("Within-subject plot can only be made if there is at least one within-subject variable listed in withinvars parameter.")
     }
-    # aggr_data <- apastats:::summarySEwithin(plot_data, measurevar = dv,
+    # aggr_data <- summarySEwithin(plot_data, measurevar = dv,
     #                                         withinvars = withinvars, betweenvars = betweenvars,
     #                                         idvar = wid, na.rm = TRUE)
 
     aggr_data <- plot_data[!is.na(plot_data[[dv]]), ] |>
-      apastats::get_superb_ci(value_var = dv, within = withinvars, between = betweenvars, wid = wid, errorbar = bars, drop_NA_subj = drop_NA_subj, debug = debug)
+      get_superb_ci(value_var = dv, within = withinvars, between = betweenvars, wid = wid, errorbar = bars, drop_NA_subj = drop_NA_subj, debug = debug)
   } else {
-    aggr_data <- apastats:::summarySE(plot_data,
+    aggr_data <- summarySE(plot_data,
       measurevar = dv,
       groupvars = c(withinvars, betweenvars),
       na.rm = TRUE
@@ -199,13 +199,13 @@ plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
     }
     data_for_margin <- aggr_data[aggr_data[, aes_list$x] %in% margin_x_vals, ]
     if (within_subj) {
-      summ_data_for_margin <- apastats:::summarySEwithin(data_for_margin,
+      summ_data_for_margin <- summarySEwithin(data_for_margin,
         measurevar = dv,
         withinvars = withinvars[!(withinvars %in% aes_list$x)], betweenvars = betweenvars[!(betweenvars %in% aes_list$x)], idvar = aes_list$x, na.rm = TRUE
       )
     } else {
       groupvars <- c(withinvars, betweenvars)
-      summ_data_for_margin <- apastats:::summarySE(data_for_margin,
+      summ_data_for_margin <- summarySE(data_for_margin,
         measurevar = dv,
         groupvars = groupvars[!(groupvars %in% aes_list$x)], na.rm = TRUE
       )
