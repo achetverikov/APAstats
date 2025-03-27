@@ -425,6 +425,10 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
   requireNamespace('superb')
   errorbar <- toupper(errorbar)
   for (x in c(within, between)) {
+    if (!(x %in% names(x))){
+      stop(sprintf('Variable "%s" is not in the data. Check if it is present and its name is spelled correctly.', x))
+    }
+    
     if (!is.factor(data[[x]])) {
       warning(paste0("Converting \"", x, "\" to a factor."))
       data[[x]] <- factor(data[[x]])
