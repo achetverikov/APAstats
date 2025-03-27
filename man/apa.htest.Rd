@@ -11,11 +11,13 @@
 \method{apa}{chisq}(obj, v = TRUE, addN = TRUE, ...)
 
 \method{apa}{dip.test}(obj, ...)
+
+\method{apa}{htest}(obj, ...)
 }
 \arguments{
-\item{obj}{a result from \link[stats:chisq.test]{stats::chisq.test} or \link[diptest:dip.test]{diptest::dip.test}}
+\item{obj}{object of htest class}
 
-\item{...}{other parameters passed to \link{format.results}}
+\item{...}{Redirects to \link{apa.r} or \link{apa.ttest}}
 
 \item{v}{add Cramer's V (default: T)}
 
@@ -26,6 +28,8 @@ formatted results string
 }
 \description{
 Describe the results of $\chi^2$ or Hartigans' dip tests
+
+Describe htest class (\link[stats:t.test]{stats::t.test} or \link[stats:cor.test]{stats::cor.test})
 }
 \section{Functions}{
 \itemize{

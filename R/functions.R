@@ -853,6 +853,7 @@ apa.mean.sd <- function(x = NULL, m = NULL, sd = NULL, digits = 2, dtype = "p", 
 apa.r <- function(rc, ...) {
   format.results(sprintf("\\emph{r}(%.0f) = %.2f, \\emph{p} %s", rc$parameter, rc$estimate, round.p(rc$p.value)), ...)
 }
+
 #' Describe differences between ROC curves
 #'
 #' @param roc_diff a difference between the ROC curves
@@ -863,6 +864,20 @@ apa.r <- function(rc, ...) {
 
 apa.roc.diff <- function(roc_diff) {
   sprintf("\\emph{D} = %0.2f, \\emph{p} %s", roc_diff$statistic, round.p(roc_diff$p.value))
+}
+
+#' Describe htest class ([stats::t.test] or [stats::cor.test])
+#'
+#' @param obj object of htest class
+#' @param ... 
+#' 
+#' Redirects to \link{apa.r} or \link{apa.ttest}
+#' @export
+#' 
+apa.htest <- function(obj, ...){
+  if (grepl('correl',obj$method)){
+    apa.r(obj,...)
+  } else apa.ttest(obj, ...)
 }
 #' Describe t-test results
 #'

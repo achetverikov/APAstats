@@ -424,10 +424,13 @@ paste_and <- function(x, sep = ", ", suffix = "") {
 get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustments = list(purpose = "single", decorrelation = "CM"), errorbar = "CI", drop_NA_subj = FALSE, drop_missing_levels = TRUE, debug = FALSE) {
   requireNamespace('superb')
   errorbar <- toupper(errorbar)
-  for (x in c(within, between)) {
+  all_vars <-  c(within, between, wid, value_var)
+  for (x in all_vars){
     if (!(x %in% names(data))){
       stop(sprintf('Variable "%s" is not in the data. Check if it is present and its name is spelled correctly.', x))
     }
+  }
+  for (x in c(within, between)) {
     
     if (!is.factor(data[[x]])) {
       warning(paste0("Converting \"", x, "\" to a factor."))
@@ -471,10 +474,10 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
 
   if (debug == TRUE) {
     message("WSDesign: ")
-    cat(WSDesign)
+    print(WSDesign)
     message("wide_data: ")
 
-    cat(wide_data)
+    print(wide_data)
   }
   colnames_wsd <- colnames(wide_data)
 
