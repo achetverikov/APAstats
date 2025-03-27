@@ -381,14 +381,14 @@ aggr2 <- function(x, by, fun, ...) {
 #' @examples
 #' data(iris)
 #' # get mean petal width and SD by group
-#' res <- as.vector(by(iris$Sepal.Width, iris$Species, describe.mean.sd))
+#' res <- as.vector(by(iris$Sepal.Width, iris$Species, apa_mean_sd))
 #' res
 #' paste_and(res)
 #' paste_and(res, sep = ";")
 #'
 #' data(faces)
 #' # get mean response times (in ms) by response accuracy
-#' res <- as.vector(by(faces$answerTime * 1000, faces$correct, describe.mean.sd))
+#' res <- as.vector(by(faces$answerTime * 1000, faces$correct, apa_mean_sd))
 #' res
 #' # no comma with two groups
 #' paste_and(res)
