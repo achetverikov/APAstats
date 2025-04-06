@@ -30,21 +30,21 @@
 \alias{mysd}
 \title{Deprecated functions in the apastats package}
 \usage{
-\method{describe}{ttest}(t, ...)
+describe.ttest(t, ...)
 
-\method{describe}{r}(rc, ...)
+describe.r(rc, ...)
 
-\method{describe}{chi}(tbl, ...)
+describe.chi(tbl, ...)
 
-\method{describe}{Anova}(afit, term, f.digits = 2, ...)
+describe.Anova(afit, term, f.digits = 2, ...)
 
-\method{describe}{aov}(fit, term, sstype = 2, ...)
+describe.aov(fit, term, sstype = 2, ...)
 
-\method{describe}{anova}(anova_res, rown = 2, f.digits = 2, ...)
+describe.anova(anova_res, rown = 2, f.digits = 2, ...)
 
-\method{describe}{bf}(bf, digits = 2, top_limit = 10000, convert_to_power = TRUE, ...)
+describe.bf(bf, digits = 2, top_limit = 10000, convert_to_power = TRUE, ...)
 
-\method{describe}{brm}(
+describe.brm(
   mod,
   term,
   trans = NULL,
@@ -56,11 +56,11 @@
   ...
 )
 
-\method{describe}{dip.test}(x, ...)
+describe.dip.test(x, ...)
 
-\method{describe}{emmeans}(obj, term, dtype = "B", df = FALSE, ...)
+describe.emmeans(obj, term, dtype = "B", df = FALSE, ...)
 
-\method{describe}{ezanova}(
+describe.ezanova(
   ezfit,
   term,
   include_eta = TRUE,
@@ -72,9 +72,9 @@
   ...
 )
 
-\method{describe}{ezstats}(ezstats_res, term = 1, ...)
+describe.ezstats(ezstats_res, term = 1, ...)
 
-\method{describe}{glm}(
+describe.glm(
   fit,
   term = NULL,
   dtype = 1,
@@ -88,19 +88,26 @@
   ...
 )
 
-\method{describe}{lht}(hyp, ...)
+describe.lht(hyp, ...)
 
-\method{describe}{lmer}(fm, pv, digits = c(2, 2, 2), incl.rel = 0, dtype = "B", incl.p = TRUE)
+describe.lmer(
+  fm,
+  pv,
+  digits = c(2, 2, 2),
+  incl.rel = 0,
+  dtype = "B",
+  incl.p = TRUE
+)
 
-\method{describe}{lmert}(sfit, factor, dtype = "t", ...)
+describe.lmert(sfit, factor, dtype = "t", ...)
 
-\method{describe}{lmtaov}(afit, term, f.digits = 2, ...)
+describe.lmtaov(afit, term, f.digits = 2, ...)
 
-\method{describe}{lsmeans}(obj, term, dtype = "B", df = FALSE, ...)
+describe.lsmeans(obj, term, dtype = "B", df = FALSE, ...)
 
-\method{describe}{roc.diff}(roc_diff)
+describe.roc.diff(roc_diff)
 
-\method{describe}{mean.sd}(
+describe.mean.sd(
   x = NULL,
   m = NULL,
   sd = NULL,
@@ -111,7 +118,7 @@
   ...
 )
 
-\method{describe}{mean.conf}(
+describe.mean.conf(
   x,
   bootCI = TRUE,
   addCI = FALSE,
@@ -120,9 +127,9 @@
   ...
 )
 
-\method{describe}{binom.mean.conf}(x, digits = 2, ...)
+describe.binom.mean.conf(x, digits = 2, ...)
 
-\method{describe}{mean.and.t}(
+describe.mean.and.t(
   x,
   by,
   which.mean = 1,
