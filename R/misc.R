@@ -465,11 +465,12 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
   WSFactors <- sapply(within, \(x) paste0(x, "(", length(levels(data[[x]])), ")"))
   variables <- colnames(wide_data)[(2 + length(between)):length(colnames(wide_data))]
 
-  WSDesign <- do.call(expand.grid, lapply(within, \(x) c(1:length(levels(data[[x]])))))
-  if (length(within) > 1) {
-    WSDesign <- WSDesign[do.call(order, WSDesign), ]
-  }
-
+  # WSDesign <- do.call(expand.grid, lapply(within, \(x) c(1:length(levels(data[[x]])))))
+  # if (length(within) > 1) {
+  #   WSDesign <- WSDesign[do.call(order, WSDesign), ]
+  # }
+  WSDesign <- data.table::as.data.table(data)[,.N, keyby = within][,lapply(.SD, as.numeric),.SDcols = -c('N')]
+  
   WSDesign <- apply(WSDesign, 1, as.vector, simplify = FALSE)
 
   if (debug == TRUE) {
