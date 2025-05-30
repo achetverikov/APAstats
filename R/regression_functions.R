@@ -164,64 +164,6 @@ apa.glm <- function(obj, term = NULL, dtype = 1, b.digits = 2, t.digits = 2,
 #' @export
 apa.lm <- apa.glm
 
-#' Describe lmer results
-#'
-#' @param obj LMER model from [lme4::lmer]
-#' @param pv p values table (from Anova)
-#' @param digits number of digits in results (default: 2)
-#' @param incl.rel include the relation sign for _p_
-#' @param dtype description type (B or t)
-#' @param incl.p include p values
-#'
-#' @return result
-#' @method apa lmerMod
-#' @export
-#'
-#' @examples
-#' if (requireNamespace("lme4", quietly = TRUE)) {
-#'   # Fit a mixed-effects model
-#'   fm <- lme4::lmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)
-#'   
-#'   # Get approximate p-values
-#'   if (requireNamespace("lmerTest", quietly = TRUE)) {
-#'     pv <- list(fixed = data.frame("Pr(>|t|)" = c(0.001, 0.001)))
-#'     rownames(pv$fixed) <- c("(Intercept)", "Days")
-#'     
-#'     # Format results
-#'     apa(fm, pv)
-#'     apa(fm, pv, digits = c(1, 1, 1))
-#'     apa(fm, pv, dtype = "t")
-#'   }
-#' }
-apa.lmerMod <- function(obj, pv, digits = c(2, 2, 2), incl.rel = 0, dtype = "B", incl.p = TRUE) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package 'lme4' is required for this function")
-  }
-  
-  cc <- lme4::fixef(obj)
-  ss <- sqrt(diag(as.matrix(vcov(obj))))
-  data <- data.frame(
-    Estimate = cc, Std.Err = ss, t = cc / ss,
-    p = pv[["fixed"]][, "Pr(>|t|)"], row.names = names(cc)
-  )
-  for (i in c(1:3)) {
-    data[, i] <- format(round(data[, i], digits[i]), nsmall = digits[i])
-  }
-  if (incl.p == FALSE) {
-    data$str <- sprintf("\\emph{t} = %s, \\emph{p} %s", data$t, round.p(data[, 4], 1))
-  }
-  if (dtype == "t") {
-    data$str <- sprintf("\\emph{B} = %s (%s), \\emph{t} = %s", data$Estimate, data$Std.Err, data$t)
-  } else if (dtype == "B") {
-    data$str <- sprintf("\\emph{B} = %s (%s), \\emph{p} %s", data$Estimate, data$Std.Err, round.p(data[, 4], 1))
-  }
-  data[, 4] <- round.p(data[, 4], incl.rel)
-  data
-}
-
-#' @rdname apa.lmerMod
-#' @export
-apa.lmer <- apa.lmerMod
 
 #' Describe lmerTest results
 #'
