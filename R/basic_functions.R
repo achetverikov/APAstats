@@ -101,13 +101,13 @@ apa.htest <- function(obj, show.mean = FALSE, abs = FALSE, ...) {
 #' @examples
 #' # One-sample t-test
 #' t_res <- t.test(rnorm(20, mean = -10, sd = 2))
-#' apa.ttest(t_res)
-#' apa.ttest(t_res, show.mean = TRUE)
-#' apa.ttest(t_res, show.mean = TRUE, abs = TRUE)
+#' apa(t_res)
+#' apa(t_res, show.mean = TRUE)
+#' apa(t_res, show.mean = TRUE, abs = TRUE)
 #' 
 #' # Two-sample t-test
 #' t_two <- t.test(rnorm(20), rnorm(20, mean = 0.8))
-#' apa.ttest(t_two)
+#' apa(t_two)
 apa.ttest <- function(obj, show.mean = FALSE, abs = FALSE, ...) {
   if (abs) obj$statistic <- abs(obj$statistic)
   if (show.mean == TRUE) {
@@ -134,7 +134,7 @@ apa.ttest <- function(obj, show.mean = FALSE, abs = FALSE, ...) {
 #' x <- rnorm(40)
 #' y <- x * 0.6 + rnorm(40, 0, 0.8)
 #' rc <- cor.test(x, y)
-#' apa.r(rc)
+#' apa(rc)
 apa.r <- function(obj, ...) {
   format.results(sprintf("\\emph{r}(%.0f) = %.2f, \\emph{p} %s", 
                          obj$parameter, obj$estimate, round.p(obj$p.value)), ...)
@@ -270,6 +270,37 @@ apa_mean_sd <- function(x = NULL, m = NULL, sd = NULL, digits = 2,
     digits, m, m_units, s1, digits, sd, sd_units, s2
   ), ...)
 }
+#' Format mean and confidence interval values into APA-style string
+#'
+#' @param mean_val The mean value
+#' @param lower_ci Lower confidence interval bound
+#' @param upper_ci Upper confidence interval bound
+#' @param addCI Add "95% CI =" prefix
+#' @param digits Number of digits to use
+#' @param ... Other arguments passed to [format.results]
+#'
+#' @return A formatted string with mean and confidence intervals
+#' @export
+#' @examples
+#' # Example usage
+#' mean_val <- 5.67
+#' lower_ci <- 4.56
+#' upper_ci <- 6.78
+#' # Format mean and CI in APA style
+#' apa_format_mean_conf(mean_val, lower_ci, upper_ci)
+#' # Format mean and CI with additional CI prefix
+#' apa_format_mean_conf(mean_val, lower_ci, upper_ci, addCI = TRUE)
+#' # Format mean and CI with custom number of digits
+#' apa_format_mean_conf(mean_val, lower_ci, upper_ci, digits = 3)
+#' 
+apa_format_mean_conf <- function(mean_val, lower_ci, upper_ci, addCI = FALSE, digits = 2, ...) {
+  ci_str <- ifelse(addCI, ", 95%% \\emph{CI} =", "")
+  format.results(sprintf(paste0(
+    "\\emph{M} = %.",
+    digits, "f", ci_str, " [%.", digits, "f, %.", digits,
+    "f]"
+  ), mean_val, lower_ci, upper_ci), ...)
+}
 
 #' Format means and confidence intervals in APA style
 #'
@@ -297,12 +328,8 @@ apa_mean_conf <- function(x, bootCI = TRUE, addCI = FALSE, digits = 2,
   if (!is.null(transform.means)) {
     res <- sapply(res, transform.means)
   }
-  ci_str <- ifelse(addCI, ", 95%% \\emph{CI} =", "")
-  format.results(with(as.list(res), sprintf(paste0(
-    "\\emph{M} = %.",
-    digits, "f", ci_str, " [%.", digits, "f, %.", digits,
-    "f]"
-  ), Mean, Lower, Upper)), ...)
+  res <- as.list(res)
+  apa_format_mean_conf(res$Mean, res$Lower, res$Upper, addCI = addCI, digits = digits, ...)
 }
 
 #' Format binomial proportions and confidence intervals in APA style

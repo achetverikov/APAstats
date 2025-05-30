@@ -129,6 +129,19 @@ base.breaks.y <- function(x, addSegment = TRUE, ...) {
 #' plot.pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
 #'      within_subj = TRUE, withinvars = c("stim_gender"), betweenvars = c("user_gender"),
 #'      bars = 'ci', exp_y = TRUE, do_aggregate = TRUE) + ylab("RT")
+#'      
+#' if (requireNamespace("afex", quietly = TRUE)) {
+#'   # Using the Stroop dataset from afex package
+#'   data(stroop, package = "afex")
+#'   # within-subject CI
+#'   plot.pointrange(stroop, aes(x = condition, color = congruency, y = rt), wid = "pno",
+#'      within_subj = TRUE, withinvars = c("congruency"), betweenvars = c("condition","study")) +
+#'      facet_grid(~study)+
+#'      ylab("RT")
+#'      
+#'
+#'}
+
 
 plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize = I(3), linesize = I(1),
                             pointfill = I("white"), pointshape = NULL, within_subj = F,
@@ -177,13 +190,15 @@ plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
     if (length(withinvars) == 0 || is.null(withinvars)) {
       stop("Within-subject plot can only be made if there is at least one within-subject variable listed in withinvars parameter.")
     }
-    # aggr_data <- summarySEwithin(plot_data, measurevar = dv,
-    #                                         withinvars = withinvars, betweenvars = betweenvars,
-    #                                         idvar = wid, na.rm = TRUE)
-
-    aggr_data <- plot_data[!is.na(plot_data[[dv]]), ] |>
-      get_superb_ci(value_var = dv, within = withinvars, between = betweenvars, wid = wid, errorbar = bars, drop_NA_subj = drop_NA_subj, debug = debug)
-  } else {
+    
+    setDT(plot_data)
+    aggr_data <- plot_data[, get_superb_ci(data = .SD, value_var = dv, within = withinvars, between = NULL, 
+                                   wid = wid, errorbar = bars, drop_NA_subj = drop_NA_subj, debug = debug), 
+                           by = betweenvars]
+    setDF(plot_data)
+    setDF(aggr_data)
+    
+    } else {
     aggr_data <- summarySE(plot_data,
       measurevar = dv,
       groupvars = c(withinvars, betweenvars),

@@ -14,7 +14,8 @@ get_superb_ci(
   errorbar = "CI",
   drop_NA_subj = FALSE,
   drop_missing_levels = TRUE,
-  debug = FALSE
+  debug = FALSE,
+  ...
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ get_superb_ci(
 \item{drop_missing_levels}{should the missing levels of the variables in within/between be dropped? (default: TRUE)}
 
 \item{debug}{output additional debugging info (default: FALSE)}
+
+\item{...}{additional parameters passed to \link{apa_format_mean_conf}}
 }
 \value{
 dataframe with computed CIs

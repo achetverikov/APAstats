@@ -131,4 +131,16 @@ plot.pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime)
 plot.pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
      within_subj = TRUE, withinvars = c("stim_gender"), betweenvars = c("user_gender"),
      bars = 'ci', exp_y = TRUE, do_aggregate = TRUE) + ylab("RT")
+     
+if (requireNamespace("afex", quietly = TRUE)) {
+  # Using the Stroop dataset from afex package
+  data(stroop, package = "afex")
+  # within-subject CI
+  plot.pointrange(stroop, aes(x = condition, color = congruency, y = rt), wid = "pno",
+     within_subj = TRUE, withinvars = c("congruency"), betweenvars = c("condition","study")) +
+     facet_grid(~study)+
+     ylab("RT")
+     
+
+}
 }

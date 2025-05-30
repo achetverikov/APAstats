@@ -22,5 +22,5 @@ Format correlation test results in APA style
 x <- rnorm(40)
 y <- x * 0.6 + rnorm(40, 0, 0.8)
 rc <- cor.test(x, y)
-apa.r(rc)
+apa(rc)
 }

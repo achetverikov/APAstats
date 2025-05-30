@@ -24,11 +24,11 @@ Format t-test results in APA style
 \examples{
 # One-sample t-test
 t_res <- t.test(rnorm(20, mean = -10, sd = 2))
-apa.ttest(t_res)
-apa.ttest(t_res, show.mean = TRUE)
-apa.ttest(t_res, show.mean = TRUE, abs = TRUE)
+apa(t_res)
+apa(t_res, show.mean = TRUE)
+apa(t_res, show.mean = TRUE, abs = TRUE)
 
 # Two-sample t-test
 t_two <- t.test(rnorm(20), rnorm(20, mean = 0.8))
-apa.ttest(t_two)
+apa(t_two)
 }

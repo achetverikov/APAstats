@@ -413,7 +413,7 @@ paste_and <- function(x, sep = ", ", suffix = "") {
 #' @param drop_NA_subj should subjects with NA values be dropped? (default: FALSE)
 #' @param drop_missing_levels should the missing levels of the variables in within/between be dropped? (default: TRUE)
 #' @param debug output additional debugging info (default: FALSE)
-#' 
+#' @param ... additional parameters passed to [apa_format_mean_conf]
 #' @return dataframe with computed CIs
 #' @export
 #'
@@ -421,7 +421,7 @@ paste_and <- function(x, sep = ", ", suffix = "") {
 #' data(faces)
 #' get_superb_ci(faces, "uid", "stim_gender", "answerTime")
 #'
-get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustments = list(purpose = "single", decorrelation = "CM"), errorbar = "CI", drop_NA_subj = FALSE, drop_missing_levels = TRUE, debug = FALSE) {
+get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustments = list(purpose = "single", decorrelation = "CM"), errorbar = "CI", drop_NA_subj = FALSE, drop_missing_levels = TRUE, debug = FALSE, ...) {
   requireNamespace('superb')
   errorbar <- toupper(errorbar)
   all_vars <-  c(within, between, wid, value_var)
@@ -508,5 +508,11 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
       labels = levels(data[[x]])
     )
   }
+  
+  spp_data$lower_ci <- spp_data$center + spp_data$lowerwidth
+  spp_data$upper_ci <- spp_data$center + spp_data$upperwidth
+  spp_data$descr <- apa_format_mean_conf(
+    spp_data$center, spp_data$lower_ci, spp_data$upper_ci, ...
+  )
   spp_data
 }
