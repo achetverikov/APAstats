@@ -149,7 +149,7 @@ plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
                             x_as_numeric = F, custom_geom_before = NULL, connecting_line = F,
                             pretty_breaks_y = F, pretty_y_axis = F, exp_y = F, print_aggregated_data = F,
                             do_aggregate = F, add_margin = F, margin_label = "all", margin_x_vals = NULL,
-                            bars_instead_of_points = F, geom_bar_params = NULL, add_jitter = F,
+                            bars_instead_of_points = F, geom_bar_params = list(), add_jitter = F,
                             individual_points_params = list(), drop_NA_subj = F, design = "between", debug = F) {
 
   x <- y <- xend <- yend <- NULL  # due to NSE notes in R CMD check
@@ -259,8 +259,16 @@ plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
   if (connecting_line) {
     p <- p + do.call(geom_line, line_params)
   }
-  p <- p + do.call(geom_linerange, line_params)
   point_params <- list(position = pos)
+  geom_bar_params <- c(geom_bar_params, point_params)
+  
+  # bars are drawn before linerange, but points are drawn after linerange
+  if (bars_instead_of_points) {
+    p <- p + do.call(geom_bar, geom_bar_params)
+  }
+  
+  p <- p + do.call(geom_linerange, line_params)
+  
   if (!is.null(pointshape)) {
     point_params <- append(point_params, list(shape = pointshape))
   }
@@ -277,8 +285,6 @@ plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
   }
   if (!bars_instead_of_points) {
     p <- p + do.call(geom_point, point_params)
-  } else {
-    p <- p + do.call(geom_bar, geom_bar_params)
   }
 
   if (pretty_breaks_y) {
