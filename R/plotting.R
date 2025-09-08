@@ -181,7 +181,7 @@ plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
     as.character
   ), list(y = dv, ymin = "ymin", ymax = "ymax"))
   if (do_aggregate) {
-    plot_data <- summarySE(plot_data,
+    plot_data <- apastats2:::summarySE(plot_data,
       measurevar = dv,
       groupvars = c(withinvars, betweenvars, wid), na.rm = TRUE
     )
@@ -260,7 +260,7 @@ plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
     p <- p + do.call(geom_line, line_params)
   }
   point_params <- list(position = pos)
-  geom_bar_params <- c(geom_bar_params, point_params)
+  geom_bar_params <- c(geom_bar_params, point_params, list(stat='identity'))
   
   # bars are drawn before linerange, but points are drawn after linerange
   if (bars_instead_of_points) {
