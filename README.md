@@ -4,6 +4,12 @@
 
 Functions for APA-style formatting for statistical tests results in markdown or LaTeX and other miscellanous stuff.
 
+## Moving to apastats2
+
+I'm slowly transitioning the package to a new style, see the most up to date version here:
+https://github.com/achetverikov/APAstats/tree/dev
+This switch will create breaking changes. 
+
 ## Main functions
 |Function|Description|
 |--- | ---|
