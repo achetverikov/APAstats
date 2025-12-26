@@ -254,7 +254,7 @@ plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
   }
   line_params <- list(position = pos)
   if (!is.null(linesize)) {
-    line_params <- append(line_params, list(size = linesize))
+    line_params <- append(line_params, list(linewidth = linesize))
   }
   if (connecting_line) {
     p <- p + do.call(geom_line, line_params)
