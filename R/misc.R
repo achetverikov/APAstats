@@ -421,7 +421,7 @@ paste_and <- function(x, sep = ", ", suffix = "") {
 #' data(faces)
 #' get_superb_ci(faces, "uid", "stim_gender", "answerTime")
 #'
-get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustments = list(purpose = "single", decorrelation = "CM"), errorbar = "CI", drop_NA_subj = FALSE, drop_missing_levels = TRUE, debug = FALSE, ...) {
+get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustments = list(purpose = "single", decorrelation = "CM"), errorbar = "CI", drop_NA_subj = FALSE, drop_missing_levels = TRUE, aggr_fun = mean, debug = FALSE, ...) {
   requireNamespace('superb')
   errorbar <- toupper(errorbar)
   all_vars <-  c(within, between, wid, value_var)
@@ -451,7 +451,7 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
   }
 
   dcast_form <- paste0(paste0(c(wid, between), collapse = "+"), "~", paste0(within, collapse = "+"))
-  wide_data <- reshape2::dcast(data, dcast_form, value.var = value_var, fun.aggregate = mean)
+  wide_data <- reshape2::dcast(data, dcast_form, value.var = value_var, fun.aggregate = aggr_fun)
   if (anyNA(wide_data)) {
     print(wide_data[!complete.cases(wide_data), ])
     if (drop_NA_subj) {
@@ -496,7 +496,8 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
       variables = variables,
       WSDesign = WSDesign,
       BSFactors = between,
-      errorbar = errorbar
+      errorbar = errorbar,
+      statistic = substitute(aggr_fun)
     )
   # })
   
