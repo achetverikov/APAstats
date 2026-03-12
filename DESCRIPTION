@@ -1,7 +1,7 @@
 Package: apastats2
 Type: Package
 Title: APA-style results
-Version: 1.0.0
+Version: 1.0.1
 Author: Andrey Chetverikov (http://andreychetverikov.org)
 Maintainer: Andrey Chetverikov <andrey.a.chetverikov@gmail.com>
 Description: Proper formatting of statistical results in accordance with
@@ -37,6 +37,6 @@ Depends:
     data.table,
     R (>= 4.1.0)
 LazyData: TRUE
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 Additional_repositories: 

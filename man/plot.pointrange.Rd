@@ -29,7 +29,7 @@
   margin_label = "all",
   margin_x_vals = NULL,
   bars_instead_of_points = F,
-  geom_bar_params = NULL,
+  geom_bar_params = list(),
   add_jitter = F,
   individual_points_params = list(),
   drop_NA_subj = F,

@@ -7,7 +7,7 @@
 \method{apa}{BFBayesFactor}(obj, digits = 2, top_limit = 10000, convert_to_power = TRUE, ...)
 }
 \arguments{
-\item{obj}{an object of \link{BayesFactor} class \code{BFBayesFactor}}
+\item{obj}{an object of \link[BayesFactor:BayesFactor-package]{BayesFactor::BayesFactor} class \code{BFBayesFactor}}
 
 \item{digits}{number of digits to use}
 

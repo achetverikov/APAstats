@@ -17,5 +17,5 @@ A formatted string with statistical results in APA style
 \description{
 This function detects the type of statistical results stored in a list object
 and redirects to the appropriate APA formatting method. Currently supports
-\link{ezANOVA} results (\link{apa.ezANOVA}).
+\link[ez:ezANOVA]{ez::ezANOVA} results (\link{apa.ezANOVA}).
 }
