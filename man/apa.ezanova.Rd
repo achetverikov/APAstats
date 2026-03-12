@@ -33,7 +33,7 @@
 
 \item{append_to_table}{should the results be added to the original ezANOVA table (default: FALSE)}
 
-\item{...}{other parameters passed to \link{format.results}}
+\item{...}{other parameters passed to \link{format_results}}
 }
 \value{
 string with formatted results

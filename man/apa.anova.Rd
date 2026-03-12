@@ -13,7 +13,7 @@
 
 \item{f.digits}{number of digits in the results (default: 2)}
 
-\item{...}{other parameters passed to \link{format.results}}
+\item{...}{other parameters passed to \link{format_results}}
 }
 \value{
 Formatted string with F (or chi2), df, and p

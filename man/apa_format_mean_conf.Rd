@@ -24,7 +24,7 @@ apa_format_mean_conf(
 
 \item{digits}{Number of digits to use}
 
-\item{...}{Other arguments passed to \link{format.results}}
+\item{...}{Other arguments passed to \link{format_results}}
 }
 \value{
 A formatted string with mean and confidence intervals

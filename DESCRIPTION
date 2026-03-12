@@ -13,6 +13,11 @@ Imports:
     stringr,
     utils
 Suggests:
+    labeling,
+    lsr,
+    MASS,
+    pROC,
+    afex,
     lme4,
     ez,
     diptest,

@@ -54,7 +54,7 @@
 
 \item{adj.digits}{automatically adjusts digits so that B or SE would not show up as "0.00"}
 
-\item{...}{other parameters passed to \link{format.results}}
+\item{...}{other parameters passed to \link{format_results}}
 }
 \value{
 result

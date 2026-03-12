@@ -15,7 +15,7 @@
 
 \item{convert_to_power}{enable or disable converting of very small or very large numbers to exponential notation}
 
-\item{...}{other parameters passed to \link{format.results}}
+\item{...}{other parameters passed to \link{format_results}}
 }
 \value{
 string describing the result

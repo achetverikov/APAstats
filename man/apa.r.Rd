@@ -9,7 +9,7 @@
 \arguments{
 \item{obj}{An object from \link[stats:cor.test]{stats::cor.test}}
 
-\item{...}{Other arguments passed to \link{format.results}}
+\item{...}{Other arguments passed to \link{format_results}}
 }
 \value{
 A string with correlation coefficient, degrees of freedom, and p-value

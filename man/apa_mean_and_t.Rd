@@ -36,7 +36,7 @@ apa_mean_and_t(
 
 \item{transform.means}{A function to transform means and confidence intervals (default: NULL)}
 
-\item{...}{Additional arguments passed to \link{format.results}}
+\item{...}{Additional arguments passed to \link{format_results}}
 }
 \value{
 A formatted string with t-test results in APA style

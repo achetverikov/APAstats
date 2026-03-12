@@ -16,7 +16,7 @@
 
 \item{dtype}{description type ("B"/"t")}
 
-\item{...}{other parameters passed to \link{format.results}}
+\item{...}{other parameters passed to \link{format_results}}
 }
 \value{
 Formatted string

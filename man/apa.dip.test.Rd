@@ -9,7 +9,7 @@
 \arguments{
 \item{obj}{a result from \link[diptest:dip.test]{diptest::dip.test}}
 
-\item{...}{other parameters passed to \link{format.results}}
+\item{...}{other parameters passed to \link{format_results}}
 }
 \value{
 formatted results string

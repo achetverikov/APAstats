@@ -9,7 +9,7 @@
 \arguments{
 \item{obj}{hypothesis from \link[car:linearHypothesis]{car::linearHypothesis}}
 
-\item{...}{additional parameters passed to \link{format.results}}
+\item{...}{additional parameters passed to \link{format_results}}
 }
 \value{
 results of \eqn{\chi^2} or \emph{F} test

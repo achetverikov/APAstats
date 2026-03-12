@@ -13,7 +13,7 @@ table_mean_conf(x, digits = 2, binom = FALSE, ...)
 
 \item{binom}{compute binomial CI instead of the usual ones}
 
-\item{...}{other parameters passed to \link{format.results}}
+\item{...}{other parameters passed to \link{format_results}}
 }
 \value{
 a list with a mean and CI as formatted strings

@@ -11,7 +11,7 @@ apa_binom_mean_conf(x, digits = 2, ...)
 
 \item{digits}{Number of digits in results}
 
-\item{...}{Additional arguments passed to \link{format.results}}
+\item{...}{Additional arguments passed to \link{format_results}}
 }
 \value{
 A string with the mean and confidence interval in square brackets

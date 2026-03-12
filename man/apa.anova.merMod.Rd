@@ -13,7 +13,7 @@
 
 \item{f.digits}{decimal digits for F value}
 
-\item{...}{other parameters passed to \link{format.results}}
+\item{...}{other parameters passed to \link{format_results}}
 }
 \value{
 formatted string describing the results of anova

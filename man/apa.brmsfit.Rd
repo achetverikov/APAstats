@@ -33,7 +33,7 @@
 
 \item{ci.type}{type of intervals to use (currently, all that is not HPDI is treated as ETI using \code{bayestestR::eti})}
 
-\item{...}{other parameters passed to \link{format.results}}
+\item{...}{other parameters passed to \link{format_results}}
 }
 \value{
 string describing the result

@@ -292,17 +292,17 @@ f.round <- function(x, digits = 2, strip.lead.zeros = FALSE) {
 #' @param strip.lead.zeros remove zero before decimal point
 #' @param replace.very.small replace values lower than this criteria (NULL to keep values as is)
 #' @return Formatted p-value
-#' @export round.p
+#' @export
 #'
 #' @examples
 #' p_values <- c(0.025, 0.0001, 0.001, 0.568)
-#' round.p(p_values)
-#' round.p(p_values, digits = 2)
-#' round.p(p_values, include.rel = FALSE)
-#' round.p(p_values, include.rel = FALSE, strip.lead.zeros = FALSE)
-#' round.p(p_values, include.rel = FALSE, strip.lead.zeros = FALSE, replace.very.small = 0.01)
+#' round_p(p_values)
+#' round_p(p_values, digits = 2)
+#' round_p(p_values, include.rel = FALSE)
+#' round_p(p_values, include.rel = FALSE, strip.lead.zeros = FALSE)
+#' round_p(p_values, include.rel = FALSE, strip.lead.zeros = FALSE, replace.very.small = 0.01)
 #'
-round.p <- function(values, include.rel = 1, digits = 3, strip.lead.zeros = TRUE, replace.very.small = 0.001) {
+round_p <- function(values, include.rel = 1, digits = 3, strip.lead.zeros = TRUE, replace.very.small = 0.001) {
   values <- as.numeric(values)
   rel <- ifelse(include.rel, "= ", "")
   values_string <- format(round(values, digits = digits), nsmall = digits)
@@ -325,18 +325,17 @@ round.p <- function(values, include.rel = 1, digits = 3, strip.lead.zeros = TRUE
 #' @param type 'pandoc', 'latex', or 'plotmath' (the latter is very poorly implemented)
 #'
 #' @return \code{res_str} with latex 'emph' tags replaced with pandoc '_'
-#' @export format.results
+#' @export
 
-format.results <- function(res_str, type = "pandoc") {
+format_results <- function(res_str, type = "pandoc") {
   if (type == "latex") {
     res_str
   } else if (type == "pandoc") {
     stringr::str_replace_all(res_str, "\\\\emph\\{(.*?)\\}", "_\\1_")
   } else if (type == "plotmath") {
-    res_str <- stringi::stri_replace_all(res_str,
-      regex = c("\\\\emph\\{(.*?)\\}", "=", "_([^_=^ ]*)"),
-      replacement = c("italic($1)", "==", "[$1]"), vectorize_all = FALSE
-    )
+    res_str <- stringr::str_replace_all(res_str, "\\\\emph\\{(.*?)\\}", "italic(\\1)")
+    res_str <- stringr::str_replace_all(res_str, "=", "==")
+    res_str <- stringr::str_replace_all(res_str, "_([^_=^ ]*)", "[\\1]")
     if (any(grepl(",", res_str))) {
       res_str <- paste0("list(", res_str, ")")
     }
@@ -412,6 +411,9 @@ paste_and <- function(x, sep = ", ", suffix = "") {
 #' @param errorbar type of error bars to use (CI/SE)
 #' @param drop_NA_subj should subjects with NA values be dropped? (default: FALSE)
 #' @param drop_missing_levels should the missing levels of the variables in within/between be dropped? (default: TRUE)
+#' @param aggr_fun aggregation function used twice: first in [reshape2::dcast] (`fun.aggregate`),
+#'   and then as the statistic name for `superb::superbData` (constructed as `superb::<name>`).
+#'   Use a function whose name corresponds to a statistic implemented in `superb` (default: [base::mean]).
 #' @param debug output additional debugging info (default: FALSE)
 #' @param ... additional parameters passed to [apa_format_mean_conf]
 #' @return dataframe with computed CIs
@@ -551,3 +553,4 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
   )
   spp_data
 }
+

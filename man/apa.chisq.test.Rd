@@ -13,7 +13,7 @@
 
 \item{addN}{Add N (default: TRUE)}
 
-\item{...}{Other parameters passed to \link{format.results}}
+\item{...}{Other parameters passed to \link{format_results}}
 }
 \value{
 Formatted results string

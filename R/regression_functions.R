@@ -10,7 +10,7 @@
 #' @param adj.digits automatically adjusts digits so that B or SE would not show up as "0.00"
 #' @param p.as.number should the p-values be transformed to numbers (T) or shown as strings (F)?
 #' @param term.pattern return only the model terms matching the regex pattern (grepl is used)
-#' @param ... other parameters passed to [format.results]
+#' @param ... other parameters passed to [format_results]
 #'
 #' @return result
 #' @method apa glm
@@ -118,27 +118,27 @@ apa.glm <- function(obj, term = NULL, dtype = 1, b.digits = 2, t.digits = 2,
   
   res_df <- data.frame(B = f.round(afit[, 1], 2), SE = f.round(afit[, 2], 2), 
                        Stat = f.round(afit[, 3], t.digits), 
-                       p = if (p.as.number) zapsmall(as.vector(afit[, 4]), 4) else round.p(afit[, 4]), 
+                       p = if (p.as.number) zapsmall(as.vector(afit[, 4]), 4) else round_p(afit[, 4]), 
                        eff = row.names(afit), row.names = row.names(afit))
   
   if (dtype == 1) {
     res_df$str <- sprintf(paste0("\\emph{", t_z, "}", dfs, " %s, \\emph{p} %s"), 
-                          round.p(afit[, 3], digits = t.digits, strip.lead.zeros = FALSE), 
-                          round.p(afit[, 4]))
+                          round_p(afit[, 3], digits = t.digits, strip.lead.zeros = FALSE), 
+                          round_p(afit[, 4]))
   } else if (dtype == 2) {
     res_df$str <- sprintf(paste0("\\emph{B} = %.", b.digits, "f (%.", b.digits, "f), \\emph{p} %s"), 
-                          afit[, 1], afit[, 2], round.p(afit[, 4]))
+                          afit[, 1], afit[, 2], round_p(afit[, 4]))
   } else if (dtype == 3) {
     res_df$str <- sprintf(paste0("\\emph{B} = %.", b.digits, "f, \\emph{SE} = %.", b.digits, 
                                  "f, \\emph{", t_z, "}", dfs, " %s, \\emph{p} %s"), 
                           afit[, 1], afit[, 2], 
-                          round.p(afit[, 3], digits = t.digits, 
+                          round_p(afit[, 3], digits = t.digits, 
                                   strip.lead.zeros = FALSE, replace.very.small = 0.01), 
-                          round.p(afit[, 4]))
+                          round_p(afit[, 4]))
   } else if (dtype == 4) {
     res_df$str <- sprintf(paste0("\\emph{B} = %.", b.digits, "f (%.", b.digits, "f), \\emph{", t_z, "}", dfs, " %s"), 
                           afit[, 1], afit[, 2], 
-                          round.p(afit[, 3], digits = t.digits, 
+                          round_p(afit[, 3], digits = t.digits, 
                                   strip.lead.zeros = FALSE, replace.very.small = 0.01))
   }
   
@@ -146,10 +146,10 @@ apa.glm <- function(obj, term = NULL, dtype = 1, b.digits = 2, t.digits = 2,
     stop("Effect sizes are not implemented for THAT kind of models yet.")
   } else if (eff.size && exists("ess")) {
     res_df$str <- paste0(res_df$str, ", \\emph{R}_{part}^2", 
-                         round.p(c(NA, ess), digits = ifelse(min(ess) < 0.01, 3, 2)))
+                         round_p(c(NA, ess), digits = ifelse(min(ess) < 0.01, 3, 2)))
   }
   
-  res_df$str <- format.results(res_df$str, ...)
+  res_df$str <- format_results(res_df$str, ...)
   if (!is.null(term)) {
     res_df[term, "str"]
   } else if (!is.null(term.pattern)) {
@@ -172,7 +172,7 @@ apa.lm <- apa.glm
 #' @param obj *summary* object from [lmerTest::lmer] model
 #' @param factor name or number of the factor that needs to be described
 #' @param dtype description type ("B"/"t")
-#' @param ... other parameters passed to [format.results]
+#' @param ... other parameters passed to [format_results]
 #'
 #' @return Formatted string
 #' @method apa summary.merMod
@@ -201,11 +201,11 @@ apa.summary.merMod <- function(obj, factor, dtype = "t", ...) {
     test.df <- paste0("(", round(coef["df"]), ")")
   }
   if (dtype == "t") {
-    res_str <- sprintf("\\emph{%s}%s = %.2f, \\emph{p} %s", test_name, test.df, coef["t value"], round.p(coef["Pr(>|t|)"]))
+    res_str <- sprintf("\\emph{%s}%s = %.2f, \\emph{p} %s", test_name, test.df, coef["t value"], round_p(coef["Pr(>|t|)"]))
   } else if (dtype == "B") {
-    res_str <- sprintf("\\emph{B} = %.2f (%.2f), \\emph{p} %s", coef["Estimate"], coef["Std. Error"], round.p(coef["Pr(>|t|)"]))
+    res_str <- sprintf("\\emph{B} = %.2f (%.2f), \\emph{p} %s", coef["Estimate"], coef["Std. Error"], round_p(coef["Pr(>|t|)"]))
   }
-  format.results(res_str, ...)
+  format_results(res_str, ...)
 }
 
 #' @rdname apa.summary.merMod
@@ -222,7 +222,7 @@ apa.lmert <- apa.summary.merMod
 #' @param eff.size.type type of the effect size ('r' or 'r2')
 #' @param nsamples number of samples to use for the effect size computations
 #' @param ci.type type of intervals to use (currently, all that is not HPDI is treated as ETI using `bayestestR::eti`)
-#' @param ... other parameters passed to [format.results]
+#' @param ... other parameters passed to [format_results]
 #'
 #' @return string describing the result
 #' @importFrom data.table data.table
@@ -298,7 +298,7 @@ apa.brmsfit <- function(obj, term, trans = NULL, digits = 2, eff.size = FALSE,
     }
   }
   
-  format.results(res_str, ...)
+  format_results(res_str, ...)
 }
 
 #' Describe BayesFactor results
@@ -307,7 +307,7 @@ apa.brmsfit <- function(obj, term, trans = NULL, digits = 2, eff.size = FALSE,
 #' @param digits number of digits to use
 #' @param top_limit numbers above that limit (or below the digits limit) will be converted to exponential notation (if convert_to_power is TRUE)
 #' @param convert_to_power enable or disable converting of very small or very large numbers to exponential notation
-#' @param ... other parameters passed to [format.results]
+#' @param ... other parameters passed to [format_results]
 #' @return string describing the result
 #' @note Code for converting to exponential notation is based on http://dankelley.github.io/r/2015/03/22/scinot.html
 #' @method apa BFBayesFactor
@@ -328,9 +328,9 @@ apa.BFBayesFactor <- function(obj, digits = 2, top_limit = 10000, convert_to_pow
   if ((bf_val < (10^(-digits)) | bf_val > top_limit) & convert_to_power) {
     exponent <- floor(log10(bf_val))
     bf_val <- round(bf_val / 10^exponent, digits = digits)
-    format.results(paste0("\\emph{BF} = $", bf_val, "\\times 10^{", as.integer(exponent), "}$"), ...)
+    format_results(paste0("\\emph{BF} = $", bf_val, "\\times 10^{", as.integer(exponent), "}$"), ...)
   } else {
-    format.results(sprintf(paste0("\\emph{BF} = %.", digits, "f"), exp(obj@bayesFactor[1])), ...)
+    format_results(sprintf(paste0("\\emph{BF} = %.", digits, "f"), exp(obj@bayesFactor[1])), ...)
   }
 }
 

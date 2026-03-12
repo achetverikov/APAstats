@@ -13,7 +13,7 @@
 
 \item{abs}{Show the absolute value of t-statistic}
 
-\item{...}{Other arguments passed to \link{format.results}}
+\item{...}{Other arguments passed to \link{format_results}}
 }
 \value{
 A string with t-test value, degrees of freedom, p-value, and optionally the mean with CI

@@ -30,7 +30,7 @@ apa_mean_sd(
 
 \item{sd_units}{Units for standard deviation}
 
-\item{...}{Additional arguments passed to \link{format.results}}
+\item{...}{Additional arguments passed to \link{format_results}}
 }
 \value{
 A formatted string with mean and standard deviation in APA style

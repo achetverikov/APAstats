@@ -3,7 +3,7 @@
 #' @param obj ANOVA results from [car::Anova] or [stats::anova]
 #' @param term model term to describe (a string with the term name or its sequential number, default: 2)
 #' @param f.digits number of digits in the results (default: 2)
-#' @param ... other parameters passed to [format.results]
+#' @param ... other parameters passed to [format_results]
 #' 
 #' @details
 #' When using model comparison version, `term` can only be a number.
@@ -37,24 +37,24 @@ apa.anova <- function(obj, term = 2, f.digits = 2, ...) {
   if ("Df.res" %in% colnames(obj)) {
     res_str <- sprintf(paste0("\\emph{F}(%i, %.", f.digits, "f) = %.", f.digits, "f, \\emph{p} %s"), 
                        obj[term, "Df"], obj[term, "Df.res"], obj[term, "F"], 
-                       round.p(obj[term, "Pr(>F)"]))
+                       round_p(obj[term, "Pr(>F)"]))
   } else if ("F" %in% names(obj)) {
     res_str <- sprintf(paste0("\\emph{F}(%.0f, %.0f) = %.", f.digits, "f, \\emph{p} %s"), 
                        obj[term, "Df"], obj[term, "Res.Df"], obj[term, "F"], 
-                       round.p(obj[term, "Pr(>F)"]))
+                       round_p(obj[term, "Pr(>F)"]))
   } else if ("Chisq" %in% names(obj)) {
     res_str <- sprintf(paste0("$\\chi^2$(%i) = %.", f.digits, "f, \\emph{p} %s"), 
                        obj[term, "Df"], obj[term, "Chisq"], 
-                       round.p(obj[term, "Pr(>Chisq)"]))
+                       round_p(obj[term, "Pr(>Chisq)"]))
   } else if ("F value" %in% names(obj)) {
     res_str <- sprintf(paste0("\\emph{F}(%i, %i) = %.", f.digits, "f, \\emph{p} %s"), 
                        obj[term, "Df"], obj["Residuals", "Df"], obj[term, "F value"], 
-                       round.p(obj[term, "Pr(>F)"]))
+                       round_p(obj[term, "Pr(>F)"]))
   } else {
     stop('The object does not have one of the expected columns (F / F value / Chisq)')
   }
   
-  format.results(res_str, ...)
+  format_results(res_str, ...)
 }
 
 #' Describe [stats::aov] results
@@ -98,7 +98,7 @@ apa.aov <- function(obj, term, sstype = 2, ...) {
 #' @param f_digits number of digits to use for F (default: 2)
 #' @param df_digits number of digits to use for df (default: 0)
 #' @param append_to_table should the results be added to the original ezANOVA table (default: FALSE)
-#' @param ... other parameters passed to [format.results]
+#' @param ... other parameters passed to [format_results]
 #'
 #' @return string with formatted results
 #' @method apa ezANOVA
@@ -134,17 +134,17 @@ apa.ezANOVA <- function(obj, term, include_eta = TRUE, spher_corr = TRUE,
   rownames(eza) <- eza$Effect
   
   suffix <- sprintf(", $\\eta$^2^~G~ %s", 
-                    round.p(eza[term, "ges"],
+                    round_p(eza[term, "ges"],
                             digits = eta_digits,
                             replace.very.small = 10^(-eta_digits)))
   if (include_eta == FALSE) {
     suffix <- ""
   }
-  res <- format.results(sprintf("\\emph{F}(%.*f, %.*f) = %.*f, \\emph{p} %s%s", 
+  res <- format_results(sprintf("\\emph{F}(%.*f, %.*f) = %.*f, \\emph{p} %s%s", 
                                 df_digits, eza[term, "DFn"], 
                                 df_digits, eza[term, "DFd"], 
                                 f_digits, eza[term, "F"], 
-                                round.p(eza[term, "p"]), suffix), ...)
+                                round_p(eza[term, "p"]), suffix), ...)
   if (append_to_table) {
     cbind(eza[term, ], res)
   } else {
@@ -198,7 +198,7 @@ apa_ezStats <- function(obj, term = 1, ...) {
 #' @param term contrast number(s)
 #' @param dtype description type, "t", "B", or any other letter
 #' @param df include DF in t-test description (default: False)
-#' @param ... other parameters passed to [format.results]
+#' @param ... other parameters passed to [format_results]
 #'
 #' @return string with formatted results
 #' @method apa summary_emm
@@ -227,15 +227,15 @@ apa.summary_emm <- function(obj, term, dtype = "B", df = FALSE, ...) {
   df_str <- ifelse(df, sprintf("(%i)", round(obj$df)), "")
   if (dtype == "t") {
     res_str <- sprintf("\\emph{%s}%s = %.2f, \\emph{p} %s", 
-                       "t", df_str, obj$t.ratio, round.p(obj$p.value))
+                       "t", df_str, obj$t.ratio, round_p(obj$p.value))
   } else if (dtype == "B") {
     res_str <- sprintf("\\emph{B} = %.2f (%.2f), \\emph{p} %s", 
-                       obj$estimate, obj$SE, round.p(obj$p.value))
+                       obj$estimate, obj$SE, round_p(obj$p.value))
   } else {
     res_str <- sprintf("\\emph{B} = %.2f (%.2f), \\emph{%s}%s = %.2f, \\emph{p} %s", 
-                       obj$estimate, obj$SE, "t", df_str, obj$t.ratio, round.p(obj$p.value))
+                       obj$estimate, obj$SE, "t", df_str, obj$t.ratio, round_p(obj$p.value))
   }
-  format.results(res_str, ...)
+  format_results(res_str, ...)
 }
 
 #' @rdname apa.summary_emm
@@ -248,7 +248,7 @@ apa.emmeans <- apa.summary_emm
 #' @param obj lmerTest anova results
 #' @param term model term to describe (a string with the term name or its sequential number)
 #' @param f.digits decimal digits for F value
-#' @param ... other parameters passed to [format.results]
+#' @param ... other parameters passed to [format_results]
 #'
 #' @return formatted string describing the results of anova
 #' @method apa anova.merMod
@@ -273,14 +273,14 @@ apa.anova.merMod <- function(obj, term, f.digits = 2, ...) {
   obj <- data.frame(obj)
   res_str <- sprintf(paste0("\\emph{F}(%.0f, %.1f) = %.", f.digits, "f, \\emph{p} %s"), 
                      obj[term, "NumDF"], obj[term, "DenDF"], 
-                     obj[term, "F.value"], round.p(obj[term, "Pr..F."]))
-  format.results(res_str, ...)
+                     obj[term, "F.value"], round_p(obj[term, "Pr..F."]))
+  format_results(res_str, ...)
 }
 
 #' Describe linearHypothesis test results
 #'
 #' @param obj hypothesis from [car::linearHypothesis]
-#' @param ... additional parameters passed to [format.results]
+#' @param ... additional parameters passed to [format_results]
 #'
 #' @return results of \eqn{\chi^2} or _F_ test
 #' @method apa linearHypothesis
@@ -304,11 +304,11 @@ apa.linearHypothesis <- function(obj, ...) {
   
   if ("Chisq" %in% names(res)) {
     res <- res[c("Df", "Chisq", "Pr(>Chisq)")]
-    res[3] <- round.p(res[3])
-    format.results(do.call(sprintf, c(list("$\\chi^2$(%g) = %.2f, \\emph{p} %s"), res)), ...)
+    res[3] <- round_p(res[3])
+    format_results(do.call(sprintf, c(list("$\\chi^2$(%g) = %.2f, \\emph{p} %s"), res)), ...)
   } else {
-    res[6] <- round.p(res[6])
+    res[6] <- round_p(res[6])
     res <- res[c(3, 1, 5, 6)]
-    format.results(do.call(sprintf, c(list("\\emph{F}(%g, %g) = %.2f, \\emph{p} %s"), res)), ...)
+    format_results(do.call(sprintf, c(list("\\emph{F}(%g, %g) = %.2f, \\emph{p} %s"), res)), ...)
   }
 }

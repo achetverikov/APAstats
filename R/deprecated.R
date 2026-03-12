@@ -56,7 +56,7 @@ describe.r <- function(rc, ...) {
 #' @export
 describe.chi <- function(tbl, ...) {
   .Deprecated("apa")
-  apa.chisq(tbl, ...)
+  apa.chisq.test(tbl, ...)
 }
 
 #' @rdname apastats-deprecated
@@ -112,14 +112,14 @@ describe.emmeans <- function(obj, term, dtype = "B", df = FALSE, ...) {
 #' @export
 describe.ezanova <- function(ezfit, term, include_eta = TRUE, spher_corr = TRUE, eta_digits = 2, f_digits = 2, df_digits = 0, append_to_table = FALSE, ...) {
   .Deprecated("apa")
-  apa.ezanova(ezfit, term, include_eta, spher_corr, eta_digits, f_digits, df_digits, append_to_table, ...)
+  apa.ezANOVA(ezfit, term, include_eta, spher_corr, eta_digits, f_digits, df_digits, append_to_table, ...)
 }
 
 #' @rdname apastats-deprecated
 #' @export
 describe.ezstats <- function(ezstats_res, term = 1, ...) {
   .Deprecated("apa")
-  apa.ezstats(ezstats_res, term, ...)
+  apa_ezStats(ezstats_res, term, ...)
 }
 
 #' @rdname apastats-deprecated
@@ -133,14 +133,23 @@ describe.glm <- function(fit, term = NULL, dtype = 1, b.digits = 2, t.digits = 2
 #' @export
 describe.lht <- function(hyp, ...) {
   .Deprecated("apa")
-  apa.lht(hyp, ...)
+  apa.linearHypothesis(hyp, ...)
 }
 
 #' @rdname apastats-deprecated
 #' @export
 describe.lmer <- function(fm, pv, digits = c(2, 2, 2), incl.rel = 0, dtype = "B", incl.p = TRUE) {
-  .Deprecated("apa")
-  apa.lmer(fm, pv, digits, incl.rel, dtype, incl.p)
+  .Deprecated("apa.glm")
+  if (!isTRUE(all.equal(incl.rel, 0)) || !isTRUE(incl.p)) {
+    warning("Arguments 'incl.rel' and 'incl.p' are ignored; use apa.glm()/apa() arguments instead.")
+  }
+  apa.glm(
+    obj = fm,
+    term = pv,
+    dtype = if (identical(dtype, "B")) 2 else 1,
+    b.digits = digits[1],
+    t.digits = digits[3]
+  )
 }
 
 #' @rdname apastats-deprecated
@@ -154,14 +163,14 @@ describe.lmert <- function(sfit, factor, dtype = "t", ...) {
 #' @export
 describe.lmtaov <- function(afit, term, f.digits = 2, ...) {
   .Deprecated("apa")
-  apa.lmtaov(afit, term, f.digits, ...)
+  apa.anova.merMod(afit, term, f.digits, ...)
 }
 
 #' @rdname apastats-deprecated
 #' @export
 describe.lsmeans <- function(obj, term, dtype = "B", df = FALSE, ...) {
   .Deprecated("apa")
-  apa.lsmeans(obj, term, dtype, df, ...)
+  apa.emmeans(obj, term, dtype, df, ...)
 }
 
 #' @rdname apastats-deprecated

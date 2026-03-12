@@ -5,12 +5,14 @@
 \alias{apa.roc.diff}
 \title{Describe differences between ROC curves}
 \usage{
-\method{apa}{roc.test}(obj)
+\method{apa}{roc.test}(obj, ...)
 
-\method{apa}{roc.diff}(obj)
+\method{apa}{roc.diff}(obj, ...)
 }
 \arguments{
 \item{obj}{a difference between the ROC curves from \link[pROC:roc.test]{pROC::roc.test}}
+
+\item{...}{Additional arguments (currently unused)}
 }
 \value{
 result

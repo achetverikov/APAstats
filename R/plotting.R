@@ -181,7 +181,7 @@ plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
     as.character
   ), list(y = dv, ymin = "ymin", ymax = "ymax"))
   if (do_aggregate) {
-    plot_data <- apastats2:::summarySE(plot_data,
+    plot_data <- summarySE(plot_data,
       measurevar = dv,
       groupvars = c(withinvars, betweenvars, wid), na.rm = TRUE
     )
@@ -191,12 +191,12 @@ plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
       stop("Within-subject plot can only be made if there is at least one within-subject variable listed in withinvars parameter.")
     }
     
-    setDT(plot_data)
+    data.table::setDT(plot_data)
     aggr_data <- plot_data[, get_superb_ci(data = .SD, value_var = dv, within = withinvars, between = NULL, 
                                    wid = wid, errorbar = bars, drop_NA_subj = drop_NA_subj, debug = debug), 
                            by = betweenvars]
-    setDF(plot_data)
-    setDF(aggr_data)
+    data.table::setDF(plot_data)
+    data.table::setDF(aggr_data)
     
     } else {
     aggr_data <- summarySE(plot_data,
@@ -289,7 +289,11 @@ plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
 
   if (pretty_breaks_y) {
     y_range <- c(min(aggr_data$ymin), max(aggr_data$ymax))
-    breaks <- labeling::extended(y_range[1], y_range[2], 5)
+    breaks <- if (requireNamespace("labeling", quietly = TRUE)) {
+      labeling::extended(y_range[1], y_range[2], 5)
+    } else {
+      pretty(y_range, n = 5)
+    }
     limits <- range(c(breaks, y_range))
     p <- p + scale_y_continuous(breaks = breaks) + coord_cartesian(ylim = limits)
     if (pretty_y_axis) {

@@ -10,8 +10,7 @@
 #' \itemize{
 #'   \item [apa.ttest] for [stats::t.test] and [apa.r] for [stats::cor.test] (both with class \code{htest})
 #'   \item [apa.aov] for [stats::aov] and [apa.anova] for [car::Anova]
-#'   \item [apa.glm] for [stats::glm] and [stats::lm]
-#'   \item [apa.lmer] for [lme4::lmer] and [apa.lmert] for [lmerTest::lmer]
+#'   \item [apa.glm] for [stats::glm], [stats::lm], [lme4::lmer], and [apa.lmert] for [lmerTest::lmer]
 #'   \item [apa.brmsfit] for [brms::brm] and [apa.BFBayesFactor] for [BayesFactor::anovaBF]
 #'   \item [apa.chisq.test] for [stats::chisq.test]
 #'   \item [apa.dip.test] for [diptest::dip.test]
@@ -58,7 +57,7 @@ apa.default <- function(obj, ...) {
 #' @param obj An object from [stats::t.test]
 #' @param show.mean Include mean value in results (useful for one-sample test)
 #' @param abs Show the absolute value of t-statistic
-#' @param ... Other arguments passed to [format.results]
+#' @param ... Other arguments passed to [format_results]
 #'
 #' @return A string with t-test value, degrees of freedom, p-value, and optionally the mean with CI
 #' @method apa htest
@@ -93,7 +92,7 @@ apa.htest <- function(obj, show.mean = FALSE, abs = FALSE, ...) {
 #' @param obj An object from [stats::t.test]
 #' @param show.mean Include mean value in results (useful for one-sample test)
 #' @param abs Show the absolute value of t-statistic
-#' @param ... Other arguments passed to [format.results]
+#' @param ... Other arguments passed to [format_results]
 #'
 #' @return A string with t-test value, degrees of freedom, p-value, and optionally the mean with CI
 #' @export
@@ -113,18 +112,18 @@ apa.ttest <- function(obj, show.mean = FALSE, abs = FALSE, ...) {
   if (show.mean == TRUE) {
     res_str <- sprintf("\\emph{M} = %.2f [%.2f, %.2f], \\emph{t}(%.1f) = %.2f, \\emph{p} %s", 
                        obj$estimate, obj$conf.int[1], obj$conf.int[2], 
-                       obj$parameter, obj$statistic, round.p(obj$p.value))
+                       obj$parameter, obj$statistic, round_p(obj$p.value))
   } else {
     res_str <- sprintf("\\emph{t}(%.1f) = %.2f, \\emph{p} %s", 
-                       obj$parameter, obj$statistic, round.p(obj$p.value))
+                       obj$parameter, obj$statistic, round_p(obj$p.value))
   }
-  format.results(res_str, ...)
+  format_results(res_str, ...)
 }
 
 #' Format correlation test results in APA style
 #'
 #' @param obj An object from [stats::cor.test]
-#' @param ... Other arguments passed to [format.results]
+#' @param ... Other arguments passed to [format_results]
 #'
 #' @return A string with correlation coefficient, degrees of freedom, and p-value
 #' @export
@@ -136,8 +135,8 @@ apa.ttest <- function(obj, show.mean = FALSE, abs = FALSE, ...) {
 #' rc <- cor.test(x, y)
 #' apa(rc)
 apa.r <- function(obj, ...) {
-  format.results(sprintf("\\emph{r}(%.0f) = %.2f, \\emph{p} %s", 
-                         obj$parameter, obj$estimate, round.p(obj$p.value)), ...)
+  format_results(sprintf("\\emph{r}(%.0f) = %.2f, \\emph{p} %s", 
+                         obj$parameter, obj$estimate, round_p(obj$p.value)), ...)
 }
 
 #' Format chi-square test results in APA style
@@ -145,7 +144,7 @@ apa.r <- function(obj, ...) {
 #' @param obj A result from [stats::chisq.test]
 #' @param v Add Cramer's V (default: TRUE)
 #' @param addN Add N (default: TRUE)
-#' @param ... Other parameters passed to [format.results]
+#' @param ... Other parameters passed to [format_results]
 #' @method apa chisq.test
 #' @return Formatted results string
 #' @export
@@ -168,15 +167,15 @@ apa.chisq.test <- function(obj, v = TRUE, addN = TRUE, ...) {
                  obj$parameter, 
                  ifelse(addN, paste0(", \\emph{N} = ", sum(tbl)), ""), 
                  obj$statistic, 
-                 round.p(obj$p.value), 
+                 round_p(obj$p.value), 
                  ifelse(v, paste0(", \\emph{V} = ", omit.zeroes(round(cv, 2))), ""))
-  format.results(res, ...)
+  format_results(res, ...)
 }
 
 #' Describe Hartigans' dip test results
 #'
 #' @param obj a result from [diptest::dip.test]
-#' @param ... other parameters passed to [format.results]
+#' @param ... other parameters passed to [format_results]
 #' @method apa dip.test
 #' @return formatted results string
 #' @export
@@ -193,13 +192,14 @@ apa.chisq.test <- function(obj, v = TRUE, addN = TRUE, ...) {
 #'   apa(dip_result)
 #' }
 apa.dip.test <- function(obj, ...) {
-  res <- sprintf("\\emph{D} = %.2f, \\emph{p} %s", obj$statistic, round.p(obj$p.value))
-  format.results(res, ...)
+  res <- sprintf("\\emph{D} = %.2f, \\emph{p} %s", obj$statistic, round_p(obj$p.value))
+  format_results(res, ...)
 }
 
 #' Describe differences between ROC curves
 #'
 #' @param obj a difference between the ROC curves from [pROC::roc.test]
+#' @param ... Additional arguments (currently unused)
 #' @return result
 #' @method apa roc.test
 #' @export
@@ -223,8 +223,8 @@ apa.dip.test <- function(obj, ...) {
 #'   # Format results in APA style
 #'   apa(roc_diff)
 #' }
-apa.roc.test <- function(obj) {
-  sprintf("\\emph{D} = %0.2f, \\emph{p} %s", obj$statistic, round.p(obj$p.value))
+apa.roc.test <- function(obj, ...) {
+  sprintf("\\emph{D} = %0.2f, \\emph{p} %s", obj$statistic, round_p(obj$p.value))
 }
 
 #' @rdname apa.roc.test
@@ -241,7 +241,7 @@ apa.roc.diff <- apa.roc.test
 #' @param dtype Format type: "p" for parentheses or "c" for comma
 #' @param m_units Units for mean (e.g., "°" for degrees)
 #' @param sd_units Units for standard deviation
-#' @param ... Additional arguments passed to [format.results]
+#' @param ... Additional arguments passed to [format_results]
 #'
 #' @return A formatted string with mean and standard deviation in APA style
 #' @export
@@ -265,7 +265,7 @@ apa_mean_sd <- function(x = NULL, m = NULL, sd = NULL, digits = 2,
     m <- m_sd$Mean
     sd <- m_sd$SD
   }
-  format.results(sprintf(
+  format_results(sprintf(
     "\\emph{M} = %.*f%s%s\\emph{SD} = %.*f%s%s",
     digits, m, m_units, s1, digits, sd, sd_units, s2
   ), ...)
@@ -277,7 +277,7 @@ apa_mean_sd <- function(x = NULL, m = NULL, sd = NULL, digits = 2,
 #' @param upper_ci Upper confidence interval bound
 #' @param addCI Add "95% CI =" prefix
 #' @param digits Number of digits to use
-#' @param ... Other arguments passed to [format.results]
+#' @param ... Other arguments passed to [format_results]
 #'
 #' @return A formatted string with mean and confidence intervals
 #' @export
@@ -295,7 +295,7 @@ apa_mean_sd <- function(x = NULL, m = NULL, sd = NULL, digits = 2,
 #' 
 apa_format_mean_conf <- function(mean_val, lower_ci, upper_ci, addCI = FALSE, digits = 2, ...) {
   ci_str <- ifelse(addCI, ", 95%% \\emph{CI} =", "")
-  format.results(sprintf(paste0(
+  format_results(sprintf(paste0(
     "\\emph{M} = %.",
     digits, "f", ci_str, " [%.", digits, "f, %.", digits,
     "f]"
@@ -309,7 +309,7 @@ apa_format_mean_conf <- function(mean_val, lower_ci, upper_ci, addCI = FALSE, di
 #' @param addCI Add "95% CI =" prefix
 #' @param digits Number of digits to use
 #' @param transform.means An optional function to transform the means and CI to another scale
-#' @param ... Other arguments passed to [format.results]
+#' @param ... Other arguments passed to [format_results]
 #'
 #' @return A string with a mean followed by confidence intervals in square brackets
 #' @export
@@ -336,7 +336,7 @@ apa_mean_conf <- function(x, bootCI = TRUE, addCI = FALSE, digits = 2,
 #'
 #' @param x A vector of zeros and ones
 #' @param digits Number of digits in results
-#' @param ... Additional arguments passed to [format.results]
+#' @param ... Additional arguments passed to [format_results]
 #'
 #' @return A string with the mean and confidence interval in square brackets
 #' @export
@@ -349,7 +349,7 @@ apa_mean_conf <- function(x, bootCI = TRUE, addCI = FALSE, digits = 2,
 #' # Format results in APA style
 #' apa_binom_mean_conf(x)
 apa_binom_mean_conf <- function(x, digits = 2, ...) {
-  format.results(with(data.frame(Hmisc::binconf(sum(x), length(x))), 
+  format_results(with(data.frame(Hmisc::binconf(sum(x), length(x))), 
                       sprintf(paste0("\\emph{M} = %.", digits, "f [%.", digits, "f, %.", digits, "f]"), 
                               PointEst, Lower, Upper)), ...)
 }
@@ -365,7 +365,7 @@ apa_binom_mean_conf <- function(x, digits = 2, ...) {
 #' @param abs Should we show the absolute value if the t-test (T) or keep its sign (FALSE, default)
 #' @param aggregate_by Do the aggregation by the third variable(s): either NULL (default), a single vector variable, or a list of variables to aggregate by.
 #' @param transform.means A function to transform means and confidence intervals (default: NULL)
-#' @param ... Additional arguments passed to [format.results]
+#' @param ... Additional arguments passed to [format_results]
 #'
 #' @return A formatted string with t-test results in APA style
 #' @export
@@ -380,6 +380,7 @@ apa_binom_mean_conf <- function(x, digits = 2, ...) {
 apa_mean_and_t <- function(x, by, which.mean = 1, digits = 2, paired = FALSE, 
                            eff.size = FALSE, abs = FALSE, aggregate_by = NULL, 
                            transform.means = NULL, ...) {
+  Lower <- Upper <- NULL
   
   if (lengthu(by) != 2) {
     stop('"by" should have exactly two levels')
@@ -430,7 +431,7 @@ apa_mean_and_t <- function(x, by, which.mean = 1, digits = 2, paired = FALSE,
     }
   }
   
-  format.results(res_str, ...)
+  format_results(res_str, ...)
 }
 
 #' Get a list with means and confidence intervals
@@ -438,7 +439,7 @@ apa_mean_and_t <- function(x, by, which.mean = 1, digits = 2, paired = FALSE,
 #' @param x numeric vector to compute the mean for
 #' @param digits number of digits in results (default: 2)
 #' @param binom compute binomial CI instead of the usual ones
-#' @param ... other parameters passed to [format.results]
+#' @param ... other parameters passed to [format_results]
 #'
 #' @return a list with a mean and CI as formatted strings
 #' @export
@@ -514,3 +515,4 @@ apa.list <- function(obj, ...) {
   # If no matching type is found
   stop("Unrecognized list format. This list doesn't match any supported statistical result types.")
 }
+

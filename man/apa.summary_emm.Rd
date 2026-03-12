@@ -18,7 +18,7 @@
 
 \item{df}{include DF in t-test description (default: False)}
 
-\item{...}{other parameters passed to \link{format.results}}
+\item{...}{other parameters passed to \link{format_results}}
 }
 \value{
 string with formatted results

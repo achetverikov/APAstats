@@ -24,7 +24,7 @@ apa_mean_conf(
 
 \item{transform.means}{An optional function to transform the means and CI to another scale}
 
-\item{...}{Other arguments passed to \link{format.results}}
+\item{...}{Other arguments passed to \link{format_results}}
 }
 \value{
 A string with a mean followed by confidence intervals in square brackets

@@ -38,6 +38,10 @@ get_superb_ci(
 
 \item{drop_missing_levels}{should the missing levels of the variables in within/between be dropped? (default: TRUE)}
 
+\item{aggr_fun}{aggregation function used twice: first in \link[reshape2:cast]{reshape2::dcast} (\code{fun.aggregate}),
+and then as the statistic name for \code{superb::superbData} (constructed as \verb{superb::<name>}).
+Use a function whose name corresponds to a statistic implemented in \code{superb} (default: \link[base:mean]{base::mean}).}
+
 \item{debug}{output additional debugging info (default: FALSE)}
 
 \item{...}{additional parameters passed to \link{apa_format_mean_conf}}
