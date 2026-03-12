@@ -14,6 +14,7 @@ get_superb_ci(
   errorbar = "CI",
   drop_NA_subj = FALSE,
   drop_missing_levels = TRUE,
+  aggr_fun = mean,
   debug = FALSE,
   ...
 )

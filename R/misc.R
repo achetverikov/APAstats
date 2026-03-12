@@ -424,6 +424,17 @@ paste_and <- function(x, sep = ", ", suffix = "") {
 get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustments = list(purpose = "single", decorrelation = "CM"), errorbar = "CI", drop_NA_subj = FALSE, drop_missing_levels = TRUE, aggr_fun = mean, debug = FALSE, ...) {
   requireNamespace('superb')
   errorbar <- toupper(errorbar)
+  encode_level_code <- function(i) {
+    chars <- LETTERS
+    out <- character(5)
+    n <- i - 1
+    for (pos in 5:1) {
+      out[pos] <- chars[(n %% 26) + 1]
+      n <- n %/% 26
+    }
+    paste0(out, collapse = "")
+  }
+  max_level_codes <- 26^5
   all_vars <-  c(within, between, wid, value_var)
   for (x in all_vars){
     if (!(x %in% names(data))){
@@ -431,7 +442,7 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
     }
   }
   for (x in c(within, between)) {
-    
+
     if (!is.factor(data[[x]])) {
       warning(paste0("Converting \"", x, "\" to a factor."))
       data[[x]] <- factor(data[[x]])
@@ -450,8 +461,20 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
     }
   }
 
+  data_superb <- data
+  level_maps <- list()
+  for (x in c(within, between)) {
+    x_levels <- levels(data_superb[[x]])
+    if (length(x_levels) > max_level_codes) {
+      stop(sprintf("Too many levels in \"%s\" (%s). Maximum supported with 5-letter codes is %s.", x, length(x_levels), max_level_codes))
+    }
+    x_codes <- vapply(seq_along(x_levels), encode_level_code, FUN.VALUE = character(1))
+    level_maps[[x]] <- data.frame(original = x_levels, code = x_codes, stringsAsFactors = FALSE)
+    data_superb[[x]] <- factor(data_superb[[x]], levels = x_levels, labels = x_codes)
+  }
+
   dcast_form <- paste0(paste0(c(wid, between), collapse = "+"), "~", paste0(within, collapse = "+"))
-  wide_data <- reshape2::dcast(data, dcast_form, value.var = value_var, fun.aggregate = aggr_fun)
+  wide_data <- reshape2::dcast(data_superb, dcast_form, value.var = value_var, fun.aggregate = aggr_fun)
   if (anyNA(wide_data)) {
     print(wide_data[!complete.cases(wide_data), ])
     if (drop_NA_subj) {
@@ -462,15 +485,15 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
       stop("NAs present after aggregation")
     }
   }
-  WSFactors <- sapply(within, \(x) paste0(x, "(", length(levels(data[[x]])), ")"))
+  WSFactors <- sapply(within, \(x) paste0(x, "(", length(levels(data_superb[[x]])), ")"))
   variables <- colnames(wide_data)[(2 + length(between)):length(colnames(wide_data))]
 
   # WSDesign <- do.call(expand.grid, lapply(within, \(x) c(1:length(levels(data[[x]])))))
   # if (length(within) > 1) {
   #   WSDesign <- WSDesign[do.call(order, WSDesign), ]
   # }
-  WSDesign <- data.table::as.data.table(data)[,.N, keyby = within][,lapply(.SD, as.numeric),.SDcols = -c('N')]
-  
+  WSDesign <- data.table::as.data.table(data_superb)[,.N, keyby = within][,lapply(.SD, as.numeric),.SDcols = -c('N')]
+
   WSDesign <- apply(WSDesign, 1, as.vector, simplify = FALSE)
 
   if (debug == TRUE) {
@@ -485,9 +508,16 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
 
   if (!all(grepl("^[\\w. ]+$", colnames_wsd, perl = TRUE))) warning("Within- and between-subject factors levels should only contain letters, digits, underscores, dots, or spaces. If you experience errors, try removing special characters from factor levels.")
 
+
+
   cur_superb.feedback <- options('superb.feedback')
   options(superb.feedback = 'none')
-  
+  on.exit(options(superb.feedback = cur_superb.feedback), add = TRUE)
+
+  statistic_name <- as.character(substitute(aggr_fun))
+  superb_statistic <- paste0("superb::", statistic_name)
+  superb_errorbar <- paste0("superb::", errorbar)
+
   # suppressMessages({
     spp_data <- superb::superbData(wide_data,
       WSFactors = WSFactors,
@@ -496,12 +526,10 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
       variables = variables,
       WSDesign = WSDesign,
       BSFactors = between,
-      errorbar = errorbar,
-      statistic = substitute(aggr_fun)
+      errorbar = superb_errorbar,
+      statistic = superb_statistic
     )
   # })
-  
-  options(superb.feedback = cur_superb.feedback)
   spp_data <- spp_data$summaryStatistics
   for (x in within) {
     spp_data[[x]] <- factor(spp_data[[x]],
@@ -509,7 +537,13 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
       labels = levels(data[[x]])
     )
   }
-  
+  for (x in between) {
+    spp_data[[x]] <- factor(spp_data[[x]],
+      levels = level_maps[[x]]$code,
+      labels = level_maps[[x]]$original
+    )
+  }
+
   spp_data$lower_ci <- spp_data$center + spp_data$lowerwidth
   spp_data$upper_ci <- spp_data$center + spp_data$upperwidth
   spp_data$descr <- apa_format_mean_conf(
