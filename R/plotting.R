@@ -14,9 +14,9 @@
 #'   theme_minimal()
 #'  
 #' p 
-#' p + base.breaks(faces$answerTime, scale = 'x') + base.breaks(faces$correct, scale = 'y')
+#' p + base_breaks(faces$answerTime, scale = 'x') + base_breaks(faces$correct, scale = 'y')
 #'
-base.breaks <- function(x, scale = "x", addSegment = TRUE, ...) {
+base_breaks <- function(x, scale = "x", addSegment = TRUE, ...) {
   y <- xend <- yend <- NULL  # due to NSE notes in R CMD check
   
   b <- pretty(x)
@@ -49,21 +49,21 @@ base.breaks <- function(x, scale = "x", addSegment = TRUE, ...) {
   }
 }
 
-#' @describeIn base.breaks Tufte-like breaks for X axis
+#' @describeIn base_breaks Tufte-like breaks for X axis
 #' @export
 #'
 
-base.breaks.x <- function(x, addSegment = TRUE, ...) {
-  base.breaks(x, scale = "x", addSegment = addSegment, ...)
+base_breaks_x <- function(x, addSegment = TRUE, ...) {
+  base_breaks(x, scale = "x", addSegment = addSegment, ...)
 }
 
 
-#' @describeIn base.breaks Tufte-like breaks for Y axis
+#' @describeIn base_breaks Tufte-like breaks for Y axis
 #' @export
 #'
 
-base.breaks.y <- function(x, addSegment = TRUE, ...) {
-  base.breaks(x, scale = "y", addSegment = addSegment, ...)
+base_breaks_y <- function(x, addSegment = TRUE, ...) {
+  base_breaks(x, scale = "y", addSegment = addSegment, ...)
 }
 
 
@@ -103,30 +103,30 @@ base.breaks.y <- function(x, addSegment = TRUE, ...) {
 #' @details For point and line properties (e.g., pointfill) passing NULL allows to avoid setting these values (useful when they are mapped to some variables).
 #'
 #' @return plot of pointrange
-#' @export plot.pointrange
+#' @export plot_pointrange
 #' @import ggplot2
 #' @examples
 #' data(faces)
 #' # between-subject CI
-#' plot.pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime)) + ylab("RT")
+#' plot_pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime)) + ylab("RT")
 #' 
 #' # within-subject CI
-#' plot.pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
+#' plot_pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
 #'      within_subj = TRUE, withinvars = c("stim_gender"), betweenvars = c("user_gender")) +
 #'      ylab("RT")
 #'      
 #' # with bars showing standard errors
-#' plot.pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
+#' plot_pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
 #'      within_subj = TRUE, withinvars = c("stim_gender"), betweenvars = c("user_gender"),
 #'      bars = 'se') + ylab("RT")
 #'      
 #' # same but also printing out aggregated data
-#' plot.pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
+#' plot_pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
 #'      within_subj = TRUE, withinvars = c("stim_gender"), betweenvars = c("user_gender"),
 #'      bars = 'se', print_aggregated_data = TRUE) + ylab("RT")
 #'      
 #' # CIs with aggregating the data beforehand and using exp-transformed y-axis
-#' plot.pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
+#' plot_pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
 #'      within_subj = TRUE, withinvars = c("stim_gender"), betweenvars = c("user_gender"),
 #'      bars = 'ci', exp_y = TRUE, do_aggregate = TRUE) + ylab("RT")
 #'      
@@ -134,7 +134,7 @@ base.breaks.y <- function(x, addSegment = TRUE, ...) {
 #'   # Using the Stroop dataset from afex package
 #'   data(stroop, package = "afex")
 #'   # within-subject CI
-#'   plot.pointrange(stroop, aes(x = condition, color = congruency, y = rt), wid = "pno",
+#'   plot_pointrange(stroop, aes(x = condition, color = congruency, y = rt), wid = "pno",
 #'      within_subj = TRUE, withinvars = c("congruency"), betweenvars = c("condition","study")) +
 #'      facet_grid(~study)+
 #'      ylab("RT")
@@ -143,7 +143,7 @@ base.breaks.y <- function(x, addSegment = TRUE, ...) {
 #'}
 
 
-plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize = I(3), linesize = I(1),
+plot_pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize = I(3), linesize = I(1),
                             pointfill = I("white"), pointshape = NULL, within_subj = F,
                             wid = "uid", bars = "ci", withinvars = NULL, betweenvars = NULL,
                             x_as_numeric = F, custom_geom_before = NULL, connecting_line = F,
@@ -248,7 +248,8 @@ plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
   if (print_aggregated_data) {
     print(aggr_data)
   }
-  p <- ggplot(aggr_data, do.call(aes_string, aes_list))
+  aes_main <- do.call(aes, lapply(aes_list, as.name))
+  p <- ggplot(aggr_data, aes_main)
   if (!is.null(custom_geom_before)) {
     p <- p + custom_geom_before
   }
@@ -281,7 +282,8 @@ plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
   if (add_jitter) {
     default_ind_pp <- list(size = pointsize / 2, fill = "lightgray", position = position_jitterdodge(dodge.width = pos$width, jitter.width = 0.1))
     individual_points_params <- append(individual_points_params, default_ind_pp[setdiff(names(default_ind_pp), names(individual_points_params))])
-    p <- p + do.call(geom_jitter, append(individual_points_params, list(data = plot_data, mapping = do.call(aes_string, aes_list[!names(aes_list) %in% c("ymax", "ymin")]), inherit.aes = F)))
+    aes_jitter <- do.call(aes, lapply(aes_list[!names(aes_list) %in% c("ymax", "ymin")], as.name))
+    p <- p + do.call(geom_jitter, append(individual_points_params, list(data = plot_data, mapping = aes_jitter, inherit.aes = FALSE)))
   }
   if (!bars_instead_of_points) {
     p <- p + do.call(geom_point, point_params)
@@ -324,7 +326,7 @@ plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
 #' @export
 #'
 scale_y_exp <- function(digits = 0, ...) {
-  scale_y_continuous(breaks = scales::trans_breaks("exp", function(x) log(x)), labels = scales::trans_format("exp", function(x) as.character(f.round(x, digits = digits))), ...)
+  scale_y_continuous(breaks = scales::trans_breaks("exp", function(x) log(x)), labels = scales::trans_format("exp", function(x) as.character(f_round(x, digits = digits))), ...)
 }
 
 #' Extract grob element by name

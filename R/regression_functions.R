@@ -109,15 +109,15 @@ apa.glm <- function(obj, term = NULL, dtype = 1, b.digits = 2, t.digits = 2,
     if (isTRUE(all.equal(dfs, as.integer(dfs)))) {
       dfs <- as.character(round(dfs))
     } else {
-      dfs <- f.round(dfs, t.digits)
+      dfs <- f_round(dfs, t.digits)
     }
     dfs <- paste0("(", dfs, ")")
   } else {
     dfs <- ""
   }
   
-  res_df <- data.frame(B = f.round(afit[, 1], 2), SE = f.round(afit[, 2], 2), 
-                       Stat = f.round(afit[, 3], t.digits), 
+  res_df <- data.frame(B = f_round(afit[, 1], 2), SE = f_round(afit[, 2], 2), 
+                       Stat = f_round(afit[, 3], t.digits), 
                        p = if (p.as.number) zapsmall(as.vector(afit[, 4]), 4) else round_p(afit[, 4]), 
                        eff = row.names(afit), row.names = row.names(afit))
   
@@ -292,9 +292,9 @@ apa.brmsfit <- function(obj, term, trans = NULL, digits = 2, eff.size = FALSE,
   res_str <- sprintf(paste0("\\emph{b} = %.", digits, "f, 95%% %s = [%.", digits, "f, %.", digits, "f]"), mean(post_samp), ci.type, ci[, "CI_low"], ci[, "CI_high"])
   if (!is.null(es)) {
     if (eff.size.type == "r") {
-      res_str <- paste0("_r_ = ", f.round(sqrt(es), digits = digits), ", ", res_str)
+      res_str <- paste0("_r_ = ", f_round(sqrt(es), digits = digits), ", ", res_str)
     } else {
-      res_str <- paste0(res_str, ", $R^2_part$ = ", f.round(es, digits = digits))
+      res_str <- paste0(res_str, ", $R^2_part$ = ", f_round(es, digits = digits))
     }
   }
   

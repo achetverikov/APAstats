@@ -12,3 +12,8 @@
 ^CRAN-SUBMISSION$
 ^\.vscode($|/)
 ^example$
+^\.git$
+^\.gitignore$
+^\.gitattributes$
+^\.gitmodules$
+^\.github($|/)

@@ -1,0 +1,110 @@
+---
+title: "Getting Started with apastats2"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started with apastats2}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+`apastats2` provides helpers for formatting statistical results in APA style.
+This vignette shows a minimal workflow using base datasets and core functions.
+
+## Format test results
+
+```{r}
+library(apastats2)
+
+set.seed(1)
+t_res <- t.test(rnorm(20, mean = 10, sd = 2))
+t_str <- apa(t_res)
+t_str
+```
+
+Inline rendering example: One-sample test result was `r t_str`.
+
+```{r}
+data("sleep")
+mt_str <- apa_mean_and_t(sleep$extra, sleep$group, which.mean = 3, paired = TRUE)
+mt_str
+```
+
+Inline rendering example: Sleep increase comparison was `r mt_str`.
+
+```{r}
+set.seed(2)
+x <- rnorm(40)
+y <- 0.5 * x + rnorm(40, sd = 0.8)
+cor_str <- apa(cor.test(x, y))
+cor_str
+```
+
+Inline rendering example: Correlation result was `r cor_str`.
+
+```{r}
+tbl <- matrix(c(30, 20, 15, 35), nrow = 2, byrow = TRUE)
+chi_str <- apa(chisq.test(tbl))
+chi_str
+```
+
+Inline rendering example: Chi-square result was `r chi_str`.
+
+## Format model terms
+
+You can format selected terms from linear or generalized models.
+
+```{r}
+glm_res <- glm(Freq ~ (Age + Sex) * Survived, family = poisson, data = data.frame(Titanic))
+glm_str <- apa(glm_res, term = "SexFemale:SurvivedYes", dtype = 3)
+glm_str
+```
+
+Inline rendering example: GLM term result was `r glm_str`.
+
+## Confidence intervals for repeated-measures summaries
+
+`get_superb_ci()` computes summary statistics and interval columns suitable for plotting.
+
+```{r, eval = requireNamespace("superb", quietly = TRUE)}
+data(faces)
+ci_data <- get_superb_ci(faces, "uid", "stim_gender", "answerTime")
+ci_data[, c("stim_gender", "descr")]
+```
+
+```{r, eval = !requireNamespace("superb", quietly = TRUE)}
+cat("Package 'superb' is not installed; skipping within-subject CI example.\n")
+```
+
+## Point-range plotting
+
+`plot_pointrange()` can be used directly for quick summaries.
+
+```{r, fig.width=5, fig.height=3, eval = requireNamespace("superb", quietly = TRUE)}
+plot_pointrange(
+  faces[correct == 1, ],
+  aes(x = user_gender, color = stim_gender, y = answerTime),
+  wid = "uid",
+  within_subj = TRUE,
+  withinvars = c("stim_gender"),
+  betweenvars = c("user_gender")
+)
+```
+
+## Misc helpers
+
+```{r}
+round_p(c(0.025, 0.0001, 0.568))
+mean_ci_str <- apa_mean_conf(c(1.1, 1.5, 0.9, 1.8, 1.2), bootCI = FALSE)
+mean_ci_str
+```
+
+Inline rendering example: Mean and CI summary was `r mean_ci_str`.
+
+See individual help pages for full argument details and supported model classes.

@@ -168,7 +168,7 @@ apa.chisq.test <- function(obj, v = TRUE, addN = TRUE, ...) {
                  ifelse(addN, paste0(", \\emph{N} = ", sum(tbl)), ""), 
                  obj$statistic, 
                  round_p(obj$p.value), 
-                 ifelse(v, paste0(", \\emph{V} = ", omit.zeroes(round(cv, 2))), ""))
+                 ifelse(v, paste0(", \\emph{V} = ", omit_zeroes(round(cv, 2))), ""))
   format_results(res, ...)
 }
 
@@ -391,7 +391,7 @@ apa_mean_and_t <- function(x, by, which.mean = 1, digits = 2, paired = FALSE,
     } else {
       aggregate_by <- list(aggregate_by = aggregate_by, by = by)
     }
-    aggr_df <- Hmisc::summarize(x, aggregate_by, mean.nn)
+    aggr_df <- Hmisc::summarize(x, aggregate_by, mean_nn)
     x <- as.numeric(aggr_df$x)
     by <- aggr_df$by
   }
@@ -427,7 +427,7 @@ apa_mean_and_t <- function(x, by, which.mean = 1, digits = 2, paired = FALSE,
       warning("Cannot compute effect size. The 'lsr' package is not available. Please install it using install.packages('lsr').")
     } else {
       eff_size <- lsr::cohensD(x ~ by, method = ifelse(paired, "paired", "unequal"))
-      res_str <- paste0(res_str, ", \\emph{d} = ", f.round(eff_size, digits = digits))
+      res_str <- paste0(res_str, ", \\emph{d} = ", f_round(eff_size, digits = digits))
     }
   }
   
@@ -460,7 +460,7 @@ table_mean_conf <- function(x, digits = 2, binom = FALSE, ...) {
   } else {
     res <- as.list(Hmisc::smean.cl.boot(x))
   }
-  res <- with(res, c(f.round(Mean, digits), 
+  res <- with(res, c(f_round(Mean, digits), 
                      sprintf(paste0("[%.", digits, "f, %.", digits, "f]"), 
                              Lower, Upper)))
   res

@@ -28,6 +28,21 @@
 \alias{mymean}
 \alias{mysum}
 \alias{mysd}
+\alias{mean.nn}
+\alias{sd.nn}
+\alias{sum.nn}
+\alias{drop.empty.cols}
+\alias{binom.ci}
+\alias{mean.round}
+\alias{sd.round}
+\alias{load.libs}
+\alias{lmer.fixef}
+\alias{omit.zeroes}
+\alias{f.round}
+\alias{base.breaks}
+\alias{base.breaks.x}
+\alias{base.breaks.y}
+\alias{plot.pointrange}
 \title{Deprecated functions in the apastats package}
 \usage{
 describe.ttest(t, ...)
@@ -147,6 +162,67 @@ mymean(...)
 mysum(...)
 
 mysd(...)
+
+\method{mean}{nn}(x, ...)
+
+sd.nn(x, ...)
+
+\method{sum}{nn}(x, ...)
+
+drop.empty.cols(df)
+
+binom.ci(x)
+
+\method{mean}{round}(x, ...)
+
+sd.round(x, ...)
+
+load.libs(libs)
+
+lmer.fixef(fit.lmer)
+
+omit.zeroes(x, digits = 2)
+
+f.round(x, digits = 2, strip.lead.zeros = FALSE)
+
+base.breaks(x, scale = "x", addSegment = TRUE, ...)
+
+base.breaks.x(x, addSegment = TRUE, ...)
+
+base.breaks.y(x, addSegment = TRUE, ...)
+
+\method{plot}{pointrange}(
+  data,
+  mapping,
+  pos = position_dodge(0.3),
+  pointsize = I(3),
+  linesize = I(1),
+  pointfill = I("white"),
+  pointshape = NULL,
+  within_subj = FALSE,
+  wid = "uid",
+  bars = "ci",
+  withinvars = NULL,
+  betweenvars = NULL,
+  x_as_numeric = FALSE,
+  custom_geom_before = NULL,
+  connecting_line = FALSE,
+  pretty_breaks_y = FALSE,
+  pretty_y_axis = FALSE,
+  exp_y = FALSE,
+  print_aggregated_data = FALSE,
+  do_aggregate = FALSE,
+  add_margin = FALSE,
+  margin_label = "all",
+  margin_x_vals = NULL,
+  bars_instead_of_points = FALSE,
+  geom_bar_params = list(),
+  add_jitter = FALSE,
+  individual_points_params = list(),
+  drop_NA_subj = FALSE,
+  design = "between",
+  debug = FALSE
+)
 }
 \description{
 These functions are deprecated and will be removed in a future version.
@@ -176,9 +252,24 @@ Please use their replacements as indicated.
 \item \code{describe.lmtaov} -> \link{apa} (for lmerTest anova objects)
 \item \code{describe.lsmeans} -> \link{apa} (for lsmeans objects)
 \item \code{describe.roc.diff} -> \link{apa} (for ROC difference objects)
-\item \code{mymean} -> \link{mean.nn}
-\item \code{mysum} -> \link{sum.nn}
-\item \code{mysd} -> \link{sd.nn}
+\item \code{mean.nn} -> \link{mean_nn}
+\item \code{sd.nn} -> \link{sd_nn}
+\item \code{sum.nn} -> \link{sum_nn}
+\item \code{drop.empty.cols} -> \link{drop_empty_cols}
+\item \code{binom.ci} -> \link{binom_ci}
+\item \code{mean.round} -> \link{mean_round}
+\item \code{sd.round} -> \link{sd_round}
+\item \code{load.libs} -> \link{load_libs}
+\item \code{lmer.fixef} -> \link{lmer_fixef}
+\item \code{omit.zeroes} -> \link{omit_zeroes}
+\item \code{f.round} -> \link{f_round}
+\item \code{base.breaks} -> \link{base_breaks}
+\item \code{base.breaks.x} -> \link{base_breaks_x}
+\item \code{base.breaks.y} -> \link{base_breaks_y}
+\item \code{plot.pointrange} -> \link{plot_pointrange}
+\item \code{mymean} -> \link{mean_nn}
+\item \code{mysum} -> \link{sum_nn}
+\item \code{mysd} -> \link{sd_nn}
 }
 }
 \keyword{internal}

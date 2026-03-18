@@ -4,15 +4,15 @@
 #' @param ... other arguments passed to mean
 #'
 #' @return mean of x with NA removed
-#' @export mean.nn
+#' @export mean_nn
 #'
 #' @examples
 #' x <- c(NA, 10, 90)
 #' mean(x)
-#' mean.nn(x)
+#' mean_nn(x)
 #'
 
-mean.nn <- function(x, ...) {
+mean_nn <- function(x, ...) {
   mean(x, na.rm = TRUE, ...)
 }
 
@@ -22,13 +22,13 @@ mean.nn <- function(x, ...) {
 #' @param ... other arguments passed to sd
 #'
 #' @return sd of x with NA removed
-#' @export sd.nn
+#' @export sd_nn
 #'
 #' @examples
 #' x <- c(NA, 10, 90)
 #' sd(x)
-#' sd.nn(x)
-sd.nn <- function(x, ...) {
+#' sd_nn(x)
+sd_nn <- function(x, ...) {
   sd(x, na.rm = TRUE, ...)
 }
 
@@ -38,13 +38,13 @@ sd.nn <- function(x, ...) {
 #' @param ... other arguments passed to sum
 #'
 #' @return sum of x with NA removed
-#' @export sum.nn
+#' @export sum_nn
 #'
 #' @examples
 #' x <- c(NA, 10, 90)
 #' sum(x)
-#' sum.nn(x)
-sum.nn <- function(x, ...) {
+#' sum_nn(x)
+sum_nn <- function(x, ...) {
   sum(x, na.rm = TRUE, ...)
 }
 
@@ -72,15 +72,15 @@ lengthu <- function(x) {
 #' @param df a data.frame
 #'
 #' @return data.frame without empty columns
-#' @export drop.empty.cols
+#' @export drop_empty_cols
 #'
 #' @examples
 #' df <- data.frame(x = rnorm(20), y = rep("A", 20), z = rep(NA, 20))
 #' str(df)
-#' df <- drop.empty.cols(df)
+#' df <- drop_empty_cols(df)
 #' str(df)
 #'
-drop.empty.cols <- function(df) {
+drop_empty_cols <- function(df) {
   Filter(function(x) !all(is.na(x)), df)
 }
 
@@ -89,11 +89,11 @@ drop.empty.cols <- function(df) {
 #' @param x a vector of 0 and 1
 #'
 #' @return a vector of mean, lower CI, upper CI, and length of x
-#' @export binom.ci
+#' @export binom_ci
 #'
 #' @examples
-#' binom.ci(rbinom(500, 1, prob = 0.7))
-binom.ci <- function(x) {
+#' binom_ci(rbinom(500, 1, prob = 0.7))
+binom_ci <- function(x) {
   ci <- Hmisc::binconf(sum(x), length(x))
   c(y = ci[1], ymin = ci[2], ymax = ci[3], len = length(x))
 }
@@ -103,17 +103,17 @@ binom.ci <- function(x) {
 #' Mean rounded to the specified number of digits
 #'
 #' @param x a number
-#' @param ... other arguments passed to [apastats2::f.round]
+#' @param ... other arguments passed to [apastats2::f_round]
 #' 
 #' @return Mean rounded to the specified number of digits (string)
-#' @export mean.round
+#' @export mean_round
 #'
 #' @examples
-#' mean.round(c(10, 99))
-#' mean.round(c(10, 99, NA))
-#' mean.round(c(10, 99), 2)
-mean.round <- function(x, ...) {
-  f.round(mean.nn(x), ...)
+#' mean_round(c(10, 99))
+#' mean_round(c(10, 99, NA))
+#' mean_round(c(10, 99), 2)
+mean_round <- function(x, ...) {
+  f_round(mean_nn(x), ...)
 }
 
 #' Rounded SD
@@ -121,17 +121,17 @@ mean.round <- function(x, ...) {
 #' SD rounded to the specified number of digits
 #'
 #' @param x a number
-#' @param ... other arguments passed to [apastats2::f.round]
+#' @param ... other arguments passed to [apastats2::f_round]
 #'
 #' @return Mean rounded to the specified number of digits (string)
 #' @export
 #'
 #' @examples
-#' sd.round(c(10, 99))
-#' sd.round(c(10, 99, NA))
-#' sd.round(c(10, 99), 2)
-sd.round <- function(x, ...) {
-  f.round(sd.nn(x), ...)
+#' sd_round(c(10, 99))
+#' sd_round(c(10, 99, NA))
+#' sd_round(c(10, 99), 2)
+sd_round <- function(x, ...) {
+  f_round(sd_nn(x), ...)
 }
 
 #' Quietly load libraries
@@ -142,8 +142,8 @@ sd.round <- function(x, ...) {
 #' @export
 #'
 #' @examples
-#' load.libs(c("ggplot2", "apastats2", "Hmisc"))
-load.libs <- function(libs) {
+#' load_libs(c("ggplot2", "apastats2", "Hmisc"))
+load_libs <- function(libs) {
   suppressMessages(invisible(lapply(libs, require, character.only = TRUE)))
 }
 
@@ -236,7 +236,7 @@ seq_mean <- function(x) {
 #' @export
 #'
 
-lmer.fixef <- function(fit.lmer) {
+lmer_fixef <- function(fit.lmer) {
   ss <- sqrt(diag(as.matrix(vcov(fit.lmer))))
   cc <- lme4::fixef(fit.lmer)
   data.frame(Estimate = cc, Std.Err = ss, t = cc / ss)
@@ -252,11 +252,11 @@ lmer.fixef <- function(fit.lmer) {
 #' @export
 #'
 #' @examples
-#' omit.zeroes(0.2312)
-#' omit.zeroes(0.2312, digits = 3)
-#' omit.zeroes("000.2312", digits = 1)
-omit.zeroes <- function(x, digits = 2) {
-  sub("^.", "", f.round(x, digits))
+#' omit_zeroes(0.2312)
+#' omit_zeroes(0.2312, digits = 3)
+#' omit_zeroes("000.2312", digits = 1)
+omit_zeroes <- function(x, digits = 2) {
+  sub("^.", "", f_round(x, digits))
 }
 
 #' Formatted rounding
@@ -269,11 +269,11 @@ omit.zeroes <- function(x, digits = 2) {
 #' @export
 #'
 #' @examples
-#' f.round(5.8242)
-#' f.round(5.8251)
-#' f.round(5.82999, digits = 3)
-#' f.round(5.82999, digits = 4)
-f.round <- function(x, digits = 2, strip.lead.zeros = FALSE) {
+#' f_round(5.8242)
+#' f_round(5.8251)
+#' f_round(5.82999, digits = 3)
+#' f_round(5.82999, digits = 4)
+f_round <- function(x, digits = 2, strip.lead.zeros = FALSE) {
   values_string <- stringr::str_trim(format(round(as.numeric(x), digits), nsmall = digits))
   if (strip.lead.zeros) {
     values_string <- sub("^0", "", values_string)
@@ -510,8 +510,6 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
 
   if (!all(grepl("^[\\w. ]+$", colnames_wsd, perl = TRUE))) warning("Within- and between-subject factors levels should only contain letters, digits, underscores, dots, or spaces. If you experience errors, try removing special characters from factor levels.")
 
-
-
   cur_superb.feedback <- options('superb.feedback')
   options(superb.feedback = 'none')
   on.exit(options(superb.feedback = cur_superb.feedback), add = TRUE)
@@ -520,18 +518,16 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
   superb_statistic <- paste0("superb::", statistic_name)
   superb_errorbar <- paste0("superb::", errorbar)
 
-  # suppressMessages({
-    spp_data <- superb::superbData(wide_data,
-      WSFactors = WSFactors,
-      factorOrder = c(within, between),
-      adjustments = adjustments,
-      variables = variables,
-      WSDesign = WSDesign,
-      BSFactors = between,
-      errorbar = superb_errorbar,
-      statistic = superb_statistic
-    )
-  # })
+  spp_data <- superb::superbData(wide_data,
+    WSFactors = WSFactors,
+    factorOrder = c(within, between),
+    adjustments = adjustments,
+    variables = variables,
+    WSDesign = WSDesign,
+    BSFactors = between,
+    errorbar = superb_errorbar,
+    statistic = superb_statistic
+  )
   spp_data <- spp_data$summaryStatistics
   for (x in within) {
     spp_data[[x]] <- factor(spp_data[[x]],

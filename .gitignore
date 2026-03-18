@@ -6,3 +6,4 @@ apastats.Rproj
 apastats2.Rcheck/*
 ..Rcheck/*
 *.tar.gz
+_upstream/
