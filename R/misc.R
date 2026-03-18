@@ -67,7 +67,7 @@ lengthu <- function(x) {
 
 #' Drop empty columns from a data.frame
 #'
-#' Drop empty (consisting of NA only) columns from a data.frame. Based on http://stackoverflow.com/a/2644009/1344028
+#' Drop empty (consisting of NA only) columns from a data.frame. Based on https://stackoverflow.com/a/2644009/1344028
 #'
 #' @param df a data.frame
 #'

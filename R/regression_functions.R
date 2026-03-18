@@ -309,7 +309,7 @@ apa.brmsfit <- function(obj, term, trans = NULL, digits = 2, eff.size = FALSE,
 #' @param convert_to_power enable or disable converting of very small or very large numbers to exponential notation
 #' @param ... other parameters passed to [format_results]
 #' @return string describing the result
-#' @note Code for converting to exponential notation is based on http://dankelley.github.io/r/2015/03/22/scinot.html
+#' @note Code for converting to exponential notation is based on https://dankelley.github.io/r/2015/03/22/scinot.html
 #' @method apa BFBayesFactor
 #' @export
 #'

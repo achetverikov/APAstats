@@ -1,4 +1,4 @@
-## code from http://www.cookbook-r.com/Graphs/Plotting_means_and_error_bars_%28ggplot2%29/
+## code from https://www.cookbook-r.com/Graphs/Plotting_means_and_error_bars_%28ggplot2%29/
 ## Gives count, mean, standard deviation, standard error of the mean, and confidence interval (default 95%).
 ##   data: a data frame.
 ##   measurevar: the name of a column that contains the variable to be summariezed

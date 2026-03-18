@@ -1,14 +1,20 @@
 Package: apastats2
 Type: Package
-Title: APA-style results
+Title: APA-Style Results
 Version: 1.0.2
-Author: Andrey Chetverikov (http://andreychetverikov.org)
-Maintainer: Andrey Chetverikov <andrey.a.chetverikov@gmail.com>
+Authors@R: person(given = "Andrey",
+    family = "Chetverikov",
+    email = "andrey.a.chetverikov@gmail.com",
+    role = c("aut", "cre"),
+    comment = c(ORCID = "0000-0003-2767-6310"))
 Description: Proper formatting of statistical results in accordance with
-    American Psychological Association Manual, 6th ed., and some convenient plotting
-    functions.
+    the American Psychological Association Manual (6th ed.), along with
+    convenient helpers for summaries, confidence intervals, and plotting.
+    Development repository: <https://github.com/achetverikov/APAstats>.
 License: GPL-3
 Encoding: UTF-8
+URL: https://github.com/achetverikov/APAstats
+BugReports: https://github.com/achetverikov/APAstats/issues
 Imports:
     stringr,
     utils
@@ -47,4 +53,3 @@ LazyData: TRUE
 RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
-Additional_repositories: 

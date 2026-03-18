@@ -24,7 +24,7 @@ string describing the result
 Describe BayesFactor results
 }
 \note{
-Code for converting to exponential notation is based on http://dankelley.github.io/r/2015/03/22/scinot.html
+Code for converting to exponential notation is based on https://dankelley.github.io/r/2015/03/22/scinot.html
 }
 \examples{
 if (requireNamespace("BayesFactor", quietly = TRUE)) {
