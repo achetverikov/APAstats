@@ -4,52 +4,9 @@ Utilities for APA-style reporting of statistical results, plus helper functions 
 
 ## Install
 
-<<<<<<< HEAD
-## Moving to apastats2
-
-I'm slowly transitioning the package to a new style, see the most up to date version here:
-https://github.com/achetverikov/APAstats/tree/dev
-This switch will create breaking changes. 
-
-## Main functions
-|Function|Description|
-|--- | ---|
-| describe.Anova | Describe Anova results|
-| describe.aov | Describe aov results|
-| describe.bf | Describe BayesFactor results|
-| describe.bimod.test | Describe bimodality test results|
-| describe.binom.mean.conf | Describe mean and confidence intervals for binomial variable|
-| describe.chi | Describe $chi^2$ results|
-| describe.dip.test | Describe Hartigans' dip test results|
-| describe.ezanova | Describe ezANOVA results|
-| describe.ezstats | Describe ezStats results|
-| describe.glm | Describe regression model (GLM, GLMer, lm, lm.circular, ...)|
-| describe.lht | Describe linearHypothesis test results|
-| describe.lmer | Describe lmer results|
-| describe.lmert | Describe lmerTest results|
-| describe.lmtaov | Describe lmerTest anova results|
-| describe.lsmeans | Describe contrasts created by lsmeans|
-| describe.emmeans | Describe contrasts created by emmeans|
-| describe.mean.and.t | Describe two-sample t-test with means and effect sizes|
-| describe.mean.conf | Describe mean and confidence intervals|
-| describe.mean.sd | Describe mean and SD|
-| describe.r | Describe Pearson test results|
-| describe.roc.diff | Describe differences between ROC curves|
-| describe.ttest | Describe t-test results|
-
-
-
-## How to install?
-
-```
-install.packages("devtools")
-devtools::install_github('achetverikov/apastats')
-library(apastats)
-=======
 ```r
 install.packages("remotes")
 remotes::install_github("achetverikov/apastats2")
->>>>>>> dev
 ```
 
 ## Transition from apastats to apastats2
