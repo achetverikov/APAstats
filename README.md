@@ -78,3 +78,11 @@ For utility helpers, snake_case aliases are now available and dot-named forms ar
 - `base.breaks.x()` -> `base_breaks_x()`
 - `base.breaks.y()` -> `base_breaks_y()`
 - `plot.pointrange()` -> `plot_pointrange()`
+
+## Install legacy apastats
+
+If you need the pre-`apastats2` code, install from the legacy branch/tag:
+
+```r
+remotes::install_github("achetverikov/apastats@legacy-apastats")
+```
