@@ -4,15 +4,15 @@
 #' @param ... other arguments passed to mean
 #'
 #' @return mean of x with NA removed
-#' @export mean.nn
+#' @export mean_nn
 #'
 #' @examples
 #' x <- c(NA, 10, 90)
 #' mean(x)
-#' mean.nn(x)
+#' mean_nn(x)
 #'
 
-mean.nn <- function(x, ...) {
+mean_nn <- function(x, ...) {
   mean(x, na.rm = TRUE, ...)
 }
 
@@ -22,13 +22,13 @@ mean.nn <- function(x, ...) {
 #' @param ... other arguments passed to sd
 #'
 #' @return sd of x with NA removed
-#' @export sd.nn
+#' @export sd_nn
 #'
 #' @examples
 #' x <- c(NA, 10, 90)
 #' sd(x)
-#' sd.nn(x)
-sd.nn <- function(x, ...) {
+#' sd_nn(x)
+sd_nn <- function(x, ...) {
   sd(x, na.rm = TRUE, ...)
 }
 
@@ -38,13 +38,13 @@ sd.nn <- function(x, ...) {
 #' @param ... other arguments passed to sum
 #'
 #' @return sum of x with NA removed
-#' @export sum.nn
+#' @export sum_nn
 #'
 #' @examples
 #' x <- c(NA, 10, 90)
 #' sum(x)
-#' sum.nn(x)
-sum.nn <- function(x, ...) {
+#' sum_nn(x)
+sum_nn <- function(x, ...) {
   sum(x, na.rm = TRUE, ...)
 }
 
@@ -72,15 +72,15 @@ lengthu <- function(x) {
 #' @param df a data.frame
 #'
 #' @return data.frame without empty columns
-#' @export drop.empty.cols
+#' @export drop_empty_cols
 #'
 #' @examples
 #' df <- data.frame(x = rnorm(20), y = rep("A", 20), z = rep(NA, 20))
 #' str(df)
-#' df <- drop.empty.cols(df)
+#' df <- drop_empty_cols(df)
 #' str(df)
 #'
-drop.empty.cols <- function(df) {
+drop_empty_cols <- function(df) {
   Filter(function(x) !all(is.na(x)), df)
 }
 
@@ -89,11 +89,11 @@ drop.empty.cols <- function(df) {
 #' @param x a vector of 0 and 1
 #'
 #' @return a vector of mean, lower CI, upper CI, and length of x
-#' @export binom.ci
+#' @export binom_ci
 #'
 #' @examples
-#' binom.ci(rbinom(500, 1, prob = 0.7))
-binom.ci <- function(x) {
+#' binom_ci(rbinom(500, 1, prob = 0.7))
+binom_ci <- function(x) {
   ci <- Hmisc::binconf(sum(x), length(x))
   c(y = ci[1], ymin = ci[2], ymax = ci[3], len = length(x))
 }
@@ -103,17 +103,17 @@ binom.ci <- function(x) {
 #' Mean rounded to the specified number of digits
 #'
 #' @param x a number
-#' @param ... other arguments passed to [apastats::f.round]
+#' @param ... other arguments passed to [apastats2::f_round]
 #' 
 #' @return Mean rounded to the specified number of digits (string)
-#' @export mean.round
+#' @export mean_round
 #'
 #' @examples
-#' mean.round(c(10, 99))
-#' mean.round(c(10, 99, NA))
-#' mean.round(c(10, 99), 2)
-mean.round <- function(x, ...) {
-  f.round(mean.nn(x), ...)
+#' mean_round(c(10, 99))
+#' mean_round(c(10, 99, NA))
+#' mean_round(c(10, 99), 2)
+mean_round <- function(x, ...) {
+  f_round(mean_nn(x), ...)
 }
 
 #' Rounded SD
@@ -121,17 +121,17 @@ mean.round <- function(x, ...) {
 #' SD rounded to the specified number of digits
 #'
 #' @param x a number
-#' @param ... other arguments passed to [apastats::f.round]
+#' @param ... other arguments passed to [apastats2::f_round]
 #'
 #' @return Mean rounded to the specified number of digits (string)
 #' @export
 #'
 #' @examples
-#' sd.round(c(10, 99))
-#' sd.round(c(10, 99, NA))
-#' sd.round(c(10, 99), 2)
-sd.round <- function(x, ...) {
-  f.round(sd.nn(x), ...)
+#' sd_round(c(10, 99))
+#' sd_round(c(10, 99, NA))
+#' sd_round(c(10, 99), 2)
+sd_round <- function(x, ...) {
+  f_round(sd_nn(x), ...)
 }
 
 #' Quietly load libraries
@@ -142,13 +142,13 @@ sd.round <- function(x, ...) {
 #' @export
 #'
 #' @examples
-#' load.libs(c("ggplot2", "apastats", "Hmisc"))
-load.libs <- function(libs) {
+#' load_libs(c("ggplot2", "apastats2", "Hmisc"))
+load_libs <- function(libs) {
   suppressMessages(invisible(lapply(libs, require, character.only = TRUE)))
 }
 
 
-#' Cut numeric variable into groups (bins) with advanced options
+#' Cut a numeric variable into groups (bins) with advanced options
 #'
 #' @param x vector of numeric values to cut into groups
 #' @param ncuts number of cuts (default: NULL)
@@ -158,8 +158,8 @@ load.libs <- function(libs) {
 #' @param labels a vector of labels to use for the groups (default: NULL)
 #' @param include_oob include values outside of the boundaries provided in `cuts` (default: TRUE)
 #' @param labels_at_means should labels be created as means between cuts (T) or as pairs of cuts (F)
-#' @param label_pairs_format formatting string to use when labels are generated from pairs of cuts (default: [\%.2f, \%.2f])
-#' @param ... other parameters passed to `base::cut`
+#' @param label_pairs_format formatting string to use when labels are generated from pairs of cuts (default: \[%.2f, %.2f\])
+#' @param ... other parameters passed to [base::cut]
 #'
 #' If `ncuts` is used, then the variable is cut into N cuts either of equal group size (eq_groups = TRUE) or equally distant from each other (eq_groups = FALSE). If `labels` are not provided, they are generated as  means between cuts if labels_at_means is T.
 #'
@@ -177,7 +177,9 @@ load.libs <- function(libs) {
 #' adv_cut(x, ncuts = 5, eq_groups = TRUE, labels_at_means = FALSE)
 #' adv_cut(x, cuts = seq(0, 100, by = 20))
 #' adv_cut(x, cuts = seq(0, 100, by = 20), labels_at_means = FALSE)
-#' adv_cut(x, cuts = seq(0, 100, by = 20), labels_at_means = FALSE, label_pairs_format = "[%i, %i]")
+#' adv_cut(x, cuts = seq(0, 100, by = 20), 
+#'            labels_at_means = FALSE, label_pairs_format = "[%i, %i]")
+#' 
 adv_cut <- function(x, ncuts = NULL, eq_groups = FALSE, cuts = NULL, num_labels = FALSE,
                     labels = NULL, include_oob = TRUE, labels_at_means = TRUE, label_pairs_format = "[%.2f, %.2f]", ...) {
   if (!is.null(ncuts)) {
@@ -234,7 +236,7 @@ seq_mean <- function(x) {
 #' @export
 #'
 
-lmer.fixef <- function(fit.lmer) {
+lmer_fixef <- function(fit.lmer) {
   ss <- sqrt(diag(as.matrix(vcov(fit.lmer))))
   cc <- lme4::fixef(fit.lmer)
   data.frame(Estimate = cc, Std.Err = ss, t = cc / ss)
@@ -250,11 +252,11 @@ lmer.fixef <- function(fit.lmer) {
 #' @export
 #'
 #' @examples
-#' omit.zeroes(0.2312)
-#' omit.zeroes(0.2312, digits = 3)
-#' omit.zeroes("000.2312", digits = 1)
-omit.zeroes <- function(x, digits = 2) {
-  sub("^.", "", f.round(x, digits))
+#' omit_zeroes(0.2312)
+#' omit_zeroes(0.2312, digits = 3)
+#' omit_zeroes("000.2312", digits = 1)
+omit_zeroes <- function(x, digits = 2) {
+  sub("^.", "", f_round(x, digits))
 }
 
 #' Formatted rounding
@@ -267,11 +269,11 @@ omit.zeroes <- function(x, digits = 2) {
 #' @export
 #'
 #' @examples
-#' f.round(5.8242)
-#' f.round(5.8251)
-#' f.round(5.82999, digits = 3)
-#' f.round(5.82999, digits = 4)
-f.round <- function(x, digits = 2, strip.lead.zeros = FALSE) {
+#' f_round(5.8242)
+#' f_round(5.8251)
+#' f_round(5.82999, digits = 3)
+#' f_round(5.82999, digits = 4)
+f_round <- function(x, digits = 2, strip.lead.zeros = FALSE) {
   values_string <- stringr::str_trim(format(round(as.numeric(x), digits), nsmall = digits))
   if (strip.lead.zeros) {
     values_string <- sub("^0", "", values_string)
@@ -290,17 +292,17 @@ f.round <- function(x, digits = 2, strip.lead.zeros = FALSE) {
 #' @param strip.lead.zeros remove zero before decimal point
 #' @param replace.very.small replace values lower than this criteria (NULL to keep values as is)
 #' @return Formatted p-value
-#' @export round.p
+#' @export
 #'
 #' @examples
 #' p_values <- c(0.025, 0.0001, 0.001, 0.568)
-#' round.p(p_values)
-#' round.p(p_values, digits = 2)
-#' round.p(p_values, include.rel = FALSE)
-#' round.p(p_values, include.rel = FALSE, strip.lead.zeros = FALSE)
-#' round.p(p_values, include.rel = FALSE, strip.lead.zeros = FALSE, replace.very.small = 0.01)
+#' round_p(p_values)
+#' round_p(p_values, digits = 2)
+#' round_p(p_values, include.rel = FALSE)
+#' round_p(p_values, include.rel = FALSE, strip.lead.zeros = FALSE)
+#' round_p(p_values, include.rel = FALSE, strip.lead.zeros = FALSE, replace.very.small = 0.01)
 #'
-round.p <- function(values, include.rel = 1, digits = 3, strip.lead.zeros = TRUE, replace.very.small = 0.001) {
+round_p <- function(values, include.rel = 1, digits = 3, strip.lead.zeros = TRUE, replace.very.small = 0.001) {
   values <- as.numeric(values)
   rel <- ifelse(include.rel, "= ", "")
   values_string <- format(round(values, digits = digits), nsmall = digits)
@@ -323,18 +325,17 @@ round.p <- function(values, include.rel = 1, digits = 3, strip.lead.zeros = TRUE
 #' @param type 'pandoc', 'latex', or 'plotmath' (the latter is very poorly implemented)
 #'
 #' @return \code{res_str} with latex 'emph' tags replaced with pandoc '_'
-#' @export format.results
+#' @export
 
-format.results <- function(res_str, type = "pandoc") {
+format_results <- function(res_str, type = "pandoc") {
   if (type == "latex") {
     res_str
   } else if (type == "pandoc") {
     stringr::str_replace_all(res_str, "\\\\emph\\{(.*?)\\}", "_\\1_")
   } else if (type == "plotmath") {
-    res_str <- stringi::stri_replace_all(res_str,
-      regex = c("\\\\emph\\{(.*?)\\}", "=", "_([^_=^ ]*)"),
-      replacement = c("italic($1)", "==", "[$1]"), vectorize_all = FALSE
-    )
+    res_str <- stringr::str_replace_all(res_str, "\\\\emph\\{(.*?)\\}", "italic(\\1)")
+    res_str <- stringr::str_replace_all(res_str, "=", "==")
+    res_str <- stringr::str_replace_all(res_str, "_([^_=^ ]*)", "[\\1]")
     if (any(grepl(",", res_str))) {
       res_str <- paste0("list(", res_str, ")")
     }
@@ -379,14 +380,14 @@ aggr2 <- function(x, by, fun, ...) {
 #' @examples
 #' data(iris)
 #' # get mean petal width and SD by group
-#' res <- as.vector(by(iris$Sepal.Width, iris$Species, describe.mean.sd))
+#' res <- as.vector(by(iris$Sepal.Width, iris$Species, apa_mean_sd))
 #' res
 #' paste_and(res)
 #' paste_and(res, sep = ";")
 #'
 #' data(faces)
 #' # get mean response times (in ms) by response accuracy
-#' res <- as.vector(by(faces$answerTime * 1000, faces$correct, describe.mean.sd))
+#' res <- as.vector(by(faces$answerTime * 1000, faces$correct, apa_mean_sd))
 #' res
 #' # no comma with two groups
 #' paste_and(res)
@@ -406,12 +407,15 @@ paste_and <- function(x, sep = ", ", suffix = "") {
 #' @param within within-subject variables (vector of strings)
 #' @param value_var dependent variable (string)
 #' @param between between-subject variables (vector of strings; default: NULL)
-#' @param adjustments adjustment settings as used for [superb::superData] (default: single CI estimates, Cousineau-Morey adjustment)
+#' @param adjustments adjustment settings as used for [superb::superbData] (default: single CI estimates, Cousineau-Morey adjustment)
 #' @param errorbar type of error bars to use (CI/SE)
 #' @param drop_NA_subj should subjects with NA values be dropped? (default: FALSE)
 #' @param drop_missing_levels should the missing levels of the variables in within/between be dropped? (default: TRUE)
+#' @param aggr_fun aggregation function used twice: first in [reshape2::dcast] (`fun.aggregate`),
+#'   and then as the statistic name for `superb::superbData` (constructed as `superb::<name>`).
+#'   Use a function whose name corresponds to a statistic implemented in `superb` (default: [base::mean]).
 #' @param debug output additional debugging info (default: FALSE)
-#' 
+#' @param ... additional parameters passed to [apa_format_mean_conf]
 #' @return dataframe with computed CIs
 #' @export
 #'
@@ -419,10 +423,28 @@ paste_and <- function(x, sep = ", ", suffix = "") {
 #' data(faces)
 #' get_superb_ci(faces, "uid", "stim_gender", "answerTime")
 #'
-get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustments = list(purpose = "single", decorrelation = "CM"), errorbar = "CI", drop_NA_subj = FALSE, drop_missing_levels = TRUE, debug = FALSE) {
+get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustments = list(purpose = "single", decorrelation = "CM"), errorbar = "CI", drop_NA_subj = FALSE, drop_missing_levels = TRUE, aggr_fun = mean, debug = FALSE, ...) {
   requireNamespace('superb')
   errorbar <- toupper(errorbar)
+  encode_level_code <- function(i) {
+    chars <- LETTERS
+    out <- character(5)
+    n <- i - 1
+    for (pos in 5:1) {
+      out[pos] <- chars[(n %% 26) + 1]
+      n <- n %/% 26
+    }
+    paste0(out, collapse = "")
+  }
+  max_level_codes <- 26^5
+  all_vars <-  c(within, between, wid, value_var)
+  for (x in all_vars){
+    if (!(x %in% names(data))){
+      stop(sprintf('Variable "%s" is not in the data. Check if it is present and its name is spelled correctly.', x))
+    }
+  }
   for (x in c(within, between)) {
+
     if (!is.factor(data[[x]])) {
       warning(paste0("Converting \"", x, "\" to a factor."))
       data[[x]] <- factor(data[[x]])
@@ -441,8 +463,20 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
     }
   }
 
+  data_superb <- data
+  level_maps <- list()
+  for (x in c(within, between)) {
+    x_levels <- levels(data_superb[[x]])
+    if (length(x_levels) > max_level_codes) {
+      stop(sprintf("Too many levels in \"%s\" (%s). Maximum supported with 5-letter codes is %s.", x, length(x_levels), max_level_codes))
+    }
+    x_codes <- vapply(seq_along(x_levels), encode_level_code, FUN.VALUE = character(1))
+    level_maps[[x]] <- data.frame(original = x_levels, code = x_codes, stringsAsFactors = FALSE)
+    data_superb[[x]] <- factor(data_superb[[x]], levels = x_levels, labels = x_codes)
+  }
+
   dcast_form <- paste0(paste0(c(wid, between), collapse = "+"), "~", paste0(within, collapse = "+"))
-  wide_data <- reshape2::dcast(data, dcast_form, value.var = value_var, fun.aggregate = mean)
+  wide_data <- reshape2::dcast(data_superb, dcast_form, value.var = value_var, fun.aggregate = aggr_fun)
   if (anyNA(wide_data)) {
     print(wide_data[!complete.cases(wide_data), ])
     if (drop_NA_subj) {
@@ -453,22 +487,23 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
       stop("NAs present after aggregation")
     }
   }
-  WSFactors <- sapply(within, \(x) paste0(x, "(", length(levels(data[[x]])), ")"))
+  WSFactors <- sapply(within, \(x) paste0(x, "(", length(levels(data_superb[[x]])), ")"))
   variables <- colnames(wide_data)[(2 + length(between)):length(colnames(wide_data))]
 
-  WSDesign <- do.call(expand.grid, lapply(within, \(x) c(1:length(levels(data[[x]])))))
-  if (length(within) > 1) {
-    WSDesign <- WSDesign[do.call(order, WSDesign), ]
-  }
+  # WSDesign <- do.call(expand.grid, lapply(within, \(x) c(1:length(levels(data[[x]])))))
+  # if (length(within) > 1) {
+  #   WSDesign <- WSDesign[do.call(order, WSDesign), ]
+  # }
+  WSDesign <- data.table::as.data.table(data_superb)[,.N, keyby = within][,lapply(.SD, as.numeric),.SDcols = -c('N')]
 
   WSDesign <- apply(WSDesign, 1, as.vector, simplify = FALSE)
 
   if (debug == TRUE) {
     message("WSDesign: ")
-    cat(WSDesign)
+    print(WSDesign)
     message("wide_data: ")
 
-    cat(wide_data)
+    print(wide_data)
   }
   colnames_wsd <- colnames(wide_data)
 
@@ -477,20 +512,22 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
 
   cur_superb.feedback <- options('superb.feedback')
   options(superb.feedback = 'none')
-  
-  # suppressMessages({
-    spp_data <- superb::superbData(wide_data,
-      WSFactors = WSFactors,
-      factorOrder = c(within, between),
-      adjustments = adjustments,
-      variables = variables,
-      WSDesign = WSDesign,
-      BSFactors = between,
-      errorbar = errorbar
-    )
-  # })
-  
-  options(superb.feedback = cur_superb.feedback)
+  on.exit(options(superb.feedback = cur_superb.feedback), add = TRUE)
+
+  statistic_name <- as.character(substitute(aggr_fun))
+  superb_statistic <- paste0("superb::", statistic_name)
+  superb_errorbar <- paste0("superb::", errorbar)
+
+  spp_data <- superb::superbData(wide_data,
+    WSFactors = WSFactors,
+    factorOrder = c(within, between),
+    adjustments = adjustments,
+    variables = variables,
+    WSDesign = WSDesign,
+    BSFactors = between,
+    errorbar = superb_errorbar,
+    statistic = superb_statistic
+  )
   spp_data <- spp_data$summaryStatistics
   for (x in within) {
     spp_data[[x]] <- factor(spp_data[[x]],
@@ -498,5 +535,18 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
       labels = levels(data[[x]])
     )
   }
+  for (x in between) {
+    spp_data[[x]] <- factor(spp_data[[x]],
+      levels = level_maps[[x]]$code,
+      labels = level_maps[[x]]$original
+    )
+  }
+
+  spp_data$lower_ci <- spp_data$center + spp_data$lowerwidth
+  spp_data$upper_ci <- spp_data$center + spp_data$upperwidth
+  spp_data$descr <- apa_format_mean_conf(
+    spp_data$center, spp_data$lower_ci, spp_data$upper_ci, ...
+  )
   spp_data
 }
+

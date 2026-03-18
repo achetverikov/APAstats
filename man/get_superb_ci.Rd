@@ -14,7 +14,9 @@ get_superb_ci(
   errorbar = "CI",
   drop_NA_subj = FALSE,
   drop_missing_levels = TRUE,
-  debug = FALSE
+  aggr_fun = mean,
+  debug = FALSE,
+  ...
 )
 }
 \arguments{
@@ -28,7 +30,7 @@ get_superb_ci(
 
 \item{between}{between-subject variables (vector of strings; default: NULL)}
 
-\item{adjustments}{adjustment settings as used for [superb::superData] (default: single CI estimates, Cousineau-Morey adjustment)}
+\item{adjustments}{adjustment settings as used for \link[superb:superbData]{superb::superbData} (default: single CI estimates, Cousineau-Morey adjustment)}
 
 \item{errorbar}{type of error bars to use (CI/SE)}
 
@@ -36,7 +38,13 @@ get_superb_ci(
 
 \item{drop_missing_levels}{should the missing levels of the variables in within/between be dropped? (default: TRUE)}
 
+\item{aggr_fun}{aggregation function used twice: first in \link[reshape2:cast]{reshape2::dcast} (\code{fun.aggregate}),
+and then as the statistic name for \code{superb::superbData} (constructed as \verb{superb::<name>}).
+Use a function whose name corresponds to a statistic implemented in \code{superb} (default: \link[base:mean]{base::mean}).}
+
 \item{debug}{output additional debugging info (default: FALSE)}
+
+\item{...}{additional parameters passed to \link{apa_format_mean_conf}}
 }
 \value{
 dataframe with computed CIs

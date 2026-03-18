@@ -14,9 +14,9 @@
 #'   theme_minimal()
 #'  
 #' p 
-#' p + base.breaks(faces$answerTime, scale = 'x') + base.breaks(faces$correct, scale = 'y')
+#' p + base_breaks(faces$answerTime, scale = 'x') + base_breaks(faces$correct, scale = 'y')
 #'
-base.breaks <- function(x, scale = "x", addSegment = TRUE, ...) {
+base_breaks <- function(x, scale = "x", addSegment = TRUE, ...) {
   y <- xend <- yend <- NULL  # due to NSE notes in R CMD check
   
   b <- pretty(x)
@@ -49,21 +49,21 @@ base.breaks <- function(x, scale = "x", addSegment = TRUE, ...) {
   }
 }
 
-#' @describeIn base.breaks Tufte-like breaks for X axis
+#' @describeIn base_breaks Tufte-like breaks for X axis
 #' @export
 #'
 
-base.breaks.x <- function(x, addSegment = TRUE, ...) {
-  base.breaks(x, scale = "x", addSegment = addSegment, ...)
+base_breaks_x <- function(x, addSegment = TRUE, ...) {
+  base_breaks(x, scale = "x", addSegment = addSegment, ...)
 }
 
 
-#' @describeIn base.breaks Tufte-like breaks for Y axis
+#' @describeIn base_breaks Tufte-like breaks for Y axis
 #' @export
 #'
 
-base.breaks.y <- function(x, addSegment = TRUE, ...) {
-  base.breaks(x, scale = "y", addSegment = addSegment, ...)
+base_breaks_y <- function(x, addSegment = TRUE, ...) {
+  base_breaks(x, scale = "y", addSegment = addSegment, ...)
 }
 
 
@@ -103,40 +103,53 @@ base.breaks.y <- function(x, addSegment = TRUE, ...) {
 #' @details For point and line properties (e.g., pointfill) passing NULL allows to avoid setting these values (useful when they are mapped to some variables).
 #'
 #' @return plot of pointrange
-#' @export plot.pointrange
+#' @export plot_pointrange
 #' @import ggplot2
 #' @examples
 #' data(faces)
 #' # between-subject CI
-#' plot.pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime)) + ylab("RT")
+#' plot_pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime)) + ylab("RT")
 #' 
 #' # within-subject CI
-#' plot.pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
+#' plot_pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
 #'      within_subj = TRUE, withinvars = c("stim_gender"), betweenvars = c("user_gender")) +
 #'      ylab("RT")
 #'      
 #' # with bars showing standard errors
-#' plot.pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
+#' plot_pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
 #'      within_subj = TRUE, withinvars = c("stim_gender"), betweenvars = c("user_gender"),
 #'      bars = 'se') + ylab("RT")
 #'      
 #' # same but also printing out aggregated data
-#' plot.pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
+#' plot_pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
 #'      within_subj = TRUE, withinvars = c("stim_gender"), betweenvars = c("user_gender"),
 #'      bars = 'se', print_aggregated_data = TRUE) + ylab("RT")
 #'      
 #' # CIs with aggregating the data beforehand and using exp-transformed y-axis
-#' plot.pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
+#' plot_pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
 #'      within_subj = TRUE, withinvars = c("stim_gender"), betweenvars = c("user_gender"),
 #'      bars = 'ci', exp_y = TRUE, do_aggregate = TRUE) + ylab("RT")
+#'      
+#' if (requireNamespace("afex", quietly = TRUE)) {
+#'   # Using the Stroop dataset from afex package
+#'   data(stroop, package = "afex")
+#'   # within-subject CI
+#'   plot_pointrange(stroop, aes(x = condition, color = congruency, y = rt), wid = "pno",
+#'      within_subj = TRUE, withinvars = c("congruency"), betweenvars = c("condition","study")) +
+#'      facet_grid(~study)+
+#'      ylab("RT")
+#'      
+#'
+#'}
 
-plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize = I(3), linesize = I(1),
+
+plot_pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize = I(3), linesize = I(1),
                             pointfill = I("white"), pointshape = NULL, within_subj = F,
                             wid = "uid", bars = "ci", withinvars = NULL, betweenvars = NULL,
                             x_as_numeric = F, custom_geom_before = NULL, connecting_line = F,
                             pretty_breaks_y = F, pretty_y_axis = F, exp_y = F, print_aggregated_data = F,
                             do_aggregate = F, add_margin = F, margin_label = "all", margin_x_vals = NULL,
-                            bars_instead_of_points = F, geom_bar_params = NULL, add_jitter = F,
+                            bars_instead_of_points = F, geom_bar_params = list(), add_jitter = F,
                             individual_points_params = list(), drop_NA_subj = F, design = "between", debug = F) {
 
   x <- y <- xend <- yend <- NULL  # due to NSE notes in R CMD check
@@ -168,7 +181,7 @@ plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
     as.character
   ), list(y = dv, ymin = "ymin", ymax = "ymax"))
   if (do_aggregate) {
-    plot_data <- apastats:::summarySE(plot_data,
+    plot_data <- summarySE(plot_data,
       measurevar = dv,
       groupvars = c(withinvars, betweenvars, wid), na.rm = TRUE
     )
@@ -177,14 +190,16 @@ plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
     if (length(withinvars) == 0 || is.null(withinvars)) {
       stop("Within-subject plot can only be made if there is at least one within-subject variable listed in withinvars parameter.")
     }
-    # aggr_data <- apastats:::summarySEwithin(plot_data, measurevar = dv,
-    #                                         withinvars = withinvars, betweenvars = betweenvars,
-    #                                         idvar = wid, na.rm = TRUE)
-
-    aggr_data <- plot_data[!is.na(plot_data[[dv]]), ] |>
-      apastats::get_superb_ci(value_var = dv, within = withinvars, between = betweenvars, wid = wid, errorbar = bars, drop_NA_subj = drop_NA_subj, debug = debug)
-  } else {
-    aggr_data <- apastats:::summarySE(plot_data,
+    
+    data.table::setDT(plot_data)
+    aggr_data <- plot_data[, get_superb_ci(data = .SD, value_var = dv, within = withinvars, between = NULL, 
+                                   wid = wid, errorbar = bars, drop_NA_subj = drop_NA_subj, debug = debug), 
+                           by = betweenvars]
+    data.table::setDF(plot_data)
+    data.table::setDF(aggr_data)
+    
+    } else {
+    aggr_data <- summarySE(plot_data,
       measurevar = dv,
       groupvars = c(withinvars, betweenvars),
       na.rm = TRUE
@@ -199,13 +214,13 @@ plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
     }
     data_for_margin <- aggr_data[aggr_data[, aes_list$x] %in% margin_x_vals, ]
     if (within_subj) {
-      summ_data_for_margin <- apastats:::summarySEwithin(data_for_margin,
+      summ_data_for_margin <- summarySEwithin(data_for_margin,
         measurevar = dv,
         withinvars = withinvars[!(withinvars %in% aes_list$x)], betweenvars = betweenvars[!(betweenvars %in% aes_list$x)], idvar = aes_list$x, na.rm = TRUE
       )
     } else {
       groupvars <- c(withinvars, betweenvars)
-      summ_data_for_margin <- apastats:::summarySE(data_for_margin,
+      summ_data_for_margin <- summarySE(data_for_margin,
         measurevar = dv,
         groupvars = groupvars[!(groupvars %in% aes_list$x)], na.rm = TRUE
       )
@@ -233,19 +248,28 @@ plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
   if (print_aggregated_data) {
     print(aggr_data)
   }
-  p <- ggplot(aggr_data, do.call(aes_string, aes_list))
+  aes_main <- do.call(aes, lapply(aes_list, as.name))
+  p <- ggplot(aggr_data, aes_main)
   if (!is.null(custom_geom_before)) {
     p <- p + custom_geom_before
   }
   line_params <- list(position = pos)
   if (!is.null(linesize)) {
-    line_params <- append(line_params, list(size = linesize))
+    line_params <- append(line_params, list(linewidth = linesize))
   }
   if (connecting_line) {
     p <- p + do.call(geom_line, line_params)
   }
-  p <- p + do.call(geom_linerange, line_params)
   point_params <- list(position = pos)
+  geom_bar_params <- c(geom_bar_params, point_params, list(stat='identity'))
+  
+  # bars are drawn before linerange, but points are drawn after linerange
+  if (bars_instead_of_points) {
+    p <- p + do.call(geom_bar, geom_bar_params)
+  }
+  
+  p <- p + do.call(geom_linerange, line_params)
+  
   if (!is.null(pointshape)) {
     point_params <- append(point_params, list(shape = pointshape))
   }
@@ -258,17 +282,20 @@ plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
   if (add_jitter) {
     default_ind_pp <- list(size = pointsize / 2, fill = "lightgray", position = position_jitterdodge(dodge.width = pos$width, jitter.width = 0.1))
     individual_points_params <- append(individual_points_params, default_ind_pp[setdiff(names(default_ind_pp), names(individual_points_params))])
-    p <- p + do.call(geom_jitter, append(individual_points_params, list(data = plot_data, mapping = do.call(aes_string, aes_list[!names(aes_list) %in% c("ymax", "ymin")]), inherit.aes = F)))
+    aes_jitter <- do.call(aes, lapply(aes_list[!names(aes_list) %in% c("ymax", "ymin")], as.name))
+    p <- p + do.call(geom_jitter, append(individual_points_params, list(data = plot_data, mapping = aes_jitter, inherit.aes = FALSE)))
   }
   if (!bars_instead_of_points) {
     p <- p + do.call(geom_point, point_params)
-  } else {
-    p <- p + do.call(geom_bar, geom_bar_params)
   }
 
   if (pretty_breaks_y) {
     y_range <- c(min(aggr_data$ymin), max(aggr_data$ymax))
-    breaks <- labeling::extended(y_range[1], y_range[2], 5)
+    breaks <- if (requireNamespace("labeling", quietly = TRUE)) {
+      labeling::extended(y_range[1], y_range[2], 5)
+    } else {
+      pretty(y_range, n = 5)
+    }
     limits <- range(c(breaks, y_range))
     p <- p + scale_y_continuous(breaks = breaks) + coord_cartesian(ylim = limits)
     if (pretty_y_axis) {
@@ -299,7 +326,7 @@ plot.pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
 #' @export
 #'
 scale_y_exp <- function(digits = 0, ...) {
-  scale_y_continuous(breaks = scales::trans_breaks("exp", function(x) log(x)), labels = scales::trans_format("exp", function(x) as.character(f.round(x, digits = digits))), ...)
+  scale_y_continuous(breaks = scales::trans_breaks("exp", function(x) log(x)), labels = scales::trans_format("exp", function(x) as.character(f_round(x, digits = digits))), ...)
 }
 
 #' Extract grob element by name

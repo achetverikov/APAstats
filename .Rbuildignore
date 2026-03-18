@@ -10,3 +10,10 @@
 ^data-raw$
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
+^\.vscode($|/)
+^example$
+^\.git$
+^\.gitignore$
+^\.gitattributes$
+^\.gitmodules$
+^\.github($|/)

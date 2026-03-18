@@ -22,5 +22,6 @@
 #' @importFrom stats var
 #' @importFrom stats vcov
 #' @importFrom utils modifyList
+#' @importFrom data.table .N .SD
 ## usethis namespace: end
 NULL

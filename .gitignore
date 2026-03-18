@@ -2,3 +2,8 @@
 .Rhistory
 .RData
 apastats.Rproj
+.vscode/*
+apastats2.Rcheck/*
+..Rcheck/*
+*.tar.gz
+_upstream/

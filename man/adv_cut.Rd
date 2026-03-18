@@ -2,7 +2,7 @@
 % Please edit documentation in R/misc.R
 \name{adv_cut}
 \alias{adv_cut}
-\title{Cut numeric variable into groups (bins) with advanced options}
+\title{Cut a numeric variable into groups (bins) with advanced options}
 \usage{
 adv_cut(
   x,
@@ -30,21 +30,21 @@ adv_cut(
 
 \item{labels}{a vector of labels to use for the groups (default: NULL)}
 
-\item{include_oob}{include values outside of the boundaries provided in `cuts` (default: TRUE)}
+\item{include_oob}{include values outside of the boundaries provided in \code{cuts} (default: TRUE)}
 
 \item{labels_at_means}{should labels be created as means between cuts (T) or as pairs of cuts (F)}
 
 \item{label_pairs_format}{formatting string to use when labels are generated from pairs of cuts (default: [\%.2f, \%.2f])}
 
-\item{...}{other parameters passed to `base::cut`
+\item{...}{other parameters passed to \link[base:cut]{base::cut}
 
-If `ncuts` is used, then the variable is cut into N cuts either of equal group size (eq_groups = TRUE) or equally distant from each other (eq_groups = FALSE). If `labels` are not provided, they are generated as  means between cuts if labels_at_means is T.}
+If \code{ncuts} is used, then the variable is cut into N cuts either of equal group size (eq_groups = TRUE) or equally distant from each other (eq_groups = FALSE). If \code{labels} are not provided, they are generated as  means between cuts if labels_at_means is T.}
 }
 \value{
 a vector of group labels the same length as the original value vector
 }
 \description{
-Cut numeric variable into groups (bins) with advanced options
+Cut a numeric variable into groups (bins) with advanced options
 }
 \examples{
 set.seed(1)
@@ -57,5 +57,7 @@ adv_cut(x, ncuts = 5, eq_groups = TRUE, num_labels = TRUE)
 adv_cut(x, ncuts = 5, eq_groups = TRUE, labels_at_means = FALSE)
 adv_cut(x, cuts = seq(0, 100, by = 20))
 adv_cut(x, cuts = seq(0, 100, by = 20), labels_at_means = FALSE)
-adv_cut(x, cuts = seq(0, 100, by = 20), labels_at_means = FALSE, label_pairs_format = "[\%i, \%i]")
+adv_cut(x, cuts = seq(0, 100, by = 20), 
+           labels_at_means = FALSE, label_pairs_format = "[\%i, \%i]")
+
 }

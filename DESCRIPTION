@@ -1,7 +1,7 @@
-Package: apastats
+Package: apastats2
 Type: Package
 Title: APA-style results
-Version: 0.5
+Version: 1.0.2
 Author: Andrey Chetverikov (http://andreychetverikov.org)
 Maintainer: Andrey Chetverikov <andrey.a.chetverikov@gmail.com>
 Description: Proper formatting of statistical results in accordance with
@@ -13,6 +13,13 @@ Imports:
     stringr,
     utils
 Suggests:
+    knitr,
+    rmarkdown,
+    labeling,
+    lsr,
+    MASS,
+    pROC,
+    afex,
     lme4,
     ez,
     diptest,
@@ -35,7 +42,9 @@ Depends:
     stats,
     ggplot2,
     data.table,
-    R (>= 3.5)
+    R (>= 4.1.0)
 LazyData: TRUE
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
+Roxygen: list(markdown = TRUE)
+VignetteBuilder: knitr
 Additional_repositories: 
