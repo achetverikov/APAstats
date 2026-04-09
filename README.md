@@ -6,7 +6,7 @@ Utilities for APA-style reporting of statistical results, plus helper functions 
 
 ```r
 install.packages("remotes")
-remotes::install_github("achetverikov/apastats2")
+remotes::install_github("achetverikov/apastats")
 ```
 
 ## Transition from apastats to apastats2
@@ -15,7 +15,7 @@ If you are migrating old scripts:
 
 1. Install/load the new package:
 ```r
-remotes::install_github("achetverikov/apastats2")
+remotes::install_github("achetverikov/apastats")
 library(apastats2)
 ```
 2. Prefer `apa()` and `apa_*` functions in new code.
