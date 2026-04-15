@@ -1,6 +1,6 @@
 #' Describe regression model (GLM, GLMer, lm, lm.circular, ...)
 #'
-#' @param obj model object from [stats::glm], [stats::lm], [lme4::lmer], [lmerTest::lmer], etc.
+#' @param obj model object from [stats::glm], [stats::lm], [lme4::lmer], [lme4::glmer], [lmerTest::lmer], etc.
 #' @param term model term to describe (a string with the term name or its sequential number); if `NULL`, returns a formatted summary for all coefficients
 #' @param dtype description type (1: t, p;  2: B(SE), p; 3: B, SE, t, p; or other: B (SE), t)
 #' @param b.digits how many digits to use for _B_ and _SE_
@@ -44,6 +44,15 @@
 #' if (requireNamespace("lmerTest", quietly = TRUE)) {
 #'   fm <- lmerTest::lmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)
 #'   apa(fm, "Days", test.df = TRUE)
+#' }
+#'
+#' if (requireNamespace("lme4", quietly = TRUE)) {
+#'   gm <- lme4::glmer(
+#'     cbind(incidence, size - incidence) ~ period + (1 | herd),
+#'     data = lme4::cbpp,
+#'     family = binomial
+#'   )
+#'   apa(gm, "period2")
 #' }
 apa.glm <- function(obj, term = NULL, dtype = 1, b.digits = 2, t.digits = 2, 
                     test.df = FALSE, p.as.number = FALSE, term.pattern = NULL, 
@@ -168,6 +177,11 @@ apa.glm <- function(obj, term = NULL, dtype = 1, b.digits = 2, t.digits = 2,
 #' @method apa lm
 #' @export
 apa.lm <- apa.glm
+
+#' @rdname apa.glm
+#' @method apa glmerMod
+#' @export
+apa.glmerMod <- apa.glm
 
 #' @rdname apa.glm
 #' @method apa lmerModLmerTest

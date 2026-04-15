@@ -24,7 +24,7 @@ This function supports various statistical objects directly:
 \itemize{
 \item \link{apa.ttest} for \link[stats:t.test]{stats::t.test} and \link{apa.r} for \link[stats:cor.test]{stats::cor.test} (both with class \code{htest})
 \item \link{apa.aov} for \link[stats:aov]{stats::aov} and \link{apa.anova} for \link[car:Anova]{car::Anova}
-\item \link{apa.glm} for \link[stats:glm]{stats::glm}, \link[stats:lm]{stats::lm}, \link[lme4:lmer]{lme4::lmer}, and \link[lmerTest:lmer]{lmerTest::lmer}; \link{apa.lmert} remains available for summary objects from \link[lmerTest:lmer]{lmerTest::lmer}
+\item \link{apa.glm} for \link[stats:glm]{stats::glm}, \link[stats:lm]{stats::lm}, \link[lme4:lmer]{lme4::lmer}, \link[lme4:glmer]{lme4::glmer}, and \link[lmerTest:lmer]{lmerTest::lmer}; \link{apa.lmert} remains available for summary objects from \link[lmerTest:lmer]{lmerTest::lmer}
 \item \link{apa.brmsfit} for \link[brms:brm]{brms::brm} and \link{apa.BFBayesFactor} for \link[BayesFactor:anovaBF]{BayesFactor::anovaBF}
 \item \link{apa.chisq.test} for \link[stats:chisq.test]{stats::chisq.test}
 \item \link{apa.dip.test} for \link[diptest:dip.test]{diptest::dip.test}

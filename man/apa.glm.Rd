@@ -3,6 +3,7 @@
 \name{apa.glm}
 \alias{apa.glm}
 \alias{apa.lm}
+\alias{apa.glmerMod}
 \alias{apa.lmerModLmerTest}
 \title{Describe regression model (GLM, GLMer, lm, lm.circular, ...)}
 \usage{
@@ -34,6 +35,20 @@
   ...
 )
 
+\method{apa}{glmerMod}(
+  obj,
+  term = NULL,
+  dtype = 1,
+  b.digits = 2,
+  t.digits = 2,
+  test.df = FALSE,
+  p.as.number = FALSE,
+  term.pattern = NULL,
+  eff.size = FALSE,
+  adj.digits = FALSE,
+  ...
+)
+
 \method{apa}{lmerModLmerTest}(
   obj,
   term = NULL,
@@ -49,7 +64,7 @@
 )
 }
 \arguments{
-\item{obj}{model object from \link[stats:glm]{stats::glm}, \link[stats:lm]{stats::lm}, \link[lme4:lmer]{lme4::lmer}, \link[lmerTest:lmer]{lmerTest::lmer}, etc.}
+\item{obj}{model object from \link[stats:glm]{stats::glm}, \link[stats:lm]{stats::lm}, \link[lme4:lmer]{lme4::lmer}, \link[lme4:glmer]{lme4::glmer}, \link[lmerTest:lmer]{lmerTest::lmer}, etc.}
 
 \item{term}{model term to describe (a string with the term name or its sequential number); if \code{NULL}, returns a formatted summary for all coefficients}
 
@@ -105,5 +120,14 @@ if (requireNamespace("rockchalk", quietly = TRUE)) {
 if (requireNamespace("lmerTest", quietly = TRUE)) {
   fm <- lmerTest::lmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)
   apa(fm, "Days", test.df = TRUE)
+}
+
+if (requireNamespace("lme4", quietly = TRUE)) {
+  gm <- lme4::glmer(
+    cbind(incidence, size - incidence) ~ period + (1 | herd),
+    data = lme4::cbpp,
+    family = binomial
+  )
+  apa(gm, "period2")
 }
 }
