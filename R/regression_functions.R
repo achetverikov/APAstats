@@ -1,7 +1,7 @@
 #' Describe regression model (GLM, GLMer, lm, lm.circular, ...)
 #'
-#' @param obj model object from [stats::glm], [stats::lm], [lme4::lmer], etc.
-#' @param term model term to describe (a string with the term name or its sequential number)
+#' @param obj model object from [stats::glm], [stats::lm], [lme4::lmer], [lmerTest::lmer], etc.
+#' @param term model term to describe (a string with the term name or its sequential number); if `NULL`, returns a formatted summary for all coefficients
 #' @param dtype description type (1: t, p;  2: B(SE), p; 3: B, SE, t, p; or other: B (SE), t)
 #' @param b.digits how many digits to use for _B_ and _SE_
 #' @param t.digits how many digits to use for _t_
@@ -33,12 +33,17 @@
 #' apa(fit, "body", 4)   # B(SE), t format
 #' apa(fit, "body", 3, test.df = TRUE)  # Include df in the output
 #' 
-#' # Full model summary
+#' # Full model summary for all coefficients
 #' apa(fit)
 #' 
 #' # With effect size (requires rockchalk package)
 #' if (requireNamespace("rockchalk", quietly = TRUE)) {
 #'   apa(fit, "body", 4, eff.size = TRUE)
+#' }
+#'
+#' if (requireNamespace("lmerTest", quietly = TRUE)) {
+#'   fm <- lmerTest::lmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)
+#'   apa(fm, "Days", test.df = TRUE)
 #' }
 apa.glm <- function(obj, term = NULL, dtype = 1, b.digits = 2, t.digits = 2, 
                     test.df = FALSE, p.as.number = FALSE, term.pattern = NULL, 
@@ -57,7 +62,7 @@ apa.glm <- function(obj, term = NULL, dtype = 1, b.digits = 2, t.digits = 2,
       warning("df for lm.circular are not implemented")
     }
   } else {
-    if (grepl("merModLmerTest", fit_class)) {
+    if (inherits(obj, "lmerModLmerTest")) {
       afit <- data.frame(coef(summary(obj)))
       if (test.df) {
         dfs <- afit[, 3]
@@ -95,7 +100,7 @@ apa.glm <- function(obj, term = NULL, dtype = 1, b.digits = 2, t.digits = 2,
   if (length(attr(terms(obj), "term.labels")) == (length(rownames(afit)) + 1)) {
     rownames(afit) <- c("Intercept", attr(terms(obj), "term.labels"))
   }
-  if (fit_class == "lmerMod") {
+  if (inherits(obj, "lmerMod") && !inherits(obj, "lmerModLmerTest")) {
     if (dtype != 4) {
       warning("p-values for lmer are only a rough estimate from z-distribution, not suitable for the real use")
     }
@@ -103,7 +108,7 @@ apa.glm <- function(obj, term = NULL, dtype = 1, b.digits = 2, t.digits = 2,
   }
   
   if (test.df) {
-    if (!grepl("merModLmerTest", fit_class)) {
+    if (!inherits(obj, "lmerModLmerTest")) {
       dfs <- summary(obj)$df[2]
     }
     if (isTRUE(all.equal(dfs, as.integer(dfs)))) {
@@ -163,6 +168,11 @@ apa.glm <- function(obj, term = NULL, dtype = 1, b.digits = 2, t.digits = 2,
 #' @method apa lm
 #' @export
 apa.lm <- apa.glm
+
+#' @rdname apa.glm
+#' @method apa lmerModLmerTest
+#' @export
+apa.lmerModLmerTest <- apa.glm
 
 
 #' Describe lmerTest results

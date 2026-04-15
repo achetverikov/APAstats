@@ -1,3 +1,9 @@
+# apastats2 1.0.3
+
+* Added direct `apa.glm` support for `lmerTest::lmer` model objects via `lmerModLmerTest` dispatch.
+* Fixed `apa.glm` mixed-model class checks so `lmerTest` fits use the correct coefficient, df, and p-value handling.
+* Documented that omitting `term` returns a formatted summary table for all coefficients and added a `lmerTest::lmer` example.
+
 # apastats2 1.0.2
 
 * apastats2 is set as the main branch

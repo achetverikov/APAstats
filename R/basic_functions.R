@@ -10,7 +10,7 @@
 #' \itemize{
 #'   \item [apa.ttest] for [stats::t.test] and [apa.r] for [stats::cor.test] (both with class \code{htest})
 #'   \item [apa.aov] for [stats::aov] and [apa.anova] for [car::Anova]
-#'   \item [apa.glm] for [stats::glm], [stats::lm], [lme4::lmer], and [apa.lmert] for [lmerTest::lmer]
+#'   \item [apa.glm] for [stats::glm], [stats::lm], [lme4::lmer], and [lmerTest::lmer]; [apa.lmert] remains available for summary objects from [lmerTest::lmer]
 #'   \item [apa.brmsfit] for [brms::brm] and [apa.BFBayesFactor] for [BayesFactor::anovaBF]
 #'   \item [apa.chisq.test] for [stats::chisq.test]
 #'   \item [apa.dip.test] for [diptest::dip.test]

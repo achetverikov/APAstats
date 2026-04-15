@@ -3,6 +3,7 @@
 \name{apa.glm}
 \alias{apa.glm}
 \alias{apa.lm}
+\alias{apa.lmerModLmerTest}
 \title{Describe regression model (GLM, GLMer, lm, lm.circular, ...)}
 \usage{
 \method{apa}{glm}(
@@ -32,11 +33,25 @@
   adj.digits = FALSE,
   ...
 )
+
+\method{apa}{lmerModLmerTest}(
+  obj,
+  term = NULL,
+  dtype = 1,
+  b.digits = 2,
+  t.digits = 2,
+  test.df = FALSE,
+  p.as.number = FALSE,
+  term.pattern = NULL,
+  eff.size = FALSE,
+  adj.digits = FALSE,
+  ...
+)
 }
 \arguments{
-\item{obj}{model object from \link[stats:glm]{stats::glm}, \link[stats:lm]{stats::lm}, \link[lme4:lmer]{lme4::lmer}, etc.}
+\item{obj}{model object from \link[stats:glm]{stats::glm}, \link[stats:lm]{stats::lm}, \link[lme4:lmer]{lme4::lmer}, \link[lmerTest:lmer]{lmerTest::lmer}, etc.}
 
-\item{term}{model term to describe (a string with the term name or its sequential number)}
+\item{term}{model term to describe (a string with the term name or its sequential number); if \code{NULL}, returns a formatted summary for all coefficients}
 
 \item{dtype}{description type (1: t, p;  2: B(SE), p; 3: B, SE, t, p; or other: B (SE), t)}
 
@@ -79,11 +94,16 @@ apa(fit, "body", 3)   # B, SE, t, p format
 apa(fit, "body", 4)   # B(SE), t format
 apa(fit, "body", 3, test.df = TRUE)  # Include df in the output
 
-# Full model summary
+# Full model summary for all coefficients
 apa(fit)
 
 # With effect size (requires rockchalk package)
 if (requireNamespace("rockchalk", quietly = TRUE)) {
   apa(fit, "body", 4, eff.size = TRUE)
+}
+
+if (requireNamespace("lmerTest", quietly = TRUE)) {
+  fm <- lmerTest::lmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)
+  apa(fm, "Days", test.df = TRUE)
 }
 }
