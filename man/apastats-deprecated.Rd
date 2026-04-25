@@ -8,6 +8,7 @@
 \alias{describe.Anova}
 \alias{describe.aov}
 \alias{describe.anova}
+\alias{describe.afex}
 \alias{describe.bf}
 \alias{describe.brm}
 \alias{describe.dip.test}
@@ -56,6 +57,17 @@ describe.Anova(afit, term, f.digits = 2, ...)
 describe.aov(fit, term, sstype = 2, ...)
 
 describe.anova(anova_res, rown = 2, f.digits = 2, ...)
+
+describe.afex(
+  afex_fit,
+  term,
+  include_eta = TRUE,
+  eta_digits = 2,
+  f_digits = 2,
+  df_digits = 0,
+  append_to_table = FALSE,
+  ...
+)
 
 describe.bf(bf, digits = 2, top_limit = 10000, convert_to_power = TRUE, ...)
 
@@ -239,6 +251,7 @@ Please use their replacements as indicated.
 \item \code{describe.Anova} -> \link{apa} (for Anova objects)
 \item \code{describe.aov} -> \link{apa} (for aov objects)
 \item \code{describe.anova} -> \link{apa} (for anova objects)
+\item \code{describe.afex} -> \link{apa} (for afex_aov objects)
 \item \code{describe.bf} -> \link{apa} (for BFBayesFactor objects)
 \item \code{describe.brm} -> \link{apa} (for brmsfit objects)
 \item \code{describe.dip.test} -> \link{apa} (for dip.test objects)

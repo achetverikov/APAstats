@@ -9,7 +9,7 @@
 #' This function supports various statistical objects directly:
 #' \itemize{
 #'   \item [apa.ttest] for [stats::t.test] and [apa.r] for [stats::cor.test] (both with class \code{htest})
-#'   \item [apa.aov] for [stats::aov] and [apa.anova] for [car::Anova]
+#'   \item [apa.aov] for [stats::aov], [apa.anova] for [car::Anova], and [apa.afex_aov] for [afex::aov_ez], [afex::aov_car], or [afex::aov_4]
 #'   \item [apa.glm] for [stats::glm], [stats::lm], [lme4::lmer], [lme4::glmer], and [lmerTest::lmer]; [apa.lmert] remains available for summary objects from [lmerTest::lmer]
 #'   \item [apa.brmsfit] for [brms::brm] and [apa.BFBayesFactor] for [BayesFactor::anovaBF]
 #'   \item [apa.chisq.test] for [stats::chisq.test]

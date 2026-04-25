@@ -1,3 +1,8 @@
+# apastats2 1.0.4
+
+* Added `apa()` support for `afex::aov_ez`, `afex::aov_car`, and `afex::aov_4` results via `afex_aov` dispatch.
+* Added deprecated `describe.afex()` compatibility wrapper.
+
 # apastats2 1.0.3
 
 * Added direct `apa.glm` support for `lmerTest::lmer` model objects via `lmerModLmerTest` dispatch.

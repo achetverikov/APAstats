@@ -15,6 +15,7 @@
 #'   \item `describe.Anova` -> [apa] (for Anova objects)
 #'   \item `describe.aov` -> [apa] (for aov objects)
 #'   \item `describe.anova` -> [apa] (for anova objects)
+#'   \item `describe.afex` -> [apa] (for afex_aov objects)
 #'   \item `describe.bf` -> [apa] (for BFBayesFactor objects)
 #'   \item `describe.brm` -> [apa] (for brmsfit objects)
 #'   \item `describe.dip.test` -> [apa] (for dip.test objects)
@@ -93,6 +94,16 @@ describe.aov <- function(fit, term, sstype = 2, ...) {
 describe.anova <- function(anova_res, rown = 2, f.digits = 2, ...) {
   .Deprecated("apa")
   apa.anova(anova_res, rown, f.digits, ...)
+}
+
+#' @rdname apastats-deprecated
+#' @export
+describe.afex <- function(afex_fit, term, include_eta = TRUE, eta_digits = 2,
+                          f_digits = 2, df_digits = 0,
+                          append_to_table = FALSE, ...) {
+  .Deprecated("apa")
+  apa.afex_aov(afex_fit, term, include_eta, eta_digits, f_digits, df_digits,
+               append_to_table, ...)
 }
 
 #' @rdname apastats-deprecated

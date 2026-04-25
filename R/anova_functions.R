@@ -152,6 +152,65 @@ apa.ezANOVA <- function(obj, term, include_eta = TRUE, spher_corr = TRUE,
   }
 }
 
+#' Describe afex ANOVA results
+#'
+#' Provides formatted string like _F_(num.Df, den.Df) = ..., _p_ ..., eta2 = ... based on [afex::aov_ez], [afex::aov_car], or [afex::aov_4] results.
+#'
+#' @param obj afex ANOVA object
+#' @param term model term to describe (a string with the term name or its sequential number)
+#' @param include_eta add generalized eta^2 for the model (default: TRUE)
+#' @param eta_digits number of digits to use for eta^2 (default: 2)
+#' @param f_digits number of digits to use for F (default: 2)
+#' @param df_digits number of digits to use for df (default: 0)
+#' @param append_to_table should the results be added to the afex ANOVA table (default: FALSE)
+#' @param ... other parameters passed to [format_results]
+#'
+#' @return string with formatted results
+#' @method apa afex_aov
+#' @export
+#'
+#' @examples
+#' if (requireNamespace("afex", quietly = TRUE)) {
+#'   data(stroop, package = "afex")
+#'
+#'   afex_res <- afex::aov_ez(
+#'     id = "pno",
+#'     dv = "rt",
+#'     within = "condition",
+#'     data = stroop[!is.na(stroop$rt), ],
+#'     fun_aggregate = mean
+#'   )
+#'
+#'   apa(afex_res, "condition")
+#'   apa(afex_res, "condition", eta_digits = 3)
+#'   apa(afex_res, "condition", include_eta = FALSE)
+#' }
+apa.afex_aov <- function(obj, term, include_eta = TRUE, eta_digits = 2,
+                         f_digits = 2, df_digits = 0,
+                         append_to_table = FALSE, ...) {
+  eza <- data.frame(obj$anova_table)
+  eza$effect <- row.names(eza)
+
+  suffix <- sprintf(", $\\eta$^2^~G~ %s",
+                    round_p(eza[term, "ges"],
+                            digits = eta_digits,
+                            replace.very.small = 10^(-eta_digits)))
+  if (include_eta == FALSE) {
+    suffix <- ""
+  }
+
+  res <- format_results(sprintf("\\emph{F}(%.*f, %.*f) = %.*f, \\emph{p} %s%s",
+                                df_digits, eza[term, "num.Df"],
+                                df_digits, eza[term, "den.Df"],
+                                f_digits, eza[term, "F"],
+                                round_p(eza[term, "Pr..F."]), suffix), ...)
+  if (append_to_table) {
+    cbind(eza[term, ], res)
+  } else {
+    res
+  }
+}
+
 #' Describe ezStats results
 #'
 #' Returns formatted string with mean and SD from ezStats object
