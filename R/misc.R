@@ -436,6 +436,26 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
     }
     paste0(out, collapse = "")
   }
+  decode_wide_data <- function(wide_data, level_maps, within, between, id_cols) {
+    decoded <- wide_data
+    for (x in between) {
+      code_match <- match(as.character(decoded[[x]]), level_maps[[x]]$code)
+      decoded[[x]] <- ifelse(is.na(code_match), as.character(decoded[[x]]), level_maps[[x]]$original[code_match])
+    }
+    wide_cols <- setdiff(colnames(decoded), id_cols)
+    decoded_names <- vapply(wide_cols, function(x) {
+      x_codes <- strsplit(x, "_", fixed = TRUE)[[1]]
+      if (length(x_codes) != length(within)) return(x)
+      x_labels <- Map(function(var, code) {
+        code_match <- match(code, level_maps[[var]]$code)
+        if (is.na(code_match)) return(code)
+        paste0(var, "=", level_maps[[var]]$original[code_match])
+      }, within, x_codes)
+      paste(unlist(x_labels), collapse = ", ")
+    }, FUN.VALUE = character(1))
+    colnames(decoded)[match(wide_cols, colnames(decoded))] <- decoded_names
+    decoded
+  }
   max_level_codes <- 26^5
   all_vars <-  c(within, between, wid, value_var)
   for (x in all_vars){
@@ -478,7 +498,8 @@ get_superb_ci <- function(data, wid, within, value_var, between = NULL, adjustme
   dcast_form <- paste0(paste0(c(wid, between), collapse = "+"), "~", paste0(within, collapse = "+"))
   wide_data <- reshape2::dcast(data_superb, dcast_form, value.var = value_var, fun.aggregate = aggr_fun)
   if (anyNA(wide_data)) {
-    print(wide_data[!complete.cases(wide_data), ])
+    na_rows <- wide_data[!complete.cases(wide_data), ]
+    print(decode_wide_data(na_rows, level_maps, within, between, c(wid, between)))
     if (drop_NA_subj) {
       n_dropped <- sum(!complete.cases(wide_data))
       wide_data <- wide_data[complete.cases(wide_data), ]

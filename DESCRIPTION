@@ -43,7 +43,10 @@ Suggests:
     lmerTest,
     bayestestR,
     rockchalk,
-    carData
+    carData,
+    testthat (>= 3.0.0)
+Remotes:
+    achetverikov/superb@fix-ddply-function-lookup
 Depends:
     stats,
     ggplot2,
@@ -53,3 +56,4 @@ LazyData: TRUE
 RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
+Config/testthat/edition: 3
