@@ -54,7 +54,7 @@ describe.chi(tbl, ...)
 
 describe.Anova(afit, term, f.digits = 2, ...)
 
-describe.aov(fit, term, sstype = 2, ...)
+describe.aov(fit, term = NULL, sstype = 2, ...)
 
 describe.anova(anova_res, rown = 2, f.digits = 2, ...)
 
