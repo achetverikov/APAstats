@@ -101,6 +101,7 @@ apa.aov <- function(obj, term, sstype = 2, ...) {
 #'
 #' @return one or more formatted strings with F, numerator and denominator df,
 #'   and p values
+#' @rdname apa.aov
 #' @method apa aovlist
 #' @export
 #'
