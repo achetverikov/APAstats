@@ -1,5 +1,6 @@
 # apastats2 1.0.4
 
+* Added `apa()` support for `stats::aov()` models with `Error()` terms (`aovlist` objects), fixing #9.
 * Added `apa()` support for `afex::aov_ez`, `afex::aov_car`, and `afex::aov_4` results via `afex_aov` dispatch.
 * Added deprecated `describe.afex()` compatibility wrapper.
 
