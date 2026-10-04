@@ -86,6 +86,104 @@ apa.aov <- function(obj, term, sstype = 2, ...) {
   }
 }
 
+#' Describe repeated-measures `aov` results with an `Error()` term
+#'
+#' `stats::aov()` models containing `Error()` return an `aovlist` object,
+#' which cannot be passed to `car::Anova()`. This method extracts the ANOVA
+#' tables from each error stratum and reports effects using the residual degrees
+#' of freedom from the same stratum.
+#'
+#' @param obj fitted [stats::aov] model with an `Error()` term
+#' @param term model term to describe. A character term name or sequential
+#'   number can be supplied; if `NULL`, all testable effects are returned.
+#' @param f.digits number of digits for the F value
+#' @param ... other parameters passed to [format_results]
+#'
+#' @return one or more formatted strings with F, numerator and denominator df,
+#'   and p values
+#' @method apa aovlist
+#' @export
+#'
+#' @examples
+#' fit_rm <- aov(yield ~ N * P * K + Error(block), data = npk)
+#' apa(fit_rm, "N")
+#' apa(fit_rm)
+apa.aovlist <- function(obj, term = NULL, f.digits = 2, ...) {
+  smry <- summary(obj)
+  rows <- list()
+
+  for (stratum_i in seq_along(smry)) {
+    stratum <- smry[[stratum_i]]
+    tables <- if (is.data.frame(stratum)) list(stratum) else if (is.list(stratum)) stratum else list()
+
+    for (table_i in seq_along(tables)) {
+      tab <- tables[[table_i]]
+      if (!is.data.frame(tab) ||
+          !all(c("Df", "F value", "Pr(>F)") %in% colnames(tab))) {
+        next
+      }
+
+      term_names <- trimws(rownames(tab))
+      residual_i <- which(term_names == "Residuals")
+      if (length(residual_i) == 0) {
+        next
+      }
+
+      effect_i <- which(term_names != "Residuals" & !is.na(tab[, "F value"]))
+      if (length(effect_i) == 0) {
+        next
+      }
+
+      denominator_df <- tab[residual_i[1], "Df"]
+      for (i in effect_i) {
+        rows[[length(rows) + 1]] <- data.frame(
+          term = term_names[i],
+          Df = tab[i, "Df"],
+          Df.res = denominator_df,
+          F = tab[i, "F value"],
+          p = tab[i, "Pr(>F)"],
+          stringsAsFactors = FALSE
+        )
+      }
+    }
+  }
+
+  if (length(rows) == 0) {
+    stop("No testable effects were found in the aovlist object.")
+  }
+
+  effects <- do.call(rbind, rows)
+
+  if (!is.null(term)) {
+    if (is.numeric(term)) {
+      if (length(term) != 1 || is.na(term) || term < 1 || term > nrow(effects)) {
+        stop(sprintf("term must be between 1 and %i.", nrow(effects)))
+      }
+      effects <- effects[term, , drop = FALSE]
+    } else {
+      keep <- effects$term %in% term
+      if (!any(keep)) {
+        stop(sprintf(
+          "Term '%s' was not found. Available terms are: %s.",
+          paste(term, collapse = "', '"),
+          paste(unique(effects$term), collapse = ", ")
+        ))
+      }
+      effects <- effects[keep, , drop = FALSE]
+    }
+  }
+
+  res <- sprintf(
+    paste0("\\emph{F}(%.0f, %.0f) = %.", f.digits, "f, \\emph{p} %s"),
+    effects$Df,
+    effects$Df.res,
+    effects$F,
+    round_p(effects$p)
+  )
+  names(res) <- effects$term
+  format_results(res, ...)
+}
+
 #' Describe ezANOVA results
 #' 
 #' Provides formatted string like _F_(DFn, DFd) = ..., _p_ ..., eta2 = ... based on ezANOVA results
