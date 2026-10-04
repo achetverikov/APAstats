@@ -1,0 +1,57 @@
+/* Styles for readme_output.Rmd (the README example-output image). */
+body {
+  background: #fff;
+  color: #222;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  font-variant-numeric: lining-nums;
+  line-height: 1.5;
+  margin: 0;
+  padding: 28px 32px;
+  width: 860px;
+}
+
+h1.title {
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 22px;
+  margin: 0 0 6px;
+}
+
+p {
+  margin: 0 0 14px;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 0 0 16px;
+  width: 100%;
+}
+
+th {
+  border-bottom: 2px solid #222;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  padding: 6px 10px;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+td {
+  border-bottom: 1px solid #ddd;
+  padding: 7px 10px;
+  vertical-align: top;
+}
+
+td:first-child {
+  width: 46%;
+}
+
+code {
+  background: #f4f4f4;
+  border-radius: 3px;
+  color: #333;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 14px;
+  padding: 1px 4px;
+}

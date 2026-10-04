@@ -33,6 +33,14 @@ t_res <- t.test(rnorm(20, mean = 10, sd = 2))
 apa(t_res)
 ```
 
+## Example Output
+
+How the results look when the Markdown strings are rendered in R Markdown or Quarto:
+
+![apastats2 output for a t-test, correlation, chi-square test, ANOVA, mixed model, Bayes factor, and mean with confidence interval, as rendered text](man/figures/readme-output.png)
+
+Source: [`example/readme_output.Rmd`](example/readme_output.Rmd) (built-in R datasets).
+
 ## Main Function Families
 
 - `apa()`: formatted output for many model/test objects via S3 methods

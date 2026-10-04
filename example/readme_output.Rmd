@@ -1,0 +1,40 @@
+---
+title: "apastats2: example output"
+output:
+  html_document:
+    math_method: mathml
+    theme: null
+    highlight: null
+    self_contained: true
+    css: readme_output.css
+---
+
+```{r setup, include = FALSE}
+# Source of man/figures/readme-output.png (rendered, then screenshotted).
+# Data: built-in R datasets (sleep, mtcars, ToothGrowth) and lme4::sleepstudy.
+suppressPackageStartupMessages({
+  library(apastats2)
+  library(lmerTest)
+  library(BayesFactor)
+})
+set.seed(1)  # bootstrapped CIs (apa_mean_conf, apa_mean_and_t)
+drug1 <- sleep$extra[sleep$group == 1]
+drug2 <- sleep$extra[sleep$group == 2]
+tg <- transform(ToothGrowth, dose = factor(dose), id = seq_len(nrow(ToothGrowth)))
+anova_res <- suppressMessages(afex::aov_ez("id", "len", tg, between = c("supp", "dose")))
+lmer_res <- lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
+```
+
+Each call returns a Markdown string for R Markdown or Quarto; this is how it renders in the text.
+
+| R code | Output |
+|:--|:--|
+| `apa(t.test(drug2, drug1, paired = TRUE))` | `r apa(t.test(drug2, drug1, paired = TRUE))` |
+| `apa(cor.test(mtcars$wt, mtcars$mpg))` | `r apa(cor.test(mtcars$wt, mtcars$mpg))` |
+| `apa(chisq.test(tbl))` | `r apa(chisq.test(matrix(c(30, 20, 15, 35), 2, byrow = TRUE)))` |
+| `apa(anova_res, term = "dose")` | `r apa(anova_res, term = "dose")` |
+| `apa(lmer_res, term = "Days")` | `r apa(lmer_res, term = "Days")` |
+| `apa(ttestBF(drug2, drug1, paired = TRUE))` | `r apa(ttestBF(drug2, drug1, paired = TRUE))` |
+| `apa_mean_conf(mtcars$mpg)` | `r apa_mean_conf(mtcars$mpg)` |
+
+In a sentence: Sleep increased more with the second drug, `r apa_mean_and_t(sleep$extra, sleep$group, which.mean = 3, paired = TRUE)`.
