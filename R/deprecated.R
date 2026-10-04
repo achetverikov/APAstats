@@ -84,9 +84,13 @@ describe.Anova <- function(afit, term, f.digits = 2, ...) {
 
 #' @rdname apastats-deprecated
 #' @export
-describe.aov <- function(fit, term, sstype = 2, ...) {
+describe.aov <- function(fit, term = NULL, sstype = 2, ...) {
   .Deprecated("apa")
-  apa.aov(fit, term, sstype, ...)
+  if (inherits(fit, "aovlist")) {
+    apa(fit, term = term, ...)
+  } else {
+    apa.aov(fit, term, sstype, ...)
+  }
 }
 
 #' @rdname apastats-deprecated

@@ -2,16 +2,21 @@
 % Please edit documentation in R/anova_functions.R
 \name{apa.aov}
 \alias{apa.aov}
+\alias{apa.aovlist}
 \title{Describe \link[stats:aov]{stats::aov} results}
 \usage{
 \method{apa}{aov}(obj, term, sstype = 2, ...)
+
+\method{apa}{aovlist}(obj, term = NULL, f.digits = 2, ...)
 }
 \arguments{
 \item{obj}{fitted \link[stats:aov]{stats::aov} model}
 
-\item{term}{model term to describe (a string with the term name or its sequential number)}
+\item{term}{model term to describe (a string with the term name or its sequential number). For \code{aovlist} objects, \code{NULL} returns all testable effects.}
 
 \item{sstype}{anova SS type (e.g., 2 or 3)}
+
+\item{f.digits}{number of digits for the F value}
 
 \item{...}{other parameters passed to \link{apa.anova}}
 }
@@ -19,7 +24,7 @@
 formatted string with F(df_numerator, df_denomiator) = F_value, p =/< p_value
 }
 \description{
-Describe \link[stats:aov]{stats::aov} results
+Describe \link[stats:aov]{stats::aov} results, including repeated-measures models fitted with an \code{Error()} term (\code{aovlist} objects).
 }
 \examples{
 # Using the mtcars dataset
@@ -30,4 +35,9 @@ apa(fit, 'cyl:am')
 
 # Using a different SS type
 apa(fit, 'cyl', sstype = 3)
+
+# Repeated-measures aov with an Error() term
+fit_rm <- aov(yield ~ N * P * K + Error(block), data = npk)
+apa(fit_rm, "N")
+apa(fit_rm)
 }
