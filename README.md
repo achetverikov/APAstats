@@ -9,21 +9,6 @@ install.packages("remotes")
 remotes::install_github("achetverikov/apastats")
 ```
 
-## Transition from apastats to apastats2
-
-If you are migrating old scripts:
-
-1. Install/load the new package:
-```r
-remotes::install_github("achetverikov/apastats")
-library(apastats2)
-```
-2. Prefer `apa()` and `apa_*` functions in new code.
-3. Legacy `describe.*` functions still work for now, but are deprecated and planned for removal.
-4. Legacy dot-named utility functions are also deprecated; use snake_case equivalents (see mapping below).
-
-In most cases, replacing `library(apastats)` with `library(apastats2)` and then progressively updating deprecated calls is enough.
-
 ## Quick Example
 
 ```r
@@ -58,6 +43,21 @@ Source: [`example/readme_output.Rmd`](example/readme_output.Rmd) (built-in R dat
 ## Notes
 
 Some advanced methods rely on suggested packages (for example `ez`, `lme4`, and `emmeans`).
+
+## Transition from apastats to apastats2
+
+If you are migrating old scripts:
+
+1. Install/load the new package:
+```r
+remotes::install_github("achetverikov/apastats")
+library(apastats2)
+```
+2. Prefer `apa()` and `apa_*` functions in new code.
+3. Legacy `describe.*` functions still work for now, but are deprecated and planned for removal.
+4. Legacy dot-named utility functions are also deprecated; use snake_case equivalents (see mapping below).
+
+In most cases, replacing `library(apastats)` with `library(apastats2)` and then progressively updating deprecated calls is enough.
 
 ## Deprecated Mappings
 
