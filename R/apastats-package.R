@@ -23,5 +23,6 @@
 #' @importFrom stats vcov
 #' @importFrom utils modifyList
 #' @importFrom data.table .N .SD
+#' @importFrom data.table :=
 ## usethis namespace: end
 NULL

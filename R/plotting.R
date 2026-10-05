@@ -9,12 +9,13 @@
 #' @export
 #' 
 #' @examples
-#' p <- ggplot(faces, aes(x = answerTime, y = correct)) + 
-#'   geom_smooth(method = glm, method.args = list(family = 'binomial')) +
+#' p <- ggplot(mtcars, aes(x = wt, y = mpg)) +
+#'   geom_point() +
 #'   theme_minimal()
-#'  
-#' p 
-#' p + base_breaks(faces$answerTime, scale = 'x') + base_breaks(faces$correct, scale = 'y')
+#'
+#' p
+#' p + base_breaks(mtcars$wt, scale = "x") +
+#'   base_breaks(mtcars$mpg, scale = "y")
 #'
 base_breaks <- function(x, scale = "x", addSegment = TRUE, ...) {
   y <- xend <- yend <- NULL  # due to NSE notes in R CMD check
@@ -106,41 +107,40 @@ base_breaks_y <- function(x, addSegment = TRUE, ...) {
 #' @export plot_pointrange
 #' @import ggplot2
 #' @examples
-#' data(faces)
-#' # between-subject CI
-#' plot_pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime)) + ylab("RT")
-#' 
-#' # within-subject CI
-#' plot_pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
-#'      within_subj = TRUE, withinvars = c("stim_gender"), betweenvars = c("user_gender")) +
-#'      ylab("RT")
-#'      
-#' # with bars showing standard errors
-#' plot_pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
-#'      within_subj = TRUE, withinvars = c("stim_gender"), betweenvars = c("user_gender"),
-#'      bars = 'se') + ylab("RT")
-#'      
-#' # same but also printing out aggregated data
-#' plot_pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
-#'      within_subj = TRUE, withinvars = c("stim_gender"), betweenvars = c("user_gender"),
-#'      bars = 'se', print_aggregated_data = TRUE) + ylab("RT")
-#'      
-#' # CIs with aggregating the data beforehand and using exp-transformed y-axis
-#' plot_pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
-#'      within_subj = TRUE, withinvars = c("stim_gender"), betweenvars = c("user_gender"),
-#'      bars = 'ci', exp_y = TRUE, do_aggregate = TRUE) + ylab("RT")
-#'      
-#' if (requireNamespace("afex", quietly = TRUE)) {
-#'   # Using the Stroop dataset from afex package
-#'   data(stroop, package = "afex")
-#'   # within-subject CI
-#'   plot_pointrange(stroop, aes(x = condition, color = congruency, y = rt), wid = "pno",
-#'      within_subj = TRUE, withinvars = c("congruency"), betweenvars = c("condition","study")) +
-#'      facet_grid(~study)+
-#'      ylab("RT")
-#'      
+#' data(memory_noise)
 #'
-#'}
+#' # Between-subject CI: compare the two Experiment 1 samples
+#' target_higher <- memory_noise[
+#'   memory_noise$relative_noise == "target more noisy",
+#' ]
+#' plot_pointrange(
+#'   target_higher,
+#'   aes(x = experiment, y = bias_percent)
+#' ) + ylab("Bias toward non-target (%)")
+#'
+#' # Mixed design: relative noise is within subjects, experiment is between
+#' plot_pointrange(
+#'   memory_noise,
+#'   aes(x = relative_noise, color = experiment, y = bias_percent),
+#'   wid = "participant",
+#'   within_subj = TRUE,
+#'   withinvars = "relative_noise",
+#'   betweenvars = "experiment",
+#'   connecting_line = TRUE
+#' ) + ylab("Bias toward non-target (%)")
+#'
+#' # The same mixed design with standard errors
+#' plot_pointrange(
+#'   memory_noise,
+#'   aes(x = relative_noise, color = experiment, y = bias_percent),
+#'   wid = "participant",
+#'   within_subj = TRUE,
+#'   withinvars = "relative_noise",
+#'   betweenvars = "experiment",
+#'   bars = "se"
+#' ) + ylab("Bias toward non-target (%)")
+#'
+
 
 
 plot_pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize = I(3), linesize = I(1),
@@ -190,20 +190,30 @@ plot_pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
     if (length(withinvars) == 0 || is.null(withinvars)) {
       stop("Within-subject plot can only be made if there is at least one within-subject variable listed in withinvars parameter.")
     }
-    
-    data.table::setDT(plot_data)
-    aggr_data <- plot_data[, get_superb_ci(data = .SD, value_var = dv, within = withinvars, between = NULL, 
-                                   wid = wid, errorbar = bars, drop_NA_subj = drop_NA_subj, debug = debug), 
-                           by = betweenvars]
-    data.table::setDF(plot_data)
-    data.table::setDF(aggr_data)
-    
-    } else {
-    aggr_data <- summarySE(plot_data,
-      measurevar = dv,
-      groupvars = c(withinvars, betweenvars),
-      na.rm = TRUE
+
+    aggr_data <- get_adjusted_ci(
+      data = plot_data,
+      value_var = dv,
+      within = withinvars,
+      between = betweenvars,
+      wid = wid,
+      errorbar = bars,
+      drop_NA_subj = drop_NA_subj,
+      debug = debug
     )
+  } else {
+    aggr_data <- get_adjusted_ci(
+      data = plot_data,
+      value_var = dv,
+      between = c(withinvars, betweenvars),
+      errorbar = bars,
+      adjustments = list(purpose = "single", decorrelation = "none"),
+      debug = debug
+    )
+
+    # Keep the legacy columns used by the plotting/margin code below.
+    aggr_data[, dv] <- aggr_data$center
+    aggr_data[, bars] <- aggr_data$upperwidth
   }
   if (x_as_numeric) {
     aggr_data[, aes_list$x] <- as.numeric(as.character(aggr_data[, aes_list$x]))

@@ -27,12 +27,16 @@ res
 paste_and(res)
 paste_and(res, sep = ";")
 
-data(faces)
-# get mean response times (in ms) by response accuracy
-res <- as.vector(by(faces$answerTime * 1000, faces$correct, apa_mean_sd))
+data(memory_noise)
+# get bias and SD in the two experiment samples
+res <- as.vector(by(
+  memory_noise$bias_percent,
+  memory_noise$experiment,
+  apa_mean_sd
+))
 res
 # no comma with two groups
 paste_and(res)
-paste_and(res, suffix = " ms")
+paste_and(res, suffix = " percentage points")
 
 }

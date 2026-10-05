@@ -25,24 +25,26 @@ Describe the results of ANOVA models or model comparisons
 When using model comparison version, \code{term} can only be a number.
 }
 \examples{
-# Model comparison version
-mod1 <- lm(conformity ~ 1, data = carData::Moore)
-mod2 <- lm(conformity ~ fcategory, data = carData::Moore, 
-           contrasts = list(fcategory = contr.sum))
-mod3 <- lm(conformity ~ fcategory * partner.status, data = carData::Moore, 
-           contrasts = list(fcategory = contr.sum, partner.status = contr.sum))
-anova_obj <- anova(mod1, mod2, mod3)
+if (requireNamespace("carData", quietly = TRUE)) {
+  # Model comparison version
+  mod1 <- lm(conformity ~ 1, data = carData::Moore)
+  mod2 <- lm(conformity ~ fcategory, data = carData::Moore,
+             contrasts = list(fcategory = contr.sum))
+  mod3 <- lm(conformity ~ fcategory * partner.status, data = carData::Moore,
+             contrasts = list(fcategory = contr.sum, partner.status = contr.sum))
+  anova_obj <- anova(mod1, mod2, mod3)
 
-apa(anova_obj)
-apa(anova_obj, 3)
+  apa(anova_obj)
+  apa(anova_obj, 3)
 
-# car::Anova version
-if (requireNamespace("car", quietly = TRUE)) {
-  mod <- lm(conformity ~ fcategory * partner.status, data = carData::Moore, 
-            contrasts = list(fcategory = contr.sum, partner.status = contr.sum))
-  afit <- car::Anova(mod)
-  
-  apa(afit, "fcategory")
-  apa(afit, 2, 4)
+  # car::Anova version
+  if (requireNamespace("car", quietly = TRUE)) {
+    mod <- lm(conformity ~ fcategory * partner.status, data = carData::Moore,
+              contrasts = list(fcategory = contr.sum, partner.status = contr.sum))
+    afit <- car::Anova(mod)
+
+    apa(afit, "fcategory")
+    apa(afit, 2, 4)
+  }
 }
 }

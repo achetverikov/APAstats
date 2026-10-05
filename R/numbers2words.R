@@ -1,62 +1,84 @@
 numbers2words <- function(x) {
-  ## Function by John Fox found here:
-  ## http://tolstoy.newcastle.edu.au/R/help/05/04/2715.html
-  helper <- function(x) {
-    digits <- rev(strsplit(as.character(x), "")[[1]])
-    nDigits <- length(digits)
-    if (nDigits == 1) {
-      as.vector(ones[digits])
-    } else if (nDigits == 2) {
-      if (x <= 19) {
-        as.vector(teens[digits[1]])
-      } else {
-        trim(paste(
-          tens[digits[2]],
-          Recall(as.numeric(digits[1]))
-        ))
-      }
-    } else if (nDigits == 3) {
-      trim(paste(
-        ones[digits[3]], "hundred",
-        Recall(makeNumber(digits[2:1]))
-      ))
-    } else {
-      nSuffix <- ((nDigits + 2) %/% 3) - 1
-      if (nSuffix > length(suffixes)) stop(paste(x, "is too large!"))
-      trim(paste(
-        Recall(makeNumber(digits[
-          nDigits:(3 * nSuffix + 1)
-        ])),
-        suffixes[nSuffix],
-        Recall(makeNumber(digits[(3 * nSuffix):1]))
-      ))
-    }
+  if (!is.numeric(x)) {
+    stop("x must be numeric.")
   }
-  trim <- function(text) {
-    gsub("^\ ", "", gsub("\ *$", "", text))
-  }
-  makeNumber <- function(...) as.numeric(paste(..., collapse = ""))
-  opts <- options(scipen = 100)
-  on.exit(options(opts))
+
   ones <- c(
     "", "one", "two", "three", "four", "five", "six", "seven",
     "eight", "nine"
   )
-  names(ones) <- 0:9
   teens <- c(
     "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
-    "sixteen", " seventeen", "eighteen", "nineteen"
+    "sixteen", "seventeen", "eighteen", "nineteen"
   )
-  names(teens) <- 0:9
   tens <- c(
-    "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty",
-    "ninety"
+    "", "", "twenty", "thirty", "forty", "fifty", "sixty",
+    "seventy", "eighty", "ninety"
   )
-  names(tens) <- 2:9
-  x <- round(x)
-  suffixes <- c("thousand", "million", "billion", "trillion")
-  if (length(x) > 1) {
-    return(sapply(x, helper))
+  scales <- c("", "thousand", "million", "billion", "trillion")
+
+  under_thousand <- function(n) {
+    parts <- character()
+
+    hundreds <- n %/% 100
+    if (hundreds > 0) {
+      parts <- c(parts, ones[hundreds + 1], "hundred")
+      n <- n %% 100
+    }
+
+    if (n >= 20) {
+      parts <- c(parts, tens[n %/% 10 + 1])
+      n <- n %% 10
+      if (n > 0) {
+        parts <- c(parts, ones[n + 1])
+      }
+    } else if (n >= 10) {
+      parts <- c(parts, teens[n - 9])
+    } else if (n > 0) {
+      parts <- c(parts, ones[n + 1])
+    }
+
+    paste(parts, collapse = " ")
   }
-  helper(x)
+
+  convert_one <- function(value) {
+    if (is.na(value)) {
+      return(NA_character_)
+    }
+    if (!is.finite(value)) {
+      stop("x must contain only finite values or NA.")
+    }
+
+    value <- round(value)
+    if (abs(value) >= 1e15) {
+      stop("numbers2words supports absolute values below 1 quadrillion.")
+    }
+    if (value == 0) {
+      return("zero")
+    }
+    if (value < 0) {
+      return(paste("minus", convert_one(-value)))
+    }
+
+    pieces <- character()
+    scale_i <- 1L
+
+    while (value > 0) {
+      chunk <- value %% 1000
+      if (chunk > 0) {
+        chunk_words <- under_thousand(chunk)
+        scale_word <- scales[scale_i]
+        if (nzchar(scale_word)) {
+          chunk_words <- paste(chunk_words, scale_word)
+        }
+        pieces <- c(chunk_words, pieces)
+      }
+      value <- value %/% 1000
+      scale_i <- scale_i + 1L
+    }
+
+    paste(pieces, collapse = " ")
+  }
+
+  vapply(x, convert_one, character(1), USE.NAMES = FALSE)
 }

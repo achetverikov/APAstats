@@ -18,7 +18,8 @@ results of \eqn{\chi^2} or \emph{F} test
 Describe linearHypothesis test results
 }
 \examples{
-if (requireNamespace("car", quietly = TRUE)) {
+if (requireNamespace("car", quietly = TRUE) &&
+    requireNamespace("carData", quietly = TRUE)) {
   # Create a linear model
   mod.davis <- lm(weight ~ repwt, data = carData::Davis)
   

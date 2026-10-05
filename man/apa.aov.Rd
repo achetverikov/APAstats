@@ -27,14 +27,16 @@ formatted string with F(df_numerator, df_denomiator) = F_value, p =/< p_value
 Describe \link[stats:aov]{stats::aov} results, including repeated-measures models fitted with an \code{Error()} term (\code{aovlist} objects).
 }
 \examples{
-# Using the mtcars dataset
-fit <- aov(mpg ~ cyl * am, data = mtcars)
-apa(fit, 'cyl')
-apa(fit, 'am')
-apa(fit, 'cyl:am')
+if (requireNamespace("car", quietly = TRUE)) {
+  # Using the mtcars dataset
+  fit <- aov(mpg ~ cyl * am, data = mtcars)
+  apa(fit, 'cyl')
+  apa(fit, 'am')
+  apa(fit, 'cyl:am')
 
-# Using a different SS type
-apa(fit, 'cyl', sstype = 3)
+  # Using a different SS type
+  apa(fit, 'cyl', sstype = 3)
+}
 
 # Repeated-measures aov with an Error() term
 fit_rm <- aov(yield ~ N * P * K + Error(block), data = npk)

@@ -244,60 +244,21 @@ grid.arrange(p1, p2, ncol=2)
 
 ### Showing log-transformed data back untransformed
 
-Sometimes it is useful to analyze data log-transformed (e.g., in reaction time analyses), but to show it untransformed. _scale_y_exp_ comes in handy.
-
-
-```r
-library(scales)
-temp <- tempfile()
-download.file("http://cogjournal.org/2/1/files/ChetverikovRJCS2015SOMdata.zip",temp)
-faces <- data.table(read.csv(unz(temp, "faces_data.csv"), header = T))
-unlink(temp)
-
-faces[,logAT:=log(answerTime)]
-
-p0<-plot.pointrange(faces[correct==1, ], aes(x=user_gender, color=stim_gender, y=logAT), wid='uid')+ylab('Log RT')
-
-p0
-```
-
-![](example_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+The historical example previously downloaded the `faces` dataset from a URL that is no longer available. Current examples use the bundled `memory_noise` dataset derived from Chetverikov & Hansmann-Roth (2026).
 
 ```r
-p1<-plot.pointrange(faces[correct==1, ], aes(x=user_gender, color=stim_gender, y=logAT), wid='uid')+scale_y_exp(digits=2)+labs(x="Participant's gender", color="Face Gender", y='Untransformed RT')
+data(memory_noise)
+memory_noise$log_error <- log(memory_noise$mean_abs_error)
 
-p1
+p1 <- plot_pointrange(
+  memory_noise,
+  aes(x = relative_noise, color = experiment, y = log_error),
+  wid = "participant",
+  within_subj = TRUE,
+  withinvars = "relative_noise",
+  betweenvars = "experiment"
+) +
+  scale_y_exp(digits = 2)
 ```
 
-![](example_files/figure-html/unnamed-chunk-7-2.png)<!-- -->
-
-### Sharing legend and axis title between plots
-
-It is not very easy to share legend or axis title between plots. I modified a function from https://github.com/hadley/ggplot2/wiki/Share-a-legend-between-two-ggplot2-graphs to make it easier. 
-
-
-```r
-p2<-plot.pointrange(faces, aes(x=user_gender, color=stim_gender, y=correct), wid='uid')+labs(x="Participant's gender", color="Face Gender" ,y='Accuracy')
-
-p2
-```
-
-![](example_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
-
-```r
-grid_arrange_shared_legend(p1 + theme(legend.direction="horizontal"),p2)
-```
-
-![](example_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
-
-```r
-grid_arrange_shared_legend(p1, p2, stack = 'horizontal')
-```
-
-![](example_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
-
-```r
-grid_arrange_shared_legend(p1, p2, stack = 'horizontal', one_sub = T)
-```
-
-![](example_files/figure-html/unnamed-chunk-10-2.png)<!-- -->
+See `vignette("apastats2-intro")` for the maintained examples.
