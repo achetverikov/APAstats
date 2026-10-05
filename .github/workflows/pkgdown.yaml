@@ -2,8 +2,18 @@
 on:
   push:
     branches: [master]
+    paths-ignore:
+      - "tests/**"
+      - ".github/workflows/R-CMD-check.yaml"
+      - ".github/workflows/superb-parity.yaml"
+      - ".github/scripts/superb-parity.R"
   pull_request:
     branches: [master]
+    paths-ignore:
+      - "tests/**"
+      - ".github/workflows/R-CMD-check.yaml"
+      - ".github/workflows/superb-parity.yaml"
+      - ".github/scripts/superb-parity.R"
   release:
     types: [published]
   workflow_dispatch:
@@ -15,11 +25,13 @@ permissions: read-all
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
+concurrency:
+  group: pkgdown-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   pkgdown:
     runs-on: ubuntu-latest
-    concurrency:
-      group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     permissions:
