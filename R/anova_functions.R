@@ -13,25 +13,27 @@
 #' @export
 #'
 #' @examples
-#' # Model comparison version
-#' mod1 <- lm(conformity ~ 1, data = carData::Moore)
-#' mod2 <- lm(conformity ~ fcategory, data = carData::Moore, 
-#'            contrasts = list(fcategory = contr.sum))
-#' mod3 <- lm(conformity ~ fcategory * partner.status, data = carData::Moore, 
-#'            contrasts = list(fcategory = contr.sum, partner.status = contr.sum))
-#' anova_obj <- anova(mod1, mod2, mod3)
-#' 
-#' apa(anova_obj)
-#' apa(anova_obj, 3)
-#' 
-#' # car::Anova version
-#' if (requireNamespace("car", quietly = TRUE)) {
-#'   mod <- lm(conformity ~ fcategory * partner.status, data = carData::Moore, 
-#'             contrasts = list(fcategory = contr.sum, partner.status = contr.sum))
-#'   afit <- car::Anova(mod)
-#'   
-#'   apa(afit, "fcategory")
-#'   apa(afit, 2, 4)
+#' if (requireNamespace("carData", quietly = TRUE)) {
+#'   # Model comparison version
+#'   mod1 <- lm(conformity ~ 1, data = carData::Moore)
+#'   mod2 <- lm(conformity ~ fcategory, data = carData::Moore,
+#'              contrasts = list(fcategory = contr.sum))
+#'   mod3 <- lm(conformity ~ fcategory * partner.status, data = carData::Moore,
+#'              contrasts = list(fcategory = contr.sum, partner.status = contr.sum))
+#'   anova_obj <- anova(mod1, mod2, mod3)
+#'
+#'   apa(anova_obj)
+#'   apa(anova_obj, 3)
+#'
+#'   # car::Anova version
+#'   if (requireNamespace("car", quietly = TRUE)) {
+#'     mod <- lm(conformity ~ fcategory * partner.status, data = carData::Moore,
+#'               contrasts = list(fcategory = contr.sum, partner.status = contr.sum))
+#'     afit <- car::Anova(mod)
+#'
+#'     apa(afit, "fcategory")
+#'     apa(afit, 2, 4)
+#'   }
 #' }
 apa.anova <- function(obj, term = 2, f.digits = 2, ...) {
   if ("Df.res" %in% colnames(obj)) {
@@ -69,14 +71,16 @@ apa.anova <- function(obj, term = 2, f.digits = 2, ...) {
 #' @export
 #' 
 #' @examples
-#' # Using the mtcars dataset
-#' fit <- aov(mpg ~ cyl * am, data = mtcars)
-#' apa(fit, 'cyl')
-#' apa(fit, 'am')
-#' apa(fit, 'cyl:am')
-#' 
-#' # Using a different SS type
-#' apa(fit, 'cyl', sstype = 3)
+#' if (requireNamespace("car", quietly = TRUE)) {
+#'   # Using the mtcars dataset
+#'   fit <- aov(mpg ~ cyl * am, data = mtcars)
+#'   apa(fit, 'cyl')
+#'   apa(fit, 'am')
+#'   apa(fit, 'cyl:am')
+#'
+#'   # Using a different SS type
+#'   apa(fit, 'cyl', sstype = 3)
+#' }
 apa.aov <- function(obj, term, sstype = 2, ...) {
   if (requireNamespace("car", quietly = TRUE)) {
     afit <- car::Anova(obj, type = sstype)
@@ -445,7 +449,8 @@ apa.anova.merMod <- function(obj, term, f.digits = 2, ...) {
 #' @export
 #'
 #' @examples
-#' if (requireNamespace("car", quietly = TRUE)) {
+#' if (requireNamespace("car", quietly = TRUE) &&
+#'     requireNamespace("carData", quietly = TRUE)) {
 #'   # Create a linear model
 #'   mod.davis <- lm(weight ~ repwt, data = carData::Davis)
 #'   

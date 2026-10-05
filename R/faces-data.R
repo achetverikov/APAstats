@@ -2,7 +2,7 @@
 #'
 #' This dataset contains data on response times in a face identification task. The faces were presented for a short time, then two faces (old and new) appeared and participants were asked to choose the old one. The data contains the information about gender (both stimuli gender and participants gender) and answer accuracy and can used to illustrate the mixed models regression approach.
 #'
-#' You are free to use it under a Creative Commons Attribution 4.0 International License. When used in research papers, please cite: Chetverikov, A.A. (2015). Linear mixed effects regression in cognitive studies. The Russian Journal of Cognitive Science, 2(1), 41-51. URL: http://cogjournal.org/2/1/pdf/ChetverikovRJCS2015.pdf
+#' You are free to use it under a Creative Commons Attribution 4.0 International License. When used in research papers, please cite: Chetverikov, A.A. (2015). Linear mixed effects regression in cognitive studies. The Russian Journal of Cognitive Science, 2(1), 41-51.
 #'
 #' \itemize{
 #'  \item uid. participant ID
@@ -22,9 +22,9 @@
 #'
 #' @keywords datasets
 #'
-#' @references Chetverikov, A.A. (2015). Linear mixed effects regression in cognitive studies. The Russian Journal of Cognitive Science, 2(1), 41-51. URL: \href{http://cogjournal.org/2/1/pdf/ChetverikovRJCS2015.pdf}{http://cogjournal.org/2/1/pdf/ChetverikovRJCS2015.pdf}
+#' @references Chetverikov, A.A. (2015). Linear mixed effects regression in cognitive studies. The Russian Journal of Cognitive Science, 2(1), 41-51. A current copy of the article is available from the Cognitive Research Group publications page: \url{https://cogpsy.ru/publications/}
 #'
-#' @source \href{http://cogjournal.org/2/1/files/ChetverikovRJCS2015SOMdata.zip}{Supplemental data for Chetverikov (2015)}
+#' @source Data accompanying Chetverikov (2015).
 #'
 #'
 NULL
