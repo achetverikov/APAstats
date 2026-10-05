@@ -35,11 +35,11 @@ Tufte-like breaks for axes
 
 }}
 \examples{
-p <- ggplot(faces, aes(x = answerTime, y = correct)) + 
-  geom_smooth(method = glm, method.args = list(family = 'binomial')) +
+p <- ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() +
   theme_minimal()
- 
-p 
-p + base_breaks(faces$answerTime, scale = 'x') + base_breaks(faces$correct, scale = 'y')
 
+p
+p + base_breaks(mtcars$wt, scale = "x") +
+  base_breaks(mtcars$mpg, scale = "y")
 }

@@ -1,5 +1,9 @@
 # apastats2 1.0.4
 
+* Added the `memory_noise` example dataset derived from Chetverikov & Hansmann-Roth (2026), using unequal-noise trials and density-asymmetry bias scores; Exp. 1 vs. Exp. 1 HV is the between-subject factor and target relative noise is the within-subject factor.
+* Added `get_adjusted_ci()` as the general interval engine for between-subject, within-subject, and mixed designs; `plot_pointrange()` now uses it for both between- and within-subject summaries.
+* Reimplemented Cousineau-Morey intervals internally, removing the `superb`/`reshape2` dependency and the development-branch `Remotes` entry while documenting the implementation's basis in the `superb` framework.
+* `get_adjusted_ci()` supports arbitrary scalar summary functions, with superb-compatible SE/CI formulas for common statistics and custom precision-function hooks. The old `get_superb_ci()` name remains as a deprecated compatibility wrapper.
 * Added `apa()` support for `stats::aov()` models with `Error()` terms (`aovlist` objects), fixing #9.
 * Added `apa()` support for `afex::aov_ez`, `afex::aov_car`, and `afex::aov_4` results via `afex_aov` dispatch.
 * Added deprecated `describe.afex()` compatibility wrapper.

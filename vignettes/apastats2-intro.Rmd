@@ -68,33 +68,62 @@ glm_str
 
 Inline rendering example: GLM term result was `r glm_str`.
 
-## Confidence intervals for repeated-measures summaries
+## Adjusted confidence intervals
 
-`get_superb_ci()` computes summary statistics and interval columns suitable for plotting.
+`get_adjusted_ci()` computes summary statistics and interval columns for
+between-subject, within-subject, and mixed designs. The within-subject
+Cousineau-Morey implementation is adapted from the `superb` framework, but
+`apastats2` implements it internally and does not require `superb`.
 
-```{r, eval = requireNamespace("superb", quietly = TRUE)}
-data(faces)
-ci_data <- get_superb_ci(faces, "uid", "stim_gender", "answerTime")
-ci_data[, c("stim_gender", "descr")]
-```
+```{r}
+data(memory_noise)
 
-```{r, eval = !requireNamespace("superb", quietly = TRUE)}
-cat("Package 'superb' is not installed; skipping within-subject CI example.\n")
+# Between-subject intervals: standard vs high-variability sample
+target_higher <- memory_noise[
+  memory_noise$relative_noise == "target more noisy",
+]
+between_ci <- get_adjusted_ci(
+  target_higher,
+  value_var = "bias_percent",
+  between = "experiment",
+  wid = "participant"
+)
+between_ci[, c("experiment", "descr")]
+
+# Within-subject Cousineau-Morey intervals
+within_ci <- get_adjusted_ci(
+  memory_noise[memory_noise$experiment == "Exp. 1", ],
+  value_var = "bias_percent",
+  within = "relative_noise",
+  wid = "participant"
+)
+within_ci[, c("relative_noise", "descr")]
+
+# Mixed design
+mixed_ci <- get_adjusted_ci(
+  memory_noise,
+  value_var = "bias_percent",
+  within = "relative_noise",
+  between = "experiment",
+  wid = "participant"
+)
+mixed_ci[, c("experiment", "relative_noise", "descr")]
 ```
 
 ## Point-range plotting
 
 `plot_pointrange()` can be used directly for quick summaries.
 
-```{r, fig.width=5, fig.height=3, eval = requireNamespace("superb", quietly = TRUE)}
+```{r, fig.width=5, fig.height=3}
 plot_pointrange(
-  faces[correct == 1, ],
-  aes(x = user_gender, color = stim_gender, y = answerTime),
-  wid = "uid",
+  memory_noise,
+  aes(x = relative_noise, color = experiment, y = bias_percent),
+  wid = "participant",
   within_subj = TRUE,
-  withinvars = c("stim_gender"),
-  betweenvars = c("user_gender")
-)
+  withinvars = "relative_noise",
+  betweenvars = "experiment",
+  connecting_line = TRUE
+) + ylab("Bias toward non-target (%)")
 ```
 
 ## Misc helpers

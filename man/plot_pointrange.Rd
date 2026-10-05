@@ -108,39 +108,36 @@ Pointrange plot
 For point and line properties (e.g., pointfill) passing NULL allows to avoid setting these values (useful when they are mapped to some variables).
 }
 \examples{
-data(faces)
-# between-subject CI
-plot_pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime)) + ylab("RT")
+data(memory_noise)
 
-# within-subject CI
-plot_pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
-     within_subj = TRUE, withinvars = c("stim_gender"), betweenvars = c("user_gender")) +
-     ylab("RT")
-     
-# with bars showing standard errors
-plot_pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
-     within_subj = TRUE, withinvars = c("stim_gender"), betweenvars = c("user_gender"),
-     bars = 'se') + ylab("RT")
-     
-# same but also printing out aggregated data
-plot_pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
-     within_subj = TRUE, withinvars = c("stim_gender"), betweenvars = c("user_gender"),
-     bars = 'se', print_aggregated_data = TRUE) + ylab("RT")
-     
-# CIs with aggregating the data beforehand and using exp-transformed y-axis
-plot_pointrange(faces, aes(x = user_gender, color = stim_gender, y = answerTime), wid = "uid",
-     within_subj = TRUE, withinvars = c("stim_gender"), betweenvars = c("user_gender"),
-     bars = 'ci', exp_y = TRUE, do_aggregate = TRUE) + ylab("RT")
-     
-if (requireNamespace("afex", quietly = TRUE)) {
-  # Using the Stroop dataset from afex package
-  data(stroop, package = "afex")
-  # within-subject CI
-  plot_pointrange(stroop, aes(x = condition, color = congruency, y = rt), wid = "pno",
-     within_subj = TRUE, withinvars = c("congruency"), betweenvars = c("condition","study")) +
-     facet_grid(~study)+
-     ylab("RT")
-     
+# Between-subject CI: compare the two Experiment 1 samples
+target_higher <- memory_noise[
+  memory_noise$relative_noise == "target more noisy",
+]
+plot_pointrange(
+  target_higher,
+  aes(x = experiment, y = bias_percent)
+) + ylab("Bias toward non-target (\%)")
 
-}
+# Mixed design: relative noise is within subjects, experiment is between
+plot_pointrange(
+  memory_noise,
+  aes(x = relative_noise, color = experiment, y = bias_percent),
+  wid = "participant",
+  within_subj = TRUE,
+  withinvars = "relative_noise",
+  betweenvars = "experiment",
+  connecting_line = TRUE
+) + ylab("Bias toward non-target (\%)")
+
+# The same mixed design with standard errors
+plot_pointrange(
+  memory_noise,
+  aes(x = relative_noise, color = experiment, y = bias_percent),
+  wid = "participant",
+  within_subj = TRUE,
+  withinvars = "relative_noise",
+  betweenvars = "experiment",
+  bars = "se"
+) + ylab("Bias toward non-target (\%)")
 }

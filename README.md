@@ -45,7 +45,8 @@ Source: [`example/readme_output.Rmd`](example/readme_output.Rmd) (built-in R dat
 
 - `apa()`: formatted output for many model/test objects via S3 methods
 - `apa_*`: APA-formatted means, confidence intervals, test statistics
-- `plot_pointrange()`: point-range plotting with optional within-subject intervals
+- `get_adjusted_ci()`: confidence intervals/SEs for between-subject, within-subject, and mixed designs
+- `plot_pointrange()`: point-range plotting using the same adjusted-interval engine
 - misc utilities (`round_p()`, `f_round()`, `drop_empty_cols()`, etc.)
 
 ## Documentation
@@ -55,7 +56,7 @@ Source: [`example/readme_output.Rmd`](example/readme_output.Rmd) (built-in R dat
 
 ## Notes
 
-Some advanced methods rely on suggested packages (for example `ez`, `lme4`, `superb`, `emmeans`).
+Some advanced methods rely on suggested packages (for example `ez`, `lme4`, and `emmeans`).
 
 ## Deprecated Mappings
 
@@ -70,6 +71,10 @@ Use the following replacements:
 - `describe.mean.conf()` -> `apa_mean_conf()`
 - `describe.binom.mean.conf()` -> `apa_binom_mean_conf()`
 - `describe.mean.and.t()` -> `apa_mean_and_t()`
+
+Additional deprecated compatibility mapping:
+
+- `get_superb_ci()` -> `get_adjusted_ci()`
 
 For utility helpers, snake_case aliases are now available and dot-named forms are legacy:
 
