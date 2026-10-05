@@ -3,10 +3,27 @@ name: R-CMD-check
 on:
   push:
     branches: [master]
+    paths-ignore:
+      - "README.md"
+      - "_pkgdown.yml"
+      - ".github/workflows/pkgdown.yaml"
+      - ".github/workflows/superb-parity.yaml"
+      - ".github/scripts/superb-parity.R"
   pull_request:
+    paths-ignore:
+      - "README.md"
+      - "_pkgdown.yml"
+      - ".github/workflows/pkgdown.yaml"
+      - ".github/workflows/superb-parity.yaml"
+      - ".github/scripts/superb-parity.R"
+  workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: r-cmd-check-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   R-CMD-check:
@@ -32,37 +49,3 @@ jobs:
             error_on = "warning",
             check_dir = "check"
           )
-
-
-  superb-parity:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: r-lib/actions/setup-r@v2
-        with:
-          use-public-rspm: true
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          dependencies: '"hard"'
-          extra-packages: any::callr, any::remotes, any::reshape2
-      - name: Install superb baseline
-        shell: Rscript {0}
-        run: |
-          remotes::install_github(
-            "achetverikov/superb@fix-ddply-function-lookup",
-            dependencies = NA,
-            upgrade = "never"
-          )
-      - name: Install old and new apastats2
-        shell: bash
-        run: |
-          mkdir -p /tmp/apastats-old /tmp/apastats-new
-          Rscript -e 'remotes::install_github("achetverikov/APAstats@d7acabc0fc082200dfe1770606dd71491e157ad5", lib="/tmp/apastats-old", dependencies=FALSE, upgrade="never")'
-          R CMD INSTALL . --library=/tmp/apastats-new
-      - name: Compare against superb implementation
-        shell: bash
-        run: |
-          Rscript .github/scripts/superb-parity.R /tmp/apastats-old /tmp/apastats-new
