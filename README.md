@@ -51,6 +51,7 @@ Source: [`example/readme_output.Rmd`](example/readme_output.Rmd) (built-in R dat
 
 ## Documentation
 
+- Website: <https://achetverikov.github.io/APAstats/>
 - Function help: `?apa`, `?apa_mean_conf`, etc.
 - Vignette: `vignette("apastats2-intro", package = "apastats2")`
 
