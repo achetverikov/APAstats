@@ -1,0 +1,70 @@
+url: https://achetverikov.github.io/APAstats/
+template:
+  bootstrap: 5
+  math-rendering: mathjax
+
+navbar:
+  structure:
+    left:  [intro, reference, articles, tutorials, news]
+    right: [search, github, lightswitch]
+
+reference:
+- title: APA-style reporting
+  contents:
+  - apa
+  - starts_with("apa_")
+  - starts_with("apa.")
+
+- title: Confidence intervals and plotting
+  contents:
+  - get_adjusted_ci
+  - plot_pointrange
+  - table_mean_conf
+  - table_mean_conf_by
+  - binom_ci
+  - base_breaks
+  - starts_with("base_breaks_")
+  - scale_y_exp
+
+- title: Model helpers
+  contents:
+  - ins_lmer
+  - lmer_fixef
+
+- title: Utilities
+  contents:
+  - adv_cut
+  - aggr2
+  - drop_empty_cols
+  - f_round
+  - format_results
+  - get_grob_element
+  - lengthu
+  - load_libs
+  - mean_nn
+  - mean_round
+  - omit_zeroes
+  - paste_and
+  - round_p
+  - sd_nn
+  - sd_round
+  - seq_mean
+  - sum_nn
+
+- title: Datasets
+  contents:
+  - memory_noise
+
+- title: Deprecated compatibility
+  contents:
+  - apastats-deprecated
+
+authors:
+  sidebar:
+    roles: [aut, cre]
+
+figures:
+  dpi: 220
+  fig.ext: png
+  fig.width: 8
+  fig.asp: 0.5
