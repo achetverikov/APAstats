@@ -70,26 +70,9 @@
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"achetverikov/apastats"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="transition-from-apastats-to-apastats2">Transition from apastats to apastats2<a class="anchor" aria-label="anchor" href="#transition-from-apastats-to-apastats2"></a>
-</h2>
-<p>If you are migrating old scripts:</p>
-<ol style="list-style-type: decimal">
-<li>Install/load the new package:</li>
-</ol>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"achetverikov/apastats"</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://achetverikov.github.io/APAstats/">apastats2</a></span><span class="op">)</span></span></code></pre></div>
-<ol start="2" style="list-style-type: decimal">
-<li>Prefer <code><a href="reference/apa.html">apa()</a></code> and <code>apa_*</code> functions in new code.</li>
-<li>Legacy <code>describe.*</code> functions still work for now, but are deprecated and planned for removal.</li>
-<li>Legacy dot-named utility functions are also deprecated; use snake_case equivalents (see mapping below).</li>
-</ol>
-<p>In most cases, replacing <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library(apastats)</a></code> with <code><a href="https://achetverikov.github.io/APAstats/">library(apastats2)</a></code> and then progressively updating deprecated calls is enough.</p>
-</div>
-<div class="section level2">
 <h2 id="quick-example">Quick Example<a class="anchor" aria-label="anchor" href="#quick-example"></a>
 </h2>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://achetverikov.github.io/APAstats/">apastats2</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">t_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">t.test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span>, mean <span class="op">=</span> <span class="fl">10</span>, sd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
@@ -134,6 +117,23 @@
 <h2 id="notes">Notes<a class="anchor" aria-label="anchor" href="#notes"></a>
 </h2>
 <p>Some advanced methods rely on suggested packages (for example <code>ez</code>, <code>lme4</code>, and <code>emmeans</code>).</p>
+</div>
+<div class="section level2">
+<h2 id="transition-from-apastats-to-apastats2">Transition from apastats to apastats2<a class="anchor" aria-label="anchor" href="#transition-from-apastats-to-apastats2"></a>
+</h2>
+<p>If you are migrating old scripts:</p>
+<ol style="list-style-type: decimal">
+<li>Install/load the new package:</li>
+</ol>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"achetverikov/apastats"</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://achetverikov.github.io/APAstats/">apastats2</a></span><span class="op">)</span></span></code></pre></div>
+<ol start="2" style="list-style-type: decimal">
+<li>Prefer <code><a href="reference/apa.html">apa()</a></code> and <code>apa_*</code> functions in new code.</li>
+<li>Legacy <code>describe.*</code> functions still work for now, but are deprecated and planned for removal.</li>
+<li>Legacy dot-named utility functions are also deprecated; use snake_case equivalents (see mapping below).</li>
+</ol>
+<p>In most cases, replacing <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library(apastats)</a></code> with <code><a href="https://achetverikov.github.io/APAstats/">library(apastats2)</a></code> and then progressively updating deprecated calls is enough.</p>
 </div>
 <div class="section level2">
 <h2 id="deprecated-mappings">Deprecated Mappings<a class="anchor" aria-label="anchor" href="#deprecated-mappings"></a>
