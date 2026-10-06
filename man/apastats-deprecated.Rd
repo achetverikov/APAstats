@@ -279,7 +279,7 @@ Please use their replacements as indicated.
 \item \code{base.breaks} -> \link{base_breaks}
 \item \code{base.breaks.x} -> \link{base_breaks_x}
 \item \code{base.breaks.y} -> \link{base_breaks_y}
-\item \code{plot.pointrange} -> \link{plot_pointrange}
+\item \verb{plot.pointrange()} -> \link{plot_pointrange}
 \item \code{mymean} -> \link{mean_nn}
 \item \code{mysum} -> \link{sum_nn}
 \item \code{mysd} -> \link{sd_nn}
