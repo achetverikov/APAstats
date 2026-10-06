@@ -718,7 +718,7 @@ paste_and <- function(x, sep = ", ", suffix = "") {
 #' @examples
 #' data(memory_noise)
 #'
-#' # Between-subject intervals: Exp. 1 vs Exp. 1 HV
+#' # Between-subject intervals: Exp. 1A vs Exp. 1B
 #' target_higher <- memory_noise[
 #'   memory_noise$relative_noise == "target more noisy",
 #' ]
@@ -731,7 +731,7 @@ paste_and <- function(x, sep = ", ", suffix = "") {
 #'
 #' # Within-subject Cousineau-Morey intervals for relative noise
 #' get_adjusted_ci(
-#'   memory_noise[memory_noise$experiment == "Exp. 1", ],
+#'   memory_noise[memory_noise$experiment == "Exp. 1A", ],
 #'   value_var = "bias_percent",
 #'   within = "relative_noise",
 #'   wid = "participant"
