@@ -43,7 +43,7 @@
 #'   \item `base.breaks` -> [base_breaks]
 #'   \item `base.breaks.x` -> [base_breaks_x]
 #'   \item `base.breaks.y` -> [base_breaks_y]
-#'   \item `plot.pointrange` -> [plot_pointrange]
+#'   \item \verb{plot.pointrange()} -> [plot_pointrange]
 #'   \item `mymean` -> [mean_nn]
 #'   \item `mysum` -> [sum_nn]
 #'   \item `mysd` -> [sd_nn]
