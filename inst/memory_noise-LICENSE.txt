@@ -9,9 +9,9 @@ sublicense the Materials and to permit persons to whom the Materials
 are furnished to do so, subject to the following conditions:
 
 When using these Materials, please cite the paper:
- Chetverikov, A. & Hansmann-Roth, S. (2025). Noise in Competing
- Representations Determines the Direction of Memory Biases. bioRxiv,
- doi:10.64898/2025.12.17.694673.
+ Chetverikov, A. & Hansmann-Roth, S. (2026). Noise in Competing
+ Representations Determines the Direction of Memory Biases. eLife, 15,
+ RP111380. doi:10.7554/eLife.111380.1.
 
 If you re-use the simulations, please also cite the demixing model
 repository: https://github.com/achetverikov/demixing_model.
