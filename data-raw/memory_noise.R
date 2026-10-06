@@ -46,7 +46,7 @@ memory_noise[, participant := ifelse(
   sprintf("E1_HV_S%i", subject_number)
 )]
 memory_noise[, experiment := ifelse(
-  expName == "color_1", "Exp. 1", "Exp. 1 HV"
+  expName == "color_1", "Exp. 1A", "Exp. 1B"
 )]
 memory_noise[, high_noise_sd := ifelse(expName == "color_1", 20, 45)]
 memory_noise[, relative_noise := ifelse(
@@ -56,7 +56,7 @@ memory_noise[, relative_noise := ifelse(
 memory_noise$participant <- factor(memory_noise$participant)
 memory_noise$experiment <- factor(
   memory_noise$experiment,
-  levels = c("Exp. 1", "Exp. 1 HV")
+  levels = c("Exp. 1A", "Exp. 1B")
 )
 memory_noise$relative_noise <- factor(
   memory_noise$relative_noise,
