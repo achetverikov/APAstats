@@ -19,11 +19,12 @@ Imports:
     stringr,
     utils,
     Hmisc,
-    plyr
+    plyr,
+    labeling,
+    scales
 Suggests:
     knitr,
     rmarkdown,
-    labeling,
     lsr,
     MASS,
     pROC,
@@ -31,7 +32,6 @@ Suggests:
     lme4,
     ez,
     diptest,
-    scales,
     BayesFactor,
     brms,
     car,
