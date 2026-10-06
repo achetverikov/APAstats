@@ -125,7 +125,7 @@ doi:10.20982/tqmp.04.2.p061
 \examples{
 data(memory_noise)
 
-# Between-subject intervals: Exp. 1 vs Exp. 1 HV
+# Between-subject intervals: Exp. 1A vs Exp. 1B
 target_higher <- memory_noise[
   memory_noise$relative_noise == "target more noisy",
 ]
@@ -138,7 +138,7 @@ get_adjusted_ci(
 
 # Within-subject Cousineau-Morey intervals for relative noise
 get_adjusted_ci(
-  memory_noise[memory_noise$experiment == "Exp. 1", ],
+  memory_noise[memory_noise$experiment == "Exp. 1A", ],
   value_var = "bias_percent",
   within = "relative_noise",
   wid = "participant"
