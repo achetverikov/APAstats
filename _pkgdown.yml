@@ -60,6 +60,8 @@ reference:
   - apastats-deprecated
 
 authors:
+  Andrey Chetverikov:
+    href: https://andreychetverikov.org/
   sidebar:
     roles: [aut, cre]
 
