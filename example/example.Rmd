@@ -76,8 +76,15 @@ require(gridExtra)
 
 data(ergoStool)
 
-p1<-plot.pointrange(ergoStool, aes(x=Type, y=effort))+ggtitle('Usual CIs')
-p2<-plot.pointrange(ergoStool, aes(x=Type, y=effort), within_subj=T, wid='Subject')+ggtitle('Within-subject CIs')
+p1 <- plot.pointrange(ergoStool, aes(x = Type, y = effort)) +
+  labs(x = "Stool type", y = "Effort", title = "Usual CIs")
+p2 <- plot.pointrange(
+  ergoStool,
+  aes(x = Type, y = effort),
+  within_subj = TRUE,
+  wid = "Subject"
+) +
+  labs(x = "Stool type", y = "Effort", title = "Within-subject CIs")
 grid.arrange(p1, p2, ncol=2)
 ```
 
@@ -91,7 +98,7 @@ mtcars$log_mpg <- log(mtcars$mpg)
 p0 <- plot_pointrange(
   mtcars,
   aes(x = factor(cyl), y = log_mpg)
-) + ylab("Log mpg")
+) + labs(x = "Cylinders", y = "Log mpg")
 
 p0
 
