@@ -1,23 +1,22 @@
 #' Memory bias under relative-noise manipulations
 #'
-#' A compact participant-level dataset derived from Experiment 1 of
-#' Chetverikov and Hansmann-Roth (2026). The original Experiment 1 contained
-#' two independent samples. In Exp. 1 the high-noise stimulus had SD = 20
-#' degrees; in Exp. 1 HV it had SD = 45 degrees. Low-noise stimuli had
+#' A compact participant-level dataset derived from Experiments 1A and 1B of
+#' Chetverikov and Hansmann-Roth (2026). In Exp. 1A the high-noise stimulus had
+#' SD = 20 degrees; in Exp. 1B it had SD = 45 degrees. Low-noise stimuli had
 #' SD = 5 degrees in both samples.
 #'
 #' Only unequal-noise trials are included. Bias is estimated with the same
 #' weighted probability-density asymmetry approach used in the paper and
 #' averaged over target/non-target dissimilarities from 1 to 44 degrees, the
-#' range in which Experiment 1 showed the relative-noise interaction.
+#' range in which Experiments 1A and 1B showed the relative-noise interaction.
 #' Positive values indicate attraction toward the competing non-target and
 #' negative values indicate repulsion.
 #'
 #' \itemize{
 #'   \item participant. An anonymized participant identifier, unique across
-#'     the two samples.
-#'   \item experiment. Between-subject sample: \code{"Exp. 1"} or
-#'     \code{"Exp. 1 HV"}.
+#'     Experiments 1A and 1B.
+#'   \item experiment. Between-subject sample: \code{"Exp. 1A"} or
+#'     \code{"Exp. 1B"}.
 #'   \item high_noise_sd. High stimulus-noise standard deviation used in the
 #'     sample (20 or 45 degrees).
 #'   \item relative_noise. Ordered within-subject factor:
