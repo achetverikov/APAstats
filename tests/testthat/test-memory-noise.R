@@ -4,7 +4,7 @@ test_that("memory_noise has the intended mixed-design structure", {
   expect_equal(nrow(memory_noise), 70)
   expect_equal(length(unique(memory_noise$participant)), 35)
   exp_counts <- table(memory_noise$experiment)
-  expect_identical(names(exp_counts), c("Exp. 1", "Exp. 1 HV"))
+  expect_identical(names(exp_counts), c("Exp. 1A", "Exp. 1B"))
   expect_equal(as.integer(exp_counts), c(36L, 34L))
   expect_equal(
     levels(memory_noise$relative_noise),
@@ -48,7 +48,7 @@ test_that("memory_noise supports between, within, and mixed adjusted intervals",
   expect_true(all(is.finite(between$center)))
 
   within <- get_adjusted_ci(
-    memory_noise[memory_noise$experiment == "Exp. 1", ],
+    memory_noise[memory_noise$experiment == "Exp. 1A", ],
     value_var = "bias_percent",
     within = "relative_noise",
     wid = "participant"
