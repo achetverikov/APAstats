@@ -38,7 +38,6 @@ reference:
   - drop_empty_cols
   - f_round
   - format_results
-  - get_grob_element
   - lengthu
   - load_libs
   - mean_nn
