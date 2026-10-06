@@ -109,14 +109,17 @@ base_breaks_y <- function(x, addSegment = TRUE, ...) {
 #' @examples
 #' data(memory_noise)
 #'
-#' # Between-subject CI: compare the two Experiment 1 samples
+#' # Between-subject CI: compare Experiments 1A and 1B
 #' target_higher <- memory_noise[
 #'   memory_noise$relative_noise == "target more noisy",
 #' ]
 #' plot_pointrange(
 #'   target_higher,
 #'   aes(x = experiment, y = bias_percent)
-#' ) + ylab("Bias toward non-target (%)")
+#' ) + labs(
+#'   x = "Experiment",
+#'   y = "Bias toward non-target (%)"
+#' )
 #'
 #' # Mixed design: relative noise is within subjects, experiment is between
 #' plot_pointrange(
@@ -127,7 +130,16 @@ base_breaks_y <- function(x, addSegment = TRUE, ...) {
 #'   withinvars = "relative_noise",
 #'   betweenvars = "experiment",
 #'   connecting_line = TRUE
-#' ) + ylab("Bias toward non-target (%)")
+#' ) +
+#'   labs(
+#'     x = "Relative noise",
+#'     y = "Bias toward non-target (%)",
+#'     color = "Experiment"
+#'   ) +
+#'   scale_x_discrete(labels = c(
+#'     "target less noisy" = "Target less noisy",
+#'     "target more noisy" = "Target more noisy"
+#'   ))
 #'
 #' # The same mixed design with standard errors
 #' plot_pointrange(
@@ -138,7 +150,16 @@ base_breaks_y <- function(x, addSegment = TRUE, ...) {
 #'   withinvars = "relative_noise",
 #'   betweenvars = "experiment",
 #'   bars = "se"
-#' ) + ylab("Bias toward non-target (%)")
+#' ) +
+#'   labs(
+#'     x = "Relative noise",
+#'     y = "Bias toward non-target (%)",
+#'     color = "Experiment"
+#'   ) +
+#'   scale_x_discrete(labels = c(
+#'     "target less noisy" = "Target less noisy",
+#'     "target more noisy" = "Target more noisy"
+#'   ))
 #'
 
 
@@ -339,19 +360,4 @@ scale_y_exp <- function(digits = 0, ...) {
   scale_y_continuous(breaks = scales::trans_breaks("exp", function(x) log(x)), labels = scales::trans_format("exp", function(x) as.character(f_round(x, digits = digits))), ...)
 }
 
-#' Extract grob element by name
-#' @param ggplot_obj plot to extract grob from
-#' @param el element name to extract
-#'
-#' @return grob element
-#' @export
-#'
-#'
-get_grob_element <- function(ggplot_obj, el = "guide-box") {
-  tmp <- ggplot_gtable(ggplot_build(ggplot_obj))
-
-  leg <- which(tmp$layout$name == el)
-  legend <- tmp$grobs[[leg]]
-  return(legend)
-}
 
