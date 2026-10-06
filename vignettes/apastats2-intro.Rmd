@@ -92,7 +92,7 @@ between_ci[, c("experiment", "descr")]
 
 # Within-subject Cousineau-Morey intervals
 within_ci <- get_adjusted_ci(
-  memory_noise[memory_noise$experiment == "Exp. 1", ],
+  memory_noise[memory_noise$experiment == "Exp. 1A", ],
   value_var = "bias_percent",
   within = "relative_noise",
   wid = "participant"
@@ -123,7 +123,16 @@ plot_pointrange(
   withinvars = "relative_noise",
   betweenvars = "experiment",
   connecting_line = TRUE
-) + ylab("Bias toward non-target (%)")
+) +
+  labs(
+    x = "Relative noise",
+    y = "Bias toward non-target (%)",
+    color = "Experiment"
+  ) +
+  scale_x_discrete(labels = c(
+    "target less noisy" = "Target less noisy",
+    "target more noisy" = "Target more noisy"
+  ))
 ```
 
 ## Misc helpers
