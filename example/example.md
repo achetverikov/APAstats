@@ -228,7 +228,8 @@ require(gridExtra)
 ```r
 data(ergoStool)
 
-p1<-plot.pointrange(ergoStool, aes(x=Type, y=effort))+ggtitle('Usual CIs')
+p1 <- plot.pointrange(ergoStool, aes(x = Type, y = effort)) +
+  labs(x = "Stool type", y = "Effort", title = "Usual CIs")
 ```
 
 ```
@@ -236,7 +237,13 @@ p1<-plot.pointrange(ergoStool, aes(x=Type, y=effort))+ggtitle('Usual CIs')
 ```
 
 ```r
-p2<-plot.pointrange(ergoStool, aes(x=Type, y=effort), within_subj=T, wid='Subject')+ggtitle('Within-subject CIs')
+p2 <- plot.pointrange(
+  ergoStool,
+  aes(x = Type, y = effort),
+  within_subj = TRUE,
+  wid = "Subject"
+) +
+  labs(x = "Stool type", y = "Effort", title = "Within-subject CIs")
 grid.arrange(p1, p2, ncol=2)
 ```
 
@@ -258,6 +265,15 @@ p1 <- plot_pointrange(
   withinvars = "relative_noise",
   betweenvars = "experiment"
 ) +
+  labs(
+    x = "Relative noise",
+    y = "Mean absolute error",
+    color = "Experiment"
+  ) +
+  scale_x_discrete(labels = c(
+    "target less noisy" = "Target less noisy",
+    "target more noisy" = "Target more noisy"
+  )) +
   scale_y_exp(digits = 2)
 ```
 
