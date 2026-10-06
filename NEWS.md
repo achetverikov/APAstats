@@ -1,6 +1,6 @@
 # apastats2 1.0.4
 
-* Added the `memory_noise` example dataset derived from Chetverikov & Hansmann-Roth (2026), using unequal-noise trials and density-asymmetry bias scores; Exp. 1 vs. Exp. 1 HV is the between-subject factor and target relative noise is the within-subject factor.
+* Added the `memory_noise` example dataset derived from Chetverikov & Hansmann-Roth (2026), using unequal-noise trials and density-asymmetry bias scores; Exp. 1A vs. Exp. 1B is the between-subject factor and target relative noise is the within-subject factor.
 * Removed the legacy `faces` example dataset; maintained examples now use `memory_noise` or built-in datasets.
 * Added `get_adjusted_ci()` as the general interval engine for between-subject, within-subject, and mixed designs; `plot_pointrange()` now uses it for both between- and within-subject summaries.
 * Reimplemented Cousineau-Morey intervals internally, removing the `superb`/`reshape2` dependency and the development-branch `Remotes` entry while documenting the implementation's basis in the `superb` framework.
