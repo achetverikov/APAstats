@@ -184,14 +184,17 @@ variables).
 ``` r
 data(memory_noise)
 
-# Between-subject CI: compare the two Experiment 1 samples
+# Between-subject CI: compare Experiments 1A and 1B
 target_higher <- memory_noise[
   memory_noise$relative_noise == "target more noisy",
 ]
 plot_pointrange(
   target_higher,
   aes(x = experiment, y = bias_percent)
-) + ylab("Bias toward non-target (%)")
+) + labs(
+  x = "Experiment",
+  y = "Bias toward non-target (%)"
+)
 #> Warning: Variables experiment and experiment are not listed in withinvars or betweenvars but are used as plot parameters. They would be considered as betweenvars. 
 
 
@@ -204,7 +207,16 @@ plot_pointrange(
   withinvars = "relative_noise",
   betweenvars = "experiment",
   connecting_line = TRUE
-) + ylab("Bias toward non-target (%)")
+) +
+  labs(
+    x = "Relative noise",
+    y = "Bias toward non-target (%)",
+    color = "Experiment"
+  ) +
+  scale_x_discrete(labels = c(
+    "target less noisy" = "Target less noisy",
+    "target more noisy" = "Target more noisy"
+  ))
 #> `geom_line()`: Each group consists of only one observation.
 #> ℹ Do you need to adjust the group aesthetic?
 
@@ -218,5 +230,14 @@ plot_pointrange(
   withinvars = "relative_noise",
   betweenvars = "experiment",
   bars = "se"
-) + ylab("Bias toward non-target (%)")
+) +
+  labs(
+    x = "Relative noise",
+    y = "Bias toward non-target (%)",
+    color = "Experiment"
+  ) +
+  scale_x_discrete(labels = c(
+    "target less noisy" = "Target less noisy",
+    "target more noisy" = "Target more noisy"
+  ))
 ```

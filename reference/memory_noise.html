@@ -5,14 +5,12 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Memory bias under relative-noise manipulations — memory_noise"><meta name="description" content="A compact participant-level dataset derived from Experiment 1 of
-Chetverikov and Hansmann-Roth (2026). The original Experiment 1 contained
-two independent samples. In Exp. 1 the high-noise stimulus had SD = 20
-degrees; in Exp. 1 HV it had SD = 45 degrees. Low-noise stimuli had
-SD = 5 degrees in both samples."><meta property="og:description" content="A compact participant-level dataset derived from Experiment 1 of
-Chetverikov and Hansmann-Roth (2026). The original Experiment 1 contained
-two independent samples. In Exp. 1 the high-noise stimulus had SD = 20
-degrees; in Exp. 1 HV it had SD = 45 degrees. Low-noise stimuli had
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Memory bias under relative-noise manipulations — memory_noise"><meta name="description" content="A compact participant-level dataset derived from Experiments 1A and 1B of
+Chetverikov and Hansmann-Roth (2026). In Exp. 1A the high-noise stimulus had
+SD = 20 degrees; in Exp. 1B it had SD = 45 degrees. Low-noise stimuli had
+SD = 5 degrees in both samples."><meta property="og:description" content="A compact participant-level dataset derived from Experiments 1A and 1B of
+Chetverikov and Hansmann-Roth (2026). In Exp. 1A the high-noise stimulus had
+SD = 20 degrees; in Exp. 1B it had SD = 45 degrees. Low-noise stimuli had
 SD = 5 degrees in both samples."></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
@@ -52,10 +50,9 @@ SD = 5 degrees in both samples."></head><body>
     </div>
 
     <div class="ref-description section level2">
-    <p>A compact participant-level dataset derived from Experiment 1 of
-Chetverikov and Hansmann-Roth (2026). The original Experiment 1 contained
-two independent samples. In Exp. 1 the high-noise stimulus had SD = 20
-degrees; in Exp. 1 HV it had SD = 45 degrees. Low-noise stimuli had
+    <p>A compact participant-level dataset derived from Experiments 1A and 1B of
+Chetverikov and Hansmann-Roth (2026). In Exp. 1A the high-noise stimulus had
+SD = 20 degrees; in Exp. 1B it had SD = 45 degrees. Low-noise stimuli had
 SD = 5 degrees in both samples.</p>
     </div>
 
@@ -79,13 +76,13 @@ canonical CHR2026 representation used for model comparison.</p>
     <p>Only unequal-noise trials are included. Bias is estimated with the same
 weighted probability-density asymmetry approach used in the paper and
 averaged over target/non-target dissimilarities from 1 to 44 degrees, the
-range in which Experiment 1 showed the relative-noise interaction.
+range in which Experiments 1A and 1B showed the relative-noise interaction.
 Positive values indicate attraction toward the competing non-target and
 negative values indicate repulsion.</p>
 <ul><li><p>participant. An anonymized participant identifier, unique across
-    the two samples.</p></li>
-<li><p>experiment. Between-subject sample: <code>"Exp. 1"</code> or
-    <code>"Exp. 1 HV"</code>.</p></li>
+    Experiments 1A and 1B.</p></li>
+<li><p>experiment. Between-subject sample: <code>"Exp. 1A"</code> or
+    <code>"Exp. 1B"</code>.</p></li>
 <li><p>high_noise_sd. High stimulus-noise standard deviation used in the
     sample (20 or 45 degrees).</p></li>
 <li><p>relative_noise. Ordered within-subject factor:

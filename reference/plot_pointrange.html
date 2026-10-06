@@ -220,14 +220,17 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">memory_noise</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Between-subject CI: compare the two Experiment 1 samples</span></span></span>
+<span class="r-in"><span><span class="co"># Between-subject CI: compare Experiments 1A and 1B</span></span></span>
 <span class="r-in"><span><span class="va">target_higher</span> <span class="op">&lt;-</span> <span class="va">memory_noise</span><span class="op">[</span></span></span>
 <span class="r-in"><span>  <span class="va">memory_noise</span><span class="op">$</span><span class="va">relative_noise</span> <span class="op">==</span> <span class="st">"target more noisy"</span>,</span></span>
 <span class="r-in"><span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="fu">plot_pointrange</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">target_higher</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">experiment</span>, y <span class="op">=</span> <span class="va">bias_percent</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Bias toward non-target (%)"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="st">"Experiment"</span>,</span></span>
+<span class="r-in"><span>  y <span class="op">=</span> <span class="st">"Bias toward non-target (%)"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Variables experiment and experiment are not listed in withinvars or betweenvars but are used as plot parameters. They would be considered as betweenvars. </span>
 <span class="r-plt img"><img src="plot_pointrange-1.png" alt="" width="1760" height="880"></span>
 <span class="r-in"><span></span></span>
@@ -240,7 +243,16 @@
 <span class="r-in"><span>  withinvars <span class="op">=</span> <span class="st">"relative_noise"</span>,</span></span>
 <span class="r-in"><span>  betweenvars <span class="op">=</span> <span class="st">"experiment"</span>,</span></span>
 <span class="r-in"><span>  connecting_line <span class="op">=</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Bias toward non-target (%)"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    x <span class="op">=</span> <span class="st">"Relative noise"</span>,</span></span>
+<span class="r-in"><span>    y <span class="op">=</span> <span class="st">"Bias toward non-target (%)"</span>,</span></span>
+<span class="r-in"><span>    color <span class="op">=</span> <span class="st">"Experiment"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html" class="external-link">scale_x_discrete</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"target less noisy"</span> <span class="op">=</span> <span class="st">"Target less noisy"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"target more noisy"</span> <span class="op">=</span> <span class="st">"Target more noisy"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> `geom_line()`: Each group consists of only one observation.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Do you need to adjust the <span style="color: #00BB00;">group</span> aesthetic?</span>
 <span class="r-plt img"><img src="plot_pointrange-2.png" alt="" width="1760" height="880"></span>
@@ -254,7 +266,16 @@
 <span class="r-in"><span>  withinvars <span class="op">=</span> <span class="st">"relative_noise"</span>,</span></span>
 <span class="r-in"><span>  betweenvars <span class="op">=</span> <span class="st">"experiment"</span>,</span></span>
 <span class="r-in"><span>  bars <span class="op">=</span> <span class="st">"se"</span></span></span>
-<span class="r-in"><span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Bias toward non-target (%)"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    x <span class="op">=</span> <span class="st">"Relative noise"</span>,</span></span>
+<span class="r-in"><span>    y <span class="op">=</span> <span class="st">"Bias toward non-target (%)"</span>,</span></span>
+<span class="r-in"><span>    color <span class="op">=</span> <span class="st">"Experiment"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html" class="external-link">scale_x_discrete</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"target less noisy"</span> <span class="op">=</span> <span class="st">"Target less noisy"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"target more noisy"</span> <span class="op">=</span> <span class="st">"Target more noisy"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_pointrange-3.png" alt="" width="1760" height="880"></span>
 </code></pre></div>
     </div>

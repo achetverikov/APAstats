@@ -137,7 +137,7 @@ Please use their replacements as indicated.
 - `base.breaks.y` -\>
   [base_breaks_y](https://achetverikov.github.io/APAstats/reference/base_breaks.md)
 
-- `plot.pointrange` -\>
+- `plot.pointrange()` -\>
   [plot_pointrange](https://achetverikov.github.io/APAstats/reference/plot_pointrange.md)
 
 - `mymean` -\>

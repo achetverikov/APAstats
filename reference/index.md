@@ -130,9 +130,6 @@
 - [`format_results()`](https://achetverikov.github.io/APAstats/reference/format_results.md)
   : Format results
 
-- [`get_grob_element()`](https://achetverikov.github.io/APAstats/reference/get_grob_element.md)
-  : Extract grob element by name
-
 - [`lengthu()`](https://achetverikov.github.io/APAstats/reference/lengthu.md)
   : Length of unique values
 

@@ -154,12 +154,12 @@ internally and does not require <code>superb</code>.</p>
 <span><span class="op">)</span></span>
 <span><span class="va">between_ci</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"experiment"</span>, <span class="st">"descr"</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt;   experiment                      descr</span></span>
-<span><span class="co">#&gt; 1     Exp. 1  _M_ = 2.18 [-8.82, 13.18]</span></span>
-<span><span class="co">#&gt; 2  Exp. 1 HV _M_ = -9.33 [-19.11, 0.44]</span></span>
+<span><span class="co">#&gt; 1    Exp. 1A  _M_ = 2.18 [-8.82, 13.18]</span></span>
+<span><span class="co">#&gt; 2    Exp. 1B _M_ = -9.33 [-19.11, 0.44]</span></span>
 <span></span>
 <span><span class="co"># Within-subject Cousineau-Morey intervals</span></span>
 <span><span class="va">within_ci</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_adjusted_ci.html">get_adjusted_ci</a></span><span class="op">(</span></span>
-<span>  <span class="va">memory_noise</span><span class="op">[</span><span class="va">memory_noise</span><span class="op">$</span><span class="va">experiment</span> <span class="op">==</span> <span class="st">"Exp. 1"</span>, <span class="op">]</span>,</span>
+<span>  <span class="va">memory_noise</span><span class="op">[</span><span class="va">memory_noise</span><span class="op">$</span><span class="va">experiment</span> <span class="op">==</span> <span class="st">"Exp. 1A"</span>, <span class="op">]</span>,</span>
 <span>  value_var <span class="op">=</span> <span class="st">"bias_percent"</span>,</span>
 <span>  within <span class="op">=</span> <span class="st">"relative_noise"</span>,</span>
 <span>  wid <span class="op">=</span> <span class="st">"participant"</span></span>
@@ -179,10 +179,10 @@ internally and does not require <code>superb</code>.</p>
 <span><span class="op">)</span></span>
 <span><span class="va">mixed_ci</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"experiment"</span>, <span class="st">"relative_noise"</span>, <span class="st">"descr"</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt;   experiment    relative_noise                       descr</span></span>
-<span><span class="co">#&gt; 1     Exp. 1 target less noisy   _M_ = 3.08 [-6.60, 12.77]</span></span>
-<span><span class="co">#&gt; 2  Exp. 1 HV target less noisy  _M_ = -1.77 [-10.01, 6.47]</span></span>
-<span><span class="co">#&gt; 3     Exp. 1 target more noisy   _M_ = 2.18 [-7.51, 11.86]</span></span>
-<span><span class="co">#&gt; 4  Exp. 1 HV target more noisy _M_ = -9.33 [-17.57, -1.09]</span></span></code></pre></div>
+<span><span class="co">#&gt; 1    Exp. 1A target less noisy   _M_ = 3.08 [-6.60, 12.77]</span></span>
+<span><span class="co">#&gt; 2    Exp. 1B target less noisy  _M_ = -1.77 [-10.01, 6.47]</span></span>
+<span><span class="co">#&gt; 3    Exp. 1A target more noisy   _M_ = 2.18 [-7.51, 11.86]</span></span>
+<span><span class="co">#&gt; 4    Exp. 1B target more noisy _M_ = -9.33 [-17.57, -1.09]</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="point-range-plotting">Point-range plotting<a class="anchor" aria-label="anchor" href="#point-range-plotting"></a>
@@ -198,7 +198,16 @@ summaries.</p>
 <span>  withinvars <span class="op">=</span> <span class="st">"relative_noise"</span>,</span>
 <span>  betweenvars <span class="op">=</span> <span class="st">"experiment"</span>,</span>
 <span>  connecting_line <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Bias toward non-target (%)"</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="st">"Relative noise"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Bias toward non-target (%)"</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"Experiment"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html" class="external-link">scale_x_discrete</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"target less noisy"</span> <span class="op">=</span> <span class="st">"Target less noisy"</span>,</span>
+<span>    <span class="st">"target more noisy"</span> <span class="op">=</span> <span class="st">"Target more noisy"</span></span>
+<span>  <span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; `geom_line()`: Each group consists of only one observation.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Do you need to adjust the <span style="color: #00BB00;">group</span> aesthetic?</span></span></code></pre></div>
 <p><img src="apastats2-intro_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="1100"></p>

@@ -4,7 +4,7 @@
 
 - Added the `memory_noise` example dataset derived from Chetverikov &
   Hansmann-Roth (2026), using unequal-noise trials and density-asymmetry
-  bias scores; Exp. 1 vs. Exp. 1 HV is the between-subject factor and
+  bias scores; Exp. 1A vs. Exp. 1B is the between-subject factor and
   target relative noise is the within-subject factor.
 - Removed the legacy `faces` example dataset; maintained examples now
   use `memory_noise` or built-in datasets.

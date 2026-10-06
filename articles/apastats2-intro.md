@@ -102,12 +102,12 @@ between_ci <- get_adjusted_ci(
 )
 between_ci[, c("experiment", "descr")]
 #>   experiment                      descr
-#> 1     Exp. 1  _M_ = 2.18 [-8.82, 13.18]
-#> 2  Exp. 1 HV _M_ = -9.33 [-19.11, 0.44]
+#> 1    Exp. 1A  _M_ = 2.18 [-8.82, 13.18]
+#> 2    Exp. 1B _M_ = -9.33 [-19.11, 0.44]
 
 # Within-subject Cousineau-Morey intervals
 within_ci <- get_adjusted_ci(
-  memory_noise[memory_noise$experiment == "Exp. 1", ],
+  memory_noise[memory_noise$experiment == "Exp. 1A", ],
   value_var = "bias_percent",
   within = "relative_noise",
   wid = "participant"
@@ -127,10 +127,10 @@ mixed_ci <- get_adjusted_ci(
 )
 mixed_ci[, c("experiment", "relative_noise", "descr")]
 #>   experiment    relative_noise                       descr
-#> 1     Exp. 1 target less noisy   _M_ = 3.08 [-6.60, 12.77]
-#> 2  Exp. 1 HV target less noisy  _M_ = -1.77 [-10.01, 6.47]
-#> 3     Exp. 1 target more noisy   _M_ = 2.18 [-7.51, 11.86]
-#> 4  Exp. 1 HV target more noisy _M_ = -9.33 [-17.57, -1.09]
+#> 1    Exp. 1A target less noisy   _M_ = 3.08 [-6.60, 12.77]
+#> 2    Exp. 1B target less noisy  _M_ = -1.77 [-10.01, 6.47]
+#> 3    Exp. 1A target more noisy   _M_ = 2.18 [-7.51, 11.86]
+#> 4    Exp. 1B target more noisy _M_ = -9.33 [-17.57, -1.09]
 ```
 
 ## Point-range plotting
@@ -148,7 +148,16 @@ plot_pointrange(
   withinvars = "relative_noise",
   betweenvars = "experiment",
   connecting_line = TRUE
-) + ylab("Bias toward non-target (%)")
+) +
+  labs(
+    x = "Relative noise",
+    y = "Bias toward non-target (%)",
+    color = "Experiment"
+  ) +
+  scale_x_discrete(labels = c(
+    "target less noisy" = "Target less noisy",
+    "target more noisy" = "Target more noisy"
+  ))
 #> `geom_line()`: Each group consists of only one observation.
 #> ℹ Do you need to adjust the group aesthetic?
 ```

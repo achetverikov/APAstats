@@ -152,7 +152,7 @@ Psychology, 4*(2), 61-64. doi:10.20982/tqmp.04.2.p061
 ``` r
 data(memory_noise)
 
-# Between-subject intervals: Exp. 1 vs Exp. 1 HV
+# Between-subject intervals: Exp. 1A vs Exp. 1B
 target_higher <- memory_noise[
   memory_noise$relative_noise == "target more noisy",
 ]
@@ -163,15 +163,15 @@ get_adjusted_ci(
   wid = "participant"
 )
 #>   experiment    center lowerwidth upperwidth   lower_ci   upper_ci
-#> 1     Exp. 1  2.178637 -11.001061  11.001061  -8.822424 13.1796977
-#> 2  Exp. 1 HV -9.331493  -9.775628   9.775628 -19.107121  0.4441344
+#> 1    Exp. 1A  2.178637 -11.001061  11.001061  -8.822424 13.1796977
+#> 2    Exp. 1B -9.331493  -9.775628   9.775628 -19.107121  0.4441344
 #>                        descr
 #> 1  _M_ = 2.18 [-8.82, 13.18]
 #> 2 _M_ = -9.33 [-19.11, 0.44]
 
 # Within-subject Cousineau-Morey intervals for relative noise
 get_adjusted_ci(
-  memory_noise[memory_noise$experiment == "Exp. 1", ],
+  memory_noise[memory_noise$experiment == "Exp. 1A", ],
   value_var = "bias_percent",
   within = "relative_noise",
   wid = "participant"
@@ -192,10 +192,10 @@ get_adjusted_ci(
   wid = "participant"
 )
 #>      relative_noise experiment    center lowerwidth upperwidth   lower_ci
-#> 1 target less noisy     Exp. 1  3.082070  -9.684937   9.684937  -6.602867
-#> 2 target less noisy  Exp. 1 HV -1.768371  -8.239158   8.239158 -10.007529
-#> 3 target more noisy     Exp. 1  2.178637  -9.684937   9.684937  -7.506300
-#> 4 target more noisy  Exp. 1 HV -9.331493  -8.239158   8.239158 -17.570651
+#> 1 target less noisy    Exp. 1A  3.082070  -9.684937   9.684937  -6.602867
+#> 2 target less noisy    Exp. 1B -1.768371  -8.239158   8.239158 -10.007529
+#> 3 target more noisy    Exp. 1A  2.178637  -9.684937   9.684937  -7.506300
+#> 4 target more noisy    Exp. 1B -9.331493  -8.239158   8.239158 -17.570651
 #>    upper_ci                       descr
 #> 1 12.767006   _M_ = 3.08 [-6.60, 12.77]
 #> 2  6.470786  _M_ = -1.77 [-10.01, 6.47]
