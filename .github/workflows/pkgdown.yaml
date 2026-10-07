@@ -22,9 +22,6 @@ name: pkgdown.yaml
 
 permissions: read-all
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 concurrency:
   group: pkgdown-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
