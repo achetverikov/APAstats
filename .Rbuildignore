@@ -17,3 +17,7 @@
 ^\.gitattributes$
 ^\.gitmodules$
 ^\.github($|/)
+^.*\.Rcheck$
+^.*\.tar\.gz$
+^\.codex$
+^\.Rhistory$
