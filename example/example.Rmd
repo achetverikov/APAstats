@@ -68,7 +68,7 @@ Repeated measures ANOVA demonstrated a significant influence of cue on RT, `r de
 
 ### Plotting pointrange plots
 
-You can plot within-subject CIs with the help of summarySEwithin from http://www.cookbook-r.com/Graphs/Plotting_means_and_error_bars_%28ggplot2%29/
+You can plot within-subject CIs with `plot_pointrange(within_subj = TRUE)`, which uses `get_adjusted_ci()`.
 
 ```{r, pointrange_plots, message=F, cache=F}
 require(nlme)

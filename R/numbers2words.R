@@ -1,3 +1,5 @@
+# Rewritten from an earlier version based on a function by John Fox,
+# http://tolstoy.newcastle.edu.au/R/help/05/04/2715.html
 numbers2words <- function(x) {
   if (!is.numeric(x)) {
     stop("x must be numeric.")

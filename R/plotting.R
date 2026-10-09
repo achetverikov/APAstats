@@ -201,10 +201,7 @@ plot_pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
     as.character
   ), list(y = dv, ymin = "ymin", ymax = "ymax"))
   if (do_aggregate) {
-    plot_data <- summarySE(plot_data,
-      measurevar = dv,
-      groupvars = c(withinvars, betweenvars, wid), na.rm = TRUE
-    )
+    plot_data <- aggregate(plot_data[dv], plot_data[c(withinvars, betweenvars, wid)], mean)
   }
   if (within_subj) {
     if (length(withinvars) == 0 || is.null(withinvars)) {
@@ -243,17 +240,24 @@ plot_pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
       margin_x_vals <- unique(aggr_data[, aes_list$x])
     }
     data_for_margin <- aggr_data[aggr_data[, aes_list$x] %in% margin_x_vals, ]
-    if (within_subj) {
-      summ_data_for_margin <- summarySEwithin(data_for_margin,
-        measurevar = dv,
-        withinvars = withinvars[!(withinvars %in% aes_list$x)], betweenvars = betweenvars[!(betweenvars %in% aes_list$x)], idvar = aes_list$x, na.rm = TRUE
-      )
-    } else {
-      groupvars <- c(withinvars, betweenvars)
-      summ_data_for_margin <- summarySE(data_for_margin,
-        measurevar = dv,
-        groupvars = groupvars[!(groupvars %in% aes_list$x)], na.rm = TRUE
-      )
+    # the margin pools the x levels: they act as "subjects" for the remaining
+    # within-subject variables, or as plain observations if there are none
+    within_rest <- setdiff(withinvars, aes_list$x)
+    between_rest <- setdiff(betweenvars, aes_list$x)
+    margin_within <- within_subj && length(within_rest) > 0
+    summ_data_for_margin <- get_adjusted_ci(
+      data = data_for_margin,
+      value_var = "center",
+      within = if (margin_within) within_rest,
+      between = if (margin_within) between_rest else c(within_rest, between_rest),
+      wid = if (margin_within) aes_list$x,
+      errorbar = bars,
+      adjustments = if (!margin_within) list(purpose = "single", decorrelation = "none") else list(purpose = "single", decorrelation = NULL),
+      debug = debug
+    )
+    if (!within_subj) {
+      summ_data_for_margin[, dv] <- summ_data_for_margin$center
+      summ_data_for_margin[, bars] <- summ_data_for_margin$upperwidth
     }
     summ_data_for_margin[, aes_list$x] <- margin_label
     aggr_data <- plyr::rbind.fill(aggr_data, summ_data_for_margin)
