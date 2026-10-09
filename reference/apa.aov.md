@@ -40,7 +40,7 @@ apa(obj, term = NULL, f.digits = 2, ...)
 
 ## Value
 
-formatted string with F(df_numerator, df_denomiator) = F_value, p =/\<
+formatted string with F(df_numerator, df_denominator) = F_value, p =/\<
 p_value
 
 ## Examples

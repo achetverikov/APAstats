@@ -32,7 +32,7 @@ base_breaks_y(x, addSegment = TRUE, ...)
 
 ## Value
 
-scale\_(x or y)\_continuous with pretty breaks and accompaniying
+scale\_(x or y)\_continuous with pretty breaks and accompanying
 geom_segment if addSegment == TRUE
 
 ## Functions
@@ -52,6 +52,4 @@ p
 
 p + base_breaks(mtcars$wt, scale = "x") +
   base_breaks(mtcars$mpg, scale = "y")
-#> [1] 1.513 2.000 3.000 4.000 5.000 5.424
-#> [1] 10.4 15.0 20.0 25.0 30.0 33.9
 ```

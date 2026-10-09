@@ -12,7 +12,7 @@ scale_y_exp(digits = 0, ...)
 
 - digits:
 
-  number of digits to use in lables
+  number of digits to use in labels
 
 - ...:
 
