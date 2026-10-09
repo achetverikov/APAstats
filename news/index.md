@@ -1,6 +1,6 @@
 # Changelog
 
-## apastats2 1.0.4
+## apastats2 1.0.5
 
 - Removed the internal `summarySE()`, `summarySEwithin()` and
   `normDataWithin()` helpers;
@@ -8,6 +8,19 @@
   now computes margins with
   [`get_adjusted_ci()`](https://achetverikov.github.io/APAstats/reference/get_adjusted_ci.md),
   which also fixes `add_margin = TRUE` with `within_subj = TRUE`.
+- [`get_adjusted_ci()`](https://achetverikov.github.io/APAstats/reference/get_adjusted_ci.md)
+  no longer warns that the `drop` argument is ignored when reporting
+  incomplete cells.
+- [`base_breaks()`](https://achetverikov.github.io/APAstats/reference/base_breaks.md)
+  no longer prints the computed breaks.
+- Fixed typos in the documentation, added a spelling word list, and made
+  the
+  [`apa.BFBayesFactor()`](https://achetverikov.github.io/APAstats/reference/apa.BFBayesFactor.md)
+  example faster.
+- Changed the maintainer e-mail address.
+
+## apastats2 1.0.4
+
 - Added the `memory_noise` example dataset derived from Chetverikov &
   Hansmann-Roth (2026), using unequal-noise trials and density-asymmetry
   bias scores; Exp. 1A vs. Exp. 1B is the between-subject factor and

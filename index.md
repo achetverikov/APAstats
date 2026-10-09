@@ -35,7 +35,7 @@ mixed model, Bayes factor, and mean with confidence interval, as
 rendered text
 
 Source:
-[`example/readme_output.Rmd`](https://achetverikov.github.io/APAstats/example/readme_output.Rmd)
+[`example/readme_output.Rmd`](https://github.com/achetverikov/APAstats/blob/master/example/readme_output.Rmd)
 (built-in R datasets).
 
 ## Main Function Families

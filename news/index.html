@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">apastats2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,9 +43,18 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.0.4" id="apastats2-104">apastats2 1.0.4<a class="anchor" aria-label="anchor" href="#apastats2-104"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.0.5" id="apastats2-105">apastats2 1.0.5<a class="anchor" aria-label="anchor" href="#apastats2-105"></a></h2>
 <ul><li>Removed the internal <code>summarySE()</code>, <code>summarySEwithin()</code> and <code>normDataWithin()</code> helpers; <code><a href="../reference/plot_pointrange.html">plot_pointrange()</a></code> now computes margins with <code><a href="../reference/get_adjusted_ci.html">get_adjusted_ci()</a></code>, which also fixes <code>add_margin = TRUE</code> with <code>within_subj = TRUE</code>.</li>
-<li>Added the <code>memory_noise</code> example dataset derived from Chetverikov &amp; Hansmann-Roth (2026), using unequal-noise trials and density-asymmetry bias scores; Exp. 1A vs. Exp. 1B is the between-subject factor and target relative noise is the within-subject factor.</li>
+<li>
+<code><a href="../reference/get_adjusted_ci.html">get_adjusted_ci()</a></code> no longer warns that the <code>drop</code> argument is ignored when reporting incomplete cells.</li>
+<li>
+<code><a href="../reference/base_breaks.html">base_breaks()</a></code> no longer prints the computed breaks.</li>
+<li>Fixed typos in the documentation, added a spelling word list, and made the <code><a href="../reference/apa.BFBayesFactor.html">apa.BFBayesFactor()</a></code> example faster.</li>
+<li>Changed the maintainer e-mail address.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.4" id="apastats2-104">apastats2 1.0.4<a class="anchor" aria-label="anchor" href="#apastats2-104"></a></h2>
+<ul><li>Added the <code>memory_noise</code> example dataset derived from Chetverikov &amp; Hansmann-Roth (2026), using unequal-noise trials and density-asymmetry bias scores; Exp. 1A vs. Exp. 1B is the between-subject factor and target relative noise is the within-subject factor.</li>
 <li>Removed the legacy <code>faces</code> example dataset; maintained examples now use <code>memory_noise</code> or built-in datasets.</li>
 <li>Added <code><a href="../reference/get_adjusted_ci.html">get_adjusted_ci()</a></code> as the general interval engine for between-subject, within-subject, and mixed designs; <code><a href="../reference/plot_pointrange.html">plot_pointrange()</a></code> now uses it for both between- and within-subject summaries.</li>
 <li>Reimplemented Cousineau-Morey intervals internally, removing the <code>superb</code>/<code>reshape2</code> dependency and the development-branch <code>Remotes</code> entry while documenting the implementation’s basis in the <code>superb</code> framework.</li>
