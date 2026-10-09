@@ -22,7 +22,7 @@ base_breaks_y(x, addSegment = TRUE, ...)
 \item{...}{other parameters passed to scale_(x or y)_continuous}
 }
 \value{
-scale_(x or y)_continuous with pretty breaks and accompaniying geom_segment if addSegment == TRUE
+scale_(x or y)_continuous with pretty breaks and accompanying geom_segment if addSegment == TRUE
 }
 \description{
 Tufte-like breaks for axes

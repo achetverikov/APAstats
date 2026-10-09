@@ -5,7 +5,7 @@
 #' @param addSegment should we add a line to the scale? (T/F)
 #' @param ... other parameters passed to scale_(x or y)_continuous
 #'
-#' @return scale_(x or y)_continuous with pretty breaks and accompaniying geom_segment if addSegment == TRUE
+#' @return scale_(x or y)_continuous with pretty breaks and accompanying geom_segment if addSegment == TRUE
 #' @export
 #' 
 #' @examples
@@ -28,7 +28,6 @@ base_breaks <- function(x, scale = "x", addSegment = TRUE, ...) {
   if (round((b[length(b)] - b[length(b) - 1]) - (b[length(b) - 1] - b[length(b) - 2]), 5) > 0) {
     b <- b[c(1:(length(b) - 2), length(b))]
   }
-  print(b)
 
 
   if (scale == "x") {
@@ -350,7 +349,7 @@ plot_pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
 #'
 #' Helps to transform log-scale back to normal
 #'
-#' @param digits number of digits to use in lables
+#' @param digits number of digits to use in labels
 #' @param  ... other arguments passed to scale_y_continuous
 #'
 #' @return scale

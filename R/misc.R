@@ -918,7 +918,7 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
     if (nrow(missing) > 0L) {
       missing_display <- missing[c(wid, between)]
       missing_display$missing_condition <- apply(
-        missing[within, drop = FALSE],
+        missing[, within, drop = FALSE],
         1,
         function(z) paste(paste0(within, "=", z), collapse = ", ")
       )
@@ -961,44 +961,25 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
     if (decorrelation == "CM") {
       # Adapted from superb::twoStepTransform(): subject centering followed
       # by the Morey bias correction, separately within between-subject groups.
-      analysis_dt[
-        ,
-        c(".n_conditions") := data.table::uniqueN(get(".condition_key")),
-        by = ".between_key"
-      ]
+      analysis_dt[, c(".n_conditions") := data.table::uniqueN(get(".condition_key")),
+        by = ".between_key"]
       if (any(analysis_dt$.n_conditions < 2)) {
         stop(
           "Cousineau-Morey adjustment requires at least two within-subject conditions."
         )
       }
 
-      analysis_dt[
-        ,
-        c(".subject_mean") := mean(get(".value")),
-        by = unit_vars
-      ]
-      analysis_dt[
-        ,
-        c(".grand_mean") := mean(get(".subject_mean")),
-        by = ".between_key"
-      ]
-      analysis_dt[
-        ,
-        c(".cm_centered") :=
-          get(".value") - get(".subject_mean") + get(".grand_mean")
-      ]
-      analysis_dt[
-        ,
-        c(".condition_mean") := mean(get(".cm_centered")),
-        by = c(".between_key", ".condition_key")
-      ]
-      analysis_dt[
-        ,
-        c(".analysis_value") :=
-          sqrt(get(".n_conditions") / (get(".n_conditions") - 1)) *
+      analysis_dt[, c(".subject_mean") := mean(get(".value")), by = unit_vars]
+      analysis_dt[, c(".grand_mean") := mean(get(".subject_mean")),
+        by = ".between_key"]
+      analysis_dt[, c(".cm_centered") :=
+        get(".value") - get(".subject_mean") + get(".grand_mean")]
+      analysis_dt[, c(".condition_mean") := mean(get(".cm_centered")),
+        by = c(".between_key", ".condition_key")]
+      analysis_dt[, c(".analysis_value") :=
+        sqrt(get(".n_conditions") / (get(".n_conditions") - 1)) *
           (get(".cm_centered") - get(".condition_mean")) +
-          get(".condition_mean")
-      ]
+          get(".condition_mean")]
     } else {
       analysis_dt[, c(".analysis_value") := get(".value")]
     }
@@ -1050,16 +1031,10 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
   }
 
   if (length(summary_vars) > 0L) {
-    result <- analysis_dt[
-      ,
-      summarize_one(get(".analysis_value")),
-      by = summary_vars
-    ]
+    result <- analysis_dt[, summarize_one(get(".analysis_value")),
+      by = summary_vars]
   } else {
-    result <- analysis_dt[
-      ,
-      summarize_one(get(".analysis_value"))
-    ]
+    result <- analysis_dt[, summarize_one(get(".analysis_value"))]
   }
   result <- as.data.frame(result)
 
@@ -1103,11 +1078,7 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
     }
     message("Data used for interval computation:")
     print(
-      analysis_dt[
-        ,
-        c(summary_vars, ".analysis_value"),
-        with = FALSE
-      ]
+      analysis_dt[, c(summary_vars, ".analysis_value"), with = FALSE]
     )
   }
 

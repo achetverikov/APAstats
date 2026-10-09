@@ -7,7 +7,7 @@
 scale_y_exp(digits = 0, ...)
 }
 \arguments{
-\item{digits}{number of digits to use in lables}
+\item{digits}{number of digits to use in labels}
 
 \item{...}{other arguments passed to scale_y_continuous}
 }

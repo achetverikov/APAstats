@@ -21,7 +21,7 @@
 \item{...}{other parameters passed to \link{apa.anova}}
 }
 \value{
-formatted string with F(df_numerator, df_denomiator) = F_value, p =/< p_value
+formatted string with F(df_numerator, df_denominator) = F_value, p =/< p_value
 }
 \description{
 Describe \link[stats:aov]{stats::aov} results, including repeated-measures models fitted with an \code{Error()} term (\code{aovlist} objects).

@@ -66,7 +66,7 @@ apa.anova <- function(obj, term = 2, f.digits = 2, ...) {
 #' @param sstype anova SS type (e.g., 2 or 3)
 #' @param ... other parameters passed to [apa.anova]
 #'
-#' @return formatted string with F(df_numerator, df_denomiator) = F_value, p =/< p_value
+#' @return formatted string with F(df_numerator, df_denominator) = F_value, p =/< p_value
 #' @method apa aov
 #' @export
 #' 

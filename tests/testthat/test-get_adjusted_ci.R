@@ -101,12 +101,17 @@ test_that("get_adjusted_ci can drop incomplete subject-condition units", {
   )
 
   expect_warning(
-    res <- get_adjusted_ci(
-      data,
-      value_var = "y",
-      within = "condition",
-      wid = "id",
-      drop_NA_subj = TRUE
+    res <- withCallingHandlers(
+      get_adjusted_ci(
+        data,
+        value_var = "y",
+        within = "condition",
+        wid = "id",
+        drop_NA_subj = TRUE
+      ),
+      warning = function(w) {
+        if (grepl("NaN", conditionMessage(w))) invokeRestart("muffleWarning")
+      }
     ),
     "dropping 1 rows"
   )

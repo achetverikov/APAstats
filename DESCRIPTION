@@ -13,6 +13,7 @@ Description: Proper formatting of statistical results in accordance with
     Development repository: <https://github.com/achetverikov/APAstats>.
 License: GPL-3
 Encoding: UTF-8
+Language: en-US
 URL: https://achetverikov.github.io/APAstats/, https://github.com/achetverikov/APAstats
 BugReports: https://github.com/achetverikov/APAstats/issues
 Imports:
