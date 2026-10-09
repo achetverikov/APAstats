@@ -2,6 +2,12 @@
 
 ## apastats2 1.0.4
 
+- Removed the internal `summarySE()`, `summarySEwithin()` and
+  `normDataWithin()` helpers;
+  [`plot_pointrange()`](https://achetverikov.github.io/APAstats/reference/plot_pointrange.md)
+  now computes margins with
+  [`get_adjusted_ci()`](https://achetverikov.github.io/APAstats/reference/get_adjusted_ci.md),
+  which also fixes `add_margin = TRUE` with `within_subj = TRUE`.
 - Added the `memory_noise` example dataset derived from Chetverikov &
   Hansmann-Roth (2026), using unequal-noise trials and density-asymmetry
   bias scores; Exp. 1A vs. Exp. 1B is the between-subject factor and

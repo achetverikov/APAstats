@@ -53,9 +53,9 @@ if (requireNamespace("BayesFactor", quietly = TRUE)) {
   data(puzzles, package = "BayesFactor")
   
   # Run Bayesian ANOVA
-  bfs <- BayesFactor::anovaBF(RT ~ shape * color + ID, data = puzzles, progress = FALSE)
+  bfs <- BayesFactor::anovaBF(RT ~ shape + color + ID, data = puzzles, progress = FALSE)
   apa(bfs[1])
-  apa(bfs[2] / bfs[14])
+  apa(bfs[3] / bfs[1])
 }
-#> [1] "_BF_ = $2.21\\times 10^{-6}$"
+#> [1] "_BF_ = 2.73"
 ```
