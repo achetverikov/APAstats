@@ -1,6 +1,12 @@
-# apastats2 1.0.4
+# apastats2 1.0.5
 
 * Removed the internal `summarySE()`, `summarySEwithin()` and `normDataWithin()` helpers; `plot_pointrange()` now computes margins with `get_adjusted_ci()`, which also fixes `add_margin = TRUE` with `within_subj = TRUE`.
+* `get_adjusted_ci()` no longer warns that the `drop` argument is ignored when reporting incomplete cells.
+* `base_breaks()` no longer prints the computed breaks.
+* Fixed typos in the documentation, added a spelling word list, and made the `apa.BFBayesFactor()` example faster.
+* Changed the maintainer e-mail address.
+
+# apastats2 1.0.4
 * Added the `memory_noise` example dataset derived from Chetverikov & Hansmann-Roth (2026), using unequal-noise trials and density-asymmetry bias scores; Exp. 1A vs. Exp. 1B is the between-subject factor and target relative noise is the within-subject factor.
 * Removed the legacy `faces` example dataset; maintained examples now use `memory_noise` or built-in datasets.
 * Added `get_adjusted_ci()` as the general interval engine for between-subject, within-subject, and mixed designs; `plot_pointrange()` now uses it for both between- and within-subject summaries.

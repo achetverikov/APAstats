@@ -1,14 +1,14 @@
 Package: apastats2
 Type: Package
-Title: APA-Style Results
-Version: 1.0.4
+Title: Statistical Results in 'APA' Style
+Version: 1.0.5
 Authors@R: person(given = "Andrey",
     family = "Chetverikov",
-    email = "andrey.a.chetverikov@gmail.com",
+    email = "andrey.chetverikov@uib.no",
     role = c("aut", "cre"),
     comment = c(ORCID = "0000-0003-2767-6310"))
 Description: Proper formatting of statistical results in accordance with
-    the American Psychological Association Manual (6th ed.), along with
+    the American Psychological Association ('APA') Manual (sixth edition), along with
     convenient helpers for summaries, confidence intervals, and plotting.
     Development repository: <https://github.com/achetverikov/APAstats>.
 License: GPL-3

@@ -24,7 +24,7 @@ How the results look when the Markdown strings are rendered in R Markdown or Qua
 
 ![apastats2 output for a t-test, correlation, chi-square test, ANOVA, mixed model, Bayes factor, and mean with confidence interval, as rendered text](man/figures/readme-output.png)
 
-Source: [`example/readme_output.Rmd`](example/readme_output.Rmd) (built-in R datasets).
+Source: [`example/readme_output.Rmd`](https://github.com/achetverikov/APAstats/blob/master/example/readme_output.Rmd) (built-in R datasets).
 
 ## Main Function Families
 

@@ -4,9 +4,9 @@
 \name{apastats2-package}
 \alias{apastats2}
 \alias{apastats2-package}
-\title{apastats2: APA-Style Results}
+\title{apastats2: Statistical Results in 'APA' Style}
 \description{
-Proper formatting of statistical results in accordance with the American Psychological Association Manual (6th ed.), along with convenient helpers for summaries, confidence intervals, and plotting. Development repository: \url{https://github.com/achetverikov/APAstats}.
+Proper formatting of statistical results in accordance with the American Psychological Association ('APA') Manual (sixth edition), along with convenient helpers for summaries, confidence intervals, and plotting. Development repository: \url{https://github.com/achetverikov/APAstats}.
 }
 \seealso{
 Useful links:
@@ -17,7 +17,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Andrey Chetverikov \email{andrey.a.chetverikov@gmail.com} (\href{https://orcid.org/0000-0003-2767-6310}{ORCID})
+\strong{Maintainer}: Andrey Chetverikov \email{andrey.chetverikov@uib.no} (\href{https://orcid.org/0000-0003-2767-6310}{ORCID})
 
 }
 \keyword{internal}
