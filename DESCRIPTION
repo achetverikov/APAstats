@@ -1,7 +1,7 @@
 Package: apastats2
 Type: Package
 Title: Statistical Results in 'APA' Style
-Version: 1.0.5
+Version: 1.0.6
 Authors@R: person(given = "Andrey",
     family = "Chetverikov",
     email = "andrey.chetverikov@uib.no",
@@ -24,6 +24,7 @@ Imports:
     labeling,
     scales
 Suggests:
+    superb,
     knitr,
     rmarkdown,
     lsr,

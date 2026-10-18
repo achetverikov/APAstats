@@ -674,10 +674,14 @@ paste_and <- function(x, sep = ", ", suffix = "") {
 #'   optional; if supplied, repeated rows are aggregated within subject/group
 #'   cells before intervals are computed.
 #' @param adjustments adjustment settings. Supports purpose = "single" or
-#'   "difference". decorrelation can be "CM" or "none" for within-subject
+#'   "difference". decorrelation can be "CM", "CA", or "none" for within-subject
 #'   designs and must be "none" for purely between-subject designs. If omitted,
 #'   decorrelation defaults to "CM" when within is supplied and "none"
-#'   otherwise.
+#'   otherwise. CA multiplies interval widths by sqrt(1 - r), where r is the
+#'   mean Pearson correlation across all pairs of aggregated within-subject
+#'   conditions, estimated separately in each between-subject group. It requires
+#'   at least two complete subjects, two conditions, and nonzero variance in
+#'   every condition. Centers are unchanged.
 #' @param errorbar "CI", "SE", "none", or a precision function. A precision
 #'   function receives the condition vector and returns either one error-bar
 #'   width or two interval limits.
@@ -866,8 +870,8 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
   if (!(purpose %in% c("single", "difference"))) {
     stop('Only adjustments$purpose = "single" or "difference" is supported.')
   }
-  if (!(decorrelation %in% c("CM", "NONE"))) {
-    stop('Only adjustments$decorrelation = "CM" or "none" is supported.')
+  if (!(decorrelation %in% c("CM", "CA", "NONE"))) {
+    stop('Only adjustments$decorrelation = "CM", "CA", or "none" is supported.')
   }
   if (!has_within && decorrelation != "NONE") {
     stop("Within-subject decorrelation cannot be used when within is NULL.")
@@ -984,6 +988,27 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
       analysis_dt[, c(".analysis_value") := get(".value")]
     }
 
+    if (decorrelation == "CA") {
+      # superb's correlation adjustment uses the mean of all pairwise
+      # condition correlations, independently within each between group.
+      analysis_dt[, c(".ca_multiplier") := {
+        wide <- data.table::dcast(
+          .SD, .unit_key ~ .condition_key, value.var = ".value"
+        )
+        values <- as.matrix(wide[, -1L, with = FALSE])
+        if (ncol(values) < 2L || nrow(values) < 2L) {
+          stop("CA adjustment requires at least two complete subjects and two within-subject conditions per between-subject group.")
+        }
+        if (any(!is.finite(values)) ||
+            any(apply(values, 2L, stats::sd) == 0)) {
+          stop("CA adjustment requires finite values and nonzero variance in every condition within each between-subject group.")
+        }
+        correlations <- stats::cor(values)
+        r_bar <- mean(correlations[upper.tri(correlations)])
+        sqrt(1 - min(1, max(-1, r_bar)))
+      }, by = ".between_key"]
+    }
+
     summary_vars <- c(within, between)
   } else {
     if (is.null(wid)) {
@@ -1007,7 +1032,7 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
 
   purpose_multiplier <- if (purpose == "difference") sqrt(2) else 1
 
-  summarize_one <- function(analysis_value) {
+  summarize_one <- function(analysis_value, ca_multiplier = 1) {
     center <- scalar_summary(analysis_value)
     precision <- .call_interval_precision(
       precision_fun,
@@ -1025,14 +1050,16 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
 
     list(
       center = center,
-      lowerwidth = purpose_multiplier * lowerwidth,
-      upperwidth = purpose_multiplier * upperwidth
+      lowerwidth = purpose_multiplier * ca_multiplier * lowerwidth,
+      upperwidth = purpose_multiplier * ca_multiplier * upperwidth
     )
   }
 
   if (length(summary_vars) > 0L) {
-    result <- analysis_dt[, summarize_one(get(".analysis_value")),
-      by = summary_vars]
+    result <- analysis_dt[, summarize_one(
+      get(".analysis_value"),
+      if (decorrelation == "CA") get(".ca_multiplier")[1L] else 1
+    ), by = summary_vars]
   } else {
     result <- analysis_dt[, summarize_one(get(".analysis_value"))]
   }

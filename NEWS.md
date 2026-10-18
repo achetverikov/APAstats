@@ -1,3 +1,8 @@
+# apastats2 1.0.6
+
+* `get_adjusted_ci()` now supports correlation-adjusted (`decorrelation = "CA"`) intervals for within-subject and mixed designs, using the mean pairwise condition correlation separately within each between-subject group. The default remains Cousineau-Morey (`"CM"`).
+* CA supports the existing aggregation, confidence-level, precision-function, missing-subject, and difference-purpose options. Undefined correlations produce informative errors. The implementation has no runtime dependency on `superb`; regression tests compare against it when available.
+
 # apastats2 1.0.5
 
 * Removed the internal `summarySE()`, `summarySEwithin()` and `normDataWithin()` helpers; `plot_pointrange()` now computes margins with `get_adjusted_ci()`, which also fixes `add_margin = TRUE` with `within_subj = TRUE`.

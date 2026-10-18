@@ -131,7 +131,7 @@ test_that("get_adjusted_ci rejects unsupported decorrelation options", {
       value_var = "y",
       within = "condition",
       wid = "id",
-      adjustments = list(purpose = "single", decorrelation = "CA")
+      adjustments = list(purpose = "single", decorrelation = "unsupported")
     ),
     "decorrelation"
   )

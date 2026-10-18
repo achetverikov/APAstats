@@ -53,10 +53,14 @@ optional; if supplied, repeated rows are aggregated within subject/group
 cells before intervals are computed.}
 
 \item{adjustments}{adjustment settings. Supports \code{purpose = "single"} or
-\code{"difference"}. \code{decorrelation} can be \code{"CM"} or
+\code{"difference"}. \code{decorrelation} can be \code{"CM"}, \code{"CA"}, or
 \code{"none"} for within-subject designs and must be \code{"none"} for
 purely between-subject designs. If omitted, decorrelation defaults to
-\code{"CM"} when \code{within} is supplied and \code{"none"} otherwise.}
+\code{"CM"} when \code{within} is supplied and \code{"none"} otherwise. CA multiplies interval widths by sqrt(1 - r), where r is the
+mean Pearson correlation across all pairs of aggregated within-subject
+conditions, estimated separately in each between-subject group. It requires
+at least two complete subjects, two conditions, and nonzero variance in
+every condition. Centers are unchanged.}
 
 \item{errorbar}{\code{"CI"}, \code{"SE"}, \code{"none"}, or a precision
 function. A precision function receives the condition vector and returns
