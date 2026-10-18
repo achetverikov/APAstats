@@ -70,10 +70,15 @@ get_superb_ci(
 - adjustments:
 
   adjustment settings. Supports `purpose = "single"` or `"difference"`.
-  `decorrelation` can be `"CM"` or `"none"` for within-subject designs
-  and must be `"none"` for purely between-subject designs. If omitted,
-  decorrelation defaults to `"CM"` when `within` is supplied and
-  `"none"` otherwise.
+  `decorrelation` can be `"CM"`, `"CA"`, or `"none"` for within-subject
+  designs and must be `"none"` for purely between-subject designs. If
+  omitted, decorrelation defaults to `"CM"` when `within` is supplied
+  and `"none"` otherwise. CA multiplies interval widths by sqrt(1 - r),
+  where r is the mean Pearson correlation across all pairs of aggregated
+  within-subject conditions, estimated separately in each
+  between-subject group. It requires at least two complete subjects, two
+  conditions, and nonzero variance in every condition. Centers are
+  unchanged.
 
 - errorbar:
 
@@ -126,8 +131,10 @@ The within-subject implementation and statistic-specific precision
 conventions are adapted from the superb framework and its R
 implementation (Cousineau, Goulet, & Harding, 2021). In particular, the
 Cousineau-Morey path follows the two-step centering and bias-correction
-algorithm used by `superb::twoStepTransform()`. The code is implemented
-locally; apastats2 does not depend on or call superb.
+algorithm used by
+[`superb::twoStepTransform()`](http://dcousin3.github.io/superb/reference/twoStepTransform.md).
+The code is implemented locally; apastats2 does not depend on or call
+superb.
 
 `get_superb_ci()` is retained as a deprecated compatibility wrapper. New
 code should use `get_adjusted_ci()`.

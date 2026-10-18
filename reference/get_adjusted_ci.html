@@ -21,7 +21,7 @@ within subject-by-group cells."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">apastats2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -124,10 +124,14 @@ cells before intervals are computed.</p></dd>
 
 <dt id="arg-adjustments">adjustments<a class="anchor" aria-label="anchor" href="#arg-adjustments"></a></dt>
 <dd><p>adjustment settings. Supports <code>purpose = "single"</code> or
-<code>"difference"</code>. <code>decorrelation</code> can be <code>"CM"</code> or
+<code>"difference"</code>. <code>decorrelation</code> can be <code>"CM"</code>, <code>"CA"</code>, or
 <code>"none"</code> for within-subject designs and must be <code>"none"</code> for
 purely between-subject designs. If omitted, decorrelation defaults to
-<code>"CM"</code> when <code>within</code> is supplied and <code>"none"</code> otherwise.</p></dd>
+<code>"CM"</code> when <code>within</code> is supplied and <code>"none"</code> otherwise. CA multiplies interval widths by sqrt(1 - r), where r is the
+mean Pearson correlation across all pairs of aggregated within-subject
+conditions, estimated separately in each between-subject group. It requires
+at least two complete subjects, two conditions, and nonzero variance in
+every condition. Centers are unchanged.</p></dd>
 
 
 <dt id="arg-errorbar">errorbar<a class="anchor" aria-label="anchor" href="#arg-errorbar"></a></dt>
@@ -181,7 +185,7 @@ as a function.</p></dd>
 are adapted from the <span class="pkg">superb</span> framework and its R implementation
 (Cousineau, Goulet, &amp; Harding, 2021). In particular, the Cousineau-Morey path
 follows the two-step centering and bias-correction algorithm used by
-<code>superb::twoStepTransform()</code>. The code is implemented locally;
+<code><a href="http://dcousin3.github.io/superb/reference/twoStepTransform.html" class="external-link">superb::twoStepTransform()</a></code>. The code is implemented locally;
 <span class="pkg">apastats2</span> does not depend on or call <span class="pkg">superb</span>.</p>
 <p><code>get_superb_ci()</code> is retained as a deprecated compatibility wrapper.
 New code should use <code>get_adjusted_ci()</code>.</p>

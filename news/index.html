@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">apastats2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,6 +42,12 @@
       <small>Source: <a href="https://github.com/achetverikov/APAstats/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.6" id="apastats2-106">apastats2 1.0.6<a class="anchor" aria-label="anchor" href="#apastats2-106"></a></h2>
+<ul><li>
+<code><a href="../reference/get_adjusted_ci.html">get_adjusted_ci()</a></code> now supports correlation-adjusted (<code>decorrelation = "CA"</code>) intervals for within-subject and mixed designs, using the mean pairwise condition correlation separately within each between-subject group. The default remains Cousineau-Morey (<code>"CM"</code>).</li>
+<li>CA supports the existing aggregation, confidence-level, precision-function, missing-subject, and difference-purpose options. Undefined correlations produce informative errors. The implementation has no runtime dependency on <code>superb</code>; regression tests compare against it when available.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.5" id="apastats2-105">apastats2 1.0.5<a class="anchor" aria-label="anchor" href="#apastats2-105"></a></h2>
 <ul><li>Removed the internal <code>summarySE()</code>, <code>summarySEwithin()</code> and <code>normDataWithin()</code> helpers; <code><a href="../reference/plot_pointrange.html">plot_pointrange()</a></code> now computes margins with <code><a href="../reference/get_adjusted_ci.html">get_adjusted_ci()</a></code>, which also fixes <code>add_margin = TRUE</code> with <code>within_subj = TRUE</code>.</li>
