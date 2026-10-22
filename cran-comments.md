@@ -43,9 +43,7 @@ verified with a real fitted model. For this check, a temporary library supplied
 StanHeaders 2.32.10 compatible with the locally installed rstan 2.32.7; the
 regular installed library was not changed.
 
-Version 1.1.0 changes the version metadata, release notes, and submission
-comments only; R code, generated help files, and tests are unchanged from the
-fully checked 1.0.5 source. Version 1.1.0 was rebuilt successfully (including
-the vignette), installed in a temporary library, and loaded with its version
-verified. The full check has not been repeated for this metadata-only bump;
-remote checks have not been rerun.
+Version 1.1.0 incorporates the review fixes above and merges the additional
+CA validation and tests from the remote 1.0.6 revision. The package code and
+tests were verified locally after the merge; the full checks reported above
+describe the earlier 1.0.5 snapshot.

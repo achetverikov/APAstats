@@ -24,6 +24,7 @@ Imports:
     labeling,
     scales
 Suggests:
+    superb,
     knitr,
     rmarkdown,
     lsr,

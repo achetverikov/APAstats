@@ -61,7 +61,8 @@ otherwise. CA (correlation adjustment) multiplies interval widths by
 pairs of within-subject conditions, computed separately within each
 between-subject group after cell aggregation and incomplete-unit removal.
 Centers are unchanged. CA requires at least two complete subjects and
-two conditions per group, with nonzero variance in every condition.}
+two conditions per group, with finite values and nonzero variance in
+every condition.}
 
 \item{errorbar}{"CI", "SE", "none", or a precision function. A precision
 function receives the condition vector and returns either one error-bar

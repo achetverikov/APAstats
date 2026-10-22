@@ -582,7 +582,8 @@ paste_and <- function(x, sep = ", ", suffix = "") {
 #'   pairs of within-subject conditions, computed separately within each
 #'   between-subject group after cell aggregation and incomplete-unit removal.
 #'   Centers are unchanged. CA requires at least two complete subjects and
-#'   two conditions per group, with nonzero variance in every condition.
+#'   two conditions per group, with finite values and nonzero variance in
+#'   every condition.
 #' @param errorbar "CI", "SE", "none", or a precision function. A precision
 #'   function receives the condition vector and returns either one error-bar
 #'   width or two interval limits.
@@ -915,8 +916,8 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
       if (nrow(values) < 2 || ncol(values) < 2) {
         stop("CA adjustment requires at least two complete subjects and two conditions per group.")
       }
-      if (any(apply(values, 2, stats::sd) == 0)) {
-        stop("CA adjustment requires nonzero variance in every within-subject condition.")
+      if (any(!is.finite(values)) || any(apply(values, 2, stats::sd) == 0)) {
+        stop("CA adjustment requires finite values and nonzero variance in every within-subject condition.")
       }
       correlations <- stats::cor(values)
       list(multiplier = sqrt(1 - mean(correlations[upper.tri(correlations)])))
