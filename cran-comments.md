@@ -26,7 +26,7 @@ the within-subject default. CA results matched superb 1.0.1 in 16 numerical
 comparisons spanning mixed groups, four summary statistics, CI/SE, and
 single/difference purposes.
 
-## Local validation of version 1.0.5 (2026-10-22)
+## Full local validation of version 1.1.0 (2026-10-22)
 
 Built the source tarball and checked it on Windows 11, R 4.6.1, using
 R CMD check --as-cran --timings with _R_CHECK_DONTTEST_EXAMPLES_=true:
@@ -37,13 +37,21 @@ R CMD check --as-cran --timings with _R_CHECK_DONTTEST_EXAMPLES_=true:
 * A lastMiKTeXException temporary file from the local MiKTeX installation.
   Both the PDF and HTML manuals built successfully.
 
-All 156 test assertions passed, with no warnings or skips. Regular examples,
-donttest examples, and vignette rebuilding passed. The brms example was also
-verified with a real fitted model. For this check, a temporary library supplied
-StanHeaders 2.32.10 compatible with the locally installed rstan 2.32.7; the
-regular installed library was not changed.
+All 197 test assertions passed, with no warnings or skips. Regular examples,
+donttest examples, and vignette rebuilding passed. The brms example was
+verified with a real fitted model. A temporary check library supplied
+StanHeaders 2.32.10 compatible with rstan 2.32.7; the normal installed library
+was not changed.
 
-Version 1.1.0 incorporates the review fixes above and merges the additional
-CA validation and tests from the remote 1.0.6 revision. The package code and
-tests were verified locally after the merge; the full checks reported above
-describe the earlier 1.0.5 snapshot.
+## GitHub validation
+
+* The pkgdown build and deployment passed:
+  https://github.com/achetverikov/APAstats/actions/runs/39790337381
+* All eight comparisons against the former superb-backed implementation passed:
+  https://github.com/achetverikov/APAstats/actions/runs/39790482637
+* The Linux R-CMD-check workflow explicitly runs donttest examples and supplies
+  the C++ headers needed to compile the Bayesian example. Its latest result:
+  https://github.com/achetverikov/APAstats/actions/workflows/R-CMD-check.yaml
+
+The GitHub workflow also matches StanHeaders to rstan 2.32.7 when that version
+is installed. No dependency version is pinned in the package DESCRIPTION.
