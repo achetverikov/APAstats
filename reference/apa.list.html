@@ -7,9 +7,9 @@
   };
 </script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Format results from list objects in APA style — apa.list"><meta name="description" content="This function detects the type of statistical results stored in a list object
 and redirects to the appropriate APA formatting method. Currently supports
-ez::ezANOVA results (apa.ezANOVA)."><meta property="og:description" content="This function detects the type of statistical results stored in a list object
+ezANOVA results (apa.ezANOVA)."><meta property="og:description" content="This function detects the type of statistical results stored in a list object
 and redirects to the appropriate APA formatting method. Currently supports
-ez::ezANOVA results (apa.ezANOVA)."></head><body>
+ezANOVA results (apa.ezANOVA)."></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -17,7 +17,7 @@ ez::ezANOVA results (apa.ezANOVA)."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">apastats2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,7 +50,7 @@ ez::ezANOVA results (apa.ezANOVA)."></head><body>
     <div class="ref-description section level2">
     <p>This function detects the type of statistical results stored in a list object
 and redirects to the appropriate APA formatting method. Currently supports
-<a href="https://rdrr.io/pkg/ez/man/ezANOVA.html" class="external-link">ez::ezANOVA</a> results (<a href="apa.ezanova.html">apa.ezANOVA</a>).</p>
+<a href="https://rdrr.io/pkg/ez/man/ezANOVA.html" class="external-link">ezANOVA</a> results (<a href="apa.ezanova.html">apa.ezANOVA</a>).</p>
     </div>
 
     <div class="section level2">
@@ -73,7 +73,9 @@ and redirects to the appropriate APA formatting method. Currently supports
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A formatted string with statistical results in APA style</p>
+    <p>A character vector of formatted ANOVA results, or a <code>data.frame</code>
+containing selected ANOVA rows and a <code>res</code> column when <code>append_to_table = TRUE</code>.
+See <a href="apa.ezanova.html">apa.ezANOVA</a>.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

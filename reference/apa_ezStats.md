@@ -52,10 +52,12 @@ if (requireNamespace("ez", quietly = TRUE) && requireNamespace("afex", quietly =
   )
   
   # Format results in APA style
-  apa_ezStats(ezstats_res, 1)
-  apa_ezStats(ezstats_res, "incongruent")
-  apa_ezStats(ezstats_res, 1, digits = 3)
+  print(apa_ezStats(ezstats_res, 1))
+  print(apa_ezStats(ezstats_res, "incongruent"))
+  print(apa_ezStats(ezstats_res, 1, digits = 3))
 }
 #> Warning: Collapsing data to cell means. *IF* the requested effects are a subset of the full design, you must use the "within_full" argument, else results may be inaccurate.
+#> [1] "_M_ = 0.61 (_SD_ = 0.09)"
+#> [1] "_M_ = 0.72 (_SD_ = 0.13)"
 #> [1] "_M_ = 0.614 (_SD_ = 0.091)"
 ```

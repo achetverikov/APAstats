@@ -23,7 +23,11 @@ apa(obj, ...)
 
 ## Value
 
-A formatted string in APA style
+The result of the method for `obj`: usually a character vector of
+APA-formatted statistical results. Regression methods can return a
+`data.frame` of coefficient summaries, and ANOVA methods can return a
+`data.frame` with formatted text appended when requested. See each
+method's documentation for its columns and selection options.
 
 ## Details
 
@@ -95,7 +99,7 @@ In addition, there are standalone utility functions for formatting:
 # t-test example
 t_res <- t.test(rnorm(30), rnorm(30, 0.5))
 apa(t_res)
-#> [1] "_t_(55.1) = -1.47, _p_ = .148"
+#> [1] "_t_(51.1) = -3.32, _p_ = .002"
 
 # Correlation example
 cor_res <- cor.test(mtcars$mpg, mtcars$wt)

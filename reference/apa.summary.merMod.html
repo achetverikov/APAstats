@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">apastats2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,7 +78,8 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Formatted string</p>
+    <p>A character vector reporting the selected fixed-effect estimate,
+standard error, test statistic, degrees of freedom when available, and p-value.</p>
     </div>
 
     <div class="section level2">
@@ -89,11 +90,14 @@
 <span class="r-in"><span>  <span class="va">fms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fm</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  </span></span>
 <span class="r-in"><span>  <span class="co"># Format results in APA style</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">fms</span>, <span class="st">"Days"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">fms</span>, <span class="st">"(Intercept)"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">fms</span>, <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">fms</span>, <span class="st">"Days"</span>, <span class="st">"B"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">fms</span>, <span class="st">"Days"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">fms</span>, <span class="st">"(Intercept)"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">fms</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">fms</span>, <span class="st">"Days"</span>, <span class="st">"B"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_t_(17) = 6.77, _p_ &lt; .001"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_t_(17) = 36.84, _p_ &lt; .001"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_t_(17) = 6.77, _p_ &lt; .001"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_B_ = 10.47 (1.55), _p_ &lt; .001"</span>
 </code></pre></div>
     </div>

@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">apastats2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,14 +83,14 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># One-sample t-test</span></span></span>
 <span class="r-in"><span><span class="va">t_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">t.test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span>, mean <span class="op">=</span> <span class="op">-</span><span class="fl">10</span>, sd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">t_res</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_t_(19.0) = -29.19, _p_ &lt; .001"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_t_(19.0) = -22.02, _p_ &lt; .001"</span>
 <span class="r-in"><span><span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">t_res</span>, show.mean <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_M_ = -10.37 [-11.11, -9.62], _t_(19.0) = -29.19, _p_ &lt; .001"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_M_ = -9.69 [-10.61, -8.76], _t_(19.0) = -22.02, _p_ &lt; .001"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Two-sample t-test</span></span></span>
 <span class="r-in"><span><span class="va">t_two</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">t.test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span>, mean <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">t_two</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_t_(34.8) = -1.52, _p_ = .137"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_t_(37.9) = -3.55, _p_ = .001"</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

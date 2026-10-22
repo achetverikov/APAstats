@@ -29,7 +29,12 @@ ins_lmer(obj, term = NULL, digits = 2, adj.digits = TRUE)
 
 ## Value
 
-result
+A character result for a selected `term`, or a `data.frame` of
+coefficient summaries when `term = NULL`. The table has the columns
+documented in
+[apa.glm](https://achetverikov.github.io/APAstats/reference/apa.glm.md);
+`str` contains estimates, standard errors, and test statistics formatted
+for in-text reporting.
 
 ## Examples
 
@@ -39,8 +44,9 @@ if (requireNamespace("lme4", quietly = TRUE)) {
   fm <- lme4::lmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)
   
   # Concise in-text reporting
-  ins_lmer(fm, "Days")
-  ins_lmer(fm, "(Intercept)", digits = 1)
+  print(ins_lmer(fm, "Days"))
+  print(ins_lmer(fm, "(Intercept)", digits = 1))
 }
+#> [1] "_B_ = 10.47 (1.55), _t_ =  6.77"
 #> [1] "_B_ = 251.4 (6.8), _t_ = 36.84"
 ```

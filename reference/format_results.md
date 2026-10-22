@@ -22,4 +22,5 @@ format_results(res_str, type = "pandoc")
 
 ## Value
 
-`res_str` with latex 'emph' tags replaced with pandoc '\_'
+A character vector containing `res_str` in the requested notation: LaTeX
+markup, Pandoc emphasis, or text for plotmath expressions.

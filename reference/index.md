@@ -24,10 +24,17 @@
   : Format means and standard deviations in APA style
 
 - [`apa(`*`<BFBayesFactor>`*`)`](https://achetverikov.github.io/APAstats/reference/apa.BFBayesFactor.md)
-  : Describe BayesFactor results
+  :
+
+  Describe
+  [BayesFactor](https://rdrr.io/pkg/BayesFactor/man/BayesFactor-package.html)
+  results
 
 - [`apa(`*`<afex_aov>`*`)`](https://achetverikov.github.io/APAstats/reference/apa.afex_aov.md)
-  : Describe afex ANOVA results
+  :
+
+  Describe [afex](https://rdrr.io/pkg/afex/man/afex-package.html) ANOVA
+  results
 
 - [`apa(`*`<anova>`*`)`](https://achetverikov.github.io/APAstats/reference/apa.anova.md)
   : Describe the results of ANOVA models or model comparisons
@@ -42,7 +49,11 @@
   Describe [stats::aov](https://rdrr.io/r/stats/aov.html) results
 
 - [`apa(`*`<brmsfit>`*`)`](https://achetverikov.github.io/APAstats/reference/apa.brmsfit.md)
-  : Describe brms model results
+  :
+
+  Describe
+  [brms](https://paulbuerkner.com/brms/reference/brms-package.html)
+  model results
 
 - [`apa(`*`<chisq.test>`*`)`](https://achetverikov.github.io/APAstats/reference/apa.chisq.test.md)
   : Format chi-square test results in APA style
@@ -81,7 +92,10 @@
 
 - [`apa(`*`<summary_emm>`*`)`](https://achetverikov.github.io/APAstats/reference/apa.summary_emm.md)
   [`apa(`*`<emmeans>`*`)`](https://achetverikov.github.io/APAstats/reference/apa.summary_emm.md)
-  : Describe contrasts created by emmeans
+  :
+
+  Describe contrasts created by
+  [emmeans](https://rvlenth.github.io/emmeans/reference/emmeans-package.html)
 
 - [`apa(`*`<ttest>`*`)`](https://achetverikov.github.io/APAstats/reference/apa.ttest.md)
   : Format t-test results in APA style
@@ -94,9 +108,9 @@
 - [`plot_pointrange()`](https://achetverikov.github.io/APAstats/reference/plot_pointrange.md)
   : Pointrange plot
 - [`table_mean_conf()`](https://achetverikov.github.io/APAstats/reference/table_mean_conf.md)
-  : Get a list with means and confidence intervals
+  : Get formatted means and confidence intervals
 - [`table_mean_conf_by()`](https://achetverikov.github.io/APAstats/reference/table_mean_conf_by.md)
-  : Get a list of means and confidence intervals by group
+  : Get formatted means and confidence intervals by group
 - [`binom_ci()`](https://achetverikov.github.io/APAstats/reference/binom_ci.md)
   : Binomial confidence interval as a vector
 - [`base_breaks()`](https://achetverikov.github.io/APAstats/reference/base_breaks.md)
@@ -137,7 +151,7 @@
   : Quietly load libraries
 
 - [`mean_nn()`](https://achetverikov.github.io/APAstats/reference/mean_nn.md)
-  : Mean with na.rm=T
+  : Mean with na.rm=TRUE
 
 - [`mean_round()`](https://achetverikov.github.io/APAstats/reference/mean_round.md)
   : Rounded mean
@@ -154,7 +168,7 @@
   Round *p*-value
 
 - [`sd_nn()`](https://achetverikov.github.io/APAstats/reference/sd_nn.md)
-  : SD with na.rm=T
+  : SD with na.rm=TRUE
 
 - [`sd_round()`](https://achetverikov.github.io/APAstats/reference/sd_round.md)
   : Rounded SD
@@ -163,7 +177,7 @@
   : Get the means between the points of a sequence
 
 - [`sum_nn()`](https://achetverikov.github.io/APAstats/reference/sum_nn.md)
-  : Sum with na.rm=T
+  : Sum with na.rm=TRUE
 
 ## Datasets
 
@@ -214,4 +228,4 @@
   [`base.breaks.x()`](https://achetverikov.github.io/APAstats/reference/apastats-deprecated.md)
   [`base.breaks.y()`](https://achetverikov.github.io/APAstats/reference/apastats-deprecated.md)
   [`plot(`*`<pointrange>`*`)`](https://achetverikov.github.io/APAstats/reference/apastats-deprecated.md)
-  : Deprecated functions in the apastats package
+  : Deprecated functions in the apastats2 package

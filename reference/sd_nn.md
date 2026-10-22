@@ -1,6 +1,6 @@
-# SD with na.rm=T
+# SD with na.rm=TRUE
 
-SD with na.rm=T
+SD with na.rm=TRUE
 
 ## Usage
 
@@ -20,7 +20,8 @@ sd_nn(x, ...)
 
 ## Value
 
-sd of x with NA removed
+A numeric scalar giving the standard deviation of `x`, with missing
+values removed.
 
 ## Examples
 

@@ -24,7 +24,8 @@ paste_and(x, sep = ", ", suffix = "")
 
 ## Value
 
-a string iterating the values in x
+A character string listing the values in `x`, with the requested
+separators, suffix, and final conjunction.
 
 ## Examples
 

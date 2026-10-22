@@ -1,6 +1,6 @@
-# Get a list with means and confidence intervals
+# Get formatted means and confidence intervals
 
-Get a list with means and confidence intervals
+Get formatted means and confidence intervals
 
 ## Usage
 
@@ -29,7 +29,8 @@ table_mean_conf(x, digits = 2, binom = FALSE, ...)
 
 ## Value
 
-a list with a mean and CI as formatted strings
+A character vector of length two: the formatted mean followed by the
+confidence limits in square brackets.
 
 ## Examples
 

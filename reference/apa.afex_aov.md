@@ -1,4 +1,4 @@
-# Describe afex ANOVA results
+# Describe [afex](https://rdrr.io/pkg/afex/man/afex-package.html) ANOVA results
 
 Provides formatted string like *F*(num.Df, den.Df) = ..., *p* ..., eta2
 = ... based on
@@ -26,7 +26,7 @@ apa(
 
 - obj:
 
-  afex ANOVA object
+  [afex](https://rdrr.io/pkg/afex/man/afex-package.html) ANOVA object
 
 - term:
 
@@ -51,7 +51,9 @@ apa(
 
 - append_to_table:
 
-  should the results be added to the afex ANOVA table (default: FALSE)
+  should the results be added to the
+  [afex](https://rdrr.io/pkg/afex/man/afex-package.html) ANOVA table
+  (default: FALSE)
 
 - ...:
 
@@ -60,7 +62,10 @@ apa(
 
 ## Value
 
-string with formatted results
+A character vector reporting F statistics, degrees of freedom, p-values,
+and optional generalized eta-squared. With `append_to_table = TRUE`, a
+`data.frame` of selected ANOVA rows with an added `res` column
+containing the formatted results.
 
 ## Examples
 
@@ -76,9 +81,11 @@ if (requireNamespace("afex", quietly = TRUE)) {
     fun_aggregate = mean
   )
 
-  apa(afex_res, "condition")
-  apa(afex_res, "condition", eta_digits = 3)
-  apa(afex_res, "condition", include_eta = FALSE)
+  print(apa(afex_res, "condition"))
+  print(apa(afex_res, "condition", eta_digits = 3))
+  print(apa(afex_res, "condition", include_eta = FALSE))
 }
+#> [1] "_F_(1, 684) = 3.24, _p_ = .072, $\\eta$^2^~G~ < .01"
+#> [1] "_F_(1, 684) = 3.24, _p_ = .072, $\\eta$^2^~G~ < .001"
 #> [1] "_F_(1, 684) = 3.24, _p_ = .072"
 ```

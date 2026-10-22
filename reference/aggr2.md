@@ -28,7 +28,9 @@ aggr2(x, by, fun, ...)
 
 ## Value
 
-value aggregated first by specified vector and then aggregated again
+The object returned by `fun` when applied to the group summaries. Its
+class depends on `fun`; scalar numeric summary functions such as
+[base::mean](https://rdrr.io/r/base/mean.html) return one numeric value.
 
 ## Examples
 

@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">apastats2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,13 +38,13 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Describe BayesFactor results</h1>
+      <h1>Describe <a href="https://rdrr.io/pkg/BayesFactor/man/BayesFactor-package.html" class="external-link">BayesFactor</a> results</h1>
       <small class="dont-index">Source: <a href="https://github.com/achetverikov/APAstats/blob/master/R/regression_functions.R" class="external-link"><code>R/regression_functions.R</code></a></small>
       <div class="d-none name"><code>apa.BFBayesFactor.Rd</code></div>
     </div>
 
     <div class="ref-description section level2">
-    <p>Describe BayesFactor results</p>
+    <p>Describe <a href="https://rdrr.io/pkg/BayesFactor/man/BayesFactor-package.html" class="external-link">BayesFactor</a> results</p>
     </div>
 
     <div class="section level2">
@@ -58,7 +58,7 @@
 
 
 <dl><dt id="arg-obj">obj<a class="anchor" aria-label="anchor" href="#arg-obj"></a></dt>
-<dd><p>an object of <a href="https://rdrr.io/pkg/BayesFactor/man/BayesFactor-package.html" class="external-link">BayesFactor::BayesFactor</a> class <code>BFBayesFactor</code></p></dd>
+<dd><p>an object of <a href="https://rdrr.io/pkg/BayesFactor/man/BayesFactor-package.html" class="external-link">BayesFactor</a> class <code>BFBayesFactor</code></p></dd>
 
 
 <dt id="arg-digits">digits<a class="anchor" aria-label="anchor" href="#arg-digits"></a></dt>
@@ -79,7 +79,8 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>string describing the result</p>
+    <p>A character result reporting the Bayes factor, optionally in
+scientific notation for very large or small values.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -89,15 +90,12 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BayesFactor"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="co"># Load the puzzle data from BayesFactor package</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">puzzles</span>, package <span class="op">=</span> <span class="st">"BayesFactor"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  </span></span>
-<span class="r-in"><span>  <span class="co"># Run Bayesian ANOVA</span></span></span>
-<span class="r-in"><span>  <span class="va">bfs</span> <span class="op">&lt;-</span> <span class="fu">BayesFactor</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BayesFactor/man/anovaBF.html" class="external-link">anovaBF</a></span><span class="op">(</span><span class="va">RT</span> <span class="op">~</span> <span class="va">shape</span> <span class="op">+</span> <span class="va">color</span> <span class="op">+</span> <span class="va">ID</span>, data <span class="op">=</span> <span class="va">puzzles</span>, progress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">bfs</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">bfs</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">/</span> <span class="va">bfs</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu">BayesFactor</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BayesFactor/man/ttestBF.html" class="external-link">ttestBF</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">1.1</span>, <span class="fl">0.9</span>, <span class="fl">1.5</span>, <span class="fl">1.2</span>, <span class="fl">0.7</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">bf</span>, top_limit <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_BF_ = 2.73"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_BF_ = 90.10"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_BF_ = $9.01\\times 10^{1}$"</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -5,15 +5,21 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Get adjusted confidence intervals or standard errors — get_adjusted_ci"><meta name="description" content="Computes grouped summary statistics and precision intervals for
-between-subject, within-subject, and mixed designs. With no within-subject
-factors, ordinary independent-observation intervals are computed. Supplying a
-subject identifier in a between-subject design first aggregates repeated rows
-within subject-by-group cells."><meta property="og:description" content="Computes grouped summary statistics and precision intervals for
-between-subject, within-subject, and mixed designs. With no within-subject
-factors, ordinary independent-observation intervals are computed. Supplying a
-subject identifier in a between-subject design first aggregates repeated rows
-within subject-by-group cells."></head><body>
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Get adjusted confidence intervals or standard errors — get_adjusted_ci"><meta name="description" content="Computes grouped summary statistics and precision intervals for between-
+subject, within-subject, and mixed designs. With no within-subject factors,
+ordinary independent-observation intervals are computed. Supplying a subject
+identifier in a between-subject design first aggregates repeated rows within
+subject-by-group cells.
+get_superb_ci() is retained for backward compatibility. New code should use
+get_adjusted_ci(). Its within-subject results are intended to remain
+numerically compatible with the former implementation backed by superb."><meta property="og:description" content="Computes grouped summary statistics and precision intervals for between-
+subject, within-subject, and mixed designs. With no within-subject factors,
+ordinary independent-observation intervals are computed. Supplying a subject
+identifier in a between-subject design first aggregates repeated rows within
+subject-by-group cells.
+get_superb_ci() is retained for backward compatibility. New code should use
+get_adjusted_ci(). Its within-subject results are intended to remain
+numerically compatible with the former implementation backed by superb."></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -21,7 +27,7 @@ within subject-by-group cells."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">apastats2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,11 +58,14 @@ within subject-by-group cells."></head><body>
     </div>
 
     <div class="ref-description section level2">
-    <p>Computes grouped summary statistics and precision intervals for
-between-subject, within-subject, and mixed designs. With no within-subject
-factors, ordinary independent-observation intervals are computed. Supplying a
-subject identifier in a between-subject design first aggregates repeated rows
-within subject-by-group cells.</p>
+    <p>Computes grouped summary statistics and precision intervals for between-
+subject, within-subject, and mixed designs. With no within-subject factors,
+ordinary independent-observation intervals are computed. Supplying a subject
+identifier in a between-subject design first aggregates repeated rows within
+subject-by-group cells.</p>
+<p>get_superb_ci() is retained for backward compatibility. New code should use
+<code>get_adjusted_ci()</code>. Its within-subject results are intended to remain
+numerically compatible with the former implementation backed by <a href="https://CRAN.R-project.org/package=superb" class="external-link">superb</a>.</p>
     </div>
 
     <div class="section level2">
@@ -107,7 +116,7 @@ within subject-by-group cells.</p>
 
 <dt id="arg-within">within<a class="anchor" aria-label="anchor" href="#arg-within"></a></dt>
 <dd><p>within-subject variables (vector of strings; default: NULL).
-If supplied, <code>wid</code> must also be supplied.</p></dd>
+If supplied, wid must also be supplied.</p></dd>
 
 
 <dt id="arg-between">between<a class="anchor" aria-label="anchor" href="#arg-between"></a></dt>
@@ -123,21 +132,23 @@ cells before intervals are computed.</p></dd>
 
 
 <dt id="arg-adjustments">adjustments<a class="anchor" aria-label="anchor" href="#arg-adjustments"></a></dt>
-<dd><p>adjustment settings. Supports <code>purpose = "single"</code> or
-<code>"difference"</code>. <code>decorrelation</code> can be <code>"CM"</code>, <code>"CA"</code>, or
-<code>"none"</code> for within-subject designs and must be <code>"none"</code> for
-purely between-subject designs. If omitted, decorrelation defaults to
-<code>"CM"</code> when <code>within</code> is supplied and <code>"none"</code> otherwise. CA multiplies interval widths by sqrt(1 - r), where r is the
-mean Pearson correlation across all pairs of aggregated within-subject
-conditions, estimated separately in each between-subject group. It requires
-at least two complete subjects, two conditions, and nonzero variance in
-every condition. Centers are unchanged.</p></dd>
+<dd><p>adjustment settings. Supports purpose = "single" or
+"difference". decorrelation can be "CM", "CA", or "none" for within-subject
+designs and must be "none" for purely between-subject designs. If omitted,
+decorrelation defaults to "CM" when within is supplied and "none"
+otherwise. CA (correlation adjustment) multiplies interval widths by
+<code>sqrt(1 - rbar)</code>, where <code>rbar</code> is the mean Pearson correlation across
+pairs of within-subject conditions, computed separately within each
+between-subject group after cell aggregation and incomplete-unit removal.
+Centers are unchanged. CA requires at least two complete subjects and
+two conditions per group, with finite values and nonzero variance in
+every condition.</p></dd>
 
 
 <dt id="arg-errorbar">errorbar<a class="anchor" aria-label="anchor" href="#arg-errorbar"></a></dt>
-<dd><p><code>"CI"</code>, <code>"SE"</code>, <code>"none"</code>, or a precision
-function. A precision function receives the condition vector and returns
-either one error-bar width or two interval limits.</p></dd>
+<dd><p>"CI", "SE", "none", or a precision function. A precision
+function receives the condition vector and returns either one error-bar
+width or two interval limits.</p></dd>
 
 
 <dt id="arg-gamma">gamma<a class="anchor" aria-label="anchor" href="#arg-gamma"></a></dt>
@@ -156,14 +167,12 @@ variables be dropped? (default: TRUE)</p></dd>
 
 <dt id="arg-aggr-fun">aggr_fun<a class="anchor" aria-label="anchor" href="#arg-aggr-fun"></a></dt>
 <dd><p>scalar summary function. For within-subject designs, and for
-between-subject designs with <code>wid</code> supplied, it is also used to
-aggregate repeated observations within observational-unit cells. Built-in
-precision formulas mirror <code>superb</code> for <code>mean</code>, <code>median</code>,
-<code>var</code>, <code>sd</code>, <code>IQR</code>, and the superb-style <code>MAD</code>,
-<code>hmean</code>, <code>gmean</code>, <code>fisherskew</code>, <code>pearsonskew</code>, and
-<code>fisherkurtosis</code> names. For other named functions, define a matching
-<code>SE.&lt;name&gt;</code> or <code>CI.&lt;name&gt;</code> function, or supply <code>errorbar</code>
-as a function.</p></dd>
+between-subject designs with wid supplied, it is also used to aggregate
+repeated observations within observational-unit cells. Built-in precision
+formulas mirror <a href="https://CRAN.R-project.org/package=superb" class="external-link">superb</a> for mean, median, var, sd, IQR, and the superb-style
+MAD, hmean, gmean, fisherskew, pearsonskew, and fisherkurtosis names.
+For other named functions, define a matching <code>SE.&lt;name&gt;</code> or <code>CI.&lt;name&gt;</code>
+function, or supply errorbar as a function.</p></dd>
 
 
 <dt id="arg-debug">debug<a class="anchor" aria-label="anchor" href="#arg-debug"></a></dt>
@@ -176,34 +185,34 @@ as a function.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A dataframe with grouping variables, <code>center</code>, <code>lowerwidth</code>,
-<code>upperwidth</code>, <code>lower_ci</code>, <code>upper_ci</code>, and <code>descr</code>.</p>
+    <p>A <code>data.frame</code> with one row per group and the grouping variables,
+<code>center</code> (summary statistic), <code>lowerwidth</code> and <code>upperwidth</code> (signed interval
+offsets from the center), <code>lower_ci</code> and <code>upper_ci</code> (interval limits), and
+<code>descr</code> (formatted summary and interval text). With <code>errorbar = "none"</code>,
+both offsets are zero and both limits equal the center.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The within-subject implementation and statistic-specific precision conventions
-are adapted from the <span class="pkg">superb</span> framework and its R implementation
-(Cousineau, Goulet, &amp; Harding, 2021). In particular, the Cousineau-Morey path
-follows the two-step centering and bias-correction algorithm used by
-<code><a href="http://dcousin3.github.io/superb/reference/twoStepTransform.html" class="external-link">superb::twoStepTransform()</a></code>. The code is implemented locally;
-<span class="pkg">apastats2</span> does not depend on or call <span class="pkg">superb</span>.</p>
-<p><code>get_superb_ci()</code> is retained as a deprecated compatibility wrapper.
-New code should use <code>get_adjusted_ci()</code>.</p>
+    <p>The within-subject implementation and statistic-specific precision
+conventions are adapted from the superb framework and its R implementation
+(Cousineau, Goulet, &amp; Harding, 2021). In particular, the Cousineau-Morey
+path follows the two-step centering and bias-correction algorithm used by
+<a href="https://CRAN.R-project.org/package=superb" class="external-link">superb</a>. The code is implemented locally;
+<a href="apastats2-package.html">apastats2</a> does not depend on or
+call <a href="https://CRAN.R-project.org/package=superb" class="external-link">superb</a>.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Cousineau, D., Goulet, M.-A., &amp; Harding, B. (2021). Summary plots with
 adjusted error bars: The superb framework with an implementation in R.
-<em>Advances in Methods and Practices in Psychological Science, 4</em>(3).
+Advances in Methods and Practices in Psychological Science, 4(3).
 doi:10.1177/25152459211035109</p>
 <p>Cousineau, D. (2005). Confidence intervals in within-subject designs:
-A simpler solution to Loftus and Masson's method.
-<em>The Quantitative Methods for Psychology, 1</em>(1), 42-45.
-doi:10.20982/tqmp.01.1.p042</p>
+A simpler solution to Loftus and Masson's method. The Quantitative Methods
+for Psychology, 1(1), 42-45. doi:10.20982/tqmp.01.1.p042</p>
 <p>Morey, R. D. (2008). Confidence intervals from normalized data:
-A correction to Cousineau (2005).
-<em>The Quantitative Methods for Psychology, 4</em>(2), 61-64.
-doi:10.20982/tqmp.04.2.p061</p>
+A correction to Cousineau (2005). The Quantitative Methods for Psychology,
+4(2), 61-64. doi:10.20982/tqmp.04.2.p061</p>
     </div>
 
     <div class="section level2">
@@ -241,6 +250,19 @@ doi:10.20982/tqmp.04.2.p061</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 _M_ = 3.08 [-6.60, 12.77]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 _M_ = 2.18 [-7.51, 11.86]</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Correlation-adjusted intervals</span></span></span>
+<span class="r-in"><span><span class="fu">get_adjusted_ci</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">memory_noise</span><span class="op">[</span><span class="va">memory_noise</span><span class="op">$</span><span class="va">experiment</span> <span class="op">==</span> <span class="st">"Exp. 1A"</span>, <span class="op">]</span>,</span></span>
+<span class="r-in"><span>  value_var <span class="op">=</span> <span class="st">"bias_percent"</span>, within <span class="op">=</span> <span class="st">"relative_noise"</span>, wid <span class="op">=</span> <span class="st">"participant"</span>,</span></span>
+<span class="r-in"><span>  adjustments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>decorrelation <span class="op">=</span> <span class="st">"CA"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      relative_noise   center lowerwidth upperwidth   lower_ci  upper_ci</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 target less noisy 3.082070  -6.450899   6.450899  -3.368829  9.532968</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 target more noisy 2.178637 -12.386335  12.386335 -10.207699 14.564972</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                        descr</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   _M_ = 3.08 [-3.37, 9.53]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 _M_ = 2.18 [-10.21, 14.56]</span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Mixed design: experiment is between, relative noise is within</span></span></span>
 <span class="r-in"><span><span class="fu">get_adjusted_ci</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">memory_noise</span>,</span></span>
@@ -259,6 +281,7 @@ doi:10.20982/tqmp.04.2.p061</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.470786  _M_ = -1.77 [-10.01, 6.47]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 11.863574   _M_ = 2.18 [-7.51, 11.86]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 -1.092336 _M_ = -9.33 [-17.57, -1.09]</span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

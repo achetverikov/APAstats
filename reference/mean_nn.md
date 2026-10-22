@@ -1,6 +1,6 @@
-# Mean with na.rm=T
+# Mean with na.rm=TRUE
 
-Mean with na.rm=T
+Mean with na.rm=TRUE
 
 ## Usage
 
@@ -20,7 +20,8 @@ mean_nn(x, ...)
 
 ## Value
 
-mean of x with NA removed
+A numeric or complex scalar giving the mean of `x`, with missing values
+removed.
 
 ## Examples
 

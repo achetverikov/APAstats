@@ -1,6 +1,6 @@
-# Sum with na.rm=T
+# Sum with na.rm=TRUE
 
-Sum with na.rm=T
+Sum with na.rm=TRUE
 
 ## Usage
 
@@ -20,7 +20,8 @@ sum_nn(x, ...)
 
 ## Value
 
-sum of x with NA removed
+A numeric or complex scalar giving the sum of `x`, with missing values
+removed.
 
 ## Examples
 

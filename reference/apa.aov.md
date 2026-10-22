@@ -1,8 +1,10 @@
 # Describe [stats::aov](https://rdrr.io/r/stats/aov.html) results
 
-Describe [stats::aov](https://rdrr.io/r/stats/aov.html) results,
-including repeated-measures models fitted with an `Error()` term
-(`aovlist` objects).
+[`stats::aov()`](https://rdrr.io/r/stats/aov.html) models containing
+`Error()` return an `aovlist` object, which cannot be passed to
+[`car::Anova()`](https://rdrr.io/pkg/car/man/Anova.html). This method
+extracts the ANOVA tables from each error stratum and reports effects
+using the residual degrees of freedom from the same stratum.
 
 ## Usage
 
@@ -18,30 +20,34 @@ apa(obj, term = NULL, f.digits = 2, ...)
 
 - obj:
 
-  fitted [stats::aov](https://rdrr.io/r/stats/aov.html) model
+  fitted [stats::aov](https://rdrr.io/r/stats/aov.html) model with an
+  `Error()` term
 
 - term:
 
-  model term to describe (a string with the term name or its sequential
-  number). For `aovlist` objects, `NULL` returns all testable effects.
+  model term to describe. A character term name or sequential number can
+  be supplied; if `NULL`, all testable effects are returned.
 
 - sstype:
 
   anova SS type (e.g., 2 or 3)
 
-- f.digits:
-
-  number of digits for the F value
-
 - ...:
 
   other parameters passed to
-  [apa.anova](https://achetverikov.github.io/APAstats/reference/apa.anova.md)
+  [format_results](https://achetverikov.github.io/APAstats/reference/format_results.md)
+
+- f.digits:
+
+  number of digits for the F value
 
 ## Value
 
 formatted string with F(df_numerator, df_denominator) = F_value, p =/\<
 p_value
+
+one or more formatted strings with F, numerator and denominator df, and
+p values
 
 ## Examples
 
@@ -49,16 +55,17 @@ p_value
 if (requireNamespace("car", quietly = TRUE)) {
   # Using the mtcars dataset
   fit <- aov(mpg ~ cyl * am, data = mtcars)
-  apa(fit, 'cyl')
-  apa(fit, 'am')
-  apa(fit, 'cyl:am')
+  print(apa(fit, 'cyl'))
+  print(apa(fit, 'am'))
+  print(apa(fit, 'cyl:am'))
 
   # Using a different SS type
-  apa(fit, 'cyl', sstype = 3)
+  print(apa(fit, 'cyl', sstype = 3))
 }
+#> [1] "_F_(1, 28) = 52.03, _p_ < .001"
+#> [1] "_F_(1, 28) = 4.28, _p_ = .048"
+#> [1] "_F_(1, 28) = 3.41, _p_ = .076"
 #> [1] "_F_(1, 28) = 19.40, _p_ < .001"
-
-# Repeated-measures aov with an Error() term
 fit_rm <- aov(yield ~ N * P * K + Error(block), data = npk)
 apa(fit_rm, "N")
 #>                                N 

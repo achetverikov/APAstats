@@ -17,4 +17,6 @@ lmer_fixef(fit.lmer)
 
 ## Value
 
-result
+A `data.frame` with one row per fixed-effect coefficient and columns
+`Estimate` (coefficient), `Std.Err` (standard error), and `t` (the ratio
+of the estimate to its standard error). Row names identify model terms.

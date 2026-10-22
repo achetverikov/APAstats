@@ -16,7 +16,9 @@ load_libs(libs)
 
 ## Value
 
-None
+Invisibly, a list of logical scalars, one per package in `libs`,
+indicating whether loading succeeded. Called for the side effect of
+loading and attaching the requested packages.
 
 ## Examples
 

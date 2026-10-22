@@ -21,7 +21,8 @@ mean_round(x, ...)
 
 ## Value
 
-Mean rounded to the specified number of digits (string)
+A character string containing the mean rounded to the specified number
+of decimal places.
 
 ## Examples
 

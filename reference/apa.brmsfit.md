@@ -1,6 +1,8 @@
-# Describe brms model results
+# Describe [brms](https://paulbuerkner.com/brms/reference/brms-package.html) model results
 
-Describe brms model results
+Describe
+[brms](https://paulbuerkner.com/brms/reference/brms-package.html) model
+results
 
 ## Usage
 
@@ -65,23 +67,29 @@ apa(
 
 ## Value
 
-string describing the result
+A character result reporting the posterior mean coefficient, its 95%
+interval, and optionally an effect-size estimate.
 
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
-if (requireNamespace("brms", quietly = TRUE)) {
+# \donttest{
+if (requireNamespace("brms", quietly = TRUE) &&
+    requireNamespace("bayestestR", quietly = TRUE)) {
   # Generate sample data
-  x <- rnorm(500, sd = 6)
-  y <- 4 * x + rnorm(500)
+  set.seed(42)
+  x <- seq(-1, 1, length.out = 30)
+  y <- 1 + 2 * x + rnorm(30, sd = 0.5)
   
   # Fit a Bayesian regression model
-  fit <- brms::brm(y ~ x, data = data.frame(x, y), chains = 1, iter = 500)
-  apa(fit, "x")
+  fit <- brms::brm(y ~ x, data = data.frame(x, y), backend = "rstan",
+                   chains = 1, cores = 1, iter = 500, seed = 42, refresh = 0)
+  print(apa(fit, "x"))
   
   # Convert x to another scale for output
-  apa(fit, "x", trans = function(val) val + 5)
+  print(apa(fit, "x", trans = function(val) val + 5))
 }
-} # }
+#> Compiling Stan program...
+#> Error in .fun(model_code = .x1): Boost not found; call install.packages('BH')
+# }
 ```

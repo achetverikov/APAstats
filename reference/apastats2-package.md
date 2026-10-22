@@ -1,13 +1,15 @@
-# apastats2: Statistical Results in 'APA' Style
+# apastats2: Statistical Results in APA Style
 
 Proper formatting of statistical results in accordance with the American
-Psychological Association ('APA') Manual (sixth edition), along with
+Psychological Association (APA) Manual (sixth edition), along with
 convenient helpers for summaries, confidence intervals, and plotting.
 Development repository: <https://github.com/achetverikov/APAstats>.
 
 ## See also
 
 Useful links:
+
+- <https://achetverikov.github.io/APAstats/>
 
 - <https://github.com/achetverikov/APAstats>
 
@@ -17,3 +19,8 @@ Useful links:
 
 **Maintainer**: Andrey Chetverikov <andrey.chetverikov@uib.no>
 ([ORCID](https://orcid.org/0000-0003-2767-6310))
+
+Authors:
+
+- Andrey Chetverikov <andrey.chetverikov@uib.no>
+  ([ORCID](https://orcid.org/0000-0003-2767-6310))

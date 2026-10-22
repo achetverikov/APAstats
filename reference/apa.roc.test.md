@@ -25,7 +25,8 @@ apa(obj, ...)
 
 ## Value
 
-result
+A character result reporting the test statistic and p-value for the
+comparison between ROC curves.
 
 ## Examples
 

@@ -24,7 +24,7 @@ base_breaks_y(x, addSegment = TRUE, ...)
 
 - addSegment:
 
-  should we add a line to the scale? (T/F)
+  should we add a line to the scale? (TRUE/FALSE)
 
 - ...:
 
@@ -32,8 +32,10 @@ base_breaks_y(x, addSegment = TRUE, ...)
 
 ## Value
 
-scale\_(x or y)\_continuous with pretty breaks and accompanying
-geom_segment if addSegment == TRUE
+A continuous position scale (class `ScaleContinuousPosition`) with
+breaks spanning `x`. When `addSegment = TRUE`, a list containing an
+axis-segment layer and the scale, suitable for adding to a
+[ggplot2](https://CRAN.R-project.org/package=ggplot2) plot.
 
 ## Functions
 
@@ -52,4 +54,5 @@ p
 
 p + base_breaks(mtcars$wt, scale = "x") +
   base_breaks(mtcars$mpg, scale = "y")
+
 ```

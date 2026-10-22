@@ -1,6 +1,8 @@
-# Describe BayesFactor results
+# Describe [BayesFactor](https://rdrr.io/pkg/BayesFactor/man/BayesFactor-package.html) results
 
-Describe BayesFactor results
+Describe
+[BayesFactor](https://rdrr.io/pkg/BayesFactor/man/BayesFactor-package.html)
+results
 
 ## Usage
 
@@ -14,7 +16,7 @@ apa(obj, digits = 2, top_limit = 10000, convert_to_power = TRUE, ...)
 - obj:
 
   an object of
-  [BayesFactor::BayesFactor](https://rdrr.io/pkg/BayesFactor/man/BayesFactor-package.html)
+  [BayesFactor](https://rdrr.io/pkg/BayesFactor/man/BayesFactor-package.html)
   class `BFBayesFactor`
 
 - digits:
@@ -38,7 +40,8 @@ apa(obj, digits = 2, top_limit = 10000, convert_to_power = TRUE, ...)
 
 ## Value
 
-string describing the result
+A character result reporting the Bayes factor, optionally in scientific
+notation for very large or small values.
 
 ## Note
 
@@ -49,13 +52,10 @@ https://dankelley.github.io/r/2015/03/22/scinot.html
 
 ``` r
 if (requireNamespace("BayesFactor", quietly = TRUE)) {
-  # Load the puzzle data from BayesFactor package
-  data(puzzles, package = "BayesFactor")
-  
-  # Run Bayesian ANOVA
-  bfs <- BayesFactor::anovaBF(RT ~ shape + color + ID, data = puzzles, progress = FALSE)
-  apa(bfs[1])
-  apa(bfs[3] / bfs[1])
+  bf <- BayesFactor::ttestBF(x = c(0.8, 1.1, 0.9, 1.5, 1.2, 0.7))
+  print(apa(bf))
+  print(apa(bf, top_limit = 10))
 }
-#> [1] "_BF_ = 2.73"
+#> [1] "_BF_ = 90.10"
+#> [1] "_BF_ = $9.01\\times 10^{1}$"
 ```

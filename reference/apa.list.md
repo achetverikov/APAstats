@@ -2,7 +2,7 @@
 
 This function detects the type of statistical results stored in a list
 object and redirects to the appropriate APA formatting method. Currently
-supports [ez::ezANOVA](https://rdrr.io/pkg/ez/man/ezANOVA.html) results
+supports [ezANOVA](https://rdrr.io/pkg/ez/man/ezANOVA.html) results
 ([apa.ezANOVA](https://achetverikov.github.io/APAstats/reference/apa.ezanova.md)).
 
 ## Usage
@@ -24,4 +24,7 @@ apa(obj, ...)
 
 ## Value
 
-A formatted string with statistical results in APA style
+A character vector of formatted ANOVA results, or a `data.frame`
+containing selected ANOVA rows and a `res` column when
+`append_to_table = TRUE`. See
+[apa.ezANOVA](https://achetverikov.github.io/APAstats/reference/apa.ezanova.md).

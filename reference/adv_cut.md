@@ -52,8 +52,8 @@ adv_cut(
 
 - labels_at_means:
 
-  should labels be created as means between cuts (T) or as pairs of cuts
-  (F)
+  should labels be created as means between cuts (TRUE) or as pairs of
+  cuts (FALSE)
 
 - label_pairs_format:
 
@@ -68,11 +68,13 @@ adv_cut(
   If `ncuts` is used, then the variable is cut into N cuts either of
   equal group size (eq_groups = TRUE) or equally distant from each other
   (eq_groups = FALSE). If `labels` are not provided, they are generated
-  as means between cuts if labels_at_means is T.
+  as means between cuts if labels_at_means is TRUE.
 
 ## Value
 
-a vector of group labels the same length as the original value vector
+A factor assigning each element of `x` to a bin, or a numeric vector of
+bin labels when `num_labels = TRUE`. The result has the same length as
+`x`.
 
 ## Examples
 

@@ -5,7 +5,13 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Describe stats::aov results — apa.aov"><meta name="description" content="Describe stats::aov results, including repeated-measures models fitted with an Error() term (aovlist objects)."><meta property="og:description" content="Describe stats::aov results, including repeated-measures models fitted with an Error() term (aovlist objects)."></head><body>
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Describe stats::aov results — apa.aov"><meta name="description" content="stats::aov() models containing Error() return an aovlist object,
+which cannot be passed to car::Anova(). This method extracts the ANOVA
+tables from each error stratum and reports effects using the residual degrees
+of freedom from the same stratum."><meta property="og:description" content="stats::aov() models containing Error() return an aovlist object,
+which cannot be passed to car::Anova(). This method extracts the ANOVA
+tables from each error stratum and reports effects using the residual degrees
+of freedom from the same stratum."></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -13,7 +19,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">apastats2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,7 +50,10 @@
     </div>
 
     <div class="ref-description section level2">
-    <p>Describe <a href="https://rdrr.io/r/stats/aov.html" class="external-link">stats::aov</a> results, including repeated-measures models fitted with an <code>Error()</code> term (<code>aovlist</code> objects).</p>
+    <p><code><a href="https://rdrr.io/r/stats/aov.html" class="external-link">stats::aov()</a></code> models containing <code>Error()</code> return an <code>aovlist</code> object,
+which cannot be passed to <code><a href="https://rdrr.io/pkg/car/man/Anova.html" class="external-link">car::Anova()</a></code>. This method extracts the ANOVA
+tables from each error stratum and reports effects using the residual degrees
+of freedom from the same stratum.</p>
     </div>
 
     <div class="section level2">
@@ -61,28 +70,31 @@
 
 
 <dl><dt id="arg-obj">obj<a class="anchor" aria-label="anchor" href="#arg-obj"></a></dt>
-<dd><p>fitted <a href="https://rdrr.io/r/stats/aov.html" class="external-link">stats::aov</a> model</p></dd>
+<dd><p>fitted <a href="https://rdrr.io/r/stats/aov.html" class="external-link">stats::aov</a> model with an <code>Error()</code> term</p></dd>
 
 
 <dt id="arg-term">term<a class="anchor" aria-label="anchor" href="#arg-term"></a></dt>
-<dd><p>model term to describe (a string with the term name or its sequential number). For <code>aovlist</code> objects, <code>NULL</code> returns all testable effects.</p></dd>
+<dd><p>model term to describe. A character term name or sequential
+number can be supplied; if <code>NULL</code>, all testable effects are returned.</p></dd>
 
 
 <dt id="arg-sstype">sstype<a class="anchor" aria-label="anchor" href="#arg-sstype"></a></dt>
 <dd><p>anova SS type (e.g., 2 or 3)</p></dd>
 
 
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>other parameters passed to <a href="format_results.html">format_results</a></p></dd>
+
+
 <dt id="arg-f-digits">f.digits<a class="anchor" aria-label="anchor" href="#arg-f-digits"></a></dt>
 <dd><p>number of digits for the F value</p></dd>
-
-
-<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>other parameters passed to <a href="apa.anova.html">apa.anova</a></p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>formatted string with F(df_numerator, df_denominator) = F_value, p =/&lt; p_value</p>
+<p>one or more formatted strings with F, numerator and denominator df,
+and p values</p>
     </div>
 
     <div class="section level2">
@@ -90,16 +102,17 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"car"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="co"># Using the mtcars dataset</span></span></span>
 <span class="r-in"><span>  <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aov.html" class="external-link">aov</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">cyl</span> <span class="op">*</span> <span class="va">am</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">fit</span>, <span class="st">'cyl'</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">fit</span>, <span class="st">'am'</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">fit</span>, <span class="st">'cyl:am'</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">fit</span>, <span class="st">'cyl'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">fit</span>, <span class="st">'am'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">fit</span>, <span class="st">'cyl:am'</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co"># Using a different SS type</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">fit</span>, <span class="st">'cyl'</span>, sstype <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">fit</span>, <span class="st">'cyl'</span>, sstype <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_F_(1, 28) = 52.03, _p_ &lt; .001"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_F_(1, 28) = 4.28, _p_ = .048"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_F_(1, 28) = 3.41, _p_ = .076"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_F_(1, 28) = 19.40, _p_ &lt; .001"</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Repeated-measures aov with an Error() term</span></span></span>
 <span class="r-in"><span><span class="va">fit_rm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aov.html" class="external-link">aov</a></span><span class="op">(</span><span class="va">yield</span> <span class="op">~</span> <span class="va">N</span> <span class="op">*</span> <span class="va">P</span> <span class="op">*</span> <span class="va">K</span> <span class="op">+</span> <span class="fu">Error</span><span class="op">(</span><span class="va">block</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">npk</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">fit_rm</span>, <span class="st">"N"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                N </span>

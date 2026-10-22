@@ -36,7 +36,9 @@ apa(obj, factor, dtype = "t", ...)
 
 ## Value
 
-Formatted string
+A character vector reporting the selected fixed-effect estimate,
+standard error, test statistic, degrees of freedom when available, and
+p-value.
 
 ## Examples
 
@@ -47,10 +49,13 @@ if (requireNamespace("lmerTest", quietly = TRUE)) {
   fms <- summary(fm)
   
   # Format results in APA style
-  apa(fms, "Days")
-  apa(fms, "(Intercept)")
-  apa(fms, 2)
-  apa(fms, "Days", "B")
+  print(apa(fms, "Days"))
+  print(apa(fms, "(Intercept)"))
+  print(apa(fms, 2))
+  print(apa(fms, "Days", "B"))
 }
+#> [1] "_t_(17) = 6.77, _p_ < .001"
+#> [1] "_t_(17) = 36.84, _p_ < .001"
+#> [1] "_t_(17) = 6.77, _p_ < .001"
 #> [1] "_B_ = 10.47 (1.55), _p_ < .001"
 ```

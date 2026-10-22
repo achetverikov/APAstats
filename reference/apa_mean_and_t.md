@@ -47,8 +47,8 @@ apa_mean_and_t(
 
 - abs:
 
-  Should we show the absolute value if the t-test (T) or keep its sign
-  (FALSE, default)
+  Should we show the absolute value if the t-test (TRUE) or keep its
+  sign (FALSE, default)
 
 - aggregate_by:
 

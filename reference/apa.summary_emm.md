@@ -1,6 +1,7 @@
-# Describe contrasts created by emmeans
+# Describe contrasts created by [emmeans](https://rvlenth.github.io/emmeans/reference/emmeans-package.html)
 
-Describe contrasts created by emmeans
+Describe contrasts created by
+[emmeans](https://rvlenth.github.io/emmeans/reference/emmeans-package.html)
 
 ## Usage
 
@@ -54,11 +55,15 @@ if (requireNamespace("emmeans", quietly = TRUE)) {
   sum_contr <- summary(emmeans::contrast(warp.emm, "trt.vs.ctrl"))
   
   # Format results in APA style
-  apa(sum_contr, 1)
-  apa(sum_contr, 3)
-  apa(sum_contr, 3, dtype = "t")
-  apa(sum_contr, 3, dtype = "c")
-  apa(sum_contr, 3, dtype = "c", df = TRUE)
+  print(apa(sum_contr, 1))
+  print(apa(sum_contr, 3))
+  print(apa(sum_contr, 3, dtype = "t"))
+  print(apa(sum_contr, 3, dtype = "c"))
+  print(apa(sum_contr, 3, dtype = "c", df = TRUE))
 }
+#> [1] "_B_ = -20.56 (5.16), _p_ < .001"
+#> [1] "_B_ = 0.56 (5.16), _p_ = .986"
+#> [1] "_t_ = 0.11, _p_ = .986"
+#> [1] "_B_ = 0.56 (5.16), _t_ = 0.11, _p_ = .986"
 #> [1] "_B_ = 0.56 (5.16), _t_(48) = 0.11, _p_ = .986"
 ```

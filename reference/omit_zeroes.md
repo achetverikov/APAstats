@@ -20,7 +20,8 @@ omit_zeroes(x, digits = 2)
 
 ## Value
 
-A number without leading zero
+A character vector containing formatted values with the leading
+character removed, intended to omit the zero before a decimal point.
 
 ## Examples
 

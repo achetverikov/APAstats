@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">apastats2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -96,7 +96,7 @@
 
 
 <dt id="arg-labels-at-means">labels_at_means<a class="anchor" aria-label="anchor" href="#arg-labels-at-means"></a></dt>
-<dd><p>should labels be created as means between cuts (T) or as pairs of cuts (F)</p></dd>
+<dd><p>should labels be created as means between cuts (TRUE) or as pairs of cuts (FALSE)</p></dd>
 
 
 <dt id="arg-label-pairs-format">label_pairs_format<a class="anchor" aria-label="anchor" href="#arg-label-pairs-format"></a></dt>
@@ -105,12 +105,14 @@
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>other parameters passed to <a href="https://rdrr.io/r/base/cut.html" class="external-link">base::cut</a></p>
-<p>If <code>ncuts</code> is used, then the variable is cut into N cuts either of equal group size (eq_groups = TRUE) or equally distant from each other (eq_groups = FALSE). If <code>labels</code> are not provided, they are generated as  means between cuts if labels_at_means is T.</p></dd>
+<p>If <code>ncuts</code> is used, then the variable is cut into N cuts either of equal group size (eq_groups = TRUE) or equally distant from each other (eq_groups = FALSE). If <code>labels</code> are not provided, they are generated as  means between cuts if labels_at_means is TRUE.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a vector of group labels the same length as the original value vector</p>
+    <p>A factor assigning each element of <code>x</code> to a bin, or a numeric
+vector of bin labels when <code>num_labels = TRUE</code>. The result has the same
+length as <code>x</code>.</p>
     </div>
 
     <div class="section level2">

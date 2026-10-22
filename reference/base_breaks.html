@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">apastats2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,7 +69,7 @@
 
 
 <dt id="arg-addsegment">addSegment<a class="anchor" aria-label="anchor" href="#arg-addsegment"></a></dt>
-<dd><p>should we add a line to the scale? (T/F)</p></dd>
+<dd><p>should we add a line to the scale? (TRUE/FALSE)</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -78,7 +78,10 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>scale_(x or y)_continuous with pretty breaks and accompanying geom_segment if addSegment == TRUE</p>
+    <p>A continuous position scale (class <code>ScaleContinuousPosition</code>)
+with breaks spanning <code>x</code>. When <code>addSegment = TRUE</code>, a list containing
+an axis-segment layer and the scale, suitable for adding to a
+<a href="https://CRAN.R-project.org/package=ggplot2" class="external-link">ggplot2</a> plot.</p>
     </div>
     <div class="section level2">
     <h2 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a></h2>
@@ -98,6 +101,7 @@
 <span class="r-in"><span><span class="va">p</span> <span class="op">+</span> <span class="fu">base_breaks</span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">wt</span>, scale <span class="op">=</span> <span class="st">"x"</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>  <span class="fu">base_breaks</span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, scale <span class="op">=</span> <span class="st">"y"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="base_breaks-2.png" alt="" width="1760" height="880"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

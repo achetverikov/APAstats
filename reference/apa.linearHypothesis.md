@@ -23,7 +23,8 @@ apa(obj, ...)
 
 ## Value
 
-results of \\\chi^2\\ or *F* test
+A character result reporting the chi-squared or F statistic, degrees of
+freedom, and p-value for the linear-hypothesis test.
 
 ## Examples
 
@@ -35,11 +36,12 @@ if (requireNamespace("car", quietly = TRUE) &&
   
   # Test hypotheses
   res <- car::linearHypothesis(mod.davis, c("(Intercept) = 0", "repwt = 1"))
-  apa(res)
+  print(apa(res))
   
   # Test using Chi-square
   res.chi <- car::linearHypothesis(mod.davis, c("(Intercept) = 0", "repwt = 1"), test = "Chisq")
-  apa(res.chi)
+  print(apa(res.chi))
 }
+#> [1] "_F_(2, 181) = 1.74, _p_ = .179"
 #> [1] "$\\chi^2$(2) = 3.47, _p_ = .176"
 ```

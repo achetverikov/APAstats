@@ -16,7 +16,8 @@ binom_ci(x)
 
 ## Value
 
-a vector of mean, lower CI, upper CI, and length of x
+A named numeric vector: `y` is the estimated proportion, `ymin` and
+`ymax` are its 95% confidence limits, and `len` is the sample size.
 
 ## Examples
 

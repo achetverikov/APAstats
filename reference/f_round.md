@@ -24,7 +24,8 @@ f_round(x, digits = 2, strip.lead.zeros = FALSE)
 
 ## Value
 
-Value A number rounded to the specified number of digits
+A character vector containing `x` rounded to the specified number of
+decimal places, optionally omitting zeros before decimal points.
 
 ## Examples
 

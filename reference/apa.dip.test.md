@@ -38,5 +38,5 @@ if (requireNamespace("diptest", quietly = TRUE)) {
   # Format results in APA style
   apa(dip_result)
 }
-#> [1] "_D_ = 0.05, _p_ < .001"
+#> [1] "_D_ = 0.06, _p_ < .001"
 ```

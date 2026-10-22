@@ -100,8 +100,8 @@ apa(
 
 - p.as.number:
 
-  should the p-values be transformed to numbers (T) or shown as strings
-  (F)?
+  should the p-values be transformed to numbers (TRUE) or shown as
+  strings (FALSE)?
 
 - term.pattern:
 
@@ -124,7 +124,12 @@ apa(
 
 ## Value
 
-result
+A character result for a selected `term`. Otherwise, a `data.frame` with
+columns `B` (coefficient estimate), `SE` (standard error), `Stat` (test
+statistic), `p` (p-value), `eff` (term name), and `str` (complete
+APA-formatted result). The summary columns are character vectors except
+that `p` is numeric when `p.as.number = TRUE`. `term.pattern` filters
+the rows of this data frame.
 
 ## Examples
 
@@ -159,7 +164,7 @@ apa(fit)
 
 # With effect size (requires rockchalk package)
 if (requireNamespace("rockchalk", quietly = TRUE)) {
-  apa(fit, "body", 4, eff.size = TRUE)
+  print(apa(fit, "body", 4, eff.size = TRUE))
 }
 #> The deltaR-square values: the change in the R-square
 #>       observed when a single term is removed.
@@ -170,7 +175,7 @@ if (requireNamespace("rockchalk", quietly = TRUE)) {
 
 if (requireNamespace("lmerTest", quietly = TRUE)) {
   fm <- lmerTest::lmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)
-  apa(fm, "Days", test.df = TRUE)
+  print(apa(fm, "Days", test.df = TRUE))
 }
 #> [1] "_t_(17.00) =  6.77, _p_ < .001"
 
@@ -180,7 +185,7 @@ if (requireNamespace("lme4", quietly = TRUE)) {
     data = lme4::cbpp,
     family = binomial
   )
-  apa(gm, "period2")
+  print(apa(gm, "period2"))
 }
 #> [1] "_Z_ = -3.27, _p_ = .001"
 ```

@@ -20,4 +20,5 @@ scale_y_exp(digits = 0, ...)
 
 ## Value
 
-scale
+A continuous y-position scale (class `ScaleContinuousPosition`) with
+breaks and labels transformed from logarithmic to exponentiated values.

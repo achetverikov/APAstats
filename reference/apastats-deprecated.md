@@ -1,4 +1,4 @@
-# Deprecated functions in the apastats package
+# Deprecated functions in the [apastats2](https://achetverikov.github.io/APAstats/reference/apastats2-package.md) package
 
 These functions are deprecated and will be removed in a future version.
 Please use their replacements as indicated.
@@ -346,3 +346,52 @@ plot(
   debug = FALSE
 )
 ```
+
+## Value
+
+Each function returns the result of its replacement and signals a
+deprecation warning. The returned value depends on the function:
+
+- The `describe.*` functions return character vectors containing
+  APA-formatted statistical results, such as test statistics, degrees of
+  freedom, p-values, effect sizes, means, or confidence intervals.
+  `describe.glm` and `describe.lmer` instead return a data frame when no
+  term is selected, with formatted coefficient summaries in columns `B`,
+  `SE`, `Stat`, `p`, `eff`, and `str`; see
+  [apa.glm](https://achetverikov.github.io/APAstats/reference/apa.glm.md)
+  for the column meanings. With `append_to_table = TRUE`,
+  `describe.afex` and `describe.ezanova` instead return a data frame
+  containing the selected ANOVA results and an additional `res` column
+  with formatted text.
+
+- `mymean`, `mean.nn`, `mysum`, `sum.nn`, `mysd`, and `sd.nn` return
+  numeric summaries (mean, sum, or standard deviation) with missing
+  values removed.
+
+- `drop.empty.cols` returns the input data frame with columns containing
+  only missing values removed.
+
+- `binom.ci` returns a named numeric vector: `y` is the estimated
+  proportion, `ymin` and `ymax` are its confidence limits, and `len` is
+  the number of observations.
+
+- `mean.round`, `sd.round`, `omit.zeroes`, and `f.round` return
+  character vectors containing formatted numbers.
+
+- `load.libs` invisibly returns a list of logical values, one per
+  requested package, indicating whether loading succeeded. It is called
+  for the side effect of loading and attaching packages.
+
+- `lmer.fixef` returns a data frame with columns `Estimate`, `Std.Err`,
+  and `t`, giving fixed-effect estimates, standard errors, and
+  estimate-to-standard-error ratios.
+
+- `base.breaks`, `base.breaks.x`, and `base.breaks.y` return a
+  continuous
+  [ggplot2](https://ggplot2.tidyverse.org/reference/ggplot2-package.html)
+  scale (class `ScaleContinuousPosition`) with axis breaks; when
+  `addSegment = TRUE`, they return a list containing a segment layer and
+  that scale.
+
+- `plot.pointrange` returns a `ggplot` object showing group summaries
+  with confidence intervals or standard errors.

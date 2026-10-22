@@ -51,8 +51,8 @@ if (requireNamespace("carData", quietly = TRUE)) {
              contrasts = list(fcategory = contr.sum, partner.status = contr.sum))
   anova_obj <- anova(mod1, mod2, mod3)
 
-  apa(anova_obj)
-  apa(anova_obj, 3)
+  print(apa(anova_obj))
+  print(apa(anova_obj, 3))
 
   # car::Anova version
   if (requireNamespace("car", quietly = TRUE)) {
@@ -60,9 +60,12 @@ if (requireNamespace("carData", quietly = TRUE)) {
               contrasts = list(fcategory = contr.sum, partner.status = contr.sum))
     afit <- car::Anova(mod)
 
-    apa(afit, "fcategory")
-    apa(afit, 2, 4)
+    print(apa(afit, "fcategory"))
+    print(apa(afit, 2, 4))
   }
 }
+#> [1] "_F_(2, 42) = 0.09, _p_ = .915"
+#> [1] "_F_(3, 39) = 6.16, _p_ = .002"
+#> [1] "_F_(2, 39) = 0.28, _p_ = .760"
 #> [1] "_F_(1, 39) = 10.1207, _p_ = .003"
 ```

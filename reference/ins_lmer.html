@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">apastats2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,7 +74,10 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>result</p>
+    <p>A character result for a selected <code>term</code>, or a <code>data.frame</code> of
+coefficient summaries when <code>term = NULL</code>. The table has the columns
+documented in <a href="apa.glm.html">apa.glm</a>; <code>str</code> contains estimates, standard errors, and
+test statistics formatted for in-text reporting.</p>
     </div>
 
     <div class="section level2">
@@ -84,9 +87,10 @@
 <span class="r-in"><span>  <span class="va">fm</span> <span class="op">&lt;-</span> <span class="fu">lme4</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, <span class="fu">lme4</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/lme4/man/sleepstudy.html" class="external-link">sleepstudy</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>  </span></span>
 <span class="r-in"><span>  <span class="co"># Concise in-text reporting</span></span></span>
-<span class="r-in"><span>  <span class="fu">ins_lmer</span><span class="op">(</span><span class="va">fm</span>, <span class="st">"Days"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu">ins_lmer</span><span class="op">(</span><span class="va">fm</span>, <span class="st">"(Intercept)"</span>, digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">ins_lmer</span><span class="op">(</span><span class="va">fm</span>, <span class="st">"Days"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">ins_lmer</span><span class="op">(</span><span class="va">fm</span>, <span class="st">"(Intercept)"</span>, digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_B_ = 10.47 (1.55), _t_ =  6.77"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_B_ = 251.4 (6.8), _t_ = 36.84"</span>
 </code></pre></div>
     </div>

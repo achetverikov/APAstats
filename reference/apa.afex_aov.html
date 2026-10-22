@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">apastats2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +38,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Describe afex ANOVA results</h1>
+      <h1>Describe <a href="https://rdrr.io/pkg/afex/man/afex-package.html" class="external-link">afex</a> ANOVA results</h1>
       <small class="dont-index">Source: <a href="https://github.com/achetverikov/APAstats/blob/master/R/anova_functions.R" class="external-link"><code>R/anova_functions.R</code></a></small>
       <div class="d-none name"><code>apa.afex_aov.Rd</code></div>
     </div>
@@ -67,7 +67,7 @@
 
 
 <dl><dt id="arg-obj">obj<a class="anchor" aria-label="anchor" href="#arg-obj"></a></dt>
-<dd><p>afex ANOVA object</p></dd>
+<dd><p><a href="https://rdrr.io/pkg/afex/man/afex-package.html" class="external-link">afex</a> ANOVA object</p></dd>
 
 
 <dt id="arg-term">term<a class="anchor" aria-label="anchor" href="#arg-term"></a></dt>
@@ -91,7 +91,7 @@
 
 
 <dt id="arg-append-to-table">append_to_table<a class="anchor" aria-label="anchor" href="#arg-append-to-table"></a></dt>
-<dd><p>should the results be added to the afex ANOVA table (default: FALSE)</p></dd>
+<dd><p>should the results be added to the <a href="https://rdrr.io/pkg/afex/man/afex-package.html" class="external-link">afex</a> ANOVA table (default: FALSE)</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -100,7 +100,10 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>string with formatted results</p>
+    <p>A character vector reporting F statistics, degrees of freedom,
+p-values, and optional generalized eta-squared. With <code>append_to_table = TRUE</code>,
+a <code>data.frame</code> of selected ANOVA rows with an added <code>res</code> column containing
+the formatted results.</p>
     </div>
 
     <div class="section level2">
@@ -116,10 +119,12 @@
 <span class="r-in"><span>    fun_aggregate <span class="op">=</span> <span class="va">mean</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">afex_res</span>, <span class="st">"condition"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">afex_res</span>, <span class="st">"condition"</span>, eta_digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">afex_res</span>, <span class="st">"condition"</span>, include_eta <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">afex_res</span>, <span class="st">"condition"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">afex_res</span>, <span class="st">"condition"</span>, eta_digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">afex_res</span>, <span class="st">"condition"</span>, include_eta <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_F_(1, 684) = 3.24, _p_ = .072, $\\eta$^2^~G~ &lt; .01"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_F_(1, 684) = 3.24, _p_ = .072, $\\eta$^2^~G~ &lt; .001"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_F_(1, 684) = 3.24, _p_ = .072"</span>
 </code></pre></div>
     </div>

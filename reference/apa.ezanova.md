@@ -64,7 +64,10 @@ apa(
 
 ## Value
 
-string with formatted results
+A character vector reporting F statistics, degrees of freedom, p-values,
+and optional generalized eta-squared. With `append_to_table = TRUE`, a
+`data.frame` of selected ANOVA rows with an added `res` column
+containing the formatted results.
 
 ## Examples
 
@@ -83,10 +86,12 @@ if (requireNamespace("ez", quietly = TRUE) && requireNamespace("afex", quietly =
   )
   
   # Format results in APA style
-  apa(ez_res, "condition")
-  apa(ez_res, "condition", eta_digits = 3)
-  apa(ez_res, "condition", include_eta = FALSE)
+  print(apa(ez_res, "condition"))
+  print(apa(ez_res, "condition", eta_digits = 3))
+  print(apa(ez_res, "condition", include_eta = FALSE))
 }
 #> Warning: Collapsing data to cell means. *IF* the requested effects are a subset of the full design, you must use the "within_full" argument, else results may be inaccurate.
+#> [1] "_F_(1, 684) = 3.24, _p_ = .072, $\\eta$^2^~G~ < .01"
+#> [1] "_F_(1, 684) = 3.24, _p_ = .072, $\\eta$^2^~G~ < .001"
 #> [1] "_F_(1, 684) = 3.24, _p_ = .072"
 ```

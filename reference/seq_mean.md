@@ -16,7 +16,7 @@ seq_mean(x)
 
 ## Value
 
-means between consecutive values
+A numeric vector of midpoints between consecutive values in `x`.
 
 ## Examples
 

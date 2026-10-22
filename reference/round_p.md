@@ -40,7 +40,8 @@ round_p(
 
 ## Value
 
-Formatted p-value
+A character vector of formatted p-values, including the requested
+relation signs and small-value threshold notation.
 
 ## Examples
 

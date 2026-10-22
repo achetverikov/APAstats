@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">apastats2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,29 +57,29 @@
 <span>  linesize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,</span>
 <span>  pointfill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="st">"white"</span><span class="op">)</span>,</span>
 <span>  pointshape <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  within_subj <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  within_subj <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  wid <span class="op">=</span> <span class="st">"uid"</span>,</span>
 <span>  bars <span class="op">=</span> <span class="st">"ci"</span>,</span>
 <span>  withinvars <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  betweenvars <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  x_as_numeric <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  x_as_numeric <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  custom_geom_before <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  connecting_line <span class="op">=</span> <span class="cn">F</span>,</span>
-<span>  pretty_breaks_y <span class="op">=</span> <span class="cn">F</span>,</span>
-<span>  pretty_y_axis <span class="op">=</span> <span class="cn">F</span>,</span>
-<span>  exp_y <span class="op">=</span> <span class="cn">F</span>,</span>
-<span>  print_aggregated_data <span class="op">=</span> <span class="cn">F</span>,</span>
-<span>  do_aggregate <span class="op">=</span> <span class="cn">F</span>,</span>
-<span>  add_margin <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  connecting_line <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  pretty_breaks_y <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  pretty_y_axis <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  exp_y <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  print_aggregated_data <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  do_aggregate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  add_margin <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  margin_label <span class="op">=</span> <span class="st">"all"</span>,</span>
 <span>  margin_x_vals <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  bars_instead_of_points <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  bars_instead_of_points <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  geom_bar_params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  add_jitter <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  add_jitter <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  individual_points_params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  drop_NA_subj <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  drop_NA_subj <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  design <span class="op">=</span> <span class="st">"between"</span>,</span>
-<span>  debug <span class="op">=</span> <span class="cn">F</span></span>
+<span>  debug <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -144,7 +144,7 @@
 
 
 <dt id="arg-connecting-line">connecting_line<a class="anchor" aria-label="anchor" href="#arg-connecting-line"></a></dt>
-<dd><p>should we add connecting line (T/F)?</p></dd>
+<dd><p>should we add connecting line (TRUE/FALSE)?</p></dd>
 
 
 <dt id="arg-pretty-breaks-y">pretty_breaks_y<a class="anchor" aria-label="anchor" href="#arg-pretty-breaks-y"></a></dt>
@@ -164,11 +164,11 @@
 
 
 <dt id="arg-do-aggregate">do_aggregate<a class="anchor" aria-label="anchor" href="#arg-do-aggregate"></a></dt>
-<dd><p>aggregate data by all conditions before plotting (False)</p></dd>
+<dd><p>aggregate data by all conditions before plotting (FALSE)</p></dd>
 
 
 <dt id="arg-add-margin">add_margin<a class="anchor" aria-label="anchor" href="#arg-add-margin"></a></dt>
-<dd><p>add margin that would show the aggregate over all or subset of x-axis values (T/F)</p></dd>
+<dd><p>add margin that would show the aggregate over all or subset of x-axis values (TRUE/FALSE)</p></dd>
 
 
 <dt id="arg-margin-label">margin_label<a class="anchor" aria-label="anchor" href="#arg-margin-label"></a></dt>
@@ -209,7 +209,8 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>plot of pointrange</p>
+    <p>A <code>ggplot</code> object displaying group summaries and their error bars,
+with optional margin summaries, connecting lines, bars, or individual points.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -277,6 +278,7 @@
 <span class="r-in"><span>    <span class="st">"target more noisy"</span> <span class="op">=</span> <span class="st">"Target more noisy"</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_pointrange-3.png" alt="" width="1760" height="880"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

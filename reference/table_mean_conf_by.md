@@ -1,6 +1,6 @@
-# Get a list of means and confidence intervals by group
+# Get formatted means and confidence intervals by group
 
-Get a list of means and confidence intervals by group
+Get formatted means and confidence intervals by group
 
 ## Usage
 
@@ -28,7 +28,11 @@ table_mean_conf_by(x, by, digits = 2, binom = FALSE)
 
 ## Value
 
-a list of means and CI with keys corresponding to the group labels
+An array of list entries, with dimensions and dimension names determined
+by the levels of the grouping variables in `by`. Each observed group
+contains the two-element character vector returned by
+[table_mean_conf](https://achetverikov.github.io/APAstats/reference/table_mean_conf.md);
+unobserved combinations contain `NULL`.
 
 ## Examples
 
