@@ -2,10 +2,13 @@
 #'
 #' @param x vector of numbers to create breaks from
 #' @param scale scale (x or y) to create breaks for
-#' @param addSegment should we add a line to the scale? (T/F)
+#' @param addSegment should we add a line to the scale? (TRUE/FALSE)
 #' @param ... other parameters passed to scale_(x or y)_continuous
 #'
-#' @return scale_(x or y)_continuous with pretty breaks and accompanying geom_segment if addSegment == TRUE
+#' @return A continuous position scale (class `ScaleContinuousPosition`)
+#' with breaks spanning `x`. When `addSegment = TRUE`, a list containing
+#' an axis-segment layer and the scale, suitable for adding to a
+#' [ggplot2](https://CRAN.R-project.org/package=ggplot2) plot.
 #' @export
 #' 
 #' @examples
@@ -83,13 +86,13 @@ base_breaks_y <- function(x, addSegment = TRUE, ...) {
 #' @param betweenvars between-subject variables
 #' @param x_as_numeric should we treat x as numeric (otherwise it is treated as is)?
 #' @param custom_geom_before any custom geom to add before points and connecting line (geoms that should be on top of the pointrange can be added in a usual manner)
-#' @param connecting_line should we add connecting line (T/F)?
+#' @param connecting_line should we add connecting line (TRUE/FALSE)?
 #' @param pretty_breaks_y prettify y breaks
 #' @param pretty_y_axis prettify y axis
 #' @param exp_y exponentiate y (it's better to use this than scale_y_exp if pretty_breaks_y is used)
 #' @param print_aggregated_data print aggregated data used for plotting to console
-#' @param do_aggregate aggregate data by all conditions before plotting (False)
-#' @param add_margin add margin that would show the aggregate over all or subset of x-axis values (T/F)
+#' @param do_aggregate aggregate data by all conditions before plotting (FALSE)
+#' @param add_margin add margin that would show the aggregate over all or subset of x-axis values (TRUE/FALSE)
 #' @param margin_label margin label to use
 #' @param margin_x_vals which levels of x-axis variable to aggregate over (NULL means all of them)
 #' @param bars_instead_of_points use geom_bar instead of geom_point
@@ -102,7 +105,8 @@ base_breaks_y <- function(x, addSegment = TRUE, ...) {
 #'
 #' @details For point and line properties (e.g., pointfill) passing NULL allows to avoid setting these values (useful when they are mapped to some variables).
 #'
-#' @return plot of pointrange
+#' @return A `ggplot` object displaying group summaries and their error bars,
+#' with optional margin summaries, connecting lines, bars, or individual points.
 #' @export plot_pointrange
 #' @import ggplot2
 #' @examples
@@ -164,13 +168,13 @@ base_breaks_y <- function(x, addSegment = TRUE, ...) {
 
 
 plot_pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize = I(3), linesize = I(1),
-                            pointfill = I("white"), pointshape = NULL, within_subj = F,
+                            pointfill = I("white"), pointshape = NULL, within_subj = FALSE,
                             wid = "uid", bars = "ci", withinvars = NULL, betweenvars = NULL,
-                            x_as_numeric = F, custom_geom_before = NULL, connecting_line = F,
-                            pretty_breaks_y = F, pretty_y_axis = F, exp_y = F, print_aggregated_data = F,
-                            do_aggregate = F, add_margin = F, margin_label = "all", margin_x_vals = NULL,
-                            bars_instead_of_points = F, geom_bar_params = list(), add_jitter = F,
-                            individual_points_params = list(), drop_NA_subj = F, design = "between", debug = F) {
+                            x_as_numeric = FALSE, custom_geom_before = NULL, connecting_line = FALSE,
+                            pretty_breaks_y = FALSE, pretty_y_axis = FALSE, exp_y = FALSE, print_aggregated_data = FALSE,
+                            do_aggregate = FALSE, add_margin = FALSE, margin_label = "all", margin_x_vals = NULL,
+                            bars_instead_of_points = FALSE, geom_bar_params = list(), add_jitter = FALSE,
+                            individual_points_params = list(), drop_NA_subj = FALSE, design = "between", debug = FALSE) {
 
   x <- y <- xend <- yend <- NULL  # due to NSE notes in R CMD check
   
@@ -180,20 +184,20 @@ plot_pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
   }
   dv <- as.character(plot_f["y"][[1]])
   plot_vars <- as.character(unlist(plot_f[names(plot_f) != "y"]))
-  if (length(setdiff(plot_vars, c(betweenvars, withinvars))) > 0) {
+  unclassified <- setdiff(plot_vars, c(betweenvars, withinvars))
+  if (length(unclassified) > 0) {
     if (design == "between") {
-      warning(paste0("Variables ", paste_and(unique(setdiff(plot_vars, c(betweenvars, withinvars)))), " are not listed in withinvars or betweenvars but are used as plot parameters. They would be considered as betweenvars. "))
-      betweenvars <- union(betweenvars, setdiff(plot_vars, withinvars))
+      warning(paste0("Variables ", paste_and(unclassified), " are not listed in withinvars or betweenvars but are used as plot parameters. They would be considered as betweenvars. "))
+      betweenvars <- union(betweenvars, unclassified)
     } else {
-      warning(paste0("Variables ", paste_and(unique(setdiff(plot_vars, c(betweenvars, withinvars)))), " are not listed in withinvars or betweenvars but are used as plot parameters. They would be considered as withinvars "))
-      withinvars <- union(withinvars, setdiff(plot_vars, betweenvars))
+      warning(paste0("Variables ", paste_and(unclassified), " are not listed in withinvars or betweenvars but are used as plot parameters. They would be considered as withinvars "))
+      withinvars <- union(withinvars, unclassified)
     }
   }
 
   withinvars <- unique(withinvars)
   betweenvars <- unique(betweenvars)
 
-  # plot_data <- as.data.frame(ellipses[[1]])
   plot_data <- as.data.frame(data)
   plot_data <- plot_data[!is.na(plot_data[, dv]), ]
   aes_list <- modifyList(lapply(
@@ -203,35 +207,15 @@ plot_pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
   if (do_aggregate) {
     plot_data <- aggregate(plot_data[dv], plot_data[c(withinvars, betweenvars, wid)], mean)
   }
-  if (within_subj) {
-    if (length(withinvars) == 0 || is.null(withinvars)) {
-      stop("Within-subject plot can only be made if there is at least one within-subject variable listed in withinvars parameter.")
-    }
-
-    aggr_data <- get_adjusted_ci(
-      data = plot_data,
-      value_var = dv,
-      within = withinvars,
-      between = betweenvars,
-      wid = wid,
-      errorbar = bars,
-      drop_NA_subj = drop_NA_subj,
-      debug = debug
-    )
-  } else {
-    aggr_data <- get_adjusted_ci(
-      data = plot_data,
-      value_var = dv,
-      between = c(withinvars, betweenvars),
-      errorbar = bars,
-      adjustments = list(purpose = "single", decorrelation = "none"),
-      debug = debug
-    )
-
-    # Keep the legacy columns used by the plotting/margin code below.
-    aggr_data[, dv] <- aggr_data$center
-    aggr_data[, bars] <- aggr_data$upperwidth
+  if (within_subj && length(withinvars) == 0) {
+    stop("Within-subject plot can only be made if there is at least one within-subject variable listed in withinvars parameter.")
   }
+  aggr_data <- get_adjusted_ci(
+    plot_data, value_var = dv, within = if (within_subj) withinvars,
+    between = if (within_subj) betweenvars else c(withinvars, betweenvars),
+    wid = if (within_subj) wid, errorbar = bars,
+    drop_NA_subj = within_subj && drop_NA_subj, debug = debug
+  )
   if (x_as_numeric) {
     aggr_data[, aes_list$x] <- as.numeric(as.character(aggr_data[, aes_list$x]))
   }
@@ -255,24 +239,15 @@ plot_pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
       adjustments = if (!margin_within) list(purpose = "single", decorrelation = "none") else list(purpose = "single", decorrelation = NULL),
       debug = debug
     )
-    if (!within_subj) {
-      summ_data_for_margin[, dv] <- summ_data_for_margin$center
-      summ_data_for_margin[, bars] <- summ_data_for_margin$upperwidth
-    }
     summ_data_for_margin[, aes_list$x] <- margin_label
     aggr_data <- plyr::rbind.fill(aggr_data, summ_data_for_margin)
 
     x_levels <- unique(aggr_data[, aes_list$x])
     aggr_data[, aes_list$x] <- factor(aggr_data[, aes_list$x], levels = c(x_levels[x_levels != margin_label], margin_label))
   }
-  if (within_subj) {
-    aggr_data$ymin <- aggr_data[, "center"] + aggr_data[, "lowerwidth"]
-    aggr_data$ymax <- aggr_data[, "center"] + aggr_data[, "upperwidth"]
-    aggr_data[, dv] <- aggr_data$center
-  } else {
-    aggr_data$ymin <- aggr_data[, dv] - aggr_data[, bars]
-    aggr_data$ymax <- aggr_data[, dv] + aggr_data[, bars]
-  }
+  aggr_data$ymin <- aggr_data$lower_ci
+  aggr_data$ymax <- aggr_data$upper_ci
+  aggr_data[, dv] <- aggr_data$center
   if (exp_y) {
     aggr_data$ymin <- exp(aggr_data$ymin)
     aggr_data$ymax <- exp(aggr_data$ymax)
@@ -338,12 +313,9 @@ plot_pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
         yend = max(breaks)
       )
       p <- p + geom_segment(
-        data = data.frame(
-          x = -Inf,
-          xend = -Inf, y = min(breaks), yend = max(breaks)
-        ),
+        data = d,
         aes(x = x, xend = xend, y = y, yend = yend),
-        inherit.aes = F
+        inherit.aes = FALSE
       )
     }
   }
@@ -356,7 +328,8 @@ plot_pointrange <- function(data, mapping, pos = position_dodge(0.3), pointsize 
 #' @param digits number of digits to use in labels
 #' @param  ... other arguments passed to scale_y_continuous
 #'
-#' @return scale
+#' @return A continuous y-position scale (class `ScaleContinuousPosition`)
+#' with breaks and labels transformed from logarithmic to exponentiated values.
 #' @export
 #'
 scale_y_exp <- function(digits = 0, ...) {

@@ -10,7 +10,9 @@ load_libs(libs)
 \item{libs}{a vector of libraries names}
 }
 \value{
-None
+Invisibly, a list of logical scalars, one per package in \code{libs},
+indicating whether loading succeeded. Called for the side effect of
+loading and attaching the requested packages.
 }
 \description{
 Quietly load libraries

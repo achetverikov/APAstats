@@ -16,7 +16,9 @@ aggr2(x, by, fun, ...)
 \item{...}{additional parameters passed to fun}
 }
 \value{
-value aggregated first by specified vector and then aggregated again
+The object returned by \code{fun} when applied to the group summaries.
+Its class depends on \code{fun}; scalar numeric summary functions such as
+\link[base:mean]{base::mean} return one numeric value.
 }
 \description{
 Aggregates value twice providing mean of means, SD of SDs, etc.

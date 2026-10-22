@@ -10,7 +10,9 @@ lmer_fixef(fit.lmer)
 \item{fit.lmer}{fitted \code{lme4::lmer} model object}
 }
 \value{
-result
+A \code{data.frame} with one row per fixed-effect coefficient and columns
+\code{Estimate} (coefficient), \code{Std.Err} (standard error), and \code{t} (the ratio
+of the estimate to its standard error). Row names identify model terms.
 }
 \description{
 Get nice matrix of fixed effects from lmer

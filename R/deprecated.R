@@ -1,4 +1,4 @@
-#' Deprecated functions in the apastats package
+#' Deprecated functions in the [apastats2][apastats2::apastats2-package] package
 #'
 #' @description
 #' These functions are deprecated and will be removed in a future version.
@@ -47,6 +47,44 @@
 #'   \item `mymean` -> [mean_nn]
 #'   \item `mysum` -> [sum_nn]
 #'   \item `mysd` -> [sd_nn]
+#' }
+#'
+#' @return
+#' Each function returns the result of its replacement and signals a deprecation
+#' warning. The returned value depends on the function:
+#' \itemize{
+#'   \item The \code{describe.*} functions return character vectors containing
+#'   APA-formatted statistical results, such as test statistics, degrees of
+#'   freedom, p-values, effect sizes, means, or confidence intervals.
+#'   \code{describe.glm} and \code{describe.lmer} instead return a data frame
+#'   when no term is selected, with formatted coefficient summaries in columns
+#'   \code{B}, \code{SE}, \code{Stat}, \code{p}, \code{eff}, and \code{str};
+#'   see [apa.glm] for the column meanings.
+#'   With \code{append_to_table = TRUE}, \code{describe.afex} and
+#'   \code{describe.ezanova} instead return a data frame containing the selected
+#'   ANOVA results and an additional \code{res} column with formatted text.
+#'   \item \code{mymean}, \code{mean.nn}, \code{mysum}, \code{sum.nn},
+#'   \code{mysd}, and \code{sd.nn} return numeric summaries (mean, sum, or
+#'   standard deviation) with missing values removed.
+#'   \item \code{drop.empty.cols} returns the input data frame with columns
+#'   containing only missing values removed.
+#'   \item \code{binom.ci} returns a named numeric vector: \code{y} is the
+#'   estimated proportion, \code{ymin} and \code{ymax} are its confidence
+#'   limits, and \code{len} is the number of observations.
+#'   \item \code{mean.round}, \code{sd.round}, \code{omit.zeroes}, and
+#'   \code{f.round} return character vectors containing formatted numbers.
+#'   \item \code{load.libs} invisibly returns a list of logical values, one
+#'   per requested package, indicating whether loading succeeded. It is called
+#'   for the side effect of loading and attaching packages.
+#'   \item \code{lmer.fixef} returns a data frame with columns
+#'   \code{Estimate}, \code{Std.Err}, and \code{t}, giving fixed-effect
+#'   estimates, standard errors, and estimate-to-standard-error ratios.
+#'   \item \code{base.breaks}, \code{base.breaks.x}, and \code{base.breaks.y}
+#'   return a continuous [ggplot2][ggplot2::ggplot2-package] scale (class \code{ScaleContinuousPosition})
+#'   with axis breaks; when \code{addSegment = TRUE}, they return a list
+#'   containing a segment layer and that scale.
+#'   \item \code{plot.pointrange} returns a \code{ggplot} object showing
+#'   group summaries with confidence intervals or standard errors.
 #' }
 #'
 #' @name apastats-deprecated

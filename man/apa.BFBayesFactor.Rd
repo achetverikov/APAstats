@@ -2,12 +2,12 @@
 % Please edit documentation in R/regression_functions.R
 \name{apa.BFBayesFactor}
 \alias{apa.BFBayesFactor}
-\title{Describe BayesFactor results}
+\title{Describe \link[BayesFactor:BayesFactor-package]{BayesFactor} results}
 \usage{
 \method{apa}{BFBayesFactor}(obj, digits = 2, top_limit = 10000, convert_to_power = TRUE, ...)
 }
 \arguments{
-\item{obj}{an object of \link[BayesFactor:BayesFactor-package]{BayesFactor::BayesFactor} class \code{BFBayesFactor}}
+\item{obj}{an object of \link[BayesFactor:BayesFactor-package]{BayesFactor} class \code{BFBayesFactor}}
 
 \item{digits}{number of digits to use}
 
@@ -18,22 +18,19 @@
 \item{...}{other parameters passed to \link{format_results}}
 }
 \value{
-string describing the result
+A character result reporting the Bayes factor, optionally in
+scientific notation for very large or small values.
 }
 \description{
-Describe BayesFactor results
+Describe \link[BayesFactor:BayesFactor-package]{BayesFactor} results
 }
 \note{
 Code for converting to exponential notation is based on https://dankelley.github.io/r/2015/03/22/scinot.html
 }
 \examples{
 if (requireNamespace("BayesFactor", quietly = TRUE)) {
-  # Load the puzzle data from BayesFactor package
-  data(puzzles, package = "BayesFactor")
-  
-  # Run Bayesian ANOVA
-  bfs <- BayesFactor::anovaBF(RT ~ shape + color + ID, data = puzzles, progress = FALSE)
-  apa(bfs[1])
-  apa(bfs[3] / bfs[1])
+  bf <- BayesFactor::ttestBF(x = c(0.8, 1.1, 0.9, 1.5, 1.2, 0.7))
+  print(apa(bf))
+  print(apa(bf, top_limit = 10))
 }
 }

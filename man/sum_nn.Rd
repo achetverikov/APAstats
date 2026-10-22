@@ -2,7 +2,7 @@
 % Please edit documentation in R/misc.R
 \name{sum_nn}
 \alias{sum_nn}
-\title{Sum with na.rm=T}
+\title{Sum with na.rm=TRUE}
 \usage{
 sum_nn(x, ...)
 }
@@ -12,10 +12,11 @@ sum_nn(x, ...)
 \item{...}{other arguments passed to sum}
 }
 \value{
-sum of x with NA removed
+A numeric or complex scalar giving the sum of \code{x}, with
+missing values removed.
 }
 \description{
-Sum with na.rm=T
+Sum with na.rm=TRUE
 }
 \examples{
 x <- c(NA, 10, 90)

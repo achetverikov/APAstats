@@ -12,7 +12,11 @@ apa(obj, ...)
 \item{...}{Additional arguments passed to specific methods}
 }
 \value{
-A formatted string in APA style
+The result of the method for \code{obj}: usually a character vector of
+APA-formatted statistical results. Regression methods can return a
+\code{data.frame} of coefficient summaries, and ANOVA methods can return a
+\code{data.frame} with formatted text appended when requested. See each
+method's documentation for its columns and selection options.
 }
 \description{
 The \code{apa} function provides a convenient way to format statistical results
@@ -23,7 +27,7 @@ It dispatches to various S3 methods depending on the class of the input object.
 This function supports various statistical objects directly:
 \itemize{
 \item \link{apa.ttest} for \link[stats:t.test]{stats::t.test} and \link{apa.r} for \link[stats:cor.test]{stats::cor.test} (both with class \code{htest})
-\item \link{apa.aov} for \link[stats:aov]{stats::aov}, \link{apa.anova} for \link[car:Anova]{car::Anova}, and \link{apa.afex_aov} for \link[afex:aov_car]{afex::aov_ez}, \link[afex:aov_car]{afex::aov_car}, or \link[afex:aov_car]{afex::aov_4}
+\item \link{apa.aov} for \link[stats:aov]{stats::aov}, \link{apa.anova} for \link[car:Anova]{car::Anova}, and \link{apa.afex_aov} for \link[afex:aov_ez]{afex::aov_ez}, \link[afex:aov_car]{afex::aov_car}, or \link[afex:aov_4]{afex::aov_4}
 \item \link{apa.glm} for \link[stats:glm]{stats::glm}, \link[stats:lm]{stats::lm}, \link[lme4:lmer]{lme4::lmer}, \link[lme4:glmer]{lme4::glmer}, and \link[lmerTest:lmer]{lmerTest::lmer}; \link{apa.lmert} remains available for summary objects from \link[lmerTest:lmer]{lmerTest::lmer}
 \item \link{apa.brmsfit} for \link[brms:brm]{brms::brm} and \link{apa.BFBayesFactor} for \link[BayesFactor:anovaBF]{BayesFactor::anovaBF}
 \item \link{apa.chisq.test} for \link[stats:chisq.test]{stats::chisq.test}

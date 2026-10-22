@@ -35,8 +35,8 @@ if (requireNamespace("ez", quietly = TRUE) && requireNamespace("afex", quietly =
   )
   
   # Format results in APA style
-  apa_ezStats(ezstats_res, 1)
-  apa_ezStats(ezstats_res, "incongruent")
-  apa_ezStats(ezstats_res, 1, digits = 3)
+  print(apa_ezStats(ezstats_res, 1))
+  print(apa_ezStats(ezstats_res, "incongruent"))
+  print(apa_ezStats(ezstats_res, 1, digits = 3))
 }
 }

@@ -16,7 +16,10 @@ ins_lmer(obj, term = NULL, digits = 2, adj.digits = TRUE)
 \item{adj.digits}{automatically adjusts digits so that B would not show up as "0.00"}
 }
 \value{
-result
+A character result for a selected \code{term}, or a \code{data.frame} of
+coefficient summaries when \code{term = NULL}. The table has the columns
+documented in \link{apa.glm}; \code{str} contains estimates, standard errors, and
+test statistics formatted for in-text reporting.
 }
 \description{
 A shortcut for apa.glm(..., dtype=4)
@@ -27,7 +30,7 @@ if (requireNamespace("lme4", quietly = TRUE)) {
   fm <- lme4::lmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)
   
   # Concise in-text reporting
-  ins_lmer(fm, "Days")
-  ins_lmer(fm, "(Intercept)", digits = 1)
+  print(ins_lmer(fm, "Days"))
+  print(ins_lmer(fm, "(Intercept)", digits = 1))
 }
 }

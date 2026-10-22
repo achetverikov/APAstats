@@ -19,7 +19,8 @@
 \item{...}{other parameters passed to \link{format_results}}
 }
 \value{
-Formatted string
+A character vector reporting the selected fixed-effect estimate,
+standard error, test statistic, degrees of freedom when available, and p-value.
 }
 \description{
 Note that this function uses \emph{summary} object from lmerTest::lmer model and not the model itself (see examples). Otherwise p-values will be computed during the call and everything will be very slow.
@@ -31,9 +32,9 @@ if (requireNamespace("lmerTest", quietly = TRUE)) {
   fms <- summary(fm)
   
   # Format results in APA style
-  apa(fms, "Days")
-  apa(fms, "(Intercept)")
-  apa(fms, 2)
-  apa(fms, "Days", "B")
+  print(apa(fms, "Days"))
+  print(apa(fms, "(Intercept)"))
+  print(apa(fms, 2))
+  print(apa(fms, "Days", "B"))
 }
 }

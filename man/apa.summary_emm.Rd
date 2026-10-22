@@ -3,7 +3,7 @@
 \name{apa.summary_emm}
 \alias{apa.summary_emm}
 \alias{apa.emmeans}
-\title{Describe contrasts created by emmeans}
+\title{Describe contrasts created by \link[emmeans:emmeans-package]{emmeans}}
 \usage{
 \method{apa}{summary_emm}(obj, term, dtype = "B", df = FALSE, ...)
 
@@ -24,7 +24,7 @@
 string with formatted results
 }
 \description{
-Describe contrasts created by emmeans
+Describe contrasts created by \link[emmeans:emmeans-package]{emmeans}
 }
 \examples{
 if (requireNamespace("emmeans", quietly = TRUE)) {
@@ -38,10 +38,10 @@ if (requireNamespace("emmeans", quietly = TRUE)) {
   sum_contr <- summary(emmeans::contrast(warp.emm, "trt.vs.ctrl"))
   
   # Format results in APA style
-  apa(sum_contr, 1)
-  apa(sum_contr, 3)
-  apa(sum_contr, 3, dtype = "t")
-  apa(sum_contr, 3, dtype = "c")
-  apa(sum_contr, 3, dtype = "c", df = TRUE)
+  print(apa(sum_contr, 1))
+  print(apa(sum_contr, 3))
+  print(apa(sum_contr, 3, dtype = "t"))
+  print(apa(sum_contr, 3, dtype = "c"))
+  print(apa(sum_contr, 3, dtype = "c", df = TRUE))
 }
 }

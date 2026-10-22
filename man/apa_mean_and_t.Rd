@@ -30,7 +30,7 @@ apa_mean_and_t(
 
 \item{eff.size}{Should we include effect size (default: FALSE)}
 
-\item{abs}{Should we show the absolute value if the t-test (T) or keep its sign (FALSE, default)}
+\item{abs}{Should we show the absolute value if the t-test (TRUE) or keep its sign (FALSE, default)}
 
 \item{aggregate_by}{Do the aggregation by the third variable(s): either NULL (default), a single vector variable, or a list of variables to aggregate by.}
 

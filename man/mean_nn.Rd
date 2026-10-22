@@ -2,7 +2,7 @@
 % Please edit documentation in R/misc.R
 \name{mean_nn}
 \alias{mean_nn}
-\title{Mean with na.rm=T}
+\title{Mean with na.rm=TRUE}
 \usage{
 mean_nn(x, ...)
 }
@@ -12,10 +12,11 @@ mean_nn(x, ...)
 \item{...}{other arguments passed to mean}
 }
 \value{
-mean of x with NA removed
+A numeric or complex scalar giving the mean of \code{x}, with
+missing values removed.
 }
 \description{
-Mean with na.rm=T
+Mean with na.rm=TRUE
 }
 \examples{
 x <- c(NA, 10, 90)

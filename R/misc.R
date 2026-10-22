@@ -1,9 +1,10 @@
-#' Mean with na.rm=T
+#' Mean with na.rm=TRUE
 #'
 #' @param x a vector of numbers
 #' @param ... other arguments passed to mean
 #'
-#' @return mean of x with NA removed
+#' @return A numeric or complex scalar giving the mean of `x`, with
+#' missing values removed.
 #' @export mean_nn
 #'
 #' @examples
@@ -16,12 +17,13 @@ mean_nn <- function(x, ...) {
   mean(x, na.rm = TRUE, ...)
 }
 
-#' SD with na.rm=T
+#' SD with na.rm=TRUE
 #'
 #' @param x a vector of numbers
 #' @param ... other arguments passed to sd
 #'
-#' @return sd of x with NA removed
+#' @return A numeric scalar giving the standard deviation of `x`, with
+#' missing values removed.
 #' @export sd_nn
 #'
 #' @examples
@@ -32,12 +34,13 @@ sd_nn <- function(x, ...) {
   sd(x, na.rm = TRUE, ...)
 }
 
-#' Sum with na.rm=T
+#' Sum with na.rm=TRUE
 #'
 #' @param x a vector of numbers
 #' @param ... other arguments passed to sum
 #'
-#' @return sum of x with NA removed
+#' @return A numeric or complex scalar giving the sum of `x`, with
+#' missing values removed.
 #' @export sum_nn
 #'
 #' @examples
@@ -54,7 +57,7 @@ sum_nn <- function(x, ...) {
 #'
 #' @param x a vector
 #'
-#' @return number of unique values in x
+#' @return A numeric scalar giving the number of distinct values in `x`.
 #' @export
 #'
 #' @examples
@@ -88,7 +91,8 @@ drop_empty_cols <- function(df) {
 #'
 #' @param x a vector of 0 and 1
 #'
-#' @return a vector of mean, lower CI, upper CI, and length of x
+#' @return A named numeric vector: `y` is the estimated proportion,
+#' `ymin` and `ymax` are its 95% confidence limits, and `len` is the sample size.
 #' @export binom_ci
 #'
 #' @examples
@@ -105,7 +109,8 @@ binom_ci <- function(x) {
 #' @param x a number
 #' @param ... other arguments passed to [apastats2::f_round]
 #' 
-#' @return Mean rounded to the specified number of digits (string)
+#' @return A character string containing the mean rounded to the specified
+#' number of decimal places.
 #' @export mean_round
 #'
 #' @examples
@@ -123,7 +128,8 @@ mean_round <- function(x, ...) {
 #' @param x a number
 #' @param ... other arguments passed to [apastats2::f_round]
 #'
-#' @return Mean rounded to the specified number of digits (string)
+#' @return A character string containing the standard deviation rounded to
+#' the specified number of decimal places.
 #' @export
 #'
 #' @examples
@@ -138,7 +144,9 @@ sd_round <- function(x, ...) {
 #'
 #' @param libs a vector of libraries names
 #'
-#' @return None
+#' @return Invisibly, a list of logical scalars, one per package in `libs`,
+#' indicating whether loading succeeded. Called for the side effect of
+#' loading and attaching the requested packages.
 #' @export
 #'
 #' @examples
@@ -157,13 +165,15 @@ load_libs <- function(libs) {
 #' @param num_labels should the labels be transformed into numbers (default: FALSE)
 #' @param labels a vector of labels to use for the groups (default: NULL)
 #' @param include_oob include values outside of the boundaries provided in `cuts` (default: TRUE)
-#' @param labels_at_means should labels be created as means between cuts (T) or as pairs of cuts (F)
+#' @param labels_at_means should labels be created as means between cuts (TRUE) or as pairs of cuts (FALSE)
 #' @param label_pairs_format formatting string to use when labels are generated from pairs of cuts (default: \[%.2f, %.2f\])
 #' @param ... other parameters passed to [base::cut]
 #'
-#' If `ncuts` is used, then the variable is cut into N cuts either of equal group size (eq_groups = TRUE) or equally distant from each other (eq_groups = FALSE). If `labels` are not provided, they are generated as  means between cuts if labels_at_means is T.
+#' If `ncuts` is used, then the variable is cut into N cuts either of equal group size (eq_groups = TRUE) or equally distant from each other (eq_groups = FALSE). If `labels` are not provided, they are generated as  means between cuts if labels_at_means is TRUE.
 #'
-#' @return a vector of group labels the same length as the original value vector
+#' @return A factor assigning each element of `x` to a bin, or a numeric
+#' vector of bin labels when `num_labels = TRUE`. The result has the same
+#' length as `x`.
 #' @export
 #'
 #' @examples
@@ -201,7 +211,7 @@ adv_cut <- function(x, ncuts = NULL, eq_groups = FALSE, cuts = NULL, num_labels 
     if (labels_at_means) {
       labels <- seq_mean(cuts)
     } else {
-      labels <- sapply(1:(length(cuts) - 1), \(i) sprintf(label_pairs_format, cuts[i], cuts[i + 1]))
+      labels <- sprintf(label_pairs_format, utils::head(cuts, -1), utils::tail(cuts, -1))
     }
   }
 
@@ -217,7 +227,7 @@ adv_cut <- function(x, ncuts = NULL, eq_groups = FALSE, cuts = NULL, num_labels 
 #'
 #' @param x a vector of numeric values
 #'
-#' @return means between consecutive values
+#' @return A numeric vector of midpoints between consecutive values in `x`.
 #' @export
 #'
 #' @examples
@@ -232,7 +242,9 @@ seq_mean <- function(x) {
 #'
 #' @param fit.lmer fitted `lme4::lmer` model object
 #'
-#' @return result
+#' @return A `data.frame` with one row per fixed-effect coefficient and columns
+#' `Estimate` (coefficient), `Std.Err` (standard error), and `t` (the ratio
+#' of the estimate to its standard error). Row names identify model terms.
 #' @export
 #'
 
@@ -248,7 +260,8 @@ lmer_fixef <- function(fit.lmer) {
 #' @param x A number
 #' @param digits Number of decimal digits to keep
 #'
-#' @return A number without leading zero
+#' @return A character vector containing formatted values with the leading
+#' character removed, intended to omit the zero before a decimal point.
 #' @export
 #'
 #' @examples
@@ -265,7 +278,8 @@ omit_zeroes <- function(x, digits = 2) {
 #' @param digits Number of decimal digits to keep
 #' @param strip.lead.zeros remove zero before decimal point (default is false)
 #'
-#' @return Value A number rounded to the specified number of digits
+#' @return A character vector containing `x` rounded to the specified number
+#' of decimal places, optionally omitting zeros before decimal points.
 #' @export
 #'
 #' @examples
@@ -291,7 +305,8 @@ f_round <- function(x, digits = 2, strip.lead.zeros = FALSE) {
 #' @param digits a number of decimal digits
 #' @param strip.lead.zeros remove zero before decimal point
 #' @param replace.very.small replace values lower than this criteria (NULL to keep values as is)
-#' @return Formatted p-value
+#' @return A character vector of formatted p-values, including the requested
+#' relation signs and small-value threshold notation.
 #' @export
 #'
 #' @examples
@@ -324,7 +339,8 @@ round_p <- function(values, include.rel = 1, digits = 3, strip.lead.zeros = TRUE
 #' @param res_str text
 #' @param type 'pandoc', 'latex', or 'plotmath' (the latter is very poorly implemented)
 #'
-#' @return \code{res_str} with latex 'emph' tags replaced with pandoc '_'
+#' @return A character vector containing `res_str` in the requested notation:
+#' LaTeX markup, Pandoc emphasis, or text for plotmath expressions.
 #' @export
 
 format_results <- function(res_str, type = "pandoc") {
@@ -339,6 +355,7 @@ format_results <- function(res_str, type = "pandoc") {
     if (any(grepl(",", res_str))) {
       res_str <- paste0("list(", res_str, ")")
     }
+    res_str
   }
 }
 
@@ -352,7 +369,9 @@ format_results <- function(res_str, type = "pandoc") {
 #' @param fun function to apply
 #' @param ... additional parameters passed to fun
 #'
-#' @return value aggregated first by specified vector and then aggregated again
+#' @return The object returned by `fun` when applied to the group summaries.
+#' Its class depends on `fun`; scalar numeric summary functions such as
+#' [base::mean] return one numeric value.
 #' @export
 #'
 #' @examples
@@ -374,7 +393,8 @@ aggr2 <- function(x, by, fun, ...) {
 #' @param sep separator (is not used for only two groups)
 #' @param suffix suffix to append to each value before the separator
 #'
-#' @return a string iterating the values in x
+#' @return A character string listing the values in `x`, with the requested
+#' separators, suffix, and final conjunction.
 #' @export
 #'
 #' @examples
@@ -432,187 +452,34 @@ paste_and <- function(x, sep = ", ", suffix = "") {
   NULL
 }
 
-.get_interval_precision_fun <- function(stat_name, stat_fun, errorbar, caller_env) {
-  if (is.function(errorbar)) {
-    return(errorbar)
-  }
-
-  if (!is.character(errorbar) || length(errorbar) != 1L) {
-    stop("errorbar must be 'CI', 'SE', 'none', or a precision function.")
-  }
-
-  errorbar_type <- toupper(errorbar)
-  if (!(errorbar_type %in% c("CI", "SE", "NONE"))) {
-    stop("errorbar must be 'CI', 'SE', 'none', or a precision function.")
-  }
-  if (errorbar_type == "NONE") {
-    return(function(x, gamma = 0.95) 0)
-  }
-
-  precision_builtin <- switch(
-    stat_name,
-    mean = if (errorbar_type == "SE") {
-      function(x, gamma = 0.95) stats::sd(x) / sqrt(length(x))
-    } else {
-      function(x, gamma = 0.95) {
-        se <- stats::sd(x) / sqrt(length(x))
-        base::mean(x) + se * stats::qt(
-          c(0.5 - gamma / 2, 0.5 + gamma / 2),
-          df = length(x) - 1
-        )
-      }
-    },
-    median = if (errorbar_type == "SE") {
-      function(x, gamma = 0.95) {
-        sqrt(pi / 2) * stats::sd(x) / sqrt(length(x))
-      }
-    } else {
-      function(x, gamma = 0.95) {
-        se <- sqrt(pi / 2) * stats::sd(x) / sqrt(length(x))
-        stats::median(x) + se * stats::qt(
-          c(0.5 - gamma / 2, 0.5 + gamma / 2),
-          df = length(x) - 1
-        )
-      }
-    },
-    var = if (errorbar_type == "SE") {
-      function(x, gamma = 0.95) {
-        stats::var(x) * sqrt(2 / (length(x) - 1))
-      }
-    } else {
-      function(x, gamma = 0.95) {
-        vx <- stats::var(x)
-        q <- stats::qchisq(
-          c(0.5 + gamma / 2, 0.5 - gamma / 2),
-          df = length(x) - 1
-        )
-        vx * (length(x) - 1) / q
-      }
-    },
-    sd = if (errorbar_type == "SE") {
-      function(x, gamma = 0.95) {
-        stats::sd(x) / sqrt(2 * (length(x) - 1))
-      }
-    } else {
-      function(x, gamma = 0.95) {
-        q <- sqrt(stats::qchisq(
-          c(0.5 + gamma / 2, 0.5 - gamma / 2),
-          df = length(x) - 1
-        ))
-        stats::sd(x) * sqrt(length(x) - 1) / q
-      }
-    },
-    MAD = if (errorbar_type == "SE") {
-      function(x, gamma = 0.95) {
-        sqrt(2 / pi) * stats::sd(x) / sqrt(length(x))
-      }
-    } else {
-      function(x, gamma = 0.95) {
-        se <- sqrt(2 / pi) * stats::sd(x) / sqrt(length(x))
-        stat_fun(x) + se * stats::qt(
-          c(0.5 - gamma / 2, 0.5 + gamma / 2),
-          df = length(x) - 1
-        )
-      }
-    },
-    IQR = if (errorbar_type == "SE") {
-      function(x, gamma = 0.95) {
-        q <- stats::dnorm(stats::qnorm(0.25))
-        stats::sd(x) / (2 * sqrt(length(x)) * q)
-      }
-    } else {
-      function(x, gamma = 0.95) {
-        q <- stats::dnorm(stats::qnorm(0.25))
-        se <- stats::sd(x) / (2 * sqrt(length(x)) * q)
-        stats::IQR(x) + se * stats::qt(
-          c(0.5 - gamma / 2, 0.5 + gamma / 2),
-          df = length(x) - 1
-        )
-      }
-    },
-    hmean = if (errorbar_type == "SE") {
-      function(x, gamma = 0.95) {
-        stat_fun(x)^2 * stats::sd(1 / x) / sqrt(length(x) - 1)
-      }
-    } else {
-      function(x, gamma = 0.95) {
-        se <- stat_fun(x)^2 * stats::sd(1 / x) / sqrt(length(x) - 1)
-        stat_fun(x) + se * stats::qt(
-          c(0.5 - gamma / 2, 0.5 + gamma / 2),
-          df = length(x) - 1
-        )
-      }
-    },
-    gmean = if (errorbar_type == "SE") {
-      function(x, gamma = 0.95) {
-        stat_fun(x) * stats::sd(log(x)) / sqrt(length(x) - 1)
-      }
-    } else {
-      function(x, gamma = 0.95) {
-        se <- stat_fun(x) * stats::sd(log(x)) / sqrt(length(x) - 1)
-        stat_fun(x) + se * stats::qt(
-          c(0.5 - gamma / 2, 0.5 + gamma / 2),
-          df = length(x) - 1
-        )
-      }
-    },
-    fisherskew = if (errorbar_type == "SE") {
-      function(x, gamma = 0.95) {
-        n <- length(x)
-        sqrt((6 * n * (n - 1)) / ((n - 2) * (n + 1) * (n + 3)))
-      }
-    } else {
-      function(x, gamma = 0.95) {
-        n <- length(x)
-        se <- sqrt((6 * n * (n - 1)) / ((n - 2) * (n + 1) * (n + 3)))
-        stat_fun(x) + se * stats::qnorm(
-          c(0.5 - gamma / 2, 0.5 + gamma / 2)
-        )
-      }
-    },
-    pearsonskew = if (errorbar_type == "SE") {
-      function(x, gamma = 0.95) {
-        sqrt((pi / 2 - 1) / length(x))
-      }
-    } else {
-      function(x, gamma = 0.95) {
-        se <- sqrt((pi / 2 - 1) / length(x))
-        stat_fun(x) + se * stats::qt(
-          c(0.5 - gamma / 2, 0.5 + gamma / 2),
-          df = length(x) - 1
-        )
-      }
-    },
-    fisherkurtosis = if (errorbar_type == "SE") {
-      function(x, gamma = 0.95) {
-        n <- length(x)
-        se_skew <- sqrt((6 * n * (n - 1)) / ((n - 2) * (n + 1) * (n + 3)))
-        2 * se_skew * sqrt((n^2 - 1) / ((n - 3) * (n + 5)))
-      }
-    } else {
-      function(x, gamma = 0.95) {
-        n <- length(x)
-        se_skew <- sqrt((6 * n * (n - 1)) / ((n - 2) * (n + 1) * (n + 3)))
-        se <- 2 * se_skew * sqrt((n^2 - 1) / ((n - 3) * (n + 5)))
-        minbx <- 2 * (n - 1) / (n - 3)
-        lnc <- stats::qlnorm(c(0.5 - gamma / 2, 0.5 + gamma / 2))
-        stat_fun(x) + 2 * lnc^(se / 2) - minbx
-      }
-    },
-    NULL
+.interval_se <- function(x, stat_name, stat_fun) {
+  n <- length(x)
+  switch(stat_name,
+    mean = stats::sd(x) / sqrt(n),
+    median = sqrt(pi / 2) * stats::sd(x) / sqrt(n),
+    var = stats::var(x) * sqrt(2 / (n - 1)),
+    sd = stats::sd(x) / sqrt(2 * (n - 1)),
+    MAD = sqrt(2 / pi) * stats::sd(x) / sqrt(n),
+    IQR = stats::sd(x) / (2 * sqrt(n) * stats::dnorm(stats::qnorm(0.25))),
+    hmean = stat_fun(x)^2 * stats::sd(1 / x) / sqrt(n - 1),
+    gmean = stat_fun(x) * stats::sd(log(x)) / sqrt(n - 1),
+    pearsonskew = sqrt((pi / 2 - 1) / n),
+    fisherskew =,
+    fisherkurtosis = {
+      se <- sqrt(6 * n * (n - 1) / ((n - 2) * (n + 1) * (n + 3)))
+      if (stat_name == "fisherskew") se else
+        2 * se * sqrt((n^2 - 1) / ((n - 3) * (n + 5)))
+    }
   )
+}
 
-  if (!is.null(precision_builtin)) {
-    return(precision_builtin)
-  }
-
+.find_interval_precision_fun <- function(stat_name, stat_fun, errorbar_type, caller_env) {
   if (is.null(stat_name) || !nzchar(stat_name)) {
     stop(
       "For an anonymous summary function, supply errorbar as a precision ",
       "function returning one width or two interval limits."
     )
   }
-
   companion_name <- paste0(errorbar_type, ".", stat_name)
   candidate_envs <- list(environment(stat_fun), caller_env, globalenv())
   for (env in candidate_envs) {
@@ -621,18 +488,50 @@ paste_and <- function(x, sep = ", ", suffix = "") {
       return(get(companion_name, envir = env, mode = "function", inherits = TRUE))
     }
   }
-
   stop(
-    sprintf(
-      "No %s precision function is known for summary function '%s'. ",
-      errorbar_type, stat_name
-    ),
-    sprintf(
-      "Define %s(x%s) or pass errorbar as a function.",
-      companion_name,
-      if (errorbar_type == "CI") ", gamma = 0.95" else ""
-    )
+    sprintf("No %s precision function is known for summary function '%s'. ",
+            errorbar_type, stat_name),
+    sprintf("Define %s(x%s) or pass errorbar as a function.",
+            companion_name, if (errorbar_type == "CI") ", gamma = 0.95" else "")
   )
+}
+
+.get_interval_precision_fun <- function(stat_name, stat_fun, errorbar, caller_env) {
+  if (is.function(errorbar)) return(errorbar)
+  if (!is.character(errorbar) || length(errorbar) != 1L ||
+      !toupper(errorbar) %in% c("CI", "SE", "NONE")) {
+    stop("errorbar must be 'CI', 'SE', 'none', or a precision function.")
+  }
+  errorbar_type <- toupper(errorbar)
+  if (errorbar_type == "NONE") return(function(x, gamma = 0.95) 0)
+  builtin <- c("mean", "median", "var", "sd", "MAD", "IQR", "hmean", "gmean",
+               "fisherskew", "pearsonskew", "fisherkurtosis")
+  if (is.null(stat_name) || !stat_name %in% builtin) {
+    return(.find_interval_precision_fun(stat_name, stat_fun, errorbar_type, caller_env))
+  }
+
+  function(x, gamma = 0.95) {
+    if (errorbar_type == "SE") return(.interval_se(x, stat_name, stat_fun))
+    n <- length(x)
+    probs <- c(0.5 - gamma / 2, 0.5 + gamma / 2)
+    switch(stat_name,
+      var = stats::var(x) * (n - 1) / stats::qchisq(rev(probs), df = n - 1),
+      sd = stats::sd(x) * sqrt(n - 1) /
+        sqrt(stats::qchisq(rev(probs), df = n - 1)),
+      fisherkurtosis = stat_fun(x) +
+        2 * stats::qlnorm(probs)^(.interval_se(x, stat_name, stat_fun) / 2) -
+        2 * (n - 1) / (n - 3),
+      {
+        center <- switch(stat_name,
+          mean = base::mean(x), median = stats::median(x),
+          IQR = stats::IQR(x), stat_fun(x)
+        )
+        quantiles <- if (stat_name == "fisherskew") stats::qnorm(probs) else
+          stats::qt(probs, df = n - 1)
+        center + .interval_se(x, stat_name, stat_fun) * quantiles
+      }
+    )
+  }
 }
 
 .call_interval_precision <- function(fun, x, gamma = 0.95) {
@@ -660,8 +559,9 @@ paste_and <- function(x, sep = ", ", suffix = "") {
 #' conventions are adapted from the superb framework and its R implementation
 #' (Cousineau, Goulet, & Harding, 2021). In particular, the Cousineau-Morey
 #' path follows the two-step centering and bias-correction algorithm used by
-#' superb. The code is implemented locally; apastats2 does not depend on or
-#' call superb.
+#' [superb](https://CRAN.R-project.org/package=superb). The code is implemented locally;
+#' [apastats2][apastats2::apastats2-package] does not depend on or
+#' call [superb](https://CRAN.R-project.org/package=superb).
 #'
 #' @param data dataframe to summarize
 #' @param value_var dependent variable (string)
@@ -674,10 +574,15 @@ paste_and <- function(x, sep = ", ", suffix = "") {
 #'   optional; if supplied, repeated rows are aggregated within subject/group
 #'   cells before intervals are computed.
 #' @param adjustments adjustment settings. Supports purpose = "single" or
-#'   "difference". decorrelation can be "CM" or "none" for within-subject
+#'   "difference". decorrelation can be "CM", "CA", or "none" for within-subject
 #'   designs and must be "none" for purely between-subject designs. If omitted,
 #'   decorrelation defaults to "CM" when within is supplied and "none"
-#'   otherwise.
+#'   otherwise. CA (correlation adjustment) multiplies interval widths by
+#'   `sqrt(1 - rbar)`, where `rbar` is the mean Pearson correlation across
+#'   pairs of within-subject conditions, computed separately within each
+#'   between-subject group after cell aggregation and incomplete-unit removal.
+#'   Centers are unchanged. CA requires at least two complete subjects and
+#'   two conditions per group, with nonzero variance in every condition.
 #' @param errorbar "CI", "SE", "none", or a precision function. A precision
 #'   function receives the condition vector and returns either one error-bar
 #'   width or two interval limits.
@@ -689,15 +594,18 @@ paste_and <- function(x, sep = ", ", suffix = "") {
 #' @param aggr_fun scalar summary function. For within-subject designs, and for
 #'   between-subject designs with wid supplied, it is also used to aggregate
 #'   repeated observations within observational-unit cells. Built-in precision
-#'   formulas mirror superb for mean, median, var, sd, IQR, and the superb-style
+#'   formulas mirror [superb](https://CRAN.R-project.org/package=superb) for mean, median, var, sd, IQR, and the superb-style
 #'   MAD, hmean, gmean, fisherskew, pearsonskew, and fisherkurtosis names.
-#'   For other named functions, define a matching SE.<name> or CI.<name>
+#'   For other named functions, define a matching `SE.<name>` or `CI.<name>`
 #'   function, or supply errorbar as a function.
 #' @param debug output additional debugging info (default: FALSE)
 #' @param ... additional parameters passed to [apa_format_mean_conf]
 #'
-#' @return dataframe with grouping variables, center, lowerwidth, upperwidth,
-#'   lower_ci, upper_ci, and descr
+#' @return A `data.frame` with one row per group and the grouping variables,
+#' `center` (summary statistic), `lowerwidth` and `upperwidth` (signed interval
+#' offsets from the center), `lower_ci` and `upper_ci` (interval limits), and
+#' `descr` (formatted summary and interval text). With `errorbar = "none"`,
+#' both offsets are zero and both limits equal the center.
 #'
 #' @references
 #' Cousineau, D., Goulet, M.-A., & Harding, B. (2021). Summary plots with
@@ -735,6 +643,13 @@ paste_and <- function(x, sep = ", ", suffix = "") {
 #'   value_var = "bias_percent",
 #'   within = "relative_noise",
 #'   wid = "participant"
+#' )
+#'
+#' # Correlation-adjusted intervals
+#' get_adjusted_ci(
+#'   memory_noise[memory_noise$experiment == "Exp. 1A", ],
+#'   value_var = "bias_percent", within = "relative_noise", wid = "participant",
+#'   adjustments = list(decorrelation = "CA")
 #' )
 #'
 #' # Mixed design: experiment is between, relative noise is within
@@ -796,19 +711,13 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
     as.numeric(out)
   }
 
-  all_vars <- unique(c(
-    within,
-    between,
-    if (!is.null(wid)) wid else character(),
-    value_var
-  ))
-  for (x in all_vars) {
-    if (!(x %in% names(data))) {
-      stop(sprintf(
-        'Variable "%s" is not in the data. Check if it is present and its name is spelled correctly.',
-        x
-      ))
-    }
+  all_vars <- unique(c(within, between, wid, value_var))
+  missing_vars <- setdiff(all_vars, names(data))
+  if (length(missing_vars)) {
+    stop(sprintf(
+      'Variable "%s" is not in the data. Check if it is present and its name is spelled correctly.',
+      missing_vars[1]
+    ))
   }
 
   data <- as.data.frame(data)
@@ -836,19 +745,12 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
     }
   }
 
-  na_check_vars <- unique(c(
-    within,
-    between,
-    if (!is.null(wid)) wid else character(),
-    value_var
-  ))
-  for (x in na_check_vars) {
-    if (anyNA(data[[x]])) {
-      stop(sprintf(
-        'NAs present in "%s", they should be removed from all variables beforehand.',
-        x
-      ))
-    }
+  na_vars <- all_vars[vapply(data[all_vars], anyNA, logical(1))]
+  if (length(na_vars)) {
+    stop(sprintf(
+      'NAs present in "%s", they should be removed from all variables beforehand.',
+      na_vars[1]
+    ))
   }
 
   default_decorrelation <- if (has_within) "CM" else "none"
@@ -866,8 +768,8 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
   if (!(purpose %in% c("single", "difference"))) {
     stop('Only adjustments$purpose = "single" or "difference" is supported.')
   }
-  if (!(decorrelation %in% c("CM", "NONE"))) {
-    stop('Only adjustments$decorrelation = "CM" or "none" is supported.')
+  if (!(decorrelation %in% c("CM", "CA", "NONE"))) {
+    stop('Only adjustments$decorrelation = "CM", "CA", or "none" is supported.')
   }
   if (!has_within && decorrelation != "NONE") {
     stop("Within-subject decorrelation cannot be used when within is NULL.")
@@ -922,7 +824,7 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
         1,
         function(z) paste(paste0(within, "=", z), collapse = ", ")
       )
-      print(unique(missing_display))
+      details <- paste(utils::capture.output(print(unique(missing_display))), collapse = "\n")
 
       unit_vars <- c(wid, between)
       bad_units <- unique(row_key(missing, unit_vars))
@@ -930,11 +832,11 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
         keep <- !(row_key(joined, unit_vars) %in% bad_units)
         joined <- joined[keep, , drop = FALSE]
         warning(sprintf(
-          "NAs present after aggregation, dropping %i rows",
-          length(bad_units)
+          "NAs present after aggregation, dropping %i rows\n%s",
+          length(bad_units), details
         ))
       } else {
-        stop("NAs present after aggregation")
+        stop("NAs present after aggregation\n", details)
       }
     }
 
@@ -952,7 +854,6 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
     }
 
     unit_vars <- c(wid, between)
-    joined$.unit_key <- row_key(joined, unit_vars)
     joined$.between_key <- row_key(joined, between)
     joined$.condition_key <- row_key(joined, within)
 
@@ -1005,6 +906,23 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
     summary_vars <- between
   }
 
+  if (decorrelation == "CA") {
+    # Correlation adjustment scales widths without transforming the summaries.
+    analysis_dt[, c(".unit_key") := get(wid)]
+    ca <- analysis_dt[, {
+      wide <- data.table::dcast(.SD, .unit_key ~ .condition_key, value.var = ".value")
+      values <- as.matrix(wide[, -1, with = FALSE])
+      if (nrow(values) < 2 || ncol(values) < 2) {
+        stop("CA adjustment requires at least two complete subjects and two conditions per group.")
+      }
+      if (any(apply(values, 2, stats::sd) == 0)) {
+        stop("CA adjustment requires nonzero variance in every within-subject condition.")
+      }
+      correlations <- stats::cor(values)
+      list(multiplier = sqrt(1 - mean(correlations[upper.tri(correlations)])))
+    }, by = ".between_key", .SDcols = c(".unit_key", ".condition_key", ".value")]
+  }
+
   purpose_multiplier <- if (purpose == "difference") sqrt(2) else 1
 
   summarize_one <- function(analysis_value) {
@@ -1030,12 +948,7 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
     )
   }
 
-  if (length(summary_vars) > 0L) {
-    result <- analysis_dt[, summarize_one(get(".analysis_value")),
-      by = summary_vars]
-  } else {
-    result <- analysis_dt[, summarize_one(get(".analysis_value"))]
-  }
+  result <- analysis_dt[, summarize_one(get(".analysis_value")), by = summary_vars]
   result <- as.data.frame(result)
 
   for (x in summary_vars) {
@@ -1048,19 +961,15 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
   }
 
   if (length(summary_vars) > 0L) {
-    ord <- do.call(
-      order,
-      lapply(summary_vars, function(x) {
-        if (is.factor(result[[x]])) {
-          as.integer(result[[x]])
-        } else {
-          result[[x]]
-        }
-      })
-    )
-    result <- result[ord, , drop = FALSE]
+    result <- result[do.call(order, result[summary_vars]), , drop = FALSE]
   }
   rownames(result) <- NULL
+
+  if (decorrelation == "CA") {
+    multiplier <- ca$multiplier[match(row_key(result, between), ca$.between_key)]
+    result[c("lowerwidth", "upperwidth")] <-
+      lapply(result[c("lowerwidth", "upperwidth")], `*`, multiplier)
+  }
 
   result$lower_ci <- result$center + result$lowerwidth
   result$upper_ci <- result$center + result$upperwidth
@@ -1089,7 +998,7 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
 #'
 #' get_superb_ci() is retained for backward compatibility. New code should use
 #' [get_adjusted_ci()]. Its within-subject results are intended to remain
-#' numerically compatible with the former superb-backed implementation.
+#' numerically compatible with the former implementation backed by [superb](https://CRAN.R-project.org/package=superb).
 #'
 #' @rdname get_adjusted_ci
 #' @export

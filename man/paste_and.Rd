@@ -14,7 +14,8 @@ paste_and(x, sep = ", ", suffix = "")
 \item{suffix}{suffix to append to each value before the separator}
 }
 \value{
-a string iterating the values in x
+A character string listing the values in \code{x}, with the requested
+separators, suffix, and final conjunction.
 }
 \description{
 Paste several strings, add 'and' before last

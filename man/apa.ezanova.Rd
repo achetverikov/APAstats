@@ -36,7 +36,10 @@
 \item{...}{other parameters passed to \link{format_results}}
 }
 \value{
-string with formatted results
+A character vector reporting F statistics, degrees of freedom,
+p-values, and optional generalized eta-squared. With \code{append_to_table = TRUE},
+a \code{data.frame} of selected ANOVA rows with an added \code{res} column containing
+the formatted results.
 }
 \description{
 Provides formatted string like \emph{F}(DFn, DFd) = ..., \emph{p} ..., eta2 = ... based on ezANOVA results
@@ -56,8 +59,8 @@ if (requireNamespace("ez", quietly = TRUE) && requireNamespace("afex", quietly =
   )
   
   # Format results in APA style
-  apa(ez_res, "condition")
-  apa(ez_res, "condition", eta_digits = 3)
-  apa(ez_res, "condition", include_eta = FALSE)
+  print(apa(ez_res, "condition"))
+  print(apa(ez_res, "condition", eta_digits = 3))
+  print(apa(ez_res, "condition", include_eta = FALSE))
 }
 }

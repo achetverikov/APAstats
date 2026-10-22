@@ -30,7 +30,11 @@
 #' @param obj An object to format in APA style
 #' @param ... Additional arguments passed to specific methods
 #'
-#' @return A formatted string in APA style
+#' @return The result of the method for `obj`: usually a character vector of
+#' APA-formatted statistical results. Regression methods can return a
+#' `data.frame` of coefficient summaries, and ANOVA methods can return a
+#' `data.frame` with formatted text appended when requested. See each
+#' method's documentation for its columns and selection options.
 #' @export
 #' 
 #' @examples
@@ -200,7 +204,8 @@ apa.dip.test <- function(obj, ...) {
 #'
 #' @param obj a difference between the ROC curves from [pROC::roc.test]
 #' @param ... Additional arguments (currently unused)
-#' @return result
+#' @return A character result reporting the test statistic and p-value
+#' for the comparison between ROC curves.
 #' @method apa roc.test
 #' @export
 #'
@@ -294,12 +299,9 @@ apa_mean_sd <- function(x = NULL, m = NULL, sd = NULL, digits = 2,
 #' apa_format_mean_conf(mean_val, lower_ci, upper_ci, digits = 3)
 #' 
 apa_format_mean_conf <- function(mean_val, lower_ci, upper_ci, addCI = FALSE, digits = 2, ...) {
-  ci_str <- ifelse(addCI, ", 95%% \\emph{CI} =", "")
-  format_results(sprintf(paste0(
-    "\\emph{M} = %.",
-    digits, "f", ci_str, " [%.", digits, "f, %.", digits,
-    "f]"
-  ), mean_val, lower_ci, upper_ci), ...)
+  ci_str <- ifelse(addCI, ", 95% \\emph{CI} =", "")
+  format_results(sprintf("\\emph{M} = %.*f%s [%.*f, %.*f]",
+    digits, mean_val, ci_str, digits, lower_ci, digits, upper_ci), ...)
 }
 
 #' Format means and confidence intervals in APA style
@@ -349,9 +351,8 @@ apa_mean_conf <- function(x, bootCI = TRUE, addCI = FALSE, digits = 2,
 #' # Format results in APA style
 #' apa_binom_mean_conf(x)
 apa_binom_mean_conf <- function(x, digits = 2, ...) {
-  format_results(with(data.frame(Hmisc::binconf(sum(x), length(x))), 
-                      sprintf(paste0("\\emph{M} = %.", digits, "f [%.", digits, "f, %.", digits, "f]"), 
-                              PointEst, Lower, Upper)), ...)
+  ci <- Hmisc::binconf(sum(x), length(x))
+  apa_format_mean_conf(ci[1], ci[2], ci[3], digits = digits, ...)
 }
 
 #' Compare means with t-tests and format in APA style
@@ -362,7 +363,7 @@ apa_binom_mean_conf <- function(x, digits = 2, ...) {
 #' @param digits Number of digits in results (default: 2)
 #' @param paired Should it be a paired test (default: FALSE)
 #' @param eff.size Should we include effect size (default: FALSE)
-#' @param abs Should we show the absolute value if the t-test (T) or keep its sign (FALSE, default)
+#' @param abs Should we show the absolute value if the t-test (TRUE) or keep its sign (FALSE, default)
 #' @param aggregate_by Do the aggregation by the third variable(s): either NULL (default), a single vector variable, or a list of variables to aggregate by.
 #' @param transform.means A function to transform means and confidence intervals (default: NULL)
 #' @param ... Additional arguments passed to [format_results]
@@ -401,7 +402,8 @@ apa_mean_and_t <- function(x, by, which.mean = 1, digits = 2, paired = FALSE,
     summaries[, c("x", "Lower", "Upper")] <- sapply(summaries[, c("x", "Lower", "Upper")], transform.means)
   }
   
-  summaries <- transform(summaries, mean.descr = sprintf(paste0("\\emph{M} = %.", digits, "f [%.", digits, "f, %.", digits, "f]"), x, Lower, Upper))
+  summaries$mean.descr <- apa_format_mean_conf(
+    summaries$x, summaries$Lower, summaries$Upper, digits = digits, type = "latex")
   
   if (which.mean == 3) {
     means <- paste0(summaries[1, "mean.descr"], " vs. ", summaries[2, "mean.descr"], ", ")
@@ -434,14 +436,15 @@ apa_mean_and_t <- function(x, by, which.mean = 1, digits = 2, paired = FALSE,
   format_results(res_str, ...)
 }
 
-#' Get a list with means and confidence intervals
+#' Get formatted means and confidence intervals
 #'
 #' @param x numeric vector to compute the mean for
 #' @param digits number of digits in results (default: 2)
 #' @param binom compute binomial CI instead of the usual ones
 #' @param ... other parameters passed to [format_results]
 #'
-#' @return a list with a mean and CI as formatted strings
+#' @return A character vector of length two: the formatted mean followed
+#' by the confidence limits in square brackets.
 #' @export
 #'
 #' @examples
@@ -466,14 +469,17 @@ table_mean_conf <- function(x, digits = 2, binom = FALSE, ...) {
   res
 }
 
-#' Get a list of means and confidence intervals by group
+#' Get formatted means and confidence intervals by group
 #'
 #' @param x numeric vector to compute the mean for
 #' @param by grouping variable
 #' @param digits number of digits in results (default: 2)
 #' @param binom compute binomial CI instead of the usual ones
 #'
-#' @return a list of means and CI with keys corresponding to the group labels
+#' @return An array of list entries, with dimensions and dimension names
+#' determined by the levels of the grouping variables in `by`. Each observed
+#' group contains the two-element character vector returned by [table_mean_conf];
+#' unobserved combinations contain `NULL`.
 #' @export
 #'
 #' @examples
@@ -499,7 +505,9 @@ table_mean_conf_by <- function(x, by, digits = 2, binom = FALSE) {
 #' @param obj A list object containing statistical results
 #' @param ... Additional arguments passed to the appropriate method
 #'
-#' @return A formatted string with statistical results in APA style
+#' @return A character vector of formatted ANOVA results, or a `data.frame`
+#' containing selected ANOVA rows and a `res` column when `append_to_table = TRUE`.
+#' See [apa.ezANOVA].
 #' @method apa list
 #' @export
 #'

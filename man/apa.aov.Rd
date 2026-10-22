@@ -10,35 +10,40 @@
 \method{apa}{aovlist}(obj, term = NULL, f.digits = 2, ...)
 }
 \arguments{
-\item{obj}{fitted \link[stats:aov]{stats::aov} model}
+\item{obj}{fitted \link[stats:aov]{stats::aov} model with an \code{Error()} term}
 
-\item{term}{model term to describe (a string with the term name or its sequential number). For \code{aovlist} objects, \code{NULL} returns all testable effects.}
+\item{term}{model term to describe. A character term name or sequential
+number can be supplied; if \code{NULL}, all testable effects are returned.}
 
 \item{sstype}{anova SS type (e.g., 2 or 3)}
 
-\item{f.digits}{number of digits for the F value}
+\item{...}{other parameters passed to \link{format_results}}
 
-\item{...}{other parameters passed to \link{apa.anova}}
+\item{f.digits}{number of digits for the F value}
 }
 \value{
 formatted string with F(df_numerator, df_denominator) = F_value, p =/< p_value
+
+one or more formatted strings with F, numerator and denominator df,
+and p values
 }
 \description{
-Describe \link[stats:aov]{stats::aov} results, including repeated-measures models fitted with an \code{Error()} term (\code{aovlist} objects).
+\code{stats::aov()} models containing \code{Error()} return an \code{aovlist} object,
+which cannot be passed to \code{car::Anova()}. This method extracts the ANOVA
+tables from each error stratum and reports effects using the residual degrees
+of freedom from the same stratum.
 }
 \examples{
 if (requireNamespace("car", quietly = TRUE)) {
   # Using the mtcars dataset
   fit <- aov(mpg ~ cyl * am, data = mtcars)
-  apa(fit, 'cyl')
-  apa(fit, 'am')
-  apa(fit, 'cyl:am')
+  print(apa(fit, 'cyl'))
+  print(apa(fit, 'am'))
+  print(apa(fit, 'cyl:am'))
 
   # Using a different SS type
-  apa(fit, 'cyl', sstype = 3)
+  print(apa(fit, 'cyl', sstype = 3))
 }
-
-# Repeated-measures aov with an Error() term
 fit_rm <- aov(yield ~ N * P * K + Error(block), data = npk)
 apa(fit_rm, "N")
 apa(fit_rm)

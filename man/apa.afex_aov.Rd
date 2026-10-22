@@ -2,7 +2,7 @@
 % Please edit documentation in R/anova_functions.R
 \name{apa.afex_aov}
 \alias{apa.afex_aov}
-\title{Describe afex ANOVA results}
+\title{Describe \link[afex:afex-package]{afex} ANOVA results}
 \usage{
 \method{apa}{afex_aov}(
   obj,
@@ -16,7 +16,7 @@
 )
 }
 \arguments{
-\item{obj}{afex ANOVA object}
+\item{obj}{\link[afex:afex-package]{afex} ANOVA object}
 
 \item{term}{model term to describe (a string with the term name or its sequential number)}
 
@@ -28,15 +28,18 @@
 
 \item{df_digits}{number of digits to use for df (default: 0)}
 
-\item{append_to_table}{should the results be added to the afex ANOVA table (default: FALSE)}
+\item{append_to_table}{should the results be added to the \link[afex:afex-package]{afex} ANOVA table (default: FALSE)}
 
 \item{...}{other parameters passed to \link{format_results}}
 }
 \value{
-string with formatted results
+A character vector reporting F statistics, degrees of freedom,
+p-values, and optional generalized eta-squared. With \code{append_to_table = TRUE},
+a \code{data.frame} of selected ANOVA rows with an added \code{res} column containing
+the formatted results.
 }
 \description{
-Provides formatted string like \emph{F}(num.Df, den.Df) = ..., \emph{p} ..., eta2 = ... based on \link[afex:aov_car]{afex::aov_ez}, \link[afex:aov_car]{afex::aov_car}, or \link[afex:aov_car]{afex::aov_4} results.
+Provides formatted string like \emph{F}(num.Df, den.Df) = ..., \emph{p} ..., eta2 = ... based on \link[afex:aov_ez]{afex::aov_ez}, \link[afex:aov_car]{afex::aov_car}, or \link[afex:aov_4]{afex::aov_4} results.
 }
 \examples{
 if (requireNamespace("afex", quietly = TRUE)) {
@@ -50,8 +53,8 @@ if (requireNamespace("afex", quietly = TRUE)) {
     fun_aggregate = mean
   )
 
-  apa(afex_res, "condition")
-  apa(afex_res, "condition", eta_digits = 3)
-  apa(afex_res, "condition", include_eta = FALSE)
+  print(apa(afex_res, "condition"))
+  print(apa(afex_res, "condition", eta_digits = 3))
+  print(apa(afex_res, "condition", include_eta = FALSE))
 }
 }

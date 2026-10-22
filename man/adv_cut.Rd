@@ -32,16 +32,18 @@ adv_cut(
 
 \item{include_oob}{include values outside of the boundaries provided in \code{cuts} (default: TRUE)}
 
-\item{labels_at_means}{should labels be created as means between cuts (T) or as pairs of cuts (F)}
+\item{labels_at_means}{should labels be created as means between cuts (TRUE) or as pairs of cuts (FALSE)}
 
 \item{label_pairs_format}{formatting string to use when labels are generated from pairs of cuts (default: [\%.2f, \%.2f])}
 
 \item{...}{other parameters passed to \link[base:cut]{base::cut}
 
-If \code{ncuts} is used, then the variable is cut into N cuts either of equal group size (eq_groups = TRUE) or equally distant from each other (eq_groups = FALSE). If \code{labels} are not provided, they are generated as  means between cuts if labels_at_means is T.}
+If \code{ncuts} is used, then the variable is cut into N cuts either of equal group size (eq_groups = TRUE) or equally distant from each other (eq_groups = FALSE). If \code{labels} are not provided, they are generated as  means between cuts if labels_at_means is TRUE.}
 }
 \value{
-a vector of group labels the same length as the original value vector
+A factor assigning each element of \code{x} to a bin, or a numeric
+vector of bin labels when \code{num_labels = TRUE}. The result has the same
+length as \code{x}.
 }
 \description{
 Cut a numeric variable into groups (bins) with advanced options

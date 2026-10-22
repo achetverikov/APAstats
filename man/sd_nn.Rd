@@ -2,7 +2,7 @@
 % Please edit documentation in R/misc.R
 \name{sd_nn}
 \alias{sd_nn}
-\title{SD with na.rm=T}
+\title{SD with na.rm=TRUE}
 \usage{
 sd_nn(x, ...)
 }
@@ -12,10 +12,11 @@ sd_nn(x, ...)
 \item{...}{other arguments passed to sd}
 }
 \value{
-sd of x with NA removed
+A numeric scalar giving the standard deviation of \code{x}, with
+missing values removed.
 }
 \description{
-SD with na.rm=T
+SD with na.rm=TRUE
 }
 \examples{
 x <- c(NA, 10, 90)

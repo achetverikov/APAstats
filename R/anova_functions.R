@@ -1,3 +1,15 @@
+.format_anova_table <- function(table, term, cols, include_eta, eta_digits,
+                                f_digits, df_digits, append_to_table, ...) {
+  suffix <- if (include_eta) {
+    sprintf(", $\\eta$^2^~G~ %s", round_p(table[term, "ges"], digits = eta_digits,
+                                        replace.very.small = 10^(-eta_digits)))
+  } else ""
+  res <- format_results(sprintf("\\emph{F}(%.*f, %.*f) = %.*f, \\emph{p} %s%s",
+    df_digits, table[term, cols[1]], df_digits, table[term, cols[2]],
+    f_digits, table[term, "F"], round_p(table[term, cols[3]]), suffix), ...)
+  if (append_to_table) cbind(table[term, , drop = FALSE], res) else res
+}
+
 #' Describe the results of ANOVA models or model comparisons 
 #'
 #' @param obj ANOVA results from [car::Anova] or [stats::anova]
@@ -22,8 +34,8 @@
 #'              contrasts = list(fcategory = contr.sum, partner.status = contr.sum))
 #'   anova_obj <- anova(mod1, mod2, mod3)
 #'
-#'   apa(anova_obj)
-#'   apa(anova_obj, 3)
+#'   print(apa(anova_obj))
+#'   print(apa(anova_obj, 3))
 #'
 #'   # car::Anova version
 #'   if (requireNamespace("car", quietly = TRUE)) {
@@ -31,8 +43,8 @@
 #'               contrasts = list(fcategory = contr.sum, partner.status = contr.sum))
 #'     afit <- car::Anova(mod)
 #'
-#'     apa(afit, "fcategory")
-#'     apa(afit, 2, 4)
+#'     print(apa(afit, "fcategory"))
+#'     print(apa(afit, 2, 4))
 #'   }
 #' }
 apa.anova <- function(obj, term = 2, f.digits = 2, ...) {
@@ -74,12 +86,12 @@ apa.anova <- function(obj, term = 2, f.digits = 2, ...) {
 #' if (requireNamespace("car", quietly = TRUE)) {
 #'   # Using the mtcars dataset
 #'   fit <- aov(mpg ~ cyl * am, data = mtcars)
-#'   apa(fit, 'cyl')
-#'   apa(fit, 'am')
-#'   apa(fit, 'cyl:am')
+#'   print(apa(fit, 'cyl'))
+#'   print(apa(fit, 'am'))
+#'   print(apa(fit, 'cyl:am'))
 #'
 #'   # Using a different SS type
-#'   apa(fit, 'cyl', sstype = 3)
+#'   print(apa(fit, 'cyl', sstype = 3))
 #' }
 apa.aov <- function(obj, term, sstype = 2, ...) {
   if (requireNamespace("car", quietly = TRUE)) {
@@ -114,50 +126,24 @@ apa.aov <- function(obj, term, sstype = 2, ...) {
 #' apa(fit_rm, "N")
 #' apa(fit_rm)
 apa.aovlist <- function(obj, term = NULL, f.digits = 2, ...) {
-  smry <- summary(obj)
-  rows <- list()
-
-  for (stratum_i in seq_along(smry)) {
-    stratum <- smry[[stratum_i]]
+  rows <- lapply(summary(obj), function(stratum) {
     tables <- if (is.data.frame(stratum)) list(stratum) else if (is.list(stratum)) stratum else list()
-
-    for (table_i in seq_along(tables)) {
-      tab <- tables[[table_i]]
+    lapply(tables, function(tab) {
       if (!is.data.frame(tab) ||
-          !all(c("Df", "F value", "Pr(>F)") %in% colnames(tab))) {
-        next
-      }
-
+          !all(c("Df", "F value", "Pr(>F)") %in% colnames(tab))) return(NULL)
       term_names <- trimws(rownames(tab))
       residual_i <- which(term_names == "Residuals")
-      if (length(residual_i) == 0) {
-        next
-      }
-
       effect_i <- which(term_names != "Residuals" & !is.na(tab[, "F value"]))
-      if (length(effect_i) == 0) {
-        next
-      }
-
-      denominator_df <- tab[residual_i[1], "Df"]
-      for (i in effect_i) {
-        rows[[length(rows) + 1]] <- data.frame(
-          term = term_names[i],
-          Df = tab[i, "Df"],
-          Df.res = denominator_df,
-          F = tab[i, "F value"],
-          p = tab[i, "Pr(>F)"],
-          stringsAsFactors = FALSE
-        )
-      }
-    }
-  }
-
-  if (length(rows) == 0) {
+      if (!length(residual_i) || !length(effect_i)) return(NULL)
+      data.frame(term = term_names[effect_i], Df = tab[effect_i, "Df"],
+                 Df.res = tab[residual_i[1], "Df"], F_value = tab[effect_i, "F value"],
+                 p = tab[effect_i, "Pr(>F)"], stringsAsFactors = FALSE)
+    })
+  })
+  effects <- do.call(rbind, unlist(rows, recursive = FALSE))
+  if (is.null(effects) || nrow(effects) == 0L) {
     stop("No testable effects were found in the aovlist object.")
   }
-
-  effects <- do.call(rbind, rows)
 
   if (!is.null(term)) {
     if (is.numeric(term)) {
@@ -168,23 +154,15 @@ apa.aovlist <- function(obj, term = NULL, f.digits = 2, ...) {
     } else {
       keep <- effects$term %in% term
       if (!any(keep)) {
-        stop(sprintf(
-          "Term '%s' was not found. Available terms are: %s.",
-          paste(term, collapse = "', '"),
-          paste(unique(effects$term), collapse = ", ")
-        ))
+        stop(sprintf("Term '%s' was not found. Available terms are: %s.",
+                     paste(term, collapse = "', '"),
+                     paste(unique(effects$term), collapse = ", ")))
       }
       effects <- effects[keep, , drop = FALSE]
     }
   }
-
-  res <- sprintf(
-    paste0("\\emph{F}(%.0f, %.0f) = %.", f.digits, "f, \\emph{p} %s"),
-    effects$Df,
-    effects$Df.res,
-    effects$F,
-    round_p(effects$p)
-  )
+  res <- sprintf(paste0("\\emph{F}(%.0f, %.0f) = %.", f.digits, "f, \\emph{p} %s"),
+                 effects$Df, effects$Df.res, effects$F_value, round_p(effects$p))
   names(res) <- effects$term
   format_results(res, ...)
 }
@@ -203,7 +181,10 @@ apa.aovlist <- function(obj, term = NULL, f.digits = 2, ...) {
 #' @param append_to_table should the results be added to the original ezANOVA table (default: FALSE)
 #' @param ... other parameters passed to [format_results]
 #'
-#' @return string with formatted results
+#' @return A character vector reporting F statistics, degrees of freedom,
+#' p-values, and optional generalized eta-squared. With `append_to_table = TRUE`,
+#' a `data.frame` of selected ANOVA rows with an added `res` column containing
+#' the formatted results.
 #' @method apa ezANOVA
 #' @export
 #'
@@ -222,53 +203,41 @@ apa.aovlist <- function(obj, term = NULL, f.digits = 2, ...) {
 #'   )
 #'   
 #'   # Format results in APA style
-#'   apa(ez_res, "condition")
-#'   apa(ez_res, "condition", eta_digits = 3)
-#'   apa(ez_res, "condition", include_eta = FALSE)
+#'   print(apa(ez_res, "condition"))
+#'   print(apa(ez_res, "condition", eta_digits = 3))
+#'   print(apa(ez_res, "condition", include_eta = FALSE))
 #' }
-apa.ezANOVA <- function(obj, term, include_eta = TRUE, spher_corr = TRUE, 
-                        eta_digits = 2, f_digits = 2, df_digits = 0, 
+
+apa.ezANOVA <- function(obj, term, include_eta = TRUE, spher_corr = TRUE,
+                        eta_digits = 2, f_digits = 2, df_digits = 0,
                         append_to_table = FALSE, ...) {
   eza <- obj$ANOVA
   if (spher_corr & ("Sphericity Corrections" %in% names(obj))) {
-    eza <- merge(eza, obj$`Sphericity Corrections`, by = "Effect", all.x = TRUE)
-    eza[!is.na(eza$GGe), "p"] <- eza[!is.na(eza$GGe), ]$`p[GG]`
+    eza <- merge(eza, obj$"Sphericity Corrections", by = "Effect", all.x = TRUE)
+    eza[!is.na(eza$GGe), "p"] <- eza[!is.na(eza$GGe), ]$"p[GG]"
   }
   rownames(eza) <- eza$Effect
-  
-  suffix <- sprintf(", $\\eta$^2^~G~ %s", 
-                    round_p(eza[term, "ges"],
-                            digits = eta_digits,
-                            replace.very.small = 10^(-eta_digits)))
-  if (include_eta == FALSE) {
-    suffix <- ""
-  }
-  res <- format_results(sprintf("\\emph{F}(%.*f, %.*f) = %.*f, \\emph{p} %s%s", 
-                                df_digits, eza[term, "DFn"], 
-                                df_digits, eza[term, "DFd"], 
-                                f_digits, eza[term, "F"], 
-                                round_p(eza[term, "p"]), suffix), ...)
-  if (append_to_table) {
-    cbind(eza[term, ], res)
-  } else {
-    res
-  }
+  .format_anova_table(eza, term, c("DFn", "DFd", "p"), include_eta, eta_digits,
+                      f_digits, df_digits, append_to_table, ...)
 }
 
-#' Describe afex ANOVA results
+#' Describe [afex][afex::afex-package] ANOVA results
 #'
 #' Provides formatted string like _F_(num.Df, den.Df) = ..., _p_ ..., eta2 = ... based on [afex::aov_ez], [afex::aov_car], or [afex::aov_4] results.
 #'
-#' @param obj afex ANOVA object
+#' @param obj [afex][afex::afex-package] ANOVA object
 #' @param term model term to describe (a string with the term name or its sequential number)
 #' @param include_eta add generalized eta^2 for the model (default: TRUE)
 #' @param eta_digits number of digits to use for eta^2 (default: 2)
 #' @param f_digits number of digits to use for F (default: 2)
 #' @param df_digits number of digits to use for df (default: 0)
-#' @param append_to_table should the results be added to the afex ANOVA table (default: FALSE)
+#' @param append_to_table should the results be added to the [afex][afex::afex-package] ANOVA table (default: FALSE)
 #' @param ... other parameters passed to [format_results]
 #'
-#' @return string with formatted results
+#' @return A character vector reporting F statistics, degrees of freedom,
+#' p-values, and optional generalized eta-squared. With `append_to_table = TRUE`,
+#' a `data.frame` of selected ANOVA rows with an added `res` column containing
+#' the formatted results.
 #' @method apa afex_aov
 #' @export
 #'
@@ -284,34 +253,16 @@ apa.ezANOVA <- function(obj, term, include_eta = TRUE, spher_corr = TRUE,
 #'     fun_aggregate = mean
 #'   )
 #'
-#'   apa(afex_res, "condition")
-#'   apa(afex_res, "condition", eta_digits = 3)
-#'   apa(afex_res, "condition", include_eta = FALSE)
+#'   print(apa(afex_res, "condition"))
+#'   print(apa(afex_res, "condition", eta_digits = 3))
+#'   print(apa(afex_res, "condition", include_eta = FALSE))
 #' }
 apa.afex_aov <- function(obj, term, include_eta = TRUE, eta_digits = 2,
-                         f_digits = 2, df_digits = 0,
-                         append_to_table = FALSE, ...) {
+                          f_digits = 2, df_digits = 0, append_to_table = FALSE, ...) {
   eza <- data.frame(obj$anova_table)
   eza$effect <- row.names(eza)
-
-  suffix <- sprintf(", $\\eta$^2^~G~ %s",
-                    round_p(eza[term, "ges"],
-                            digits = eta_digits,
-                            replace.very.small = 10^(-eta_digits)))
-  if (include_eta == FALSE) {
-    suffix <- ""
-  }
-
-  res <- format_results(sprintf("\\emph{F}(%.*f, %.*f) = %.*f, \\emph{p} %s%s",
-                                df_digits, eza[term, "num.Df"],
-                                df_digits, eza[term, "den.Df"],
-                                f_digits, eza[term, "F"],
-                                round_p(eza[term, "Pr..F."]), suffix), ...)
-  if (append_to_table) {
-    cbind(eza[term, ], res)
-  } else {
-    res
-  }
+  .format_anova_table(eza, term, c("num.Df", "den.Df", "Pr..F."), include_eta,
+                      eta_digits, f_digits, df_digits, append_to_table, ...)
 }
 
 #' Describe ezStats results
@@ -341,9 +292,9 @@ apa.afex_aov <- function(obj, term, include_eta = TRUE, eta_digits = 2,
 #'   )
 #'   
 #'   # Format results in APA style
-#'   apa_ezStats(ezstats_res, 1)
-#'   apa_ezStats(ezstats_res, "incongruent")
-#'   apa_ezStats(ezstats_res, 1, digits = 3)
+#'   print(apa_ezStats(ezstats_res, 1))
+#'   print(apa_ezStats(ezstats_res, "incongruent"))
+#'   print(apa_ezStats(ezstats_res, 1, digits = 3))
 #' }
 apa_ezStats <- function(obj, term = 1, ...) {
   if (which(colnames(obj) == "N")>2){
@@ -354,7 +305,7 @@ apa_ezStats <- function(obj, term = 1, ...) {
   with(obj[term, ], apa_mean_sd(m = Mean, sd = SD, ...))
 }
 
-#' Describe contrasts created by emmeans
+#' Describe contrasts created by [emmeans][emmeans::emmeans-package]
 #'
 #' @param obj summary object from [emmeans::contrast]
 #' @param term contrast number(s)
@@ -378,11 +329,11 @@ apa_ezStats <- function(obj, term = 1, ...) {
 #'   sum_contr <- summary(emmeans::contrast(warp.emm, "trt.vs.ctrl"))
 #'   
 #'   # Format results in APA style
-#'   apa(sum_contr, 1)
-#'   apa(sum_contr, 3)
-#'   apa(sum_contr, 3, dtype = "t")
-#'   apa(sum_contr, 3, dtype = "c")
-#'   apa(sum_contr, 3, dtype = "c", df = TRUE)
+#'   print(apa(sum_contr, 1))
+#'   print(apa(sum_contr, 3))
+#'   print(apa(sum_contr, 3, dtype = "t"))
+#'   print(apa(sum_contr, 3, dtype = "c"))
+#'   print(apa(sum_contr, 3, dtype = "c", df = TRUE))
 #' }
 apa.summary_emm <- function(obj, term, dtype = "B", df = FALSE, ...) {
   obj <- as.data.frame(obj[term, ])
@@ -428,8 +379,8 @@ apa.emmeans <- apa.summary_emm
 #'   afit <- anova(fit)
 #'   
 #'   # Format results in APA style
-#'   apa(afit, "Days")
-#'   apa(afit, "Days", f.digits = 3)
+#'   print(apa(afit, "Days"))
+#'   print(apa(afit, "Days", f.digits = 3))
 #' }
 apa.anova.merMod <- function(obj, term, f.digits = 2, ...) {
   obj <- data.frame(obj)
@@ -444,7 +395,8 @@ apa.anova.merMod <- function(obj, term, f.digits = 2, ...) {
 #' @param obj hypothesis from [car::linearHypothesis]
 #' @param ... additional parameters passed to [format_results]
 #'
-#' @return results of \eqn{\chi^2} or _F_ test
+#' @return A character result reporting the chi-squared or F statistic,
+#' degrees of freedom, and p-value for the linear-hypothesis test.
 #' @method apa linearHypothesis
 #' @export
 #'
@@ -456,11 +408,11 @@ apa.anova.merMod <- function(obj, term, f.digits = 2, ...) {
 #'   
 #'   # Test hypotheses
 #'   res <- car::linearHypothesis(mod.davis, c("(Intercept) = 0", "repwt = 1"))
-#'   apa(res)
+#'   print(apa(res))
 #'   
 #'   # Test using Chi-square
 #'   res.chi <- car::linearHypothesis(mod.davis, c("(Intercept) = 0", "repwt = 1"), test = "Chisq")
-#'   apa(res.chi)
+#'   print(apa(res.chi))
 #' }
 apa.linearHypothesis <- function(obj, ...) {
   res <- obj[2, ]

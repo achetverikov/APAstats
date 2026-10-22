@@ -17,12 +17,15 @@ base_breaks_y(x, addSegment = TRUE, ...)
 
 \item{scale}{scale (x or y) to create breaks for}
 
-\item{addSegment}{should we add a line to the scale? (T/F)}
+\item{addSegment}{should we add a line to the scale? (TRUE/FALSE)}
 
 \item{...}{other parameters passed to scale_(x or y)_continuous}
 }
 \value{
-scale_(x or y)_continuous with pretty breaks and accompanying geom_segment if addSegment == TRUE
+A continuous position scale (class \code{ScaleContinuousPosition})
+with breaks spanning \code{x}. When \code{addSegment = TRUE}, a list containing
+an axis-segment layer and the scale, suitable for adding to a
+\href{https://CRAN.R-project.org/package=ggplot2}{ggplot2} plot.
 }
 \description{
 Tufte-like breaks for axes
@@ -42,4 +45,5 @@ p <- ggplot(mtcars, aes(x = wt, y = mpg)) +
 p
 p + base_breaks(mtcars$wt, scale = "x") +
   base_breaks(mtcars$mpg, scale = "y")
+
 }

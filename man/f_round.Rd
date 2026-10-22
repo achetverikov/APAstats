@@ -14,7 +14,8 @@ f_round(x, digits = 2, strip.lead.zeros = FALSE)
 \item{strip.lead.zeros}{remove zero before decimal point (default is false)}
 }
 \value{
-Value A number rounded to the specified number of digits
+A character vector containing \code{x} rounded to the specified number
+of decimal places, optionally omitting zeros before decimal points.
 }
 \description{
 Formatted rounding

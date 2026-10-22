@@ -10,7 +10,8 @@ binom_ci(x)
 \item{x}{a vector of 0 and 1}
 }
 \value{
-a vector of mean, lower CI, upper CI, and length of x
+A named numeric vector: \code{y} is the estimated proportion,
+\code{ymin} and \code{ymax} are its 95\% confidence limits, and \code{len} is the sample size.
 }
 \description{
 Binomial confidence interval as a vector

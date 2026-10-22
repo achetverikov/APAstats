@@ -12,7 +12,8 @@ omit_zeroes(x, digits = 2)
 \item{digits}{Number of decimal digits to keep}
 }
 \value{
-A number without leading zero
+A character vector containing formatted values with the leading
+character removed, intended to omit the zero before a decimal point.
 }
 \description{
 Omit leading zero from number

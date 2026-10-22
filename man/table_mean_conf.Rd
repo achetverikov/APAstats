@@ -2,7 +2,7 @@
 % Please edit documentation in R/basic_functions.R
 \name{table_mean_conf}
 \alias{table_mean_conf}
-\title{Get a list with means and confidence intervals}
+\title{Get formatted means and confidence intervals}
 \usage{
 table_mean_conf(x, digits = 2, binom = FALSE, ...)
 }
@@ -16,10 +16,11 @@ table_mean_conf(x, digits = 2, binom = FALSE, ...)
 \item{...}{other parameters passed to \link{format_results}}
 }
 \value{
-a list with a mean and CI as formatted strings
+A character vector of length two: the formatted mean followed
+by the confidence limits in square brackets.
 }
 \description{
-Get a list with means and confidence intervals
+Get formatted means and confidence intervals
 }
 \examples{
 # For continuous data

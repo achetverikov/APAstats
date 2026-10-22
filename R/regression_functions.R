@@ -8,11 +8,16 @@
 #' @param test.df should we include degrees of freedom in description?
 #' @param eff.size should we include effect size (currently implemented only for simple regression)?
 #' @param adj.digits automatically adjusts digits so that B or SE would not show up as "0.00"
-#' @param p.as.number should the p-values be transformed to numbers (T) or shown as strings (F)?
+#' @param p.as.number should the p-values be transformed to numbers (TRUE) or shown as strings (FALSE)?
 #' @param term.pattern return only the model terms matching the regex pattern (grepl is used)
 #' @param ... other parameters passed to [format_results]
 #'
-#' @return result
+#' @return A character result for a selected `term`. Otherwise, a `data.frame`
+#' with columns `B` (coefficient estimate), `SE` (standard error), `Stat`
+#' (test statistic), `p` (p-value), `eff` (term name), and `str` (complete
+#' APA-formatted result). The summary columns are character vectors except
+#' that `p` is numeric when `p.as.number = TRUE`. `term.pattern` filters
+#' the rows of this data frame.
 #' @method apa glm
 #' @export
 #'
@@ -38,12 +43,12 @@
 #' 
 #' # With effect size (requires rockchalk package)
 #' if (requireNamespace("rockchalk", quietly = TRUE)) {
-#'   apa(fit, "body", 4, eff.size = TRUE)
+#'   print(apa(fit, "body", 4, eff.size = TRUE))
 #' }
 #'
 #' if (requireNamespace("lmerTest", quietly = TRUE)) {
 #'   fm <- lmerTest::lmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)
-#'   apa(fm, "Days", test.df = TRUE)
+#'   print(apa(fm, "Days", test.df = TRUE))
 #' }
 #'
 #' if (requireNamespace("lme4", quietly = TRUE)) {
@@ -52,17 +57,15 @@
 #'     data = lme4::cbpp,
 #'     family = binomial
 #'   )
-#'   apa(gm, "period2")
+#'   print(apa(gm, "period2"))
 #' }
-apa.glm <- function(obj, term = NULL, dtype = 1, b.digits = 2, t.digits = 2, 
-                    test.df = FALSE, p.as.number = FALSE, term.pattern = NULL, 
+apa.glm <- function(obj, term = NULL, dtype = 1, b.digits = 2, t.digits = 2,
+                    test.df = FALSE, p.as.number = FALSE, term.pattern = NULL,
                     eff.size = FALSE, adj.digits = FALSE, ...) {
-  fit_package <- attr(class(obj), "package")
   fit_class <- class(obj)[1]
   fit_family <- family(obj)[1]
-  
   if (!is.numeric(dtype) | dtype < 0 | dtype > 4) dtype <- 3
-  
+
   if (fit_class == "lm.circular.cl") {
     afit <- data.frame(obj$coefficients, obj$se.coef, obj$t.values, obj$p.values)
     t_z <- "t"
@@ -71,20 +74,13 @@ apa.glm <- function(obj, term = NULL, dtype = 1, b.digits = 2, t.digits = 2,
       warning("df for lm.circular are not implemented")
     }
   } else {
+    model_summary <- summary(obj)
+    afit <- data.frame(coef(model_summary))
     if (inherits(obj, "lmerModLmerTest")) {
-      afit <- data.frame(coef(summary(obj)))
-      if (test.df) {
-        dfs <- afit[, 3]
-      }
+      if (test.df) dfs <- afit[, 3]
       afit <- afit[, c(1, 2, 4, 5)]
-    } else {
-      afit <- data.frame(coef(summary(obj)))
     }
-    if (fit_family == "gaussian") {
-      t_z <- "t"
-    } else {
-      t_z <- "Z"
-    }
+    t_z <- if (fit_family == "gaussian") "t" else "Z"
     if (eff.size) {
       if (!requireNamespace("rockchalk", quietly = TRUE)) {
         warning("Cannot compute effect size. The 'rockchalk' package is not available. Please install it using install.packages('rockchalk').")
@@ -105,7 +101,6 @@ apa.glm <- function(obj, term = NULL, dtype = 1, b.digits = 2, t.digits = 2,
       b.digits <- b.digits + 1
     }
   }
-  
   if (length(attr(terms(obj), "term.labels")) == (length(rownames(afit)) + 1)) {
     rownames(afit) <- c("Intercept", attr(terms(obj), "term.labels"))
   }
@@ -115,62 +110,44 @@ apa.glm <- function(obj, term = NULL, dtype = 1, b.digits = 2, t.digits = 2,
     }
     afit$pvals <- 2 * pnorm(-abs(afit[, 3]))
   }
-  
   if (test.df) {
-    if (!inherits(obj, "lmerModLmerTest")) {
-      dfs <- summary(obj)$df[2]
-    }
-    if (isTRUE(all.equal(dfs, as.integer(dfs)))) {
-      dfs <- as.character(round(dfs))
-    } else {
-      dfs <- f_round(dfs, t.digits)
-    }
+    if (!inherits(obj, "lmerModLmerTest")) dfs <- model_summary$df[2]
+    dfs <- if (isTRUE(all.equal(dfs, as.integer(dfs)))) {
+      as.character(round(dfs))
+    } else f_round(dfs, t.digits)
     dfs <- paste0("(", dfs, ")")
-  } else {
-    dfs <- ""
-  }
-  
-  res_df <- data.frame(B = f_round(afit[, 1], 2), SE = f_round(afit[, 2], 2), 
-                       Stat = f_round(afit[, 3], t.digits), 
-                       p = if (p.as.number) zapsmall(as.vector(afit[, 4]), 4) else round_p(afit[, 4]), 
-                       eff = row.names(afit), row.names = row.names(afit))
-  
+  } else dfs <- ""
+
+  p_str <- round_p(afit[, 4])
+  res_df <- data.frame(B = f_round(afit[, 1], 2), SE = f_round(afit[, 2], 2),
+                      Stat = f_round(afit[, 3], t.digits),
+                      p = if (p.as.number) zapsmall(as.vector(afit[, 4]), 4) else p_str,
+                      eff = row.names(afit), row.names = row.names(afit))
+  test_str <- sprintf("\\emph{%s}%s %s", t_z, dfs,
+    round_p(afit[, 3], digits = t.digits, strip.lead.zeros = FALSE,
+            replace.very.small = if (dtype == 1) 0.001 else 0.01))
+  coef_str <- sprintf("\\emph{B} = %.*f (%.*f)", b.digits, afit[, 1], b.digits, afit[, 2])
   if (dtype == 1) {
-    res_df$str <- sprintf(paste0("\\emph{", t_z, "}", dfs, " %s, \\emph{p} %s"), 
-                          round_p(afit[, 3], digits = t.digits, strip.lead.zeros = FALSE), 
-                          round_p(afit[, 4]))
+    res_df$str <- paste0(test_str, ", \\emph{p} ", p_str)
   } else if (dtype == 2) {
-    res_df$str <- sprintf(paste0("\\emph{B} = %.", b.digits, "f (%.", b.digits, "f), \\emph{p} %s"), 
-                          afit[, 1], afit[, 2], round_p(afit[, 4]))
+    res_df$str <- paste0(coef_str, ", \\emph{p} ", p_str)
   } else if (dtype == 3) {
-    res_df$str <- sprintf(paste0("\\emph{B} = %.", b.digits, "f, \\emph{SE} = %.", b.digits, 
-                                 "f, \\emph{", t_z, "}", dfs, " %s, \\emph{p} %s"), 
-                          afit[, 1], afit[, 2], 
-                          round_p(afit[, 3], digits = t.digits, 
-                                  strip.lead.zeros = FALSE, replace.very.small = 0.01), 
-                          round_p(afit[, 4]))
+    res_df$str <- sprintf("\\emph{B} = %.*f, \\emph{SE} = %.*f, %s, \\emph{p} %s",
+                          b.digits, afit[, 1], b.digits, afit[, 2], test_str, p_str)
   } else if (dtype == 4) {
-    res_df$str <- sprintf(paste0("\\emph{B} = %.", b.digits, "f (%.", b.digits, "f), \\emph{", t_z, "}", dfs, " %s"), 
-                          afit[, 1], afit[, 2], 
-                          round_p(afit[, 3], digits = t.digits, 
-                                  strip.lead.zeros = FALSE, replace.very.small = 0.01))
+    res_df$str <- paste0(coef_str, ", ", test_str)
   }
-  
-  if (eff.size && !exists("ess")) {
-    stop("Effect sizes are not implemented for THAT kind of models yet.")
-  } else if (eff.size && exists("ess")) {
-    res_df$str <- paste0(res_df$str, ", \\emph{R}_{part}^2", 
+  if (eff.size) {
+    if (!exists("ess")) stop("Effect sizes are not implemented for THAT kind of models yet.")
+    res_df$str <- paste0(res_df$str, ", \\emph{R}_{part}^2",
                          round_p(c(NA, ess), digits = ifelse(min(ess) < 0.01, 3, 2)))
   }
-  
   res_df$str <- format_results(res_df$str, ...)
   if (!is.null(term)) {
     res_df[term, "str"]
   } else if (!is.null(term.pattern)) {
     res_df[grepl(term.pattern, res_df$eff), ]
-  } else {
-    res_df
-  }
+  } else res_df
 }
 
 #' @rdname apa.glm
@@ -198,7 +175,8 @@ apa.lmerModLmerTest <- apa.glm
 #' @param dtype description type ("B"/"t")
 #' @param ... other parameters passed to [format_results]
 #'
-#' @return Formatted string
+#' @return A character vector reporting the selected fixed-effect estimate,
+#' standard error, test statistic, degrees of freedom when available, and p-value.
 #' @method apa summary.merMod
 #' @export
 #'
@@ -209,10 +187,10 @@ apa.lmerModLmerTest <- apa.glm
 #'   fms <- summary(fm)
 #'   
 #'   # Format results in APA style
-#'   apa(fms, "Days")
-#'   apa(fms, "(Intercept)")
-#'   apa(fms, 2)
-#'   apa(fms, "Days", "B")
+#'   print(apa(fms, "Days"))
+#'   print(apa(fms, "(Intercept)"))
+#'   print(apa(fms, 2))
+#'   print(apa(fms, "Days", "B"))
 #' }
 apa.summary.merMod <- function(obj, factor, dtype = "t", ...) {
   coef <- obj$coefficients[factor, ]
@@ -236,7 +214,7 @@ apa.summary.merMod <- function(obj, factor, dtype = "t", ...) {
 #' @export
 apa.lmert <- apa.summary.merMod
 
-#' Describe brms model results
+#' Describe [brms][brms::brms-package] model results
 #'
 #' @param obj model object from [brms::brm]
 #' @param term model term to describe
@@ -248,27 +226,31 @@ apa.lmert <- apa.summary.merMod
 #' @param ci.type type of intervals to use (currently, all that is not HPDI is treated as ETI using `bayestestR::eti`)
 #' @param ... other parameters passed to [format_results]
 #'
-#' @return string describing the result
+#' @return A character result reporting the posterior mean coefficient, its
+#' 95% interval, and optionally an effect-size estimate.
 #' @importFrom data.table data.table
 #' @method apa brmsfit
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' if (requireNamespace("brms", quietly = TRUE)) {
+#' \donttest{
+#' if (requireNamespace("brms", quietly = TRUE) &&
+#'     requireNamespace("bayestestR", quietly = TRUE)) {
 #'   # Generate sample data
-#'   x <- rnorm(500, sd = 6)
-#'   y <- 4 * x + rnorm(500)
+#'   set.seed(42)
+#'   x <- seq(-1, 1, length.out = 30)
+#'   y <- 1 + 2 * x + rnorm(30, sd = 0.5)
 #'   
 #'   # Fit a Bayesian regression model
-#'   fit <- brms::brm(y ~ x, data = data.frame(x, y), chains = 1, iter = 500)
-#'   apa(fit, "x")
+#'   fit <- brms::brm(y ~ x, data = data.frame(x, y), backend = "rstan",
+#'                    chains = 1, cores = 1, iter = 500, seed = 42, refresh = 0)
+#'   print(apa(fit, "x"))
 #'   
 #'   # Convert x to another scale for output
-#'   apa(fit, "x", trans = function(val) val + 5)
+#'   print(apa(fit, "x", trans = function(val) val + 5))
 #' }
 #' }
-apa.brmsfit <- function(obj, term, trans = NULL, digits = 2, eff.size = FALSE, 
+apa.brmsfit <- function(obj, term, trans = NULL, digits = 2, eff.size = FALSE,
                         eff.size.type = "r", nsamples = 100, ci.type = "HPDI", ...) {
   if (!requireNamespace("brms", quietly = TRUE)) {
     stop("Package 'brms' is required for this function")
@@ -276,76 +258,60 @@ apa.brmsfit <- function(obj, term, trans = NULL, digits = 2, eff.size = FALSE,
   if (!requireNamespace("bayestestR", quietly = TRUE)) {
     stop("Package 'bayestestR' is required for this function")
   }
-  
-  post_samp <- brms::posterior_samples(obj, c(paste0("b_", term)), exact_match = TRUE)
-  if (ncol(post_samp) > 1) {
-    warning(paste("More than one match using", term, "term"))
-  }
+  post_samp <- brms::as_draws_matrix(obj, variable = paste0("b_", term), regex = FALSE)
+  if (ncol(post_samp) > 1) warning(paste("More than one match using", term, "term"))
   post_samp <- post_samp[, 1]
-  if (is.function(trans)) {
-    post_samp <- trans(post_samp)
-  }
-  if (ci.type == "HPDI") {
-    ci <- bayestestR::hdi(post_samp, ci = 0.95)
-  } else {
-    ci <- bayestestR::eti(post_samp, ci = 0.95)
-  }
-  # it is tricky to compute partial R2, this is just one of the approaches
-  
+  if (is.function(trans)) post_samp <- trans(post_samp)
+  ci_fun <- if (ci.type == "HPDI") bayestestR::hdi else bayestestR::eti
+  ci <- ci_fun(post_samp, ci = 0.95)
+
   es <- NULL
   if (eff.size != FALSE) {
     var_res <- var(resid(obj, nsamples = nsamples)[, 1])
-    var_term <- var(obj$data[, term, with = FALSE] * brms::fixef(obj)[term, "Estimate"])
+    fixed_effects <- brms::fixef(obj)
+    var_term <- var(obj$data[, term, with = FALSE] * fixed_effects[term, "Estimate"])
+    denominator <- switch(as.character(eff.size),
+      fe_to_all = var(fitted(obj, nsamples = nsamples)[, 1]) + var_res,
+      part_fe = var_term + var_res,
+      part_fe_re = {
+        random_effects <- brms::ranef(obj)
+        term_re <- data.table(random_effects[[1]][, , term], keep.rownames = TRUE)
+        mod_data_preds <- merge(obj$data, term_re, by.x = names(random_effects), by.y = "rn")
+        var_term <- var(mod_data_preds[, term, with = FALSE] *
+          (fixed_effects[term, "Estimate"] + mod_data_preds[, "Estimate"]))
+        var_term + var_res
+      }
+    )
+    if (!is.null(denominator)) es <- var_term / denominator
   }
-  if ("fe_to_all" == eff.size) {
-    var_tot <- var(fitted(obj, nsamples = nsamples)[, 1]) + var_res
-    es <- var_term / var_tot
-  } else if ("part_fe" == eff.size) {
-    # var_f = var(fitted(obj, re_formula = NA)[,1])
-    es <- var_term / (var_term + var_res)
-  } else if ("part_fe_re" == eff.size) {
-    term_re <- data.table(brms::ranef(obj)[[1]][, , term], keep.rownames = TRUE)
-    mod_data_preds <- merge(obj$data, term_re, by.x = names(brms::ranef(obj)), by.y = "rn")
-    var_term <- var(mod_data_preds[, term, with = FALSE] * (brms::fixef(obj)[term, "Estimate"] + mod_data_preds[, "Estimate"]))
-    var_tot <- var_term + var_res
-    
-    es <- var_term / var_tot
-  }
-  
-  
-  res_str <- sprintf(paste0("\\emph{b} = %.", digits, "f, 95%% %s = [%.", digits, "f, %.", digits, "f]"), mean(post_samp), ci.type, ci[, "CI_low"], ci[, "CI_high"])
+  res_str <- sprintf("\\emph{b} = %.*f, 95%% %s = [%.*f, %.*f]",
+    digits, mean(post_samp), ci.type, digits, ci[, "CI_low"], digits, ci[, "CI_high"])
   if (!is.null(es)) {
-    if (eff.size.type == "r") {
-      res_str <- paste0("_r_ = ", f_round(sqrt(es), digits = digits), ", ", res_str)
-    } else {
-      res_str <- paste0(res_str, ", $R^2_part$ = ", f_round(es, digits = digits))
-    }
+    res_str <- if (eff.size.type == "r") {
+      paste0("_r_ = ", f_round(sqrt(es), digits = digits), ", ", res_str)
+    } else paste0(res_str, ", $R^2_part$ = ", f_round(es, digits = digits))
   }
-  
   format_results(res_str, ...)
 }
 
-#' Describe BayesFactor results
+#' Describe [BayesFactor][BayesFactor::BayesFactor-package] results
 #'
-#' @param obj an object of [BayesFactor] class `BFBayesFactor`
+#' @param obj an object of [BayesFactor][BayesFactor::BayesFactor-package] class `BFBayesFactor`
 #' @param digits number of digits to use
 #' @param top_limit numbers above that limit (or below the digits limit) will be converted to exponential notation (if convert_to_power is TRUE)
 #' @param convert_to_power enable or disable converting of very small or very large numbers to exponential notation
 #' @param ... other parameters passed to [format_results]
-#' @return string describing the result
+#' @return A character result reporting the Bayes factor, optionally in
+#' scientific notation for very large or small values.
 #' @note Code for converting to exponential notation is based on https://dankelley.github.io/r/2015/03/22/scinot.html
 #' @method apa BFBayesFactor
 #' @export
 #'
 #' @examples
 #' if (requireNamespace("BayesFactor", quietly = TRUE)) {
-#'   # Load the puzzle data from BayesFactor package
-#'   data(puzzles, package = "BayesFactor")
-#'   
-#'   # Run Bayesian ANOVA
-#'   bfs <- BayesFactor::anovaBF(RT ~ shape + color + ID, data = puzzles, progress = FALSE)
-#'   apa(bfs[1])
-#'   apa(bfs[3] / bfs[1])
+#'   bf <- BayesFactor::ttestBF(x = c(0.8, 1.1, 0.9, 1.5, 1.2, 0.7))
+#'   print(apa(bf))
+#'   print(apa(bf, top_limit = 10))
 #' }
 apa.BFBayesFactor <- function(obj, digits = 2, top_limit = 10000, convert_to_power = TRUE, ...) {
   bf_val <- exp(obj@bayesFactor[1])
@@ -366,7 +332,10 @@ apa.BFBayesFactor <- function(obj, digits = 2, top_limit = 10000, convert_to_pow
 #' @param term model term to describe (a string with the term name or its sequential number)
 #' @param digits number of digits for B and SD
 #' @param adj.digits automatically adjusts digits so that B would not show up as "0.00"
-#' @return result
+#' @return A character result for a selected `term`, or a `data.frame` of
+#' coefficient summaries when `term = NULL`. The table has the columns
+#' documented in [apa.glm]; `str` contains estimates, standard errors, and
+#' test statistics formatted for in-text reporting.
 #' @export
 #'
 #' @examples
@@ -375,8 +344,8 @@ apa.BFBayesFactor <- function(obj, digits = 2, top_limit = 10000, convert_to_pow
 #'   fm <- lme4::lmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)
 #'   
 #'   # Concise in-text reporting
-#'   ins_lmer(fm, "Days")
-#'   ins_lmer(fm, "(Intercept)", digits = 1)
+#'   print(ins_lmer(fm, "Days"))
+#'   print(ins_lmer(fm, "(Intercept)", digits = 1))
 #' }
 ins_lmer <- function(obj, term = NULL, digits = 2, adj.digits = TRUE) {
   apa.glm(obj, term = term, b.digits = digits, adj.digits = adj.digits, dtype = 4)

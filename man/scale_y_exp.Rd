@@ -12,7 +12,8 @@ scale_y_exp(digits = 0, ...)
 \item{...}{other arguments passed to scale_y_continuous}
 }
 \value{
-scale
+A continuous y-position scale (class \code{ScaleContinuousPosition})
+with breaks and labels transformed from logarithmic to exponentiated values.
 }
 \description{
 Helps to transform log-scale back to normal

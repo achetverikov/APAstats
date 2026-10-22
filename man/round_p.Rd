@@ -24,7 +24,8 @@ round_p(
 \item{replace.very.small}{replace values lower than this criteria (NULL to keep values as is)}
 }
 \value{
-Formatted p-value
+A character vector of formatted p-values, including the requested
+relation signs and small-value threshold notation.
 }
 \description{
 If p-value is <= 0.001, returns ".001" else returns p-value rounded to the specified number of digits, optionally including relation sign ("<" or "=").

@@ -16,3 +16,19 @@ test_that("plot_pointrange adds a margin for between- and within-subject designs
     expect_true(all(is.finite(c(p$data$ymin, p$data$ymax))))
   }
 })
+
+test_that("pointrange limits match ordinary t intervals and exponentiation", {
+  d <- data.frame(group = rep(c("A", "B"), each = 4),
+                  y = c(1, 2, 4, 7, 2, 5, 6, 9))
+  samples <- split(d$y, d$group)
+  centers <- vapply(samples, mean, numeric(1))
+  widths <- qt(0.975, 3) * vapply(samples, sd, numeric(1)) / sqrt(4)
+  p <- plot_pointrange(d, aes(x = group, y = y), betweenvars = "group")
+  expect_equal(p$data$y, unname(centers))
+  expect_equal(p$data$ymin, unname(centers - widths))
+  expect_equal(p$data$ymax, unname(centers + widths))
+  transformed <- plot_pointrange(d, aes(x = group, y = y),
+                                 betweenvars = "group", exp_y = TRUE)
+  expect_equal(transformed$data$ymin, exp(p$data$ymin))
+  expect_equal(transformed$data$ymax, exp(p$data$ymax))
+})

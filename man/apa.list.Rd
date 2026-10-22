@@ -12,10 +12,12 @@
 \item{...}{Additional arguments passed to the appropriate method}
 }
 \value{
-A formatted string with statistical results in APA style
+A character vector of formatted ANOVA results, or a \code{data.frame}
+containing selected ANOVA rows and a \code{res} column when \code{append_to_table = TRUE}.
+See \link{apa.ezANOVA}.
 }
 \description{
 This function detects the type of statistical results stored in a list object
 and redirects to the appropriate APA formatting method. Currently supports
-\link[ez:ezANOVA]{ez::ezANOVA} results (\link{apa.ezANOVA}).
+\link[ez:ezANOVA]{ezANOVA} results (\link{apa.ezANOVA}).
 }

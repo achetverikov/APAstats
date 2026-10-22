@@ -2,7 +2,7 @@
 % Please edit documentation in R/basic_functions.R
 \name{table_mean_conf_by}
 \alias{table_mean_conf_by}
-\title{Get a list of means and confidence intervals by group}
+\title{Get formatted means and confidence intervals by group}
 \usage{
 table_mean_conf_by(x, by, digits = 2, binom = FALSE)
 }
@@ -16,10 +16,13 @@ table_mean_conf_by(x, by, digits = 2, binom = FALSE)
 \item{binom}{compute binomial CI instead of the usual ones}
 }
 \value{
-a list of means and CI with keys corresponding to the group labels
+An array of list entries, with dimensions and dimension names
+determined by the levels of the grouping variables in \code{by}. Each observed
+group contains the two-element character vector returned by \link{table_mean_conf};
+unobserved combinations contain \code{NULL}.
 }
 \description{
-Get a list of means and confidence intervals by group
+Get formatted means and confidence intervals by group
 }
 \examples{
 # Group means for continuous data

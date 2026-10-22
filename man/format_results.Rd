@@ -12,7 +12,8 @@ format_results(res_str, type = "pandoc")
 \item{type}{'pandoc', 'latex', or 'plotmath' (the latter is very poorly implemented)}
 }
 \value{
-\code{res_str} with latex 'emph' tags replaced with pandoc '_'
+A character vector containing \code{res_str} in the requested notation:
+LaTeX markup, Pandoc emphasis, or text for plotmath expressions.
 }
 \description{
 Internal function used to convert latex-formatted results to pandoc style.

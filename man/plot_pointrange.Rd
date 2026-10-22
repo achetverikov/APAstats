@@ -12,29 +12,29 @@ plot_pointrange(
   linesize = I(1),
   pointfill = I("white"),
   pointshape = NULL,
-  within_subj = F,
+  within_subj = FALSE,
   wid = "uid",
   bars = "ci",
   withinvars = NULL,
   betweenvars = NULL,
-  x_as_numeric = F,
+  x_as_numeric = FALSE,
   custom_geom_before = NULL,
-  connecting_line = F,
-  pretty_breaks_y = F,
-  pretty_y_axis = F,
-  exp_y = F,
-  print_aggregated_data = F,
-  do_aggregate = F,
-  add_margin = F,
+  connecting_line = FALSE,
+  pretty_breaks_y = FALSE,
+  pretty_y_axis = FALSE,
+  exp_y = FALSE,
+  print_aggregated_data = FALSE,
+  do_aggregate = FALSE,
+  add_margin = FALSE,
   margin_label = "all",
   margin_x_vals = NULL,
-  bars_instead_of_points = F,
+  bars_instead_of_points = FALSE,
   geom_bar_params = list(),
-  add_jitter = F,
+  add_jitter = FALSE,
   individual_points_params = list(),
-  drop_NA_subj = F,
+  drop_NA_subj = FALSE,
   design = "between",
-  debug = F
+  debug = FALSE
 )
 }
 \arguments{
@@ -66,7 +66,7 @@ plot_pointrange(
 
 \item{custom_geom_before}{any custom geom to add before points and connecting line (geoms that should be on top of the pointrange can be added in a usual manner)}
 
-\item{connecting_line}{should we add connecting line (T/F)?}
+\item{connecting_line}{should we add connecting line (TRUE/FALSE)?}
 
 \item{pretty_breaks_y}{prettify y breaks}
 
@@ -76,9 +76,9 @@ plot_pointrange(
 
 \item{print_aggregated_data}{print aggregated data used for plotting to console}
 
-\item{do_aggregate}{aggregate data by all conditions before plotting (False)}
+\item{do_aggregate}{aggregate data by all conditions before plotting (FALSE)}
 
-\item{add_margin}{add margin that would show the aggregate over all or subset of x-axis values (T/F)}
+\item{add_margin}{add margin that would show the aggregate over all or subset of x-axis values (TRUE/FALSE)}
 
 \item{margin_label}{margin label to use}
 
@@ -99,7 +99,8 @@ plot_pointrange(
 \item{debug}{outputs additional debugging info if TRUE}
 }
 \value{
-plot of pointrange
+A \code{ggplot} object displaying group summaries and their error bars,
+with optional margin summaries, connecting lines, bars, or individual points.
 }
 \description{
 Pointrange plot
@@ -161,4 +162,5 @@ plot_pointrange(
     "target less noisy" = "Target less noisy",
     "target more noisy" = "Target more noisy"
   ))
+
 }

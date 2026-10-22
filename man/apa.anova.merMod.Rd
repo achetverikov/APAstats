@@ -33,7 +33,7 @@ if (requireNamespace("lmerTest", quietly = TRUE)) {
   afit <- anova(fit)
   
   # Format results in APA style
-  apa(afit, "Days")
-  apa(afit, "Days", f.digits = 3)
+  print(apa(afit, "Days"))
+  print(apa(afit, "Days", f.digits = 3))
 }
 }

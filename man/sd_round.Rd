@@ -12,7 +12,8 @@ sd_round(x, ...)
 \item{...}{other arguments passed to \link{f_round}}
 }
 \value{
-Mean rounded to the specified number of digits (string)
+A character string containing the standard deviation rounded to
+the specified number of decimal places.
 }
 \description{
 SD rounded to the specified number of digits

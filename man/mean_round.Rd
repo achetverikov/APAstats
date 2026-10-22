@@ -12,7 +12,8 @@ mean_round(x, ...)
 \item{...}{other arguments passed to \link{f_round}}
 }
 \value{
-Mean rounded to the specified number of digits (string)
+A character string containing the mean rounded to the specified
+number of decimal places.
 }
 \description{
 Mean rounded to the specified number of digits

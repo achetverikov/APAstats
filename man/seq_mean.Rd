@@ -10,7 +10,7 @@ seq_mean(x)
 \item{x}{a vector of numeric values}
 }
 \value{
-means between consecutive values
+A numeric vector of midpoints between consecutive values in \code{x}.
 }
 \description{
 Get the means between the points of a sequence

@@ -30,19 +30,19 @@ Positive values indicate attraction toward the competing non-target and
 negative values indicate repulsion.
 
 \itemize{
-  \item participant. An anonymized participant identifier, unique across
-    Experiments 1A and 1B.
-  \item experiment. Between-subject sample: \code{"Exp. 1A"} or
-    \code{"Exp. 1B"}.
-  \item high_noise_sd. High stimulus-noise standard deviation used in the
-    sample (20 or 45 degrees).
-  \item relative_noise. Ordered within-subject factor:
-    \code{"target less noisy"} or \code{"target more noisy"}.
-  \item bias_percent. Density-asymmetry bias in percentage points. Positive
-    values indicate attraction toward the non-target; negative values
-    indicate repulsion.
-  \item n_trials. Number of non-outlier unequal-noise trials contributing
-    to the weighted bias curve.
+\item participant. An anonymized participant identifier, unique across
+Experiments 1A and 1B.
+\item experiment. Between-subject sample: \code{"Exp. 1A"} or
+\code{"Exp. 1B"}.
+\item high_noise_sd. High stimulus-noise standard deviation used in the
+sample (20 or 45 degrees).
+\item relative_noise. Ordered within-subject factor:
+\code{"target less noisy"} or \code{"target more noisy"}.
+\item bias_percent. Density-asymmetry bias in percentage points. Positive
+values indicate attraction toward the non-target; negative values
+indicate repulsion.
+\item n_trials. Number of non-outlier unequal-noise trials contributing
+to the weighted bias curve.
 }
 }
 \references{

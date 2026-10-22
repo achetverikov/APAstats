@@ -10,7 +10,7 @@ lengthu(x)
 \item{x}{a vector}
 }
 \value{
-number of unique values in x
+A numeric scalar giving the number of distinct values in \code{x}.
 }
 \description{
 Counts unique values

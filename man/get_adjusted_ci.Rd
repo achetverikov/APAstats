@@ -42,7 +42,7 @@ get_superb_ci(
 \item{value_var}{dependent variable (string)}
 
 \item{within}{within-subject variables (vector of strings; default: NULL).
-If supplied, \code{wid} must also be supplied.}
+If supplied, wid must also be supplied.}
 
 \item{between}{between-subject/grouping variables (vector of strings;
 default: NULL)}
@@ -52,15 +52,20 @@ Required for within-subject designs. For between-subject designs it is
 optional; if supplied, repeated rows are aggregated within subject/group
 cells before intervals are computed.}
 
-\item{adjustments}{adjustment settings. Supports \code{purpose = "single"} or
-\code{"difference"}. \code{decorrelation} can be \code{"CM"} or
-\code{"none"} for within-subject designs and must be \code{"none"} for
-purely between-subject designs. If omitted, decorrelation defaults to
-\code{"CM"} when \code{within} is supplied and \code{"none"} otherwise.}
+\item{adjustments}{adjustment settings. Supports purpose = "single" or
+"difference". decorrelation can be "CM", "CA", or "none" for within-subject
+designs and must be "none" for purely between-subject designs. If omitted,
+decorrelation defaults to "CM" when within is supplied and "none"
+otherwise. CA (correlation adjustment) multiplies interval widths by
+\code{sqrt(1 - rbar)}, where \code{rbar} is the mean Pearson correlation across
+pairs of within-subject conditions, computed separately within each
+between-subject group after cell aggregation and incomplete-unit removal.
+Centers are unchanged. CA requires at least two complete subjects and
+two conditions per group, with nonzero variance in every condition.}
 
-\item{errorbar}{\code{"CI"}, \code{"SE"}, \code{"none"}, or a precision
-function. A precision function receives the condition vector and returns
-either one error-bar width or two interval limits.}
+\item{errorbar}{"CI", "SE", "none", or a precision function. A precision
+function receives the condition vector and returns either one error-bar
+width or two interval limits.}
 
 \item{gamma}{confidence level for interval functions (default: 0.95)}
 
@@ -71,56 +76,43 @@ dropped? (default: FALSE)}
 variables be dropped? (default: TRUE)}
 
 \item{aggr_fun}{scalar summary function. For within-subject designs, and for
-between-subject designs with \code{wid} supplied, it is also used to
-aggregate repeated observations within observational-unit cells. Built-in
-precision formulas mirror \code{superb} for \code{mean}, \code{median},
-\code{var}, \code{sd}, \code{IQR}, and the superb-style \code{MAD},
-\code{hmean}, \code{gmean}, \code{fisherskew}, \code{pearsonskew}, and
-\code{fisherkurtosis} names. For other named functions, define a matching
-\code{SE.<name>} or \code{CI.<name>} function, or supply \code{errorbar}
-as a function.}
+between-subject designs with wid supplied, it is also used to aggregate
+repeated observations within observational-unit cells. Built-in precision
+formulas mirror \href{https://CRAN.R-project.org/package=superb}{superb} for mean, median, var, sd, IQR, and the superb-style
+MAD, hmean, gmean, fisherskew, pearsonskew, and fisherkurtosis names.
+For other named functions, define a matching \verb{SE.<name>} or \verb{CI.<name>}
+function, or supply errorbar as a function.}
 
 \item{debug}{output additional debugging info (default: FALSE)}
 
 \item{...}{additional parameters passed to \link{apa_format_mean_conf}}
 }
 \value{
-A dataframe with grouping variables, \code{center}, \code{lowerwidth},
-\code{upperwidth}, \code{lower_ci}, \code{upper_ci}, and \code{descr}.
+A \code{data.frame} with one row per group and the grouping variables,
+\code{center} (summary statistic), \code{lowerwidth} and \code{upperwidth} (signed interval
+offsets from the center), \code{lower_ci} and \code{upper_ci} (interval limits), and
+\code{descr} (formatted summary and interval text). With \code{errorbar = "none"},
+both offsets are zero and both limits equal the center.
 }
 \description{
-Computes grouped summary statistics and precision intervals for
-between-subject, within-subject, and mixed designs. With no within-subject
-factors, ordinary independent-observation intervals are computed. Supplying a
-subject identifier in a between-subject design first aggregates repeated rows
-within subject-by-group cells.
+Computes grouped summary statistics and precision intervals for between-
+subject, within-subject, and mixed designs. With no within-subject factors,
+ordinary independent-observation intervals are computed. Supplying a subject
+identifier in a between-subject design first aggregates repeated rows within
+subject-by-group cells.
+
+get_superb_ci() is retained for backward compatibility. New code should use
+\code{\link[=get_adjusted_ci]{get_adjusted_ci()}}. Its within-subject results are intended to remain
+numerically compatible with the former implementation backed by \href{https://CRAN.R-project.org/package=superb}{superb}.
 }
 \details{
-The within-subject implementation and statistic-specific precision conventions
-are adapted from the \pkg{superb} framework and its R implementation
-(Cousineau, Goulet, & Harding, 2021). In particular, the Cousineau-Morey path
-follows the two-step centering and bias-correction algorithm used by
-\code{superb::twoStepTransform()}. The code is implemented locally;
-\pkg{apastats2} does not depend on or call \pkg{superb}.
-
-\code{get_superb_ci()} is retained as a deprecated compatibility wrapper.
-New code should use \code{get_adjusted_ci()}.
-}
-\references{
-Cousineau, D., Goulet, M.-A., & Harding, B. (2021). Summary plots with
-adjusted error bars: The superb framework with an implementation in R.
-\emph{Advances in Methods and Practices in Psychological Science, 4}(3).
-doi:10.1177/25152459211035109
-
-Cousineau, D. (2005). Confidence intervals in within-subject designs:
-A simpler solution to Loftus and Masson's method.
-\emph{The Quantitative Methods for Psychology, 1}(1), 42-45.
-doi:10.20982/tqmp.01.1.p042
-
-Morey, R. D. (2008). Confidence intervals from normalized data:
-A correction to Cousineau (2005).
-\emph{The Quantitative Methods for Psychology, 4}(2), 61-64.
-doi:10.20982/tqmp.04.2.p061
+The within-subject implementation and statistic-specific precision
+conventions are adapted from the superb framework and its R implementation
+(Cousineau, Goulet, & Harding, 2021). In particular, the Cousineau-Morey
+path follows the two-step centering and bias-correction algorithm used by
+\href{https://CRAN.R-project.org/package=superb}{superb}. The code is implemented locally;
+\link[=apastats2-package]{apastats2} does not depend on or
+call \href{https://CRAN.R-project.org/package=superb}{superb}.
 }
 \examples{
 data(memory_noise)
@@ -144,6 +136,13 @@ get_adjusted_ci(
   wid = "participant"
 )
 
+# Correlation-adjusted intervals
+get_adjusted_ci(
+  memory_noise[memory_noise$experiment == "Exp. 1A", ],
+  value_var = "bias_percent", within = "relative_noise", wid = "participant",
+  adjustments = list(decorrelation = "CA")
+)
+
 # Mixed design: experiment is between, relative noise is within
 get_adjusted_ci(
   memory_noise,
@@ -152,4 +151,19 @@ get_adjusted_ci(
   between = "experiment",
   wid = "participant"
 )
+
+}
+\references{
+Cousineau, D., Goulet, M.-A., & Harding, B. (2021). Summary plots with
+adjusted error bars: The superb framework with an implementation in R.
+Advances in Methods and Practices in Psychological Science, 4(3).
+doi:10.1177/25152459211035109
+
+Cousineau, D. (2005). Confidence intervals in within-subject designs:
+A simpler solution to Loftus and Masson's method. The Quantitative Methods
+for Psychology, 1(1), 42-45. doi:10.20982/tqmp.01.1.p042
+
+Morey, R. D. (2008). Confidence intervals from normalized data:
+A correction to Cousineau (2005). The Quantitative Methods for Psychology,
+4(2), 61-64. doi:10.20982/tqmp.04.2.p061
 }

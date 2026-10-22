@@ -1,3 +1,14 @@
+# apastats2 1.1.0
+
+* Added correlation-adjusted intervals to `get_adjusted_ci()` with `adjustments = list(decorrelation = "CA")`. Correlations are computed separately within each between-subject group after cell aggregation and incomplete-subject removal. Cousineau-Morey (`"CM"`) remains the default.
+* Compacted interval-precision selection, ANOVA and regression formatting, and confidence-interval text formatting while preserving existing output conventions.
+* Simplified `plot_pointrange()` to use the same interval columns for between- and within-subject summaries, including margin summaries.
+* Made incomplete-cell diagnostics part of the warning or error so that suppressing a warning also suppresses its diagnostic table.
+* Replaced deprecated `brms::posterior_samples()` with `brms::as_draws_matrix()`, retaining exact coefficient selection and optional transformations.
+* Fixed `format_results(type = "plotmath")` returning `NULL` when the input contains no comma.
+* Addressed CRAN review: removed quotes around APA in the package metadata, replaced `T`/`F` logical abbreviations, documented return classes and meanings (including deprecated functions), added package links, and corrected HTML rendering of column-name placeholders.
+* Made examples executable or marked long examples with `\donttest{}`, replaced the slow BayesFactor example with a small t-test, and added regression coverage for interval calculations, formatting, and plot summaries.
+
 # apastats2 1.0.5
 
 * Removed the internal `summarySE()`, `summarySEwithin()` and `normDataWithin()` helpers; `plot_pointrange()` now computes margins with `get_adjusted_ci()`, which also fixes `add_margin = TRUE` with `within_subj = TRUE`.

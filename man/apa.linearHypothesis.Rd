@@ -12,7 +12,8 @@
 \item{...}{additional parameters passed to \link{format_results}}
 }
 \value{
-results of \eqn{\chi^2} or \emph{F} test
+A character result reporting the chi-squared or F statistic,
+degrees of freedom, and p-value for the linear-hypothesis test.
 }
 \description{
 Describe linearHypothesis test results
@@ -25,10 +26,10 @@ if (requireNamespace("car", quietly = TRUE) &&
   
   # Test hypotheses
   res <- car::linearHypothesis(mod.davis, c("(Intercept) = 0", "repwt = 1"))
-  apa(res)
+  print(apa(res))
   
   # Test using Chi-square
   res.chi <- car::linearHypothesis(mod.davis, c("(Intercept) = 0", "repwt = 1"), test = "Chisq")
-  apa(res.chi)
+  print(apa(res.chi))
 }
 }

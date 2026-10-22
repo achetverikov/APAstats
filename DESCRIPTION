@@ -1,14 +1,14 @@
 Package: apastats2
 Type: Package
-Title: Statistical Results in 'APA' Style
-Version: 1.0.5
+Title: Statistical Results in APA Style
+Version: 1.1.0
 Authors@R: person(given = "Andrey",
     family = "Chetverikov",
     email = "andrey.chetverikov@uib.no",
     role = c("aut", "cre"),
     comment = c(ORCID = "0000-0003-2767-6310"))
 Description: Proper formatting of statistical results in accordance with
-    the American Psychological Association ('APA') Manual (sixth edition), along with
+    the American Psychological Association (APA) Manual (sixth edition), along with
     convenient helpers for summaries, confidence intervals, and plotting.
     Development repository: <https://github.com/achetverikov/APAstats>.
 License: GPL-3
@@ -48,7 +48,7 @@ Depends:
     data.table,
     R (>= 4.1.0)
 LazyData: TRUE
-RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 Config/testthat/edition: 3
+Config/roxygen2/version: 8.1.1

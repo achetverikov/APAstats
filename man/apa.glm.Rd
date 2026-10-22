@@ -76,7 +76,7 @@
 
 \item{test.df}{should we include degrees of freedom in description?}
 
-\item{p.as.number}{should the p-values be transformed to numbers (T) or shown as strings (F)?}
+\item{p.as.number}{should the p-values be transformed to numbers (TRUE) or shown as strings (FALSE)?}
 
 \item{term.pattern}{return only the model terms matching the regex pattern (grepl is used)}
 
@@ -87,7 +87,12 @@
 \item{...}{other parameters passed to \link{format_results}}
 }
 \value{
-result
+A character result for a selected \code{term}. Otherwise, a \code{data.frame}
+with columns \code{B} (coefficient estimate), \code{SE} (standard error), \code{Stat}
+(test statistic), \code{p} (p-value), \code{eff} (term name), and \code{str} (complete
+APA-formatted result). The summary columns are character vectors except
+that \code{p} is numeric when \code{p.as.number = TRUE}. \code{term.pattern} filters
+the rows of this data frame.
 }
 \description{
 Describe regression model (GLM, GLMer, lm, lm.circular, ...)
@@ -114,12 +119,12 @@ apa(fit)
 
 # With effect size (requires rockchalk package)
 if (requireNamespace("rockchalk", quietly = TRUE)) {
-  apa(fit, "body", 4, eff.size = TRUE)
+  print(apa(fit, "body", 4, eff.size = TRUE))
 }
 
 if (requireNamespace("lmerTest", quietly = TRUE)) {
   fm <- lmerTest::lmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)
-  apa(fm, "Days", test.df = TRUE)
+  print(apa(fm, "Days", test.df = TRUE))
 }
 
 if (requireNamespace("lme4", quietly = TRUE)) {
@@ -128,6 +133,6 @@ if (requireNamespace("lme4", quietly = TRUE)) {
     data = lme4::cbpp,
     family = binomial
   )
-  apa(gm, "period2")
+  print(apa(gm, "period2"))
 }
 }
