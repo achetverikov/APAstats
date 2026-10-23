@@ -114,9 +114,8 @@ get_superb_ci(
   Built-in precision formulas mirror
   [superb](https://CRAN.R-project.org/package=superb) for mean, median,
   var, sd, IQR, and the superb-style MAD, hmean, gmean, fisherskew,
-  pearsonskew, and fisherkurtosis names. For other named functions,
-  define a matching `SE.<name>` or `CI.<name>` function, or supply
-  errorbar as a function.
+  pearsonskew, and fisherkurtosis names. For other summary functions,
+  supply errorbar as a precision function.
 
 - debug:
 

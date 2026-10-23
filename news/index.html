@@ -45,6 +45,8 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.0" id="apastats2-110">apastats2 1.1.0<a class="anchor" aria-label="anchor" href="#apastats2-110"></a></h2>
 <ul><li>Added correlation-adjusted intervals to <code><a href="../reference/get_adjusted_ci.html">get_adjusted_ci()</a></code> with <code>adjustments = list(decorrelation = "CA")</code>. Correlations are computed separately within each between-subject group after cell aggregation and incomplete-subject removal. Cousineau-Morey (<code>"CM"</code>) remains the default.</li>
+<li>
+<code><a href="../reference/get_adjusted_ci.html">get_adjusted_ci()</a></code> no longer looks up <code>SE.&lt;name&gt;</code>/<code>CI.&lt;name&gt;</code> precision functions by name; for summary functions without a built-in formula, pass <code>errorbar</code> as a function.</li>
 <li>Compacted interval-precision selection, ANOVA and regression formatting, and confidence-interval text formatting while preserving existing output conventions.</li>
 <li>Simplified <code><a href="../reference/plot_pointrange.html">plot_pointrange()</a></code> to use the same interval columns for between- and within-subject summaries, including margin summaries.</li>
 <li>Made incomplete-cell diagnostics part of the warning or error so that suppressing a warning also suppresses its diagnostic table.</li>

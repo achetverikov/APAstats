@@ -8,6 +8,10 @@
   computed separately within each between-subject group after cell
   aggregation and incomplete-subject removal. Cousineau-Morey (`"CM"`)
   remains the default.
+- [`get_adjusted_ci()`](https://achetverikov.github.io/APAstats/reference/get_adjusted_ci.md)
+  no longer looks up `SE.<name>`/`CI.<name>` precision functions by
+  name; for summary functions without a built-in formula, pass
+  `errorbar` as a function.
 - Compacted interval-precision selection, ANOVA and regression
   formatting, and confidence-interval text formatting while preserving
   existing output conventions.
