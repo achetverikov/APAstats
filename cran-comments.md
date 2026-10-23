@@ -20,10 +20,11 @@ This is a resubmission of apastats2 1.1.0 following CRAN review.
 ## Check results
 
 * Windows 11, R 4.6.1, full R CMD check --as-cran including donttest examples:
-  0 errors, 0 warnings, 2 notes. All 197 test assertions passed.
+  0 errors, 0 warnings, 2 notes. All 199 test assertions passed.
 * GitHub Actions, Ubuntu, R 4.6.1, R CMD check --as-cran --no-manual including
   donttest examples: 0 errors, 0 warnings, 1 note.
 
 The "New submission" note is expected because the package has not yet been
-published on CRAN. The additional Windows note concerns a local MiKTeX
-temporary file; both PDF and HTML manuals built successfully.
+published on CRAN. The additional Windows note reports the elapsed time of the
+apa.brmsfit example, which is wrapped in donttest because it compiles a Stan
+model (about 4 s CPU time, most of the elapsed time is compilation).
