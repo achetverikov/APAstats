@@ -473,30 +473,7 @@ paste_and <- function(x, sep = ", ", suffix = "") {
   )
 }
 
-.find_interval_precision_fun <- function(stat_name, stat_fun, errorbar_type, caller_env) {
-  if (is.null(stat_name) || !nzchar(stat_name)) {
-    stop(
-      "For an anonymous summary function, supply errorbar as a precision ",
-      "function returning one width or two interval limits."
-    )
-  }
-  companion_name <- paste0(errorbar_type, ".", stat_name)
-  candidate_envs <- list(environment(stat_fun), caller_env, globalenv())
-  for (env in candidate_envs) {
-    if (!is.null(env) &&
-        exists(companion_name, envir = env, mode = "function", inherits = TRUE)) {
-      return(get(companion_name, envir = env, mode = "function", inherits = TRUE))
-    }
-  }
-  stop(
-    sprintf("No %s precision function is known for summary function '%s'. ",
-            errorbar_type, stat_name),
-    sprintf("Define %s(x%s) or pass errorbar as a function.",
-            companion_name, if (errorbar_type == "CI") ", gamma = 0.95" else "")
-  )
-}
-
-.get_interval_precision_fun <- function(stat_name, stat_fun, errorbar, caller_env) {
+.get_interval_precision_fun <- function(stat_name, stat_fun, errorbar) {
   if (is.function(errorbar)) return(errorbar)
   if (!is.character(errorbar) || length(errorbar) != 1L ||
       !toupper(errorbar) %in% c("CI", "SE", "NONE")) {
@@ -507,7 +484,12 @@ paste_and <- function(x, sep = ", ", suffix = "") {
   builtin <- c("mean", "median", "var", "sd", "MAD", "IQR", "hmean", "gmean",
                "fisherskew", "pearsonskew", "fisherkurtosis")
   if (is.null(stat_name) || !stat_name %in% builtin) {
-    return(.find_interval_precision_fun(stat_name, stat_fun, errorbar_type, caller_env))
+    stop(
+      sprintf("No built-in %s formula for summary function '%s'. ", errorbar_type,
+              if (is.null(stat_name) || !nzchar(stat_name)) "<anonymous>" else stat_name),
+      "Pass errorbar as a precision function returning one width or two ",
+      "interval limits."
+    )
   }
 
   function(x, gamma = 0.95) {
@@ -597,8 +579,7 @@ paste_and <- function(x, sep = ", ", suffix = "") {
 #'   repeated observations within observational-unit cells. Built-in precision
 #'   formulas mirror [superb](https://CRAN.R-project.org/package=superb) for mean, median, var, sd, IQR, and the superb-style
 #'   MAD, hmean, gmean, fisherskew, pearsonskew, and fisherkurtosis names.
-#'   For other named functions, define a matching `SE.<name>` or `CI.<name>`
-#'   function, or supply errorbar as a function.
+#'   For other summary functions, supply errorbar as a precision function.
 #' @param debug output additional debugging info (default: FALSE)
 #' @param ... additional parameters passed to [apa_format_mean_conf]
 #'
@@ -699,10 +680,7 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
   }
 
   stat_name <- .get_interval_stat_name(aggr_expr, aggr_fun)
-  caller_env <- parent.frame()
-  precision_fun <- .get_interval_precision_fun(
-    stat_name, aggr_fun, errorbar, caller_env
-  )
+  precision_fun <- .get_interval_precision_fun(stat_name, aggr_fun, errorbar)
 
   scalar_summary <- function(x) {
     out <- aggr_fun(x)

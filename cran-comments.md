@@ -13,7 +13,9 @@ This is a resubmission of apastats2 1.1.0 following CRAN review.
   wrapper with donttest. Replaced the slow BayesFactor example with a small
   t-test. All examples, including donttest examples, passed.
 * Audited package code for global assignments, including <<- and writes to
-  .GlobalEnv; none remain.
+  .GlobalEnv; none remain. get_adjusted_ci() also no longer looks up
+  precision functions by name in the calling or global environment; custom
+  precision functions must be passed explicitly as arguments.
 
 ## Check results
 

@@ -200,17 +200,17 @@ test_that("get_adjusted_ci supports custom summary and precision functions", {
     c(-1, 0, 0.5, 2)[data$trial]
 
   trimmed_mean <- function(x) mean(x, trim = 0.2)
-  SE.trimmed_mean <- function(x) stats::sd(x) / sqrt(length(x))
+  se_fun <- function(x) stats::sd(x) / sqrt(length(x))
 
-  named <- get_adjusted_ci(
+  custom <- get_adjusted_ci(
     data,
     value_var = "y",
     within = "condition",
     wid = "id",
     aggr_fun = trimmed_mean,
-    errorbar = "SE"
+    errorbar = se_fun
   )
-  direct <- get_adjusted_ci(
+  anonymous <- get_adjusted_ci(
     data,
     value_var = "y",
     within = "condition",
@@ -219,21 +219,29 @@ test_that("get_adjusted_ci supports custom summary and precision functions", {
     errorbar = function(x) stats::sd(x) / sqrt(length(x))
   )
 
-  expect_equal(named$center, direct$center)
-  expect_equal(named$lowerwidth, direct$lowerwidth)
-  expect_equal(named$upperwidth, direct$upperwidth)
+  expect_equal(custom$center, anonymous$center)
+  expect_equal(custom$lowerwidth, anonymous$lowerwidth)
+  expect_equal(custom$upperwidth, anonymous$upperwidth)
 
-  no_precision <- function(x) mean(x, trim = 0.1)
+  # Precision functions are never looked up by name.
+  SE.trimmed_mean <- se_fun
+  for (errorbar in c("CI", "SE")) {
+    expect_error(
+      get_adjusted_ci(
+        data,
+        value_var = "y",
+        within = "condition",
+        wid = "id",
+        aggr_fun = trimmed_mean,
+        errorbar = errorbar
+      ),
+      sprintf("No built-in %s formula for summary function 'trimmed_mean'", errorbar)
+    )
+  }
   expect_error(
-    get_adjusted_ci(
-      data,
-      value_var = "y",
-      within = "condition",
-      wid = "id",
-      aggr_fun = no_precision,
-      errorbar = "CI"
-    ),
-    "No CI precision function"
+    get_adjusted_ci(data, value_var = "y", within = "condition", wid = "id",
+                    aggr_fun = function(x) mean(x, trim = 0.1), errorbar = "CI"),
+    "'<anonymous>'"
   )
 })
 

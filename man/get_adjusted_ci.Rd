@@ -81,8 +81,7 @@ between-subject designs with wid supplied, it is also used to aggregate
 repeated observations within observational-unit cells. Built-in precision
 formulas mirror \href{https://CRAN.R-project.org/package=superb}{superb} for mean, median, var, sd, IQR, and the superb-style
 MAD, hmean, gmean, fisherskew, pearsonskew, and fisherkurtosis names.
-For other named functions, define a matching \verb{SE.<name>} or \verb{CI.<name>}
-function, or supply errorbar as a function.}
+For other summary functions, supply errorbar as a precision function.}
 
 \item{debug}{output additional debugging info (default: FALSE)}
 

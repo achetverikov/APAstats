@@ -1,6 +1,7 @@
 # apastats2 1.1.0
 
 * Added correlation-adjusted intervals to `get_adjusted_ci()` with `adjustments = list(decorrelation = "CA")`. Correlations are computed separately within each between-subject group after cell aggregation and incomplete-subject removal. Cousineau-Morey (`"CM"`) remains the default.
+* `get_adjusted_ci()` no longer looks up `SE.<name>`/`CI.<name>` precision functions by name; for summary functions without a built-in formula, pass `errorbar` as a function.
 * Compacted interval-precision selection, ANOVA and regression formatting, and confidence-interval text formatting while preserving existing output conventions.
 * Simplified `plot_pointrange()` to use the same interval columns for between- and within-subject summaries, including margin summaries.
 * Made incomplete-cell diagnostics part of the warning or error so that suppressing a warning also suppresses its diagnostic table.
