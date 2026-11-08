@@ -1,11 +1,23 @@
 # apastats2
 
+<!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/apastats2)](https://CRAN.R-project.org/package=apastats2)
+<!-- badges: end -->
+
 Utilities for APA-style reporting of statistical results, plus helper functions for confidence intervals, summaries, and plotting.
 
 ## Install
 
+You can install the latest released version from [CRAN](https://CRAN.R-project.org/package=apastats2) with:
+
 ```r
-install.packages("remotes")
+install.packages("apastats2")
+```
+
+The current developmental version from [GitHub](https://github.com/achetverikov/APAstats) can be installed with:
+
+```r
+# install.packages("remotes")
 remotes::install_github("achetverikov/apastats")
 ```
 
@@ -37,6 +49,7 @@ Source: [`example/readme_output.Rmd`](https://github.com/achetverikov/APAstats/b
 ## Documentation
 
 - Website: <https://achetverikov.github.io/APAstats/>
+- CRAN: <https://CRAN.R-project.org/package=apastats2>
 - Function help: `?apa`, `?apa_mean_conf`, etc.
 - Vignette: `vignette("apastats2-intro", package = "apastats2")`
 
@@ -50,7 +63,7 @@ If you are migrating old scripts:
 
 1. Install/load the new package:
 ```r
-remotes::install_github("achetverikov/apastats")
+install.packages("apastats2")
 library(apastats2)
 ```
 2. Prefer `apa()` and `apa_*` functions in new code.
