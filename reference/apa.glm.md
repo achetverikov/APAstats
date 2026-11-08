@@ -187,5 +187,5 @@ if (requireNamespace("lme4", quietly = TRUE)) {
   )
   print(apa(gm, "period2"))
 }
-#> [1] "_Z_ = -3.27, _p_ = .001"
+#> [1] "_Z_ = -3.24, _p_ = .001"
 ```

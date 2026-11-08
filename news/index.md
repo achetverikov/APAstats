@@ -2,6 +2,8 @@
 
 ## apastats2 1.1.0
 
+CRAN release: 2026-11-07
+
 - Added correlation-adjusted intervals to
   [`get_adjusted_ci()`](https://achetverikov.github.io/APAstats/reference/get_adjusted_ci.md)
   with `adjustments = list(decorrelation = "CA")`. Correlations are
