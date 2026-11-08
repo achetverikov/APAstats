@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/achetverikov/APAstats/blob/v1.1.0/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/achetverikov/APAstats/blob/master/DESCRIPTION)
 
 Chetverikov A (2026). *apastats2: Statistical Results in APA Style*. R
 package version 1.1.0, <https://achetverikov.github.io/APAstats/>.

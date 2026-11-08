@@ -60,18 +60,24 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="apastats2">apastats2<a class="anchor" aria-label="anchor" href="#apastats2"></a>
 </h1></div>
+<!-- badges: start -->
+
 <p>Utilities for APA-style reporting of statistical results, plus helper functions for confidence intervals, summaries, and plotting.</p>
 <div class="section level2">
 <h2 id="install">Install<a class="anchor" aria-label="anchor" href="#install"></a>
 </h2>
+<p>You can install the latest released version from <a href="https://CRAN.R-project.org/package=apastats2" class="external-link">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"apastats2"</span><span class="op">)</span></span></code></pre></div>
+<p>The current developmental version from <a href="https://github.com/achetverikov/APAstats" class="external-link">GitHub</a> can be installed with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"achetverikov/apastats"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="quick-example">Quick Example<a class="anchor" aria-label="anchor" href="#quick-example"></a>
 </h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://achetverikov.github.io/APAstats/">apastats2</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">t_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">t.test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span>, mean <span class="op">=</span> <span class="fl">10</span>, sd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
@@ -107,6 +113,8 @@
 <ul>
 <li>Website: <a href="https://achetverikov.github.io/APAstats/" class="uri">https://achetverikov.github.io/APAstats/</a>
 </li>
+<li>CRAN: <a href="https://CRAN.R-project.org/package=apastats2" class="external-link uri">https://CRAN.R-project.org/package=apastats2</a>
+</li>
 <li>Function help: <code><a href="reference/apa.html">?apa</a></code>, <code><a href="reference/apa_mean_conf.html">?apa_mean_conf</a></code>, etc.</li>
 <li>Vignette: <code><a href="articles/apastats2-intro.html">vignette("apastats2-intro", package = "apastats2")</a></code>
 </li>
@@ -124,8 +132,8 @@
 <ol style="list-style-type: decimal">
 <li>Install/load the new package:</li>
 </ol>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"achetverikov/apastats"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"apastats2"</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://achetverikov.github.io/APAstats/">apastats2</a></span><span class="op">)</span></span></code></pre></div>
 <ol start="2" style="list-style-type: decimal">
 <li>Prefer <code><a href="reference/apa.html">apa()</a></code> and <code>apa_*</code> functions in new code.</li>
@@ -213,7 +221,7 @@
 <h2 id="install-legacy-apastats">Install legacy apastats<a class="anchor" aria-label="anchor" href="#install-legacy-apastats"></a>
 </h2>
 <p>If you need the pre-<code>apastats2</code> code, install from the legacy branch/tag:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"achetverikov/apastats@legacy-apastats"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -250,7 +258,12 @@
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://CRAN.R-project.org/package=apastats2" class="external-link"><img src="https://www.r-pkg.org/badges/version/apastats2" alt="CRAN status"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>

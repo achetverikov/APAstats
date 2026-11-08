@@ -5,9 +5,21 @@ functions for confidence intervals, summaries, and plotting.
 
 ## Install
 
+You can install the latest released version from
+[CRAN](https://CRAN.R-project.org/package=apastats2) with:
+
 ``` r
 
-install.packages("remotes")
+install.packages("apastats2")
+```
+
+The current developmental version from
+[GitHub](https://github.com/achetverikov/APAstats) can be installed
+with:
+
+``` r
+
+# install.packages("remotes")
 remotes::install_github("achetverikov/apastats")
 ```
 
@@ -57,6 +69,7 @@ Source:
 ## Documentation
 
 - Website: <https://achetverikov.github.io/APAstats/>
+- CRAN: <https://CRAN.R-project.org/package=apastats2>
 - Function help:
   [`?apa`](https://achetverikov.github.io/APAstats/reference/apa.md),
   [`?apa_mean_conf`](https://achetverikov.github.io/APAstats/reference/apa_mean_conf.md),
@@ -77,7 +90,7 @@ If you are migrating old scripts:
 
 ``` r
 
-remotes::install_github("achetverikov/apastats")
+install.packages("apastats2")
 library(apastats2)
 ```
 
