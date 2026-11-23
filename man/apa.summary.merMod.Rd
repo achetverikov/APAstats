@@ -5,9 +5,9 @@
 \alias{apa.lmert}
 \title{Describe lmerTest results}
 \usage{
-\method{apa}{summary.merMod}(obj, factor, dtype = "t", ...)
+\method{apa}{summary.merMod}(obj, factor, dtype = "t", unit = NULL, ...)
 
-\method{apa}{lmert}(obj, factor, dtype = "t", ...)
+\method{apa}{lmert}(obj, factor, dtype = "t", unit = NULL, ...)
 }
 \arguments{
 \item{obj}{\emph{summary} object from \link[lmerTest:lmer]{lmerTest::lmer} model}
@@ -15,6 +15,10 @@
 \item{factor}{name or number of the factor that needs to be described}
 
 \item{dtype}{description type ("B"/"t")}
+
+\item{unit}{Optional unit suffix for the coefficient and its uncertainty,
+appended once before test statistics. No scale conversion is performed.
+Include any desired spacing and output-specific markup in the suffix.}
 
 \item{...}{other parameters passed to \link{format_results}}
 }

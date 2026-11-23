@@ -4,7 +4,7 @@
 \alias{table_mean_conf}
 \title{Get formatted means and confidence intervals}
 \usage{
-table_mean_conf(x, digits = 2, binom = FALSE, ...)
+table_mean_conf(x, digits = 2, binom = FALSE, unit = NULL, ...)
 }
 \arguments{
 \item{x}{numeric vector to compute the mean for}
@@ -12,6 +12,11 @@ table_mean_conf(x, digits = 2, binom = FALSE, ...)
 \item{digits}{number of digits in results (default: 2)}
 
 \item{binom}{compute binomial CI instead of the usual ones}
+
+\item{unit}{Optional suffix appended once after the complete descriptive
+block. Include any desired space or output-specific markup in the suffix,
+for example, \code{" ms"} or \code{"~\"ms\""} for plotmath.
+This labels values without converting their scale.}
 
 \item{...}{other parameters passed to \link{format_results}}
 }
@@ -21,6 +26,9 @@ by the confidence limits in square brackets.
 }
 \description{
 Get formatted means and confidence intervals
+}
+\details{
+If unit is supplied, it appears once after the CI in the second cell.
 }
 \examples{
 # For continuous data

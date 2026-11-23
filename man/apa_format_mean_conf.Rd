@@ -10,6 +10,7 @@ apa_format_mean_conf(
   upper_ci,
   addCI = FALSE,
   digits = 2,
+  unit = NULL,
   ...
 )
 }
@@ -23,6 +24,11 @@ apa_format_mean_conf(
 \item{addCI}{Add "95\% CI =" prefix}
 
 \item{digits}{Number of digits to use}
+
+\item{unit}{Optional suffix appended once after the complete descriptive
+block. Include any desired space or output-specific markup in the suffix,
+for example, \code{" ms"} or \code{"~\"ms\""} for plotmath.
+This labels values without converting their scale.}
 
 \item{...}{Other arguments passed to \link{format_results}}
 }
@@ -43,5 +49,6 @@ apa_format_mean_conf(mean_val, lower_ci, upper_ci)
 apa_format_mean_conf(mean_val, lower_ci, upper_ci, addCI = TRUE)
 # Format mean and CI with custom number of digits
 apa_format_mean_conf(mean_val, lower_ci, upper_ci, digits = 3)
+apa_format_mean_conf(350, 320, 380, unit = " ms")
 
 }

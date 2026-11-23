@@ -59,9 +59,14 @@
 #'   )
 #'   print(apa(gm, "period2"))
 #' }
+#' @param unit Optional unit suffix, or a named character vector matching
+#'   model terms when coefficients have different units. Omitted named terms
+#'   receive no label. Labels appear once after the coefficient and SE block,
+#'   before test statistics; no scale conversion is performed.
+#'   Include any desired spacing and output-specific markup in the suffix.
 apa.glm <- function(obj, term = NULL, dtype = 1, b.digits = 2, t.digits = 2,
                     test.df = FALSE, p.as.number = FALSE, term.pattern = NULL,
-                    eff.size = FALSE, adj.digits = FALSE, ...) {
+                    eff.size = FALSE, adj.digits = FALSE, unit = NULL, ...) {
   fit_class <- class(obj)[1]
   fit_family <- family(obj)[1]
   if (!is.numeric(dtype) | dtype < 0 | dtype > 4) dtype <- 3
@@ -118,6 +123,14 @@ apa.glm <- function(obj, term = NULL, dtype = 1, b.digits = 2, t.digits = 2,
     dfs <- paste0("(", dfs, ")")
   } else dfs <- ""
 
+  if (!is.null(names(unit))) {
+    if (anyDuplicated(names(unit)) || any(!names(unit) %in% row.names(afit))) {
+      stop("Named units must have unique names matching model terms.")
+    }
+    suffixes <- setNames(rep("", nrow(afit)), row.names(afit))
+    suffixes[names(unit)] <- unit
+    unit <- unname(suffixes)
+  }
   p_str <- round_p(afit[, 4])
   res_df <- data.frame(B = f_round(afit[, 1], 2), SE = f_round(afit[, 2], 2),
                       Stat = f_round(afit[, 3], t.digits),
@@ -127,13 +140,16 @@ apa.glm <- function(obj, term = NULL, dtype = 1, b.digits = 2, t.digits = 2,
     round_p(afit[, 3], digits = t.digits, strip.lead.zeros = FALSE,
             replace.very.small = if (dtype == 1) 0.001 else 0.01))
   coef_str <- sprintf("\\emph{B} = %.*f (%.*f)", b.digits, afit[, 1], b.digits, afit[, 2])
+  coef_str <- paste0(coef_str, unit)
   if (dtype == 1) {
     res_df$str <- paste0(test_str, ", \\emph{p} ", p_str)
   } else if (dtype == 2) {
     res_df$str <- paste0(coef_str, ", \\emph{p} ", p_str)
   } else if (dtype == 3) {
-    res_df$str <- sprintf("\\emph{B} = %.*f, \\emph{SE} = %.*f, %s, \\emph{p} %s",
-                          b.digits, afit[, 1], b.digits, afit[, 2], test_str, p_str)
+    estimates <- sprintf("\\emph{B} = %.*f, \\emph{SE} = %.*f",
+      b.digits, afit[, 1], b.digits, afit[, 2])
+    res_df$str <- paste0(estimates, unit, ", ", test_str,
+      ", \\emph{p} ", p_str)
   } else if (dtype == 4) {
     res_df$str <- paste0(coef_str, ", ", test_str)
   }
@@ -192,7 +208,10 @@ apa.lmerModLmerTest <- apa.glm
 #'   print(apa(fms, 2))
 #'   print(apa(fms, "Days", "B"))
 #' }
-apa.summary.merMod <- function(obj, factor, dtype = "t", ...) {
+#' @param unit Optional unit suffix for the coefficient and its uncertainty,
+#'   appended once before test statistics. No scale conversion is performed.
+#'   Include any desired spacing and output-specific markup in the suffix.
+apa.summary.merMod <- function(obj, factor, dtype = "t", unit = NULL, ...) {
   coef <- obj$coefficients[factor, ]
   if (obj$objClass == "glmerMod") {
     test_name <- "z"
@@ -205,7 +224,8 @@ apa.summary.merMod <- function(obj, factor, dtype = "t", ...) {
   if (dtype == "t") {
     res_str <- sprintf("\\emph{%s}%s = %.2f, \\emph{p} %s", test_name, test.df, coef["t value"], round_p(coef["Pr(>|t|)"]))
   } else if (dtype == "B") {
-    res_str <- sprintf("\\emph{B} = %.2f (%.2f), \\emph{p} %s", coef["Estimate"], coef["Std. Error"], round_p(coef["Pr(>|t|)"]))
+    estimates <- sprintf("\\emph{B} = %.2f (%.2f)", coef["Estimate"], coef["Std. Error"])
+    res_str <- paste0(estimates, unit, ", \\emph{p} ", round_p(coef["Pr(>|t|)"]))
   }
   format_results(res_str, ...)
 }
@@ -250,8 +270,11 @@ apa.lmert <- apa.summary.merMod
 #'   print(apa(fit, "x", trans = function(val) val + 5))
 #' }
 #' }
+#' @param unit Optional unit suffix for the coefficient and its uncertainty,
+#'   appended once before test statistics. No scale conversion is performed.
+#'   Include any desired spacing and output-specific markup in the suffix.
 apa.brmsfit <- function(obj, term, trans = NULL, digits = 2, eff.size = FALSE,
-                        eff.size.type = "r", nsamples = 100, ci.type = "HPDI", ...) {
+                        eff.size.type = "r", nsamples = 100, ci.type = "HPDI", unit = NULL, ...) {
   if (!requireNamespace("brms", quietly = TRUE)) {
     stop("Package 'brms' is required for this function")
   }
@@ -286,6 +309,7 @@ apa.brmsfit <- function(obj, term, trans = NULL, digits = 2, eff.size = FALSE,
   }
   res_str <- sprintf("\\emph{b} = %.*f, 95%% %s = [%.*f, %.*f]",
     digits, mean(post_samp), ci.type, digits, ci[, "CI_low"], digits, ci[, "CI_high"])
+  res_str <- paste0(res_str, unit)
   if (!is.null(es)) {
     res_str <- if (eff.size.type == "r") {
       paste0("_r_ = ", f_round(sqrt(es), digits = digits), ", ", res_str)

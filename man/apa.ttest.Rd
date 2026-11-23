@@ -4,7 +4,7 @@
 \alias{apa.ttest}
 \title{Format t-test results in APA style}
 \usage{
-\method{apa}{ttest}(obj, show.mean = FALSE, abs = FALSE, ...)
+\method{apa}{ttest}(obj, show.mean = FALSE, abs = FALSE, unit = NULL, ...)
 }
 \arguments{
 \item{obj}{An object from \link[stats:t.test]{stats::t.test}}
@@ -12,6 +12,11 @@
 \item{show.mean}{Include mean value in results (useful for one-sample test)}
 
 \item{abs}{Show the absolute value of t-statistic}
+
+\item{unit}{Optional suffix appended once after the complete descriptive
+block. Include any desired space or output-specific markup in the suffix,
+for example, \code{" ms"} or \code{"~\"ms\""} for plotmath.
+This labels values without converting their scale.}
 
 \item{...}{Other arguments passed to \link{format_results}}
 }

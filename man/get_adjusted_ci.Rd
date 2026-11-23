@@ -18,6 +18,7 @@ get_adjusted_ci(
   drop_missing_levels = TRUE,
   aggr_fun = mean,
   debug = FALSE,
+  unit = NULL,
   ...
 )
 
@@ -84,6 +85,11 @@ MAD, hmean, gmean, fisherskew, pearsonskew, and fisherkurtosis names.
 For other summary functions, supply errorbar as a precision function.}
 
 \item{debug}{output additional debugging info (default: FALSE)}
+
+\item{unit}{Optional suffix appended once after the complete descriptive
+block. Include any desired space or output-specific markup in the suffix,
+for example, \code{" ms"} or \code{"~\"ms\""} for plotmath.
+This labels values without converting their scale.}
 
 \item{...}{additional parameters passed to \link{apa_format_mean_conf}}
 }

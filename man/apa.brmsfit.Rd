@@ -13,6 +13,7 @@
   eff.size.type = "r",
   nsamples = 100,
   ci.type = "HPDI",
+  unit = NULL,
   ...
 )
 }
@@ -32,6 +33,10 @@
 \item{nsamples}{number of samples to use for the effect size computations}
 
 \item{ci.type}{type of intervals to use (currently, all that is not HPDI is treated as ETI using \code{bayestestR::eti})}
+
+\item{unit}{Optional unit suffix for the coefficient and its uncertainty,
+appended once before test statistics. No scale conversion is performed.
+Include any desired spacing and output-specific markup in the suffix.}
 
 \item{...}{other parameters passed to \link{format_results}}
 }

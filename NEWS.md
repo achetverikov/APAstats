@@ -1,3 +1,7 @@
+# apastats2 1.1.1
+
+* Added caller-supplied unit suffixes to descriptive, table, and coefficient formatters and simplified t-test formatting.
+
 # apastats2 1.1.0
 
 * Added correlation-adjusted intervals to `get_adjusted_ci()` with `adjustments = list(decorrelation = "CA")`. Correlations are computed separately within each between-subject group after cell aggregation and incomplete-subject removal. Cousineau-Morey (`"CM"`) remains the default.

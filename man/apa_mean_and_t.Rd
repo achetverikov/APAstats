@@ -14,6 +14,7 @@ apa_mean_and_t(
   abs = FALSE,
   aggregate_by = NULL,
   transform.means = NULL,
+  unit = NULL,
   ...
 )
 }
@@ -35,6 +36,11 @@ apa_mean_and_t(
 \item{aggregate_by}{Do the aggregation by the third variable(s): either NULL (default), a single vector variable, or a list of variables to aggregate by.}
 
 \item{transform.means}{A function to transform means and confidence intervals (default: NULL)}
+
+\item{unit}{Optional suffix appended once after the complete descriptive
+block. Include any desired space or output-specific markup in the suffix,
+for example, \code{" ms"} or \code{"~\"ms\""} for plotmath.
+This labels values without converting their scale.}
 
 \item{...}{Additional arguments passed to \link{format_results}}
 }

@@ -76,7 +76,8 @@ apa.default <- function(obj, ...) {
 #' # Two-sample t-test
 #' t_two <- t.test(rnorm(20), rnorm(20, mean = 0.8))
 #' apa(t_two)
-apa.htest <- function(obj, show.mean = FALSE, abs = FALSE, ...) {
+#' @inheritParams apa_format_mean_conf
+apa.htest <- function(obj, show.mean = FALSE, abs = FALSE, unit = NULL, ...) {
   # This is a generic method for htest objects
   # Different implementations for different test types
   if (grepl('correl', obj$method)) {
@@ -87,7 +88,7 @@ apa.htest <- function(obj, show.mean = FALSE, abs = FALSE, ...) {
     return(apa.dip.test(obj, ...))
   } else {
     # Default to t-test
-    return(apa.ttest(obj, show.mean, abs, ...))
+    return(apa.ttest(obj, show.mean, abs, unit = unit, ...))
   }
 }
 
@@ -111,16 +112,14 @@ apa.htest <- function(obj, show.mean = FALSE, abs = FALSE, ...) {
 #' # Two-sample t-test
 #' t_two <- t.test(rnorm(20), rnorm(20, mean = 0.8))
 #' apa(t_two)
-apa.ttest <- function(obj, show.mean = FALSE, abs = FALSE, ...) {
+#' @inheritParams apa_format_mean_conf
+apa.ttest <- function(obj, show.mean = FALSE, abs = FALSE, unit = NULL, ...) {
   if (abs) obj$statistic <- abs(obj$statistic)
-  if (show.mean == TRUE) {
-    res_str <- sprintf("\\emph{M} = %.2f [%.2f, %.2f], \\emph{t}(%.1f) = %.2f, \\emph{p} %s", 
-                       obj$estimate, obj$conf.int[1], obj$conf.int[2], 
-                       obj$parameter, obj$statistic, round_p(obj$p.value))
-  } else {
-    res_str <- sprintf("\\emph{t}(%.1f) = %.2f, \\emph{p} %s", 
-                       obj$parameter, obj$statistic, round_p(obj$p.value))
-  }
+  res_str <- sprintf("\\emph{t}(%.1f) = %.2f, \\emph{p} %s",
+    obj$parameter, obj$statistic, round_p(obj$p.value))
+  if (show.mean) res_str <- paste0(
+    apa_format_mean_conf(obj$estimate, obj$conf.int[1], obj$conf.int[2],
+      unit = unit, type = "latex"), ", ", res_str)
   format_results(res_str, ...)
 }
 
@@ -256,8 +255,12 @@ apa.roc.diff <- apa.roc.test
 #' apa_mean_sd(x)
 #' apa_mean_sd(m = 50.2, sd = 9.8)  # With pre-computed values
 #' apa_mean_sd(x, dtype = "c")  # Comma format instead of parentheses
+#' @inheritParams apa_format_mean_conf
+#' @details The common unit is appended once after the mean/SD block.
+#'   Existing m_units and sd_units suffixes remain supported; use either
+#'   those per-value suffixes or the common unit argument.
 apa_mean_sd <- function(x = NULL, m = NULL, sd = NULL, digits = 2, 
-                        dtype = "p", m_units = "", sd_units = "", ...) {
+                        dtype = "p", m_units = "", sd_units = "", unit = NULL, ...) {
   if (dtype == "c") {
     s1 <- ", "
     s2 <- ""
@@ -270,10 +273,12 @@ apa_mean_sd <- function(x = NULL, m = NULL, sd = NULL, digits = 2,
     m <- m_sd$Mean
     sd <- m_sd$SD
   }
-  format_results(sprintf(
-    "\\emph{M} = %.*f%s%s\\emph{SD} = %.*f%s%s",
-    digits, m, m_units, s1, digits, sd, sd_units, s2
-  ), ...)
+  if (!is.null(unit) && (any(nzchar(m_units)) || any(nzchar(sd_units)))) {
+    stop("Use either unit for the whole block or m_units/sd_units for individual values.")
+  }
+  res_str <- sprintf("\\emph{M} = %.*f%s%s\\emph{SD} = %.*f%s%s",
+    digits, m, m_units, s1, digits, sd, sd_units, s2)
+  format_results(paste0(res_str, unit), ...)
 }
 #' Format mean and confidence interval values into APA-style string
 #'
@@ -297,11 +302,18 @@ apa_mean_sd <- function(x = NULL, m = NULL, sd = NULL, digits = 2,
 #' apa_format_mean_conf(mean_val, lower_ci, upper_ci, addCI = TRUE)
 #' # Format mean and CI with custom number of digits
 #' apa_format_mean_conf(mean_val, lower_ci, upper_ci, digits = 3)
+#' apa_format_mean_conf(350, 320, 380, unit = " ms")
 #' 
-apa_format_mean_conf <- function(mean_val, lower_ci, upper_ci, addCI = FALSE, digits = 2, ...) {
+#' @param unit Optional suffix appended once after the complete descriptive
+#'   block. Include any desired space or output-specific markup in the suffix,
+#'   for example, \code{" ms"} or \code{"~\"ms\""} for plotmath.
+#'   This labels values without converting their scale.
+apa_format_mean_conf <- function(mean_val, lower_ci, upper_ci, addCI = FALSE,
+                                 digits = 2, unit = NULL, ...) {
   ci_str <- ifelse(addCI, ", 95% \\emph{CI} =", "")
-  format_results(sprintf("\\emph{M} = %.*f%s [%.*f, %.*f]",
-    digits, mean_val, ci_str, digits, lower_ci, digits, upper_ci), ...)
+  res_str <- sprintf("\\emph{M} = %.*f%s [%.*f, %.*f]",
+    digits, mean_val, ci_str, digits, lower_ci, digits, upper_ci)
+  format_results(paste0(res_str, unit), ...)
 }
 
 #' Format means and confidence intervals in APA style
@@ -320,8 +332,9 @@ apa_format_mean_conf <- function(mean_val, lower_ci, upper_ci, addCI = FALSE, di
 #' x <- runif(100, 0, 50)
 #' apa_mean_conf(x)
 #' apa_mean_conf(x, bootCI = FALSE)  # Normal approximation instead of bootstrap
+#' @inheritParams apa_format_mean_conf
 apa_mean_conf <- function(x, bootCI = TRUE, addCI = FALSE, digits = 2, 
-                          transform.means = NULL, ...) {
+                          transform.means = NULL, unit = NULL, ...) {
   if (bootCI) {
     res <- Hmisc::smean.cl.boot(x)
   } else {
@@ -331,7 +344,7 @@ apa_mean_conf <- function(x, bootCI = TRUE, addCI = FALSE, digits = 2,
     res <- sapply(res, transform.means)
   }
   res <- as.list(res)
-  apa_format_mean_conf(res$Mean, res$Lower, res$Upper, addCI = addCI, digits = digits, ...)
+  apa_format_mean_conf(res$Mean, res$Lower, res$Upper, addCI = addCI, digits = digits, unit = unit, ...)
 }
 
 #' Format binomial proportions and confidence intervals in APA style
@@ -350,9 +363,10 @@ apa_mean_conf <- function(x, bootCI = TRUE, addCI = FALSE, digits = 2,
 #' 
 #' # Format results in APA style
 #' apa_binom_mean_conf(x)
-apa_binom_mean_conf <- function(x, digits = 2, ...) {
+#' @inheritParams apa_format_mean_conf
+apa_binom_mean_conf <- function(x, digits = 2, unit = NULL, ...) {
   ci <- Hmisc::binconf(sum(x), length(x))
-  apa_format_mean_conf(ci[1], ci[2], ci[3], digits = digits, ...)
+  apa_format_mean_conf(ci[1], ci[2], ci[3], digits = digits, unit = unit, ...)
 }
 
 #' Compare means with t-tests and format in APA style
@@ -378,9 +392,10 @@ apa_binom_mean_conf <- function(x, digits = 2, ...) {
 #' apa_mean_and_t(rt, gr)
 #' apa_mean_and_t(rt, gr, which.mean = 3)
 #' apa_mean_and_t(rt, gr, eff.size = TRUE)
+#' @inheritParams apa_format_mean_conf
 apa_mean_and_t <- function(x, by, which.mean = 1, digits = 2, paired = FALSE, 
                            eff.size = FALSE, abs = FALSE, aggregate_by = NULL, 
-                           transform.means = NULL, ...) {
+                           transform.means = NULL, unit = NULL, ...) {
   Lower <- Upper <- NULL
   
   if (lengthu(by) != 2) {
@@ -406,13 +421,15 @@ apa_mean_and_t <- function(x, by, which.mean = 1, digits = 2, paired = FALSE,
     summaries$x, summaries$Lower, summaries$Upper, digits = digits, type = "latex")
   
   if (which.mean == 3) {
-    means <- paste0(summaries[1, "mean.descr"], " vs. ", summaries[2, "mean.descr"], ", ")
+    means <- paste0(summaries[1, "mean.descr"], " vs. ", summaries[2, "mean.descr"])
   } else if (which.mean == 0) {
     means <- ""
   } else {
-    means <- paste0(summaries[which.mean, "mean.descr"], ", ")
+    means <- summaries[which.mean, "mean.descr"]
   }
   
+  if (which.mean != 0) means <- paste0(means, unit, ", ")
+
   if (paired){
     if (length(x[by==unique(by)[1]])!=length(x[by==unique(by)[2]])){
       stop('For a paired t-test groups defined by `by` should have equal length.')
@@ -456,7 +473,9 @@ apa_mean_and_t <- function(x, by, which.mean = 1, digits = 2, paired = FALSE,
 #' # For binary data
 #' y <- rbinom(100, 1, prob = 0.7)
 #' table_mean_conf(y, binom = TRUE)
-table_mean_conf <- function(x, digits = 2, binom = FALSE, ...) {
+#' @inheritParams apa_format_mean_conf
+#' @details If unit is supplied, it appears once after the CI in the second cell.
+table_mean_conf <- function(x, digits = 2, binom = FALSE, unit = NULL, ...) {
   if (binom) {
     res <- data.frame(Hmisc::binconf(sum(x), length(x)))
     colnames(res) <- c("Mean", "Lower", "Upper")
@@ -466,6 +485,7 @@ table_mean_conf <- function(x, digits = 2, binom = FALSE, ...) {
   res <- with(res, c(f_round(Mean, digits), 
                      sprintf(paste0("[%.", digits, "f, %.", digits, "f]"), 
                              Lower, Upper)))
+  res[2] <- paste0(res[2], unit)
   res
 }
 
@@ -491,8 +511,10 @@ table_mean_conf <- function(x, digits = 2, binom = FALSE, ...) {
 #' # Group means for binary data 
 #' y <- rbinom(100, 1, prob = 0.7)
 #' table_mean_conf_by(y, groups, binom = TRUE)
-table_mean_conf_by <- function(x, by, digits = 2, binom = FALSE) {
-  tapply(x, by, table_mean_conf, digits, binom)
+#' @inheritParams apa_format_mean_conf
+#' @details If unit is supplied, it appears once after the CI in each group's second cell.
+table_mean_conf_by <- function(x, by, digits = 2, binom = FALSE, unit = NULL) {
+  tapply(x, by, table_mean_conf, digits, binom, unit = unit)
 }
 
 

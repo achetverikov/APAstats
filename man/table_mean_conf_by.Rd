@@ -4,7 +4,7 @@
 \alias{table_mean_conf_by}
 \title{Get formatted means and confidence intervals by group}
 \usage{
-table_mean_conf_by(x, by, digits = 2, binom = FALSE)
+table_mean_conf_by(x, by, digits = 2, binom = FALSE, unit = NULL)
 }
 \arguments{
 \item{x}{numeric vector to compute the mean for}
@@ -14,6 +14,11 @@ table_mean_conf_by(x, by, digits = 2, binom = FALSE)
 \item{digits}{number of digits in results (default: 2)}
 
 \item{binom}{compute binomial CI instead of the usual ones}
+
+\item{unit}{Optional suffix appended once after the complete descriptive
+block. Include any desired space or output-specific markup in the suffix,
+for example, \code{" ms"} or \code{"~\"ms\""} for plotmath.
+This labels values without converting their scale.}
 }
 \value{
 An array of list entries, with dimensions and dimension names
@@ -23,6 +28,9 @@ unobserved combinations contain \code{NULL}.
 }
 \description{
 Get formatted means and confidence intervals by group
+}
+\details{
+If unit is supplied, it appears once after the CI in each group's second cell.
 }
 \examples{
 # Group means for continuous data

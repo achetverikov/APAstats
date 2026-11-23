@@ -643,6 +643,7 @@ paste_and <- function(x, sep = ", ", suffix = "") {
 #'   wid = "participant"
 #' )
 #'
+#' @inheritParams apa_format_mean_conf
 get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
                             wid = NULL,
                             adjustments = list(
@@ -652,7 +653,7 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
                             errorbar = "CI", gamma = 0.95,
                             drop_NA_subj = FALSE,
                             drop_missing_levels = TRUE,
-                            aggr_fun = mean, debug = FALSE, ...) {
+                            aggr_fun = mean, debug = FALSE, unit = NULL, ...) {
   within <- unique(as.character(within))
   within <- within[!is.na(within) & nzchar(within)]
   between <- unique(as.character(between))
@@ -956,7 +957,7 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
     result$center,
     result$lower_ci,
     result$upper_ci,
-    ...
+    unit = unit, ...
   )
 
   if (debug) {

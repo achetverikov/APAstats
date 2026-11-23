@@ -18,6 +18,7 @@
   term.pattern = NULL,
   eff.size = FALSE,
   adj.digits = FALSE,
+  unit = NULL,
   ...
 )
 
@@ -32,6 +33,7 @@
   term.pattern = NULL,
   eff.size = FALSE,
   adj.digits = FALSE,
+  unit = NULL,
   ...
 )
 
@@ -46,6 +48,7 @@
   term.pattern = NULL,
   eff.size = FALSE,
   adj.digits = FALSE,
+  unit = NULL,
   ...
 )
 
@@ -60,6 +63,7 @@
   term.pattern = NULL,
   eff.size = FALSE,
   adj.digits = FALSE,
+  unit = NULL,
   ...
 )
 }
@@ -83,6 +87,12 @@
 \item{eff.size}{should we include effect size (currently implemented only for simple regression)?}
 
 \item{adj.digits}{automatically adjusts digits so that B or SE would not show up as "0.00"}
+
+\item{unit}{Optional unit suffix, or a named character vector matching
+model terms when coefficients have different units. Omitted named terms
+receive no label. Labels appear once after the coefficient and SE block,
+before test statistics; no scale conversion is performed.
+Include any desired spacing and output-specific markup in the suffix.}
 
 \item{...}{other parameters passed to \link{format_results}}
 }

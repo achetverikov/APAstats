@@ -5,9 +5,9 @@
 \alias{apa.emmeans}
 \title{Describe contrasts created by \link[emmeans:emmeans-package]{emmeans}}
 \usage{
-\method{apa}{summary_emm}(obj, term, dtype = "B", df = FALSE, ...)
+\method{apa}{summary_emm}(obj, term, dtype = "B", df = FALSE, unit = NULL, ...)
 
-\method{apa}{emmeans}(obj, term, dtype = "B", df = FALSE, ...)
+\method{apa}{emmeans}(obj, term, dtype = "B", df = FALSE, unit = NULL, ...)
 }
 \arguments{
 \item{obj}{summary object from \link[emmeans:contrast]{emmeans::contrast}}
@@ -17,6 +17,10 @@
 \item{dtype}{description type, "t", "B", or any other letter}
 
 \item{df}{include DF in t-test description (default: False)}
+
+\item{unit}{Optional unit suffix for the estimate and SE, appended
+once before test statistics. No scale conversion is performed.
+Include any desired spacing and output-specific markup in the suffix.}
 
 \item{...}{other parameters passed to \link{format_results}}
 }

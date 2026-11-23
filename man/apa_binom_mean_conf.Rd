@@ -4,12 +4,17 @@
 \alias{apa_binom_mean_conf}
 \title{Format binomial proportions and confidence intervals in APA style}
 \usage{
-apa_binom_mean_conf(x, digits = 2, ...)
+apa_binom_mean_conf(x, digits = 2, unit = NULL, ...)
 }
 \arguments{
 \item{x}{A vector of zeros and ones}
 
 \item{digits}{Number of digits in results}
+
+\item{unit}{Optional suffix appended once after the complete descriptive
+block. Include any desired space or output-specific markup in the suffix,
+for example, \code{" ms"} or \code{"~\"ms\""} for plotmath.
+This labels values without converting their scale.}
 
 \item{...}{Additional arguments passed to \link{format_results}}
 }

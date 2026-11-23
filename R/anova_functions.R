@@ -335,18 +335,19 @@ apa_ezStats <- function(obj, term = 1, ...) {
 #'   print(apa(sum_contr, 3, dtype = "c"))
 #'   print(apa(sum_contr, 3, dtype = "c", df = TRUE))
 #' }
-apa.summary_emm <- function(obj, term, dtype = "B", df = FALSE, ...) {
+#' @param unit Optional unit suffix for the estimate and SE, appended
+#'   once before test statistics. No scale conversion is performed.
+#'   Include any desired spacing and output-specific markup in the suffix.
+apa.summary_emm <- function(obj, term, dtype = "B", df = FALSE, unit = NULL, ...) {
   obj <- as.data.frame(obj[term, ])
   df_str <- ifelse(df, sprintf("(%i)", round(obj$df)), "")
   if (dtype == "t") {
     res_str <- sprintf("\\emph{%s}%s = %.2f, \\emph{p} %s", 
                        "t", df_str, obj$t.ratio, round_p(obj$p.value))
-  } else if (dtype == "B") {
-    res_str <- sprintf("\\emph{B} = %.2f (%.2f), \\emph{p} %s", 
-                       obj$estimate, obj$SE, round_p(obj$p.value))
   } else {
-    res_str <- sprintf("\\emph{B} = %.2f (%.2f), \\emph{%s}%s = %.2f, \\emph{p} %s", 
-                       obj$estimate, obj$SE, "t", df_str, obj$t.ratio, round_p(obj$p.value))
+    estimates <- paste0(sprintf("\\emph{B} = %.2f (%.2f)", obj$estimate, obj$SE), unit)
+    test <- if (dtype == "B") "" else sprintf("\\emph{t}%s = %.2f, ", df_str, obj$t.ratio)
+    res_str <- paste0(estimates, ", ", test, "\\emph{p} ", round_p(obj$p.value))
   }
   format_results(res_str, ...)
 }
