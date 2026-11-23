@@ -27,6 +27,7 @@ get_adjusted_ci(
   drop_missing_levels = TRUE,
   aggr_fun = mean,
   debug = FALSE,
+  unit = NULL,
   ...
 )
 
@@ -120,6 +121,13 @@ get_superb_ci(
 - debug:
 
   output additional debugging info (default: FALSE)
+
+- unit:
+
+  Optional suffix appended once after the complete descriptive block.
+  Include any desired space or output-specific markup in the suffix, for
+  example, `" ms"` or `"~\"ms\""` for plotmath. This labels values
+  without converting their scale.
 
 - ...:
 

@@ -7,10 +7,10 @@ Describe contrasts created by
 
 ``` r
 # S3 method for class 'summary_emm'
-apa(obj, term, dtype = "B", df = FALSE, ...)
+apa(obj, term, dtype = "B", df = FALSE, unit = NULL, ...)
 
 # S3 method for class 'emmeans'
-apa(obj, term, dtype = "B", df = FALSE, ...)
+apa(obj, term, dtype = "B", df = FALSE, unit = NULL, ...)
 ```
 
 ## Arguments
@@ -31,6 +31,12 @@ apa(obj, term, dtype = "B", df = FALSE, ...)
 - df:
 
   include DF in t-test description (default: False)
+
+- unit:
+
+  Optional unit suffix for the estimate and SE, appended once before
+  test statistics. No scale conversion is performed. Include any desired
+  spacing and output-specific markup in the suffix.
 
 - ...:
 

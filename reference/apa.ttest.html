@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">apastats2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,7 +50,7 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'ttest'</span></span>
-<span><span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">obj</span>, show.mean <span class="op">=</span> <span class="cn">FALSE</span>, abs <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="apa.html">apa</a></span><span class="op">(</span><span class="va">obj</span>, show.mean <span class="op">=</span> <span class="cn">FALSE</span>, abs <span class="op">=</span> <span class="cn">FALSE</span>, unit <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -67,6 +67,13 @@
 
 <dt id="arg-abs">abs<a class="anchor" aria-label="anchor" href="#arg-abs"></a></dt>
 <dd><p>Show the absolute value of t-statistic</p></dd>
+
+
+<dt id="arg-unit">unit<a class="anchor" aria-label="anchor" href="#arg-unit"></a></dt>
+<dd><p>Optional suffix appended once after the complete descriptive
+block. Include any desired space or output-specific markup in the suffix,
+for example, <code>" ms"</code> or <code>"~\"ms\""</code> for plotmath.
+This labels values without converting their scale.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

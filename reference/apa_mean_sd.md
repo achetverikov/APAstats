@@ -13,6 +13,7 @@ apa_mean_sd(
   dtype = "p",
   m_units = "",
   sd_units = "",
+  unit = NULL,
   ...
 )
 ```
@@ -47,6 +48,13 @@ apa_mean_sd(
 
   Units for standard deviation
 
+- unit:
+
+  Optional suffix appended once after the complete descriptive block.
+  Include any desired space or output-specific markup in the suffix, for
+  example, `" ms"` or `"~\"ms\""` for plotmath. This labels values
+  without converting their scale.
+
 - ...:
 
   Additional arguments passed to
@@ -55,6 +63,12 @@ apa_mean_sd(
 ## Value
 
 A formatted string with mean and standard deviation in APA style
+
+## Details
+
+The common unit is appended once after the mean/SD block. Existing
+m_units and sd_units suffixes remain supported; use either those
+per-value suffixes or the common unit argument.
 
 ## Examples
 

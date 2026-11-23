@@ -17,6 +17,7 @@ apa(
   eff.size.type = "r",
   nsamples = 100,
   ci.type = "HPDI",
+  unit = NULL,
   ...
 )
 ```
@@ -59,6 +60,12 @@ apa(
   type of intervals to use (currently, all that is not HPDI is treated
   as ETI using
   [`bayestestR::eti`](https://easystats.github.io/bayestestR/reference/eti.html))
+
+- unit:
+
+  Optional unit suffix for the coefficient and its uncertainty, appended
+  once before test statistics. No scale conversion is performed. Include
+  any desired spacing and output-specific markup in the suffix.
 
 - ...:
 

@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">apastats2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,6 +61,7 @@
 <span>  term.pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  eff.size <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  adj.digits <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -76,6 +77,7 @@
 <span>  term.pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  eff.size <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  adj.digits <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -91,6 +93,7 @@
 <span>  term.pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  eff.size <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  adj.digits <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -106,6 +109,7 @@
 <span>  term.pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  eff.size <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  adj.digits <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -152,6 +156,14 @@
 
 <dt id="arg-adj-digits">adj.digits<a class="anchor" aria-label="anchor" href="#arg-adj-digits"></a></dt>
 <dd><p>automatically adjusts digits so that B or SE would not show up as "0.00"</p></dd>
+
+
+<dt id="arg-unit">unit<a class="anchor" aria-label="anchor" href="#arg-unit"></a></dt>
+<dd><p>Optional unit suffix, or a named character vector matching
+model terms when coefficients have different units. Omitted named terms
+receive no label. Labels appear once after the coefficient and SE block,
+before test statistics; no scale conversion is performed.
+Include any desired spacing and output-specific markup in the suffix.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

@@ -11,6 +11,7 @@ apa_format_mean_conf(
   upper_ci,
   addCI = FALSE,
   digits = 2,
+  unit = NULL,
   ...
 )
 ```
@@ -37,6 +38,13 @@ apa_format_mean_conf(
 
   Number of digits to use
 
+- unit:
+
+  Optional suffix appended once after the complete descriptive block.
+  Include any desired space or output-specific markup in the suffix, for
+  example, `" ms"` or `"~\"ms\""` for plotmath. This labels values
+  without converting their scale.
+
 - ...:
 
   Other arguments passed to
@@ -62,4 +70,6 @@ apa_format_mean_conf(mean_val, lower_ci, upper_ci, addCI = TRUE)
 # Format mean and CI with custom number of digits
 apa_format_mean_conf(mean_val, lower_ci, upper_ci, digits = 3)
 #> [1] "_M_ = 5.670 [4.560, 6.780]"
+apa_format_mean_conf(350, 320, 380, unit = " ms")
+#> [1] "_M_ = 350.00 [320.00, 380.00] ms"
 ```

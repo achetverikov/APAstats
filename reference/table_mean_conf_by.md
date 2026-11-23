@@ -5,7 +5,7 @@ Get formatted means and confidence intervals by group
 ## Usage
 
 ``` r
-table_mean_conf_by(x, by, digits = 2, binom = FALSE)
+table_mean_conf_by(x, by, digits = 2, binom = FALSE, unit = NULL)
 ```
 
 ## Arguments
@@ -26,6 +26,13 @@ table_mean_conf_by(x, by, digits = 2, binom = FALSE)
 
   compute binomial CI instead of the usual ones
 
+- unit:
+
+  Optional suffix appended once after the complete descriptive block.
+  Include any desired space or output-specific markup in the suffix, for
+  example, `" ms"` or `"~\"ms\""` for plotmath. This labels values
+  without converting their scale.
+
 ## Value
 
 An array of list entries, with dimensions and dimension names determined
@@ -33,6 +40,11 @@ by the levels of the grouping variables in `by`. Each observed group
 contains the two-element character vector returned by
 [table_mean_conf](https://achetverikov.github.io/APAstats/reference/table_mean_conf.md);
 unobserved combinations contain `NULL`.
+
+## Details
+
+If unit is supplied, it appears once after the CI in each group's second
+cell.
 
 ## Examples
 

@@ -8,10 +8,10 @@ computed during the call and everything will be very slow.
 
 ``` r
 # S3 method for class 'summary.merMod'
-apa(obj, factor, dtype = "t", ...)
+apa(obj, factor, dtype = "t", unit = NULL, ...)
 
 # S3 method for class 'lmert'
-apa(obj, factor, dtype = "t", ...)
+apa(obj, factor, dtype = "t", unit = NULL, ...)
 ```
 
 ## Arguments
@@ -28,6 +28,12 @@ apa(obj, factor, dtype = "t", ...)
 - dtype:
 
   description type ("B"/"t")
+
+- unit:
+
+  Optional unit suffix for the coefficient and its uncertainty, appended
+  once before test statistics. No scale conversion is performed. Include
+  any desired spacing and output-specific markup in the suffix.
 
 - ...:
 

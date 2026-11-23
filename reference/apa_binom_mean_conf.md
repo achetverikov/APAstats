@@ -5,7 +5,7 @@ Format binomial proportions and confidence intervals in APA style
 ## Usage
 
 ``` r
-apa_binom_mean_conf(x, digits = 2, ...)
+apa_binom_mean_conf(x, digits = 2, unit = NULL, ...)
 ```
 
 ## Arguments
@@ -17,6 +17,13 @@ apa_binom_mean_conf(x, digits = 2, ...)
 - digits:
 
   Number of digits in results
+
+- unit:
+
+  Optional suffix appended once after the complete descriptive block.
+  Include any desired space or output-specific markup in the suffix, for
+  example, `" ms"` or `"~\"ms\""` for plotmath. This labels values
+  without converting their scale.
 
 - ...:
 

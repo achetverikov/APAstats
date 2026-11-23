@@ -6,7 +6,7 @@ Format t-test results in APA style
 
 ``` r
 # S3 method for class 'htest'
-apa(obj, show.mean = FALSE, abs = FALSE, ...)
+apa(obj, show.mean = FALSE, abs = FALSE, unit = NULL, ...)
 ```
 
 ## Arguments
@@ -22,6 +22,13 @@ apa(obj, show.mean = FALSE, abs = FALSE, ...)
 - abs:
 
   Show the absolute value of t-statistic
+
+- unit:
+
+  Optional suffix appended once after the complete descriptive block.
+  Include any desired space or output-specific markup in the suffix, for
+  example, `" ms"` or `"~\"ms\""` for plotmath. This labels values
+  without converting their scale.
 
 - ...:
 

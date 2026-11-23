@@ -15,6 +15,7 @@ apa_mean_and_t(
   abs = FALSE,
   aggregate_by = NULL,
   transform.means = NULL,
+  unit = NULL,
   ...
 )
 ```
@@ -58,6 +59,13 @@ apa_mean_and_t(
 - transform.means:
 
   A function to transform means and confidence intervals (default: NULL)
+
+- unit:
+
+  Optional suffix appended once after the complete descriptive block.
+  Include any desired space or output-specific markup in the suffix, for
+  example, `" ms"` or `"~\"ms\""` for plotmath. This labels values
+  without converting their scale.
 
 - ...:
 

@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">apastats2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,7 @@
 <span>  <span class="va">upper_ci</span>,</span>
 <span>  addCI <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -83,6 +84,13 @@
 <dd><p>Number of digits to use</p></dd>
 
 
+<dt id="arg-unit">unit<a class="anchor" aria-label="anchor" href="#arg-unit"></a></dt>
+<dd><p>Optional suffix appended once after the complete descriptive
+block. Include any desired space or output-specific markup in the suffix,
+for example, <code>" ms"</code> or <code>"~\"ms\""</code> for plotmath.
+This labels values without converting their scale.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Other arguments passed to <a href="format_results.html">format_results</a></p></dd>
 
@@ -107,6 +115,8 @@
 <span class="r-in"><span><span class="co"># Format mean and CI with custom number of digits</span></span></span>
 <span class="r-in"><span><span class="fu">apa_format_mean_conf</span><span class="op">(</span><span class="va">mean_val</span>, <span class="va">lower_ci</span>, <span class="va">upper_ci</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_M_ = 5.670 [4.560, 6.780]"</span>
+<span class="r-in"><span><span class="fu">apa_format_mean_conf</span><span class="op">(</span><span class="fl">350</span>, <span class="fl">320</span>, <span class="fl">380</span>, unit <span class="op">=</span> <span class="st">" ms"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "_M_ = 350.00 [320.00, 380.00] ms"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

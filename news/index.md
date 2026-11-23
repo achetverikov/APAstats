@@ -1,5 +1,10 @@
 # Changelog
 
+## apastats2 1.2.0
+
+- Added caller-supplied unit suffixes to descriptive, table, and
+  coefficient formatters and simplified t-test formatting.
+
 ## apastats2 1.1.0
 
 CRAN release: 2026-11-07

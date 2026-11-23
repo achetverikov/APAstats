@@ -5,7 +5,7 @@ Get formatted means and confidence intervals
 ## Usage
 
 ``` r
-table_mean_conf(x, digits = 2, binom = FALSE, ...)
+table_mean_conf(x, digits = 2, binom = FALSE, unit = NULL, ...)
 ```
 
 ## Arguments
@@ -22,6 +22,13 @@ table_mean_conf(x, digits = 2, binom = FALSE, ...)
 
   compute binomial CI instead of the usual ones
 
+- unit:
+
+  Optional suffix appended once after the complete descriptive block.
+  Include any desired space or output-specific markup in the suffix, for
+  example, `" ms"` or `"~\"ms\""` for plotmath. This labels values
+  without converting their scale.
+
 - ...:
 
   other parameters passed to
@@ -31,6 +38,10 @@ table_mean_conf(x, digits = 2, binom = FALSE, ...)
 
 A character vector of length two: the formatted mean followed by the
 confidence limits in square brackets.
+
+## Details
+
+If unit is supplied, it appears once after the CI in the second cell.
 
 ## Examples
 

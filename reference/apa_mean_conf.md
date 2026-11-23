@@ -11,6 +11,7 @@ apa_mean_conf(
   addCI = FALSE,
   digits = 2,
   transform.means = NULL,
+  unit = NULL,
   ...
 )
 ```
@@ -36,6 +37,13 @@ apa_mean_conf(
 - transform.means:
 
   An optional function to transform the means and CI to another scale
+
+- unit:
+
+  Optional suffix appended once after the complete descriptive block.
+  Include any desired space or output-specific markup in the suffix, for
+  example, `" ms"` or `"~\"ms\""` for plotmath. This labels values
+  without converting their scale.
 
 - ...:
 
