@@ -11,12 +11,12 @@ Source:
 [`DESCRIPTION`](https://github.com/achetverikov/APAstats/blob/master/DESCRIPTION)
 
 Chetverikov A (2026). *apastats2: Statistical Results in APA Style*. R
-package version 1.2.0, <https://achetverikov.github.io/APAstats/>.
+package version 1.1.1, <https://achetverikov.github.io/APAstats/>.
 
     @Manual{,
       title = {apastats2: Statistical Results in APA Style},
       author = {Andrey Chetverikov},
       year = {2026},
-      note = {R package version 1.2.0},
+      note = {R package version 1.1.1},
       url = {https://achetverikov.github.io/APAstats/},
     }

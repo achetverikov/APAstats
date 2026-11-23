@@ -1,6 +1,6 @@
 # Changelog
 
-## apastats2 1.2.0
+## apastats2 1.1.1
 
 - Added caller-supplied unit suffixes to descriptive, table, and
   coefficient formatters and simplified t-test formatting.
