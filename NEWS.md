@@ -1,3 +1,7 @@
+# apastats2 1.1.2
+
+* `get_adjusted_ci()` now returns a `data.table` for `data.table` input and a `data.frame` for `data.frame` input.
+
 # apastats2 1.1.1
 
 * Added caller-supplied unit suffixes to descriptive, table, and coefficient formatters and simplified t-test formatting.

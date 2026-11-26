@@ -545,7 +545,7 @@ paste_and <- function(x, sep = ", ", suffix = "") {
 #' [apastats2][apastats2::apastats2-package] does not depend on or
 #' call [superb](https://CRAN.R-project.org/package=superb).
 #'
-#' @param data dataframe to summarize
+#' @param data `data.frame` or `data.table` to summarize.
 #' @param value_var dependent variable (string)
 #' @param within within-subject variables (vector of strings; default: NULL).
 #'   If supplied, wid must also be supplied.
@@ -583,7 +583,8 @@ paste_and <- function(x, sep = ", ", suffix = "") {
 #' @param debug output additional debugging info (default: FALSE)
 #' @param ... additional parameters passed to [apa_format_mean_conf]
 #'
-#' @return A `data.frame` with one row per group and the grouping variables,
+#' @return A `data.table` for `data.table` input, otherwise a `data.frame`.
+#' The result has one row per group and includes the grouping variables,
 #' `center` (summary statistic), `lowerwidth` and `upperwidth` (signed interval
 #' offsets from the center), `lower_ci` and `upper_ci` (interval limits), and
 #' `descr` (formatted summary and interval text). With `errorbar = "none"`,
@@ -700,7 +701,8 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
     ))
   }
 
-  data <- as.data.frame(data)
+  input_is_dt <- data.table::is.data.table(data)
+  if (!identical(class(data), "data.frame")) data <- as.data.frame(data)
 
   # superb required factors for repeated-measures designs. Keep that
   # conversion only when it matters; between-only summaries preserve original
@@ -971,6 +973,7 @@ get_adjusted_ci <- function(data, value_var, within = NULL, between = NULL,
     )
   }
 
+  if (input_is_dt) data.table::setDT(result)
   result
 }
 

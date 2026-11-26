@@ -38,7 +38,7 @@ get_superb_ci(
 )
 }
 \arguments{
-\item{data}{dataframe to summarize}
+\item{data}{\code{data.frame} or \code{data.table} to summarize.}
 
 \item{value_var}{dependent variable (string)}
 
@@ -94,7 +94,8 @@ This labels values without converting their scale.}
 \item{...}{additional parameters passed to \link{apa_format_mean_conf}}
 }
 \value{
-A \code{data.frame} with one row per group and the grouping variables,
+A \code{data.table} for \code{data.table} input, otherwise a \code{data.frame}.
+The result has one row per group and includes the grouping variables,
 \code{center} (summary statistic), \code{lowerwidth} and \code{upperwidth} (signed interval
 offsets from the center), \code{lower_ci} and \code{upper_ci} (interval limits), and
 \code{descr} (formatted summary and interval text). With \code{errorbar = "none"},

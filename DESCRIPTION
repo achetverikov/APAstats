@@ -1,7 +1,7 @@
 Package: apastats2
 Type: Package
 Title: Statistical Results in APA Style
-Version: 1.1.1
+Version: 1.1.2
 Authors@R: person(given = "Andrey",
     family = "Chetverikov",
     email = "andrey.chetverikov@uib.no",

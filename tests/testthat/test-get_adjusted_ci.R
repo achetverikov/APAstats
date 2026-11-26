@@ -61,6 +61,22 @@ test_that("get_adjusted_ci matches the Cousineau-Morey calculation", {
   )
 })
 
+test_that("get_adjusted_ci preserves the input format", {
+  data <- data.frame(
+    id = rep(1:3, each = 2),
+    condition = factor(rep(c("A", "B"), 3), levels = c("B", "A")),
+    y = c(1, 3, 2, 5, 4, 6)
+  )
+
+  plain <- get_adjusted_ci(data, "y", within = "condition", wid = "id")
+  tabular <- get_adjusted_ci(data.table::as.data.table(data), "y",
+                            within = "condition", wid = "id")
+
+  expect_identical(class(plain), "data.frame")
+  expect_s3_class(tabular, "data.table")
+  expect_identical(as.data.frame(tabular), plain)
+})
+
 test_that("get_adjusted_ci supports SE and difference-purpose intervals", {
   data <- data.frame(
     id = factor(rep(1:4, each = 2)),
