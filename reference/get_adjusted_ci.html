@@ -27,7 +27,7 @@ numerically compatible with the former implementation backed by superb."></head>
 
     <a class="navbar-brand me-2" href="../index.html">apastats2</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,7 +108,7 @@ numerically compatible with the former implementation backed by <a href="https:/
 
 
 <dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
-<dd><p>dataframe to summarize</p></dd>
+<dd><p><code>data.frame</code> or <code>data.table</code> to summarize.</p></dd>
 
 
 <dt id="arg-value-var">value_var<a class="anchor" aria-label="anchor" href="#arg-value-var"></a></dt>
@@ -192,7 +192,8 @@ This labels values without converting their scale.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A <code>data.frame</code> with one row per group and the grouping variables,
+    <p>A <code>data.table</code> for <code>data.table</code> input, otherwise a <code>data.frame</code>.
+The result has one row per group and includes the grouping variables,
 <code>center</code> (summary statistic), <code>lowerwidth</code> and <code>upperwidth</code> (signed interval
 offsets from the center), <code>lower_ci</code> and <code>upper_ci</code> (interval limits), and
 <code>descr</code> (formatted summary and interval text). With <code>errorbar = "none"</code>,

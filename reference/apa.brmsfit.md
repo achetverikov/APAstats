@@ -97,6 +97,8 @@ if (requireNamespace("brms", quietly = TRUE) &&
   print(apa(fit, "x", trans = function(val) val + 5))
 }
 #> Compiling Stan program...
-#> Error in .fun(model_code = .x1): Boost not found; call install.packages('BH')
+#> Start sampling
+#> [1] "_b_ = 1.68, 95% HPDI = [1.31, 2.06]"
+#> [1] "_b_ = 6.68, 95% HPDI = [6.31, 7.06]"
 # }
 ```

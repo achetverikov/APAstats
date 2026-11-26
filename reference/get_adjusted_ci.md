@@ -51,7 +51,7 @@ get_superb_ci(
 
 - data:
 
-  dataframe to summarize
+  `data.frame` or `data.table` to summarize.
 
 - value_var:
 
@@ -136,7 +136,8 @@ get_superb_ci(
 
 ## Value
 
-A `data.frame` with one row per group and the grouping variables,
+A `data.table` for `data.table` input, otherwise a `data.frame`. The
+result has one row per group and includes the grouping variables,
 `center` (summary statistic), `lowerwidth` and `upperwidth` (signed
 interval offsets from the center), `lower_ci` and `upper_ci` (interval
 limits), and `descr` (formatted summary and interval text). With
